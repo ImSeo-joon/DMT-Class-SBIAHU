@@ -547,6 +547,35 @@ def verify_test():
     return jsonify({"sent": sent, "detail": detail})
 
 
+@app.post("/api/ai/polish")
+def ai_polish():
+    session, user, error = require_user()
+    if error:
+        return error
+    if not check_write(session):
+        return csrf_error()
+    if limited("ai-polish", 20):
+        return api_error(429, "修改请求太频繁，请过一会儿再试")
+    try:
+        raw = body()
+        api_key = core.clean_text(raw.get("apiKey"), "API Key", required=True, maximum=200)
+        article = core.clean_text(raw.get("text"), "文章正文", required=True, maximum=core.AI_MAX_PROMPT)
+        mode = str(raw.get("mode") or "both").strip().lower()
+        if mode not in core.POLISH_MODES:
+            mode = "both"
+        model = str(raw.get("model") or core.AI_MODELS[0]).strip()
+        if model not in core.AI_MODELS:
+            model = core.AI_MODELS[0]
+    except Exception as exc:
+        return api_error(400, str(exc) or "请求格式不正确")
+    ok, result = core.ai_chat(api_key, model, core.polish_article_prompt(article, mode),
+                              max_tokens=8000, temperature=0.2)
+    if not ok:
+        return api_error(502, result)
+    audit(user["id"], "ai-polish:" + mode, "ai", model)
+    return jsonify({"text": result, "model": model, "mode": mode})
+
+
 @app.post("/api/ai/resume")
 def ai_resume():
     session, user, error = require_user()

@@ -821,7 +821,8 @@ def delete_team_post(post_id: str) -> bool:
     return bool(cur.rowcount)
 
 
-def ai_chat(api_key: str, model: str, prompt: str) -> tuple[bool, str]:
+def ai_chat(api_key: str, model: str, prompt: str, max_tokens: int = 1600,
+            temperature: float = 0.4) -> tuple[bool, str]:
     """把一次生成请求转发给模型服务（默认 DeepSeek）。密钥只在本次请求中使用，不落库、不写日志。"""
     key = str(api_key or "").strip()
     if not key:
@@ -831,8 +832,8 @@ def ai_chat(api_key: str, model: str, prompt: str) -> tuple[bool, str]:
     payload = json.dumps({
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.4,
-        "max_tokens": 1600,
+        "temperature": temperature,
+        "max_tokens": max_tokens,
         "stream": False,
     }, ensure_ascii=False).encode("utf-8")
     request = urllib.request.Request(
@@ -863,6 +864,35 @@ def ai_chat(api_key: str, model: str, prompt: str) -> tuple[bool, str]:
     except Exception:
         return False, "返回内容无法解析"
     return True, str(text).strip()
+
+
+POLISH_MODES = ("grammar", "style", "both")
+
+
+def polish_article_prompt(text: str, mode: str = "both") -> str:
+    """「文章语法改错 / 文笔润色」工具用的提示词。"""
+    if mode not in POLISH_MODES:
+        mode = "both"
+    length = len(re.sub(r"\s+", "", text))
+    if mode == "grammar":
+        task = ("请只做语法与错别字校对：修改病句、搭配不当、标点误用、错别字以及前后不一致的用词，"
+                "不要调整结构、不要增删内容、不要润色文采。")
+    elif mode == "style":
+        task = ("请在保持原意与结构的前提下润色文笔：替换平淡或重复的措辞、调整句子长短节奏、"
+                "补充必要的细节与画面感；不要堆砌辞藻，不要改变文体与叙述人称。")
+    else:
+        task = ("请先做语法与错别字校对，再在此基础上润色文笔：修改病句、搭配不当、标点与错别字，"
+                "并在保持原意与结构的前提下改善措辞与句子节奏；不要改变文体与叙述人称，不要堆砌辞藻。")
+    return (
+        "你是一位中文写作老师，正在帮学生修改文章。\n"
+        f"{task}\n\n"
+        "输出要求：\n"
+        "1. 直接输出修改后的完整全文，不要写任何说明、点评、改动清单或总结；\n"
+        "2. 不要使用 Markdown 代码块，除原文自带的标题外不要增加额外格式；\n"
+        f"3. 篇幅与原文相当：原文约 {length} 字，修改稿正文不少于 {max(200, int(length * 0.9))} 字；\n"
+        "4. 保留作者自己的表达习惯，不要改成千篇一律的腔调。\n\n"
+        "原文如下：\n" + text
+    )
 
 
 def clean_text(value: object, key: str, *, required: bool = False, maximum: int = 4000) -> str:
@@ -1341,6 +1371,30 @@ class Handler(BaseHTTPRequestHandler):
             if verified_user:
                 self.audit(verified_user, "verify-email", "user", verified_user)
             return self.send_json(200, {"ok": True, "message": message})
+        if path == "/api/ai/polish":
+            session, user = self.require_user()
+            if not user or not self.check_csrf(session):
+                return
+            if self.limited("ai-polish", 20):
+                return self.send_error_json(429, "修改请求太频繁，请过一会儿再试")
+            try:
+                raw = self.body()
+                api_key = clean_text(raw.get("apiKey"), "API Key", required=True, maximum=200)
+                article = clean_text(raw.get("text"), "文章正文", required=True, maximum=AI_MAX_PROMPT)
+                mode = str(raw.get("mode") or "both").strip().lower()
+                if mode not in POLISH_MODES:
+                    mode = "both"
+                model = str(raw.get("model") or AI_MODELS[0]).strip()
+                if model not in AI_MODELS:
+                    model = AI_MODELS[0]
+            except (ValueError, json.JSONDecodeError) as exc:
+                return self.send_error_json(400, str(exc))
+            ok, result = ai_chat(api_key, model, polish_article_prompt(article, mode),
+                                 max_tokens=8000, temperature=0.2)
+            if not ok:
+                return self.send_error_json(502, result)
+            self.audit(user["id"], "ai-polish:" + mode, "ai", model)
+            return self.send_json(200, {"text": result, "model": model, "mode": mode})
         if path == "/api/ai/resume":
             session, user = self.require_user()
             if not user or not self.check_csrf(session):

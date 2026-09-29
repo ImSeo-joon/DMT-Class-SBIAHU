@@ -271,7 +271,7 @@ function wireVerifyUI(){
   });
 }
 const baseRenderProfile=renderProfile;
-renderProfile=function(){baseRenderProfile();applyVerifyState();acRenderAll();if(typeof teamApplyGate==='function')teamApplyGate();if(typeof noticeLoad==='function')noticeLoad();if(typeof applyVisitorGates==='function')applyVisitorGates()};
+renderProfile=function(){baseRenderProfile();applyVerifyState();acRenderAll();if(typeof teamApplyGate==='function')teamApplyGate();if(typeof noticeLoad==='function')noticeLoad();if(typeof applyVisitorGates==='function')applyVisitorGates();if(typeof cnApplyGate==='function')cnApplyGate()};
 applyVerifyState();
 </script>
 <script>
@@ -1265,8 +1265,15 @@ async function refreshEventHistory(){
         <span class="cr-en">Course essentials for introductory calculus; Lesson 1 keeps only the limits material from the 29 September session.</span>
         <span class="cr-go">进入课程 / Open course →</span>
       </a>
+      <a href="#course-cn">
+        <div class="cr-label mono">MODULE 03 / CHINESE LANGUAGE AND LITERATURE</div>
+        <h3>Chinese Language and Literature<span class="cr-alt">汉语言文学课程要点</span></h3>
+        <p>课程任务：三千字文体不限文章。按散文、诗歌、议论文、小说四种文体组织主题，每个主题配两份写作参考大纲与一段可直接交给大模型的提示词。</p>
+        <span class="cr-en">The 3000-character essay task, organised by genre and theme, with outlines, prompts and a built-in revising tool.</span>
+        <span class="cr-go">进入课程 / Open course →</span>
+      </a>
       <div class="cr-hub-soon">
-        <div class="cr-label mono">MODULE 03 / TO BE ADDED</div>
+        <div class="cr-label mono">MODULE 04 / TO BE ADDED</div>
         <h3>More courses<span class="cr-alt">后续课程</span></h3>
         <p>其他课程的核心要点会按同样的结构收进这里，包括课程定位、知识地图、术语核对与考核规则，同样提供中英双语。</p>
         <span class="cr-en">Later courses will follow the same structure, also bilingual.</span>
@@ -1650,7 +1657,7 @@ lim (n → ∞) (1 + 1/n)^n = e</span>
   var mainEl=document.getElementById('top');
   var strays=document.querySelectorAll('body > section.page');
   for(var s=0;s<strays.length;s++){if(mainEl&&strays[s].parentNode!==mainEl){mainEl.appendChild(strays[s]);}}
-  var TREE=[['course','Overview'],['course-app','Advanced Programming'],['course-calc','Applied Calculus']];
+  var TREE=[['course','Overview'],['course-app','Advanced Programming'],['course-calc','Applied Calculus'],['course-cn','Chinese Literature']];
   var courseNavs=document.querySelectorAll('.cr-nav-course');
   for(var c=0;c<courseNavs.length;c++){
     (function(bar){
@@ -1827,6 +1834,269 @@ lim (n → ∞) (1 + 1/n)^n = e</span>
   const list=document.getElementById('userAdminList');
   if(list)new MutationObserver(decorateUserRows).observe(list,{childList:true,subtree:true});
   decorateUserRows();
+})();
+</script>
+<style>
+.cn-section{margin:30px 0 0}
+.cn-section h3{font-size:19px;margin:0 0 12px;letter-spacing:-.02em}
+.cn-chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 6px}
+.cn-chips button{cursor:pointer;font:inherit;font-size:12px;padding:8px 15px;border:1px solid var(--line);border-radius:20px;background:var(--paper);color:#5d6962;transition:.2s}
+.cn-chips button:hover{border-color:#c6a15a;color:#202127}
+.cn-chips button.active{background:#a51c30;border-color:#a51c30;color:#fff;font-weight:700}
+.cn-label{font-size:11px;letter-spacing:.08em;color:#8b948c;margin:16px 0 8px}
+.cn-outline{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:0 0 12px}
+.cn-outline h4{margin:0 0 8px;font-size:14px}
+.cn-outline p{margin:0;font-size:12.5px;line-height:1.85;color:#5d6962}
+.cn-prompt{background:#f7f5ef;border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:12.5px;line-height:1.9;white-space:pre-wrap}
+.cn-tools{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px}
+.cn-tools h3{margin:0 0 8px;font-size:18px}
+.cn-tools label{display:grid;gap:6px;font-size:12px;color:#555b64;margin:12px 0}
+.cn-tools input,.cn-tools select,.cn-tools textarea{width:100%;border:1px solid var(--line);border-radius:5px;background:#fff;padding:10px;font:inherit;color:var(--ink)}
+.cn-tools textarea{min-height:190px;resize:vertical;line-height:1.75}
+.cn-result{margin-top:14px;border:1px dashed var(--line);border-radius:10px;padding:16px;background:#fffefa;white-space:pre-wrap;font-size:12.5px;line-height:1.9}
+.cn-meta{font-size:11px;color:#8b948c}
+@media(max-width:760px){.cn-tools{padding:16px}.cn-outline{padding:14px}}
+</style>
+<section class="page" data-view="course-cn">
+  <div class="wrap page-intro">
+    <div class="kicker mono">MODULE 03 / CHINESE LANGUAGE AND LITERATURE</div>
+    <h1>Chinese Language and Literature<span class="cr-sub">汉语言文学课程要点</span></h1>
+    <p>课程任务与写作参考 / Course tasks with writing references</p>
+  </div>
+  <div class="wrap section">
+    <div class="cr-subnav cr-nav-course" data-active="course-cn"></div>
+    <div class="section-head">
+      <div>
+        <div class="kicker mono">TASK INDEX / 课程任务</div>
+        <h2>Course tasks<span class="cr-alt">课程任务</span></h2>
+        <p class="small-note">每个任务给出文体导航与主题导航，每个主题配两份 AI 写作参考大纲和一段可以直接交给大模型使用的提示词；任务页末尾还有自带 API Key 的语法改错与文笔润色工具。</p>
+      </div>
+    </div>
+    <div class="cr-hub">
+      <a href="#course-cn-01">
+        <div class="cr-label mono">TASK 01 / ESSAY WRITING</div>
+        <h3>三千字文体不限文章<span class="cr-alt">课程任务：三千字文体不限文章</span></h3>
+        <p>散文、诗歌、议论文、小说四种文体，共十二个主题；每个主题两份参考大纲加一段带字数要求的写作提示词。</p>
+        <span class="cr-en">Four genres, twelve themes, two outlines and one detailed prompt each.</span>
+        <span class="cr-go">进入任务 / Open task →</span>
+      </a>
+      <div class="cr-hub-soon">
+        <div class="cr-label mono">TASK 02 / TO BE ADDED</div>
+        <h3>Later tasks<span class="cr-alt">后续任务</span></h3>
+        <p>后续课程任务会按同样的结构补充进来：文体导航、主题导航、参考大纲与提示词。</p>
+        <span class="cr-en">Later tasks will follow the same structure.</span>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="page" data-view="course-cn-01">
+  <div class="wrap page-intro">
+    <div class="kicker mono">TASK 01 / ESSAY WRITING</div>
+    <h1>Course Task: A 3000-Character Essay<span class="cr-sub">课程任务：三千字文体不限文章</span></h1>
+    <p>文体不限，篇幅约三千字。参考大纲与提示词只用来打开思路，成稿必须由你自己重写。</p>
+  </div>
+  <div class="wrap section">
+    <div class="cr-subnav cr-nav-course" data-active="course-cn"></div>
+
+    <div class="cr-grid">
+      <div class="cr-card"><div class="cr-label mono">TASK</div><strong>A 3000-character essay</strong><span class="cr-alt">三千字文体不限文章</span><p>篇幅约 2800–3200 字，文体自选：散文、诗歌、议论文、小说均可，也可以写成剧本、书信等其他形式。<span class="cr-en">Roughly 2800–3200 characters, any genre.</span></p></div>
+      <div class="cr-card"><div class="cr-label mono">COVERAGE</div><strong>Four genres, twelve themes</strong><span class="cr-alt">四种文体 · 十二个主题</span><p>每个主题提供两份参考大纲和一段写清字数要求、可直接交给大模型的提示词。<span class="cr-en">Two outlines and one ready-to-use prompt per theme.</span></p></div>
+      <div class="cr-card"><div class="cr-label mono">WORKFLOW</div><strong>Outline, draft, then rewrite</strong><span class="cr-alt">先列提纲，再写初稿，最后改错润色</span><p>建议顺序：选文体 → 选主题 → 看两份大纲 → 用提示词让大模型出初稿作素材 → 自己重写 → 用页末工具改错润色。<span class="cr-en">Use AI output as raw material, then rewrite in your own words.</span></p></div>
+      <div class="cr-card"><div class="cr-label mono">ACADEMIC HONESTY</div><strong>AI output is reference only</strong><span class="cr-alt">AI 产出只能当素材</span><p>课程对 AI 生成与抄袭是零容忍的：能直接交上去的只能是你自己写出来的句子。<span class="cr-en">Nothing generated by AI can be submitted as your own writing.</span></p></div>
+    </div>
+
+    <div class="cn-section">
+      <h3>Choose a genre and theme<span class="cr-alt">选择文体与主题</span></h3>
+      <div class="cn-label">文体 / Genre</div>
+      <div class="cn-chips" id="cnGenreTabs"></div>
+      <div class="cn-label" id="cnThemeLabel">主题 / Theme</div>
+      <div class="cn-chips" id="cnThemeTabs"></div>
+      <div id="cnThemePanel"></div>
+    </div>
+
+    <div class="cn-section">
+      <h3>Grammar check and style polish<span class="cr-alt">文章语法改错与文笔润色</span></h3>
+      <div class="cn-tools">
+        <h3>自带 API Key 的改错与润色工具</h3>
+        <p class="small-note">密钥只保存在你这台设备的浏览器里；请求经本站后端临时转发给模型服务，服务器不落库、不写日志。需要登录后使用，文章正文不超过 6000 字。</p>
+        <p class="small-note" id="cnAiGate" hidden>你当前未登录，请先<a class="text-link" href="#account" data-page="account">登录 / 注册 →</a></p>
+        <div id="cnAiForm">
+          <label>DeepSeek API Key<input id="cnAiKey" type="password" autocomplete="off" placeholder="sk-..."></label>
+          <label>模型<select id="cnAiModel"><option value="deepseek-chat">deepseek-chat（快、便宜）</option><option value="deepseek-reasoner">deepseek-reasoner（更强、较慢）</option></select></label>
+          <label>修改方式<select id="cnAiMode"><option value="both">先改错，再润色（推荐）</option><option value="grammar">只做语法改错</option><option value="style">只做文笔润色</option></select></label>
+          <label>文章正文<textarea id="cnAiText" placeholder="把写好的文章粘贴到这里，再点「开始修改」"></textarea></label>
+          <div class="button-row">
+            <button class="btn primary" type="button" id="cnAiRun">开始修改 / Revise</button>
+            <button class="btn secondary" type="button" id="cnAiSaveKey">保存在本机</button>
+            <button class="btn secondary" type="button" id="cnAiClearKey">清除密钥</button>
+            <a class="text-link" href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener">去申请密钥 ↗</a>
+          </div>
+          <div id="cnAiMessage" role="status"></div>
+          <div class="cn-result" id="cnAiResult" hidden></div>
+          <div class="button-row" id="cnAiResultRow" hidden>
+            <button class="btn secondary" type="button" id="cnAiCopy">复制修改稿</button>
+            <span class="cn-meta" id="cnAiMeta"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+/* ===== 汉语言文学：课程任务 / Chinese Language and Literature ===== */
+const CN_GENRES=[
+{id:'prose',label:'散文',themes:[
+ {label:'故乡与记忆',outlines:[
+  '以「一条路」为线索，串起三次回乡：童年、离家那年、最近一次。同一处景物在三段时间里发生变化，用变化写时间。',
+  '以一件旧物（搪瓷缸、缝纫机、老照片）为圆心，写三代人与它有关的三件小事，结尾让这件东西消失或易主。'],
+  prompt:'请写一篇约 3000 字的中文散文，主题「故乡与记忆」。\n要求：\n1）选定一个贯穿全文的核心意象（一条路、一件旧物或一种声音），不要写成流水账；\n2）至少三个具体场景，每个场景都要有可感细节，气味、声音、温度、光线至少各出现一处；\n3）用第一人称，时间在现在与回忆之间自然切换，不要用「时光荏苒」这类套话过渡；\n4）先给出两个风格不同的开头段落供我选择，一个偏白描，一个偏抒情；\n5）结尾不要直接抒情升华，落在一个具体动作或画面上；\n6）全文 2800–3200 字，若不足请补充场景与细节，不要用排比和空泛议论凑字数。'},
+ {label:'城市与日常',outlines:[
+  '以「清晨六点到七点」这一小时为横切面，按时间顺序写一座城市醒来的过程：早点摊、地铁口、写字楼、送孩子的电瓶车。',
+  '以「我」和一位固定出现的陌生人为双线：同一班公交上的乘客、楼下值夜的保安。两条线始终不相交，却在细节上互相映照。'],
+  prompt:'请写一篇约 3000 字的中文散文，主题「城市与日常」。\n要求：\n1）把观察范围限定在一条街、一个小区或一段固定的通勤路线上，不要泛泛写整座城市；\n2）至少写四个具体人物，每个人只用一个动作或一句话立住，不要交代完整生平；\n3）加入至少一处声音、一处气味、一处光线的描写；\n4）叙述者保持克制，不发表议论，判断交给读者；\n5）先给出三种不同的切入方式（从声音切入、从人物切入、从物件切入）各写 150 字左右，供我挑选；\n6）全文 2800–3200 字，语言平实，少用形容词堆叠。'},
+ {label:'离别与成长',outlines:[
+  '用「最后一次」的结构：最后一次一起吃饭、最后一次走那条路、最后一次说某句话。三次「最后一次」之后，写一次看似普通的「第一次」。',
+  '书信体：写给过去的自己或某个已经离开的人。全篇不出现收信人的名字，靠共同的记忆细节让读者知道是谁。'],
+  prompt:'请写一篇约 3000 字的中文散文（或书信体散文），主题「离别与成长」。\n要求：\n1）采用「最后一次」或书信体结构，二选一并在开头注明；\n2）全篇要有三个具体的生活细节作为支点（一样食物、一句口头禅、一个固定动作）；\n3）不要写「我很伤心」「我成长了」这类直接结论，用行为和场景呈现变化；\n4）时间顺序可以打乱，但每一次跳转都要有明确的触发物；\n5）请给出两个不同基调的标题供我选择；\n6）全文 2800–3200 字，结尾留有余味，不要圆满收束。'}
+]},
+{id:'poetry',label:'诗歌',themes:[
+ {label:'四季与时间',outlines:[
+  '组诗四节，春夏秋冬各一节，每节以一个动作收尾，动作一节能与四节形成呼应。',
+  '以「清单」体写一年：把一年里出现过的物一件件列出来（槐花、蝉声、月饼盒、暖气片、退烧药），靠意象自己推进时间。'],
+  prompt:'请创作一组中文诗歌，主题「四季与时间」，总篇幅约 3000 字（可采用组诗形式，例如 8–12 首短诗，或四个较长章节）。\n要求：\n1）用具体意象承载时间，不要直接写「时光流逝」「岁月如梭」这类抽象句；\n2）每一节至少有一个出人意料但准确新颖的比喻；\n3）避免陈词滥调（春天不等于希望、秋天不等于思念），把感受交给细节；\n4）四季节奏要有区别：春缓、夏密、秋疏、冬短；\n5）开头附三行创作说明，其余全部为诗作；\n6）总字数 2800–3200 字，分行与重复都可以用，但不要靠重复凑长度。'},
+ {label:'城市与孤独',outlines:[
+  '以「深夜还在营业的地方」为线索：便利店、二十四小时药店、深夜的网约车、仍然亮灯的自习室。写城市里互不相识的守夜人。',
+  '独白体：用第二人称「你」对着一盏灯、一部电梯或一部手机说话，全诗只对一个对象讲，却讲出了一个完整的人。'],
+  prompt:'请创作一组中文诗歌，主题「城市与孤独」，总篇幅约 3000 字。\n要求：\n1）选取三到五个具体的城市物件作为核心意象（例如便利店冷柜的灯、外卖箱、共享单车、深夜电梯），反复出现并逐次变化；\n2）孤独要通过场景与动作呈现，不要直接写出「孤独」二字；\n3）可以使用第二人称独白，也可以片段式并列，但要保持统一的语气；\n4）每首诗控制在 20 行以内，组诗之间不要重复同一个比喻；\n5）先给我三个可用的开头第一行，再由我选定后写整组；\n6）总字数 2800–3200 字。'},
+ {label:'家与远方',outlines:[
+  '以「距离」为主题，用不同的度量单位分层：公里、时差、方言词的消失、一道菜做法的失传。',
+  '以方言词汇入诗：每个方言词后面不加解释，靠语境让读者体会它的意思，全诗由五到七个方言词串起。'],
+  prompt:'请创作一组中文诗歌，主题「家与远方」，总篇幅约 3000 字。\n要求：\n1）用「距离」作为主线，可以借公里、时差、方言、饮食习惯等不同尺度来写；\n2）如果使用方言词，不加注释，只靠上下文让读者理解；\n3）全诗至少出现一次电话、一次车站或一次餐桌的场景；\n4）不要写成思乡口号，避免「故乡的月亮」这类被用滥的意象；\n5）请提供两种结尾方案（一种收束、一种留白）供我选择；\n6）总字数 2800–3200 字。'}
+]},
+{id:'argument',label:'议论文',themes:[
+ {label:'技术与人文',outlines:[
+  '立论式：先提出「技术提供手段，人文提供判断」，分三层论证——技术放大了选择的可能、选择的代价常常无人计算、因此需要价值判断；中间插一个让步段回应「技术中立」。',
+  '驳论式：先摆出流行的「技术中立论」，指出它把手段与后果割裂的漏洞，再提出自己的主张，最后落到教育层面给出可操作的建议。'],
+  prompt:'请写一篇约 3000 字的中文议论文，题目自拟，主题「技术与人文」。\n要求：\n1）中心论点必须明确、可以被反驳，并在开头两段内提出；\n2）至少三个分论点，每个分论点配一个具体事例（历史、行业、身边观察均可），不要用「众所周知」「随着社会的发展」开头；\n3）必须包含一个让步段，正面处理最强的反方观点；\n4）举例、对比、因果三种论证方法各至少使用一次；\n5）结尾给出可操作的建议，不要只喊口号；\n6）全文 2800–3200 字，语言平实，少用排比与名人名言堆砌。'},
+ {label:'大学生活与自我管理',outlines:[
+  '从「自由」的两种含义切入：外在的自由与内在的秩序，论证「自律是被设计出来的，而不是靠意志力硬撑」。',
+  '先破后立：先反驳「上了大学就轻松了」的流行说法，再立「大学是成本最低的试错期」，用具体做法支撑。'],
+  prompt:'请写一篇约 3000 字的中文议论文，题目自拟，主题「大学生活与自我管理」。\n要求：\n1）观点要有针对性，直接回应一种常见的错误认识；\n2）论证中至少包含一组真实可感的数据或现象（例如时间分配、作息、课程节奏），数据可以是合理估计但要说明来源性质；\n3）必须有一段承认反面合理性的让步，并给出反驳；\n4）给出三条具体可执行的做法，每条不超过两句话；\n5）结尾回应开头提出的问题，形成闭环；\n6）全文 2800–3200 字，避免空泛说教与励志口号。'},
+ {label:'网络时代的阅读',outlines:[
+  '质疑「碎片化阅读必然使人浅薄」，指出关键变量不是时长而是问题意识，用对照案例论证。',
+  '从「读得快」与「读得慢」两种阅读目的出发，论证工具要与目的匹配，而不是简单评判好坏。'],
+  prompt:'请写一篇约 3000 字的中文议论文，题目自拟，主题「网络时代的阅读」。\n要求：\n1）不要写成「要少玩手机」式的道德劝告，要提出一个可以被质疑的判断；\n2）至少使用一次对比论证（两条不同的阅读路径）和一次因果论证；\n3）引用一个你熟悉的读物或平台现象作为例子，并交代具体情境；\n4）必须处理一个反方观点，例如「碎片化也能形成体系」；\n5）结尾提出一种可操作的阅读方法，说明适用条件；\n6）全文 2800–3200 字，语言克制，不使用煽动性表述。'}
+]},
+{id:'fiction',label:'小说',themes:[
+ {label:'校园故事',outlines:[
+  '一个误会推动情节：一条被误删的消息、一次认错的座位或一份送错的作业。用第三人称有限视角，只让读者知道一半信息，结尾揭晓。',
+  '双线并行：现在线（一场考试或一次比赛）与回忆线（入学第一天）交替推进，在结尾交汇，揭示人物关系的真相。'],
+  prompt:'请写一篇约 3000 字的中文短篇小说，主题「校园」。\n要求：\n1）必须有一个明确的情节驱动（误会、秘密或一次两难选择），并在开头 500 字内出现；\n2）采用第三人称有限视角，只跟随一个人物，不要写成全知；\n3）情节靠场景与对白推进，避免大段心理独白；\n4）至少有两处细节在结尾前被重新点亮，形成前后照应；\n5）人物不超过六个，每个人物有一个可辨认的动作或口头习惯；\n6）全文 2800–3200 字，结尾留一点未说尽的东西，但不要留下未收拢的情节。'},
+ {label:'家庭故事',outlines:[
+  '一顿饭串起十年：年夜饭、送行的早饭或一次普通的晚饭，每上一道菜就切一次时间线，句尾回到餐桌上。',
+  '以「房子」的变化为主线：装修、出租、搬迁、拆迁，一间屋子的改动对应一家人关系的变化。'],
+  prompt:'请写一篇约 3000 字的中文短篇小说，主题「家庭」。\n要求：\n1）选择一个封闭场景（一顿饭、一间屋子、一次搬家）作为主要舞台；\n2）用具体物件与动作刻画人物关系，不要直接写「父亲很沉默」这类判断句；\n3）至少写三代人中的两位，代际差异通过语言习惯与做事方式体现；\n4）对话要口语化，允许有停顿、打断和没说出口的话；\n5）结尾不要煽情，用一件小事或一次沉默收束；\n6）全文 2800–3200 字，人物不超过六个。'},
+ {label:'设定与代价（科幻 / 奇幻）',outlines:[
+  '一个设定加一个代价：记忆可以买卖，主角卖掉一段记忆后得到了想要的位置，却发现自己失去了做判断的依据。',
+  '规则怪谈或都市奇幻：某个地方有一条不能违反的小规则，主角为了一个具体的理由决定违反它，代价逐步显现。'],
+  prompt:'请写一篇约 3000 字的中文短篇小说，主题「设定与代价」，科幻或奇幻均可。\n要求：\n1）开篇 300 字内交代清楚核心设定，规则要简单、明确、可被违反；\n2）设定必须带来一个具体的代价，并且这个代价在全文出现三次，一次比一次严重；\n3）人物动机要落地，不要为了展示设定而行动；\n4）用日常细节让幻想设定显得可信（例如手续、票据、口音、排队）；\n5）结尾可以是开放式，但要给出明确的情感落点；\n6）全文 2800–3200 字，不要解释设定来源，也不要引入第二个超自然规则。'}
+]}
+];
+(function(){
+  var genreIdx=0,themeIdx=0;
+  function el(id){return document.getElementById(id)}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function renderGenres(){
+    var box=el('cnGenreTabs');if(!box)return;
+    box.innerHTML=CN_GENRES.map(function(g,i){return '<button type="button" data-cn-genre="'+i+'"'+(i===genreIdx?' class="active"':'')+'>'+esc(g.label)+'</button>'}).join('');
+    Array.prototype.forEach.call(box.querySelectorAll('[data-cn-genre]'),function(b){b.onclick=function(){genreIdx=Number(b.dataset.cnGenre);themeIdx=0;renderGenres();renderThemes();renderPanel()}});
+  }
+  function renderThemes(){
+    var box=el('cnThemeTabs');if(!box)return;
+    var themes=CN_GENRES[genreIdx].themes;
+    box.innerHTML=themes.map(function(t,i){return '<button type="button" data-cn-theme="'+i+'"'+(i===themeIdx?' class="active"':'')+'>'+esc(t.label)+'</button>'}).join('');
+    Array.prototype.forEach.call(box.querySelectorAll('[data-cn-theme]'),function(b){b.onclick=function(){themeIdx=Number(b.dataset.cnTheme);renderThemes();renderPanel()}});
+    var label=el('cnThemeLabel');
+    if(label)label.textContent='主题 / Theme（'+CN_GENRES[genreIdx].label+'）';
+  }
+  function renderPanel(){
+    var box=el('cnThemePanel');if(!box)return;
+    var genre=CN_GENRES[genreIdx],theme=genre.themes[themeIdx];
+    var html='<div class="cn-outline"><h4>参考大纲 A</h4><p>'+esc(theme.outlines[0])+'</p></div>'
+      +'<div class="cn-outline"><h4>参考大纲 B</h4><p>'+esc(theme.outlines[1])+'</p></div>'
+      +'<div class="cn-label">AI 写作提示词 / Prompt（可直接复制给大模型）</div>'
+      +'<div class="cn-prompt" id="cnPromptText">'+esc(theme.prompt)+'</div>'
+      +'<div class="button-row" style="margin-top:12px"><button class="btn secondary" type="button" id="cnPromptCopy">复制提示词 / Copy prompt</button>'
+      +'<span class="cn-meta">文体：'+esc(genre.label)+' · 主题：'+esc(theme.label)+' · 提示词已写明字数要求</span></div>';
+    box.innerHTML=html;
+    var copy=el('cnPromptCopy');
+    if(copy)copy.onclick=function(){
+      var text=theme.prompt;
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){copy.textContent='已复制 / Copied'},function(){copy.textContent='复制失败，请手动选中'})}
+      else{copy.textContent='请手动选中提示词复制'}
+    };
+  }
+  /* ---- 自带 API Key 的改错 / 润色 ---- */
+  var CN_KEY='cn_ai_key_v1',CN_MODEL='cn_ai_model_v1',CN_MODE='cn_ai_mode_v1';
+  function readLS(k){try{return localStorage.getItem(k)||''}catch(e){return ''}}
+  function writeLS(k,v){try{if(v)localStorage.setItem(k,v);else localStorage.removeItem(k)}catch(e){}}
+  function cnApplyGate(){
+    var gate=el('cnAiGate'),form=el('cnAiForm');
+    if(!gate||!form)return;
+    var logged=!!currentUser;
+    gate.hidden=logged;
+    form.hidden=!logged;
+  }
+  window.cnApplyGate=cnApplyGate;
+  function cnMsg(text,ok){var box=el('cnAiMessage');if(!box)return;box.textContent=text||'';box.style.color=ok?'#477256':'#a51c30'}
+  (function cnAiInit(){
+    var key=el('cnAiKey'),model=el('cnAiModel'),mode=el('cnAiMode'),text=el('cnAiText'),run=el('cnAiRun'),save=el('cnAiSaveKey'),clear=el('cnAiClearKey'),copy=el('cnAiCopy');
+    if(!run)return;
+    if(key)key.value=readLS(CN_KEY);
+    if(model)model.value=readLS(CN_MODEL)||'deepseek-chat';
+    if(mode)mode.value=readLS(CN_MODE)||'both';
+    if(save)save.onclick=function(){writeLS(CN_KEY,key.value.trim());writeLS(CN_MODEL,model.value);writeLS(CN_MODE,mode.value);cnMsg('密钥已保存在本机浏览器。',true)};
+    if(clear)clear.onclick=function(){writeLS(CN_KEY,'');if(key)key.value='';cnMsg('已清除本机保存的密钥。',true)};
+    if(copy)copy.onclick=function(){
+      var out=el('cnAiResult');if(!out)return;
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(out.textContent).then(function(){copy.textContent='已复制 / Copied'},function(){copy.textContent='复制失败，请手动选中'})}
+      else{copy.textContent='请手动选中结果复制'}
+    };
+    run.onclick=async function(){
+      var article=(text&&text.value||'').trim();
+      if(!article){cnMsg('请先粘贴文章正文。');return}
+      if(article.length>6000){cnMsg('文章太长（'+article.length+' 字），请控制在 6000 字以内。');return}
+      if(!key||!key.value.trim()){cnMsg('请先填写 DeepSeek API Key。');return}
+      cnMsg('正在修改，约需要十几秒…',true);
+      writeLS(CN_KEY,key.value.trim());writeLS(CN_MODEL,model.value);writeLS(CN_MODE,mode.value);
+      run.disabled=true;
+      try{
+        var data=await api('/api/ai/polish',{method:'POST',body:JSON.stringify({apiKey:key.value.trim(),model:model.value,mode:mode.value,text:article})});
+        var out=el('cnAiResult'),row=el('cnAiResultRow'),meta=el('cnAiMeta');
+        if(out){out.hidden=false;out.textContent=data.text||''}
+        if(row)row.hidden=false;
+        if(meta)meta.textContent='原文 '+article.length+' 字 · 修改稿 '+((data.text||'').replace(/\s/g,'').length)+' 字 · 模型 '+data.model;
+        cnMsg('修改完成，请自行核对后重写。',true);
+      }catch(err){cnMsg(err.message)}
+      finally{run.disabled=false}
+    };
+    renderGenres();renderThemes();renderPanel();cnApplyGate();
+    // 同理，顶部导航栏的构建脚本跑在本模块之前，这里为这两个页面补建一次
+    var CN_TREE=window.TREE||[['course','Overview'],['course-app','Advanced Programming'],['course-calc','Applied Calculus'],['course-cn','Chinese Literature']];
+    Array.prototype.forEach.call(document.querySelectorAll('[data-view="course-cn"] .cr-nav-course, [data-view="course-cn-01"] .cr-nav-course'),function(bar){
+      var active=bar.getAttribute('data-active')||'course';
+      bar.innerHTML=CN_TREE.map(function(x){return '<a href="#'+x[0]+'" data-csub="'+x[0]+'"'+(x[0]===active?' class="active"':'')+'>'+x[1]+'</a>'}).join('');
+      bar.addEventListener('click',function(e){
+        var a=e.target.closest?e.target.closest('a[data-csub]'):null;
+        if(!a)return;
+        e.preventDefault();
+        go(a.getAttribute('data-csub'));
+      });
+    });
+    // 本模块的区块在页面末尾，早先的深链接处理跑在它之前，这里补一次
+    var initial=(location.hash||'').slice(1);
+    if(initial&&document.querySelector('[data-view="'+initial+'"]')){go(initial)}
+  })();
 })();
 </script>
 </body></html>
