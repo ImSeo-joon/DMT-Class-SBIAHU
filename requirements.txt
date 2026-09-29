@@ -1,0 +1,4 @@
+Flask>=3.1,<4
+waitress>=3.0,<4
+# 邮箱域名 MX 校验；未安装时回退到 nslookup / 系统解析
+dnspython>=2.6,<3

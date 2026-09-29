@@ -1,0 +1,287 @@
+{
+  "news": [
+    {
+      "id": "ets-update-2026",
+      "category": "最新报道 / LATEST STORY",
+      "title_cn": "初识 ETS 明方向，逐梦寰球启新程",
+      "title_en": "Meet ETS, Find Your Direction: A Global Journey Begins",
+      "date": "",
+      "summary_cn": "为帮助 2026 级新生了解国际化考试体系并树立英语学习目标，学院举办 ETS 官方考试动态分享讲座。",
+      "summary_en": "The college hosted an ETS exam update seminar to help the Class of 2026 understand international English tests and set clear learning goals.",
+      "body_cn": "为帮助 2026 级新生快速了解国际化考试体系、明确学院外语培养要求并树立大学英语学习目标，学院在宛君大礼堂举办 ETS 官方考试动态分享讲座，全体大一新生到场参加。ETS 华东区市场经理围绕机构介绍、考试解读、备考方法与规划带来入门分享。\n\n讲座介绍了 ETS 的发展背景与国际影响力，并梳理托福考试体系；同时解读 2026 年托福官方动态，包括题型与考试时长变化、听说读写考察重点、评分逻辑和考场规范。面向零基础新生，主讲人还分享了大学四年英语积累节奏与入门备考建议。\n\n现场还设置了互动答疑和趣味竞答，帮助新生加深对 ETS 与托福考试的认识。",
+      "body_en": "To help the Class of 2026 understand international English tests, clarify language-learning expectations, and set university study goals, the college hosted an ETS exam update seminar at Wanjun Auditorium. All first-year students attended. An ETS East China regional manager introduced the organization, test options, preparation methods, and planning.\n\nThe talk outlined ETS and the TOEFL framework, then reviewed official 2026 updates to task formats, test duration, skill areas, scoring, and test-day rules. Students also received beginner-friendly preparation advice and a longer-term plan for building English skills through college.\n\nAn open Q&A and quiz helped students consolidate what they learned about ETS and TOEFL.",
+      "source_url": "https://mp.weixin.qq.com/s/BgoD3uoPIf7CXLEYDdLt3w",
+      "image_url": "assets/ets-seminar.jpg",
+      "featured": true
+    },
+    {
+      "id": "peer-welcome-2026",
+      "category": "朋辈引路 / PEER STORIES",
+      "title_cn": "朋辈引路，“溪”启新章：2026级新生交流会举行",
+      "title_en": "Peer Guidance, New Beginnings: A Welcome Gathering for the Class of 2026",
+      "date": "2026.09.22",
+      "summary_cn": "六位高年级同学分享学生工作与社会实践、英语学习、专业学习方法、学业与社团平衡，以及数学建模竞赛和科研入门经验。",
+      "summary_en": "Six senior students shared advice on campus engagement, English learning, study strategies, balancing coursework with student life, and getting started in competitions and research.",
+      "body_cn": "9月22日晚，纽约石溪学院团委在逸夫图书馆第一会议厅举办2026级新生交流会。六位来自不同年级与专业方向的学长学姐，围绕学生工作与社会实践、英语学习、专业学习方法、学业与社团平衡，以及数学建模竞赛和科研入门分享经验。\n\n互动答疑中，新生踊跃提问，学长学姐结合亲身经历给出建议，帮助大家适应校园节奏、理清学业规划与发展方向。",
+      "body_en": "On September 22, the college Youth League hosted a welcome gathering for the Class of 2026 at the Yifu Library. Six senior students shared practical advice on student leadership and community engagement, English learning, study strategies, balancing coursework with campus life, and getting started in competitions and research.\n\nAn open Q&A gave new students a chance to ask questions and hear candid advice, helping them find their footing and plan their next steps.",
+      "source_url": "https://mp.weixin.qq.com/s/gl1-HQHGwPt81bhlHirCFg",
+      "image_url": "",
+      "featured": false
+    },
+    {
+      "id": "site-launch",
+      "category": "班级动态 / CLASS UPDATE",
+      "title_cn": "班级网站上线，课表与事务入口现已开放",
+      "title_en": "Class Website Is Live, with Timetable and Class Affairs Now Available",
+      "date": "2026.09.27",
+      "summary_cn": "欢迎查看周课表、浏览班级事务，并提交咨询或合作想法。",
+      "summary_en": "Explore the weekly timetable, class affairs, and ways to share questions or collaboration ideas.",
+      "body_cn": "DMT Class 01 班级网站现已上线，提供周课表、班级新闻与事务信息入口。",
+      "body_en": "The DMT Class 01 website brings together the weekly timetable, class news, and class affairs.",
+      "source_url": "",
+      "image_url": "",
+      "featured": false
+    }
+  ],
+  "events": [],
+  "schedule": {
+    "term_start": "2026-09-07",
+    "lessons": [
+      {
+        "d": 0,
+        "p": 1,
+        "n": "Applied Calculus I",
+        "weeks": [
+          [
+            4,
+            12
+          ]
+        ]
+      },
+      {
+        "d": 4,
+        "p": 1,
+        "n": "Applied Calculus I",
+        "weeks": [
+          [
+            4,
+            12
+          ]
+        ]
+      },
+      {
+        "d": 0,
+        "p": 3,
+        "n": "思想道德与法治",
+        "weeks": [
+          [
+            4,
+            18
+          ]
+        ]
+      },
+      {
+        "d": 1,
+        "p": 1,
+        "n": "Advanced Programming",
+        "weeks": [
+          [
+            4,
+            17
+          ]
+        ]
+      },
+      {
+        "d": 3,
+        "p": 1,
+        "n": "Advanced Programming",
+        "weeks": [
+          [
+            4,
+            17
+          ]
+        ]
+      },
+      {
+        "d": 1,
+        "p": 3,
+        "n": "Applied Calculus I",
+        "weeks": [
+          [
+            4,
+            6
+          ],
+          [
+            9,
+            12
+          ]
+        ]
+      },
+      {
+        "d": 2,
+        "p": 3,
+        "n": "Basic English",
+        "weeks": [
+          [
+            6,
+            17
+          ]
+        ]
+      },
+      {
+        "d": 3,
+        "p": 3,
+        "n": "Basic English",
+        "weeks": [
+          [
+            6,
+            17
+          ]
+        ]
+      },
+      {
+        "d": 4,
+        "p": 3,
+        "n": "Advanced Programming",
+        "weeks": [
+          [
+            6,
+            17
+          ]
+        ]
+      },
+      {
+        "d": 1,
+        "p": 6,
+        "n": "Applied Calculus I",
+        "weeks": [
+          [
+            7,
+            8
+          ]
+        ]
+      },
+      {
+        "d": 3,
+        "p": 6,
+        "n": "大学体育（一）",
+        "weeks": [
+          [
+            4,
+            18
+          ]
+        ]
+      },
+      {
+        "d": 2,
+        "p": 8,
+        "n": "生涯教育与就业指导",
+        "weeks": [
+          [
+            6,
+            7
+          ]
+        ]
+      },
+      {
+        "d": 3,
+        "p": 8,
+        "n": "形势与政策",
+        "weeks": [
+          [
+            15,
+            15
+          ]
+        ]
+      },
+      {
+        "d": 0,
+        "p": 8,
+        "n": "Basic English",
+        "weeks": [
+          [
+            6,
+            17
+          ]
+        ]
+      },
+      {
+        "d": 4,
+        "p": 8,
+        "n": "Basic English",
+        "weeks": [
+          [
+            6,
+            17
+          ]
+        ]
+      },
+      {
+        "d": 2,
+        "p": 11,
+        "n": "大学生心理健康教育",
+        "weeks": [
+          [
+            11,
+            14
+          ]
+        ]
+      },
+      {
+        "d": 1,
+        "p": 11,
+        "n": "Chinese Writing",
+        "weeks": [
+          [
+            4,
+            18
+          ]
+        ]
+      },
+      {
+        "d": 3,
+        "p": 11,
+        "n": "Chinese Writing",
+        "weeks": [
+          [
+            4,
+            18
+          ]
+        ]
+      },
+      {
+        "d": 0,
+        "p": 2,
+        "n": "Applied Calculus II",
+        "weeks": [
+          [
+            13,
+            18
+          ]
+        ]
+      },
+      {
+        "d": 1,
+        "p": 4,
+        "n": "Applied Calculus II",
+        "weeks": [
+          [
+            13,
+            18
+          ]
+        ]
+      },
+      {
+        "d": 4,
+        "p": 2,
+        "n": "Applied Calculus II",
+        "weeks": [
+          [
+            13,
+            18
+          ]
+        ]
+      }
+    ]
+  }
+}

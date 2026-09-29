@@ -1,0 +1,21 @@
+[Unit]
+Description=DMT Class 01 website
+After=network.target
+
+[Service]
+Type=simple
+User=dmt-site
+Group=www-data
+WorkingDirectory=/opt/dmt-class-site
+EnvironmentFile=/etc/dmt-class-site.env
+ExecStart=/opt/dmt-class-site/.venv/bin/waitress-serve --listen=127.0.0.1:8000 --threads=4 app:app
+Restart=on-failure
+RestartSec=3
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/dmt-class-site
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
