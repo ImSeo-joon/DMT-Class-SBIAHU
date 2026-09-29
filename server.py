@@ -55,6 +55,8 @@ REGISTRATION_MODES = ("invite", "open", "closed")
 AI_BASE_URL = os.environ.get("AI_BASE_URL", "https://api.deepseek.com").rstrip("/")
 AI_MODELS = ("deepseek-chat", "deepseek-reasoner")
 AI_TIMEOUT = 60
+# 限流窗口（秒）。默认 15 分钟；同一个网络出口的同学会共用额度，所以阈值不能太小。
+RATE_WINDOW = int(os.environ.get("RATE_WINDOW", "900") or 900)
 AI_MAX_PROMPT = 6000
 EMAIL_VERIFICATION_MODES = ("off", "notify", "gate")
 EMAIL_DOMAIN_CHECK_MODES = ("strict", "warn", "off")
@@ -1022,7 +1024,7 @@ class Handler(BaseHTTPRequestHandler):
     def limited(self, action: str, maximum: int = 8) -> bool:
         now = time.time()
         key = f"{action}:{self.client_key()}"
-        hits = [x for x in RATE_LIMIT.get(key, []) if now - x < 900]
+        hits = [x for x in RATE_LIMIT.get(key, []) if now - x < RATE_WINDOW]
         if len(hits) >= maximum:
             RATE_LIMIT[key] = hits
             return True
@@ -1236,7 +1238,7 @@ class Handler(BaseHTTPRequestHandler):
             session, user = self.require_user(CONTENT_ROLES)
             if not user or not self.check_csrf(session):
                 return
-            if self.limited("upload", 20):
+            if self.limited("upload", 40):
                 return self.send_error_json(429, "上传操作太频繁，请稍后重试")
             try:
                 length = int(self.headers.get("Content-Length", "0"))
@@ -1340,7 +1342,7 @@ class Handler(BaseHTTPRequestHandler):
             except (ValueError, json.JSONDecodeError) as exc:
                 return self.send_error_json(400, str(exc))
             if path == "/api/verify/request":
-                if self.limited("verify-request", 6):
+                if self.limited("verify-request", 20):
                     return self.send_error_json(429, "操作太频繁，请 15 分钟后再试")
                 email = clean_text(raw.get("email"), "邮箱", required=True, maximum=254).lower()
                 if not valid_email(email):
@@ -1362,7 +1364,7 @@ class Handler(BaseHTTPRequestHandler):
                     print(f"[email] 重发验证码失败 {email}: {detail}", file=sys.stderr)
                     return self.send_error_json(502, "验证码发送失败，请稍后重试或联系管理员。")
                 return self.send_json(200, {"ok": True, "sent": True, "expires_minutes": EMAIL_CODE_TTL_MINUTES})
-            if self.limited("verify-confirm", 20):
+            if self.limited("verify-confirm", 40):
                 return self.send_error_json(429, "尝试次数过多，请 15 分钟后再试")
             email = clean_text(raw.get("email"), "邮箱", required=True, maximum=254).lower()
             ok, message, verified_user = confirm_email_code(email, raw.get("code"))
@@ -1375,7 +1377,7 @@ class Handler(BaseHTTPRequestHandler):
             session, user = self.require_user()
             if not user or not self.check_csrf(session):
                 return
-            if self.limited("ai-polish", 20):
+            if self.limited("ai-polish", 60):
                 return self.send_error_json(429, "修改请求太频繁，请过一会儿再试")
             try:
                 raw = self.body()
@@ -1399,7 +1401,7 @@ class Handler(BaseHTTPRequestHandler):
             session, user = self.require_user()
             if not user or not self.check_csrf(session):
                 return
-            if self.limited("ai-resume", 30):
+            if self.limited("ai-resume", 60):
                 return self.send_error_json(429, "生成请求太频繁，请过一会儿再试")
             try:
                 raw = self.body()
@@ -1423,11 +1425,11 @@ class Handler(BaseHTTPRequestHandler):
             try:
                 raw = self.body()
                 if reply_match:
-                    if self.limited("team-reply", 30):
+                    if self.limited("team-reply", 60):
                         return self.send_error_json(429, "回复太频繁，请稍后再试")
                     reply = add_team_reply(reply_match.group(1), user["id"], raw.get("body"))
                     return self.send_json(201, reply)
-                if self.limited("team-post", 10):
+                if self.limited("team-post", 30):
                     return self.send_error_json(429, "发帖太频繁，请稍后再试")
                 post = create_team_post(user["id"], raw)
             except (ValueError, json.JSONDecodeError) as exc:
@@ -1438,7 +1440,7 @@ class Handler(BaseHTTPRequestHandler):
             session, user = self.require_user()
             if not user or not self.check_csrf(session):
                 return
-            if self.limited("feedback", 10):
+            if self.limited("feedback", 20):
                 return self.send_error_json(429, "提交太频繁，请稍后再试")
             try:
                 raw = self.body()
@@ -1457,8 +1459,9 @@ class Handler(BaseHTTPRequestHandler):
         if not self.require_origin():
             return
         action = "auth" if path.endswith("login") else "register"
-        if self.limited(action, 8):
-            return self.send_error_json(429, "操作太频繁，请 15 分钟后重试")
+        # 校园网、宿舍 Wi-Fi 常常共用一个出口 IP，因此认证类阈值放宽；单账号暴力破解由登录锁定兜底
+        if self.limited(action, 40):
+            return self.send_error_json(429, "操作太频繁，请稍后再试（同一网络下的同学会共用额度，可换用手机流量或等几分钟再试）")
         try:
             raw = self.body()
         except (ValueError, json.JSONDecodeError, UnicodeDecodeError) as exc:

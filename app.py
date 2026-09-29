@@ -93,10 +93,13 @@ def csrf_error():
     return api_error(403, "安全校验失败或已过期，请刷新后重试")
 
 
+RATE_WINDOW = int(os.environ.get("RATE_WINDOW", "900") or 900)
+
+
 def limited(action: str, maximum: int = 8) -> bool:
     now = time.time()
     key = f"{action}:{request.remote_addr or 'unknown'}"
-    hits = [stamp for stamp in RATE_LIMIT.get(key, []) if now - stamp < 900]
+    hits = [stamp for stamp in RATE_LIMIT.get(key, []) if now - stamp < RATE_WINDOW]
     if len(hits) >= maximum:
         RATE_LIMIT[key] = hits
         return True
@@ -315,7 +318,7 @@ def feedback_submit():
         return error
     if not check_write(session):
         return csrf_error()
-    if limited("feedback", 10):
+    if limited("feedback", 20):
         return api_error(429, "提交太频繁，请稍后再试")
     try:
         result = core.post_feedback(user, body())
@@ -332,7 +335,7 @@ def team_create():
         return error
     if not check_write(session):
         return csrf_error()
-    if limited("team-post", 10):
+    if limited("team-post", 30):
         return api_error(429, "发帖太频繁，请稍后再试")
     try:
         post = core.create_team_post(user["id"], body())
@@ -349,7 +352,7 @@ def team_reply(post_id):
         return error
     if not check_write(session):
         return csrf_error()
-    if limited("team-reply", 30):
+    if limited("team-reply", 60):
         return api_error(429, "回复太频繁，请稍后再试")
     try:
         reply = core.add_team_reply(post_id, user["id"], body().get("body"))
@@ -363,8 +366,9 @@ def register():
     error = require_origin()
     if error:
         return error
-    if limited("register"):
-        return api_error(429, "操作太频繁，请 15 分钟后重试")
+    # 校园网、宿舍 Wi-Fi 常常共用一个出口 IP，认证类阈值放宽；单账号暴力破解由登录锁定兜底
+    if limited("register", 40):
+        return api_error(429, "操作太频繁，请稍后再试（同一网络下的同学会共用额度，可换用手机流量或等几分钟再试）")
     mode = core.registration_mode()
     if mode == "closed":
         return api_error(403, "注册已关闭，请联系管理员邀请。")
@@ -428,8 +432,8 @@ def login():
     error = require_origin()
     if error:
         return error
-    if limited("auth"):
-        return api_error(429, "操作太频繁，请 15 分钟后重试")
+    if limited("auth", 40):
+        return api_error(429, "操作太频繁，请稍后再试（同一网络下的同学会共用额度，可换用手机流量或等几分钟再试）")
     try:
         raw = body()
         email = core.clean_text(raw.get("email"), "邮箱", required=True, maximum=254).lower()
@@ -478,7 +482,7 @@ def verify_request():
     error = require_origin()
     if error:
         return error
-    if limited("verify-request", 6):
+    if limited("verify-request", 20):
         return api_error(429, "操作太频繁，请 15 分钟后再试")
     try:
         email = core.clean_text(body().get("email"), "邮箱", required=True, maximum=254).lower()
@@ -510,7 +514,7 @@ def verify_confirm():
     error = require_origin()
     if error:
         return error
-    if limited("verify-confirm", 20):
+    if limited("verify-confirm", 40):
         return api_error(429, "尝试次数过多，请 15 分钟后再试")
     try:
         raw = body()
@@ -554,7 +558,7 @@ def ai_polish():
         return error
     if not check_write(session):
         return csrf_error()
-    if limited("ai-polish", 20):
+    if limited("ai-polish", 60):
         return api_error(429, "修改请求太频繁，请过一会儿再试")
     try:
         raw = body()
@@ -583,7 +587,7 @@ def ai_resume():
         return error
     if not check_write(session):
         return csrf_error()
-    if limited("ai-resume", 30):
+    if limited("ai-resume", 60):
         return api_error(429, "生成请求太频繁，请过一会儿再试")
     try:
         raw = body()
@@ -608,7 +612,7 @@ def upload_resource():
         return error
     if not check_write(session):
         return csrf_error()
-    if limited("upload", 20):
+    if limited("upload", 40):
         return api_error(429, "上传操作太频繁，请稍后重试")
     uploaded = request.files.get("file")
     if not uploaded or not uploaded.filename:
