@@ -1,0 +1,13 @@
+# Keep text files as LF everywhere, so commits made on Windows and on the
+# Ubuntu server stay byte-identical (no whole-file line-ending diffs).
+* text=auto eol=lf
+
+# Binary assets must never be line-ending converted.
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.webp binary
+
+# Local runtime artifacts (ignored by .gitignore, listed here as a safety net).
+*.sqlite3 binary
+*.pyc binary
