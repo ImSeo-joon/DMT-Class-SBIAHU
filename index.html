@@ -271,7 +271,7 @@ function wireVerifyUI(){
   });
 }
 const baseRenderProfile=renderProfile;
-renderProfile=function(){baseRenderProfile();applyVerifyState();acRenderAll();if(typeof teamApplyGate==='function')teamApplyGate();if(typeof noticeLoad==='function')noticeLoad();if(typeof applyVisitorGates==='function')applyVisitorGates();if(typeof cnApplyGate==='function')cnApplyGate()};
+renderProfile=function(){baseRenderProfile();applyVerifyState();acRenderAll();if(typeof teamApplyGate==='function')teamApplyGate();if(typeof noticeLoad==='function')noticeLoad();if(typeof applyVisitorGates==='function')applyVisitorGates();if(typeof cnApplyGate==='function')cnApplyGate();if(typeof mailboxApplyRole==='function')mailboxApplyRole()};
 applyVerifyState();
 </script>
 <script>
@@ -2097,6 +2097,169 @@ const CN_GENRES=[
     var initial=(location.hash||'').slice(1);
     if(initial&&document.querySelector('[data-view="'+initial+'"]')){go(initial)}
   })();
+})();
+</script>
+<script>
+/* ===== 咨询与合作：真实提交 + 班委「管理信箱」 ===== */
+(function(){
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function isStaff(){return !!(currentUser&&['admin','officer','counselor'].indexOf(currentUser.role)>=0)}
+
+  /* ---------- 1. 咨询与合作表单：真正提交到班委信箱 ---------- */
+  function initContactForm(){
+    var form=document.getElementById('contactForm');
+    if(!form||form.dataset.wired==='1')return;
+    var fresh=form.cloneNode(true);          // 克隆一份，清掉原来的“演示提交”监听
+    fresh.dataset.wired='1';
+    form.parentNode.replaceChild(fresh,form);
+    if(!fresh.querySelector('#contactContact')){
+      var label=document.createElement('label');
+      label.innerHTML='联系方式（选填，便于班委回复）<input id="contactContact" maxlength="120" placeholder="邮箱 / 微信 / 手机号，留空也可以">';
+      var submitBtn=fresh.querySelector('button[type="submit"]');
+      if(submitBtn)fresh.insertBefore(label,submitBtn);else fresh.appendChild(label);
+    }
+    var msg=document.createElement('div');
+    msg.id='contactMessage';msg.setAttribute('role','status');
+    msg.className='small-note';msg.style.marginTop='10px';
+    fresh.appendChild(msg);
+    fresh.addEventListener('submit',async function(e){
+      e.preventDefault();
+      var nameInput=fresh.querySelector('input:not([type]), input[type="text"]');
+      var select=fresh.querySelector('select');
+      var area=fresh.querySelector('textarea');
+      var contact=fresh.querySelector('#contactContact');
+      var payload={
+        name:nameInput?nameInput.value.trim():'',
+        category:select?select.value:'',
+        body:area?area.value.trim():'',
+        contact:contact?contact.value.trim():''
+      };
+      if(!payload.body){msg.style.color='#a51c30';msg.textContent='请先写下你的问题或想法。';return}
+      var btn=fresh.querySelector('button[type="submit"]');
+      if(btn)btn.disabled=true;
+      msg.style.color='#8b948c';msg.textContent='正在提交…';
+      try{
+        await api('/api/contact',{method:'POST',body:JSON.stringify(payload)});
+        msg.style.color='#477256';
+        msg.textContent='已提交。班委可以在个人中心的「管理信箱」里看到这条留言；如留下联系方式，我们会联系你。';
+        if(area)area.value='';
+        if(contact)contact.value='';
+      }catch(err){msg.style.color='#a51c30';msg.textContent=err.message}
+      finally{if(btn)btn.disabled=false}
+    });
+  }
+
+  /* ---------- 2. 个人中心 → 管理信箱（管理员 / 班委 / 导员） ---------- */
+  var MB_STATUSES=['待处理','处理中','已解决'];
+  var mbItems=[],mbStatuses=MB_STATUSES.slice(),mbFilter='全部';
+
+  function ensureMailbox(){
+    var tabs=document.getElementById('acTabs');
+    if(!tabs)return;
+    if(!tabs.querySelector('[data-ac-tab="messages"]')){
+      var b=document.createElement('button');
+      b.type='button';b.className='filter';b.setAttribute('data-ac-tab','messages');
+      b.textContent='管理信箱 / Inbox';
+      tabs.appendChild(b);
+      b.addEventListener('click',function(){acShowTab('messages');mailboxLoad()});
+    }
+    var host=document.querySelector('#profilePanel .account-box');
+    if(host&&!host.querySelector('[data-ac-panel="messages"]')){
+      var panel=document.createElement('div');
+      panel.setAttribute('data-ac-panel','messages');
+      panel.hidden=true;
+      panel.innerHTML='<h2>管理信箱 / Class inbox</h2>'
+        +'<p class="small-note" id="mailboxMeta">正在读取…</p>'
+        +'<div class="filters" id="mailboxFilters"></div>'
+        +'<div id="mailboxList" class="admin-list"></div>'
+        +'<div class="button-row"><button class="btn secondary" type="button" id="mailboxReload">刷新 / Refresh</button></div>'
+        +'<div id="mailboxMessage" role="status"></div>';
+      host.appendChild(panel);
+      var reload=panel.querySelector('#mailboxReload');
+      if(reload)reload.addEventListener('click',function(){mailboxLoad()});
+    }
+    var tab=tabs.querySelector('[data-ac-tab="messages"]');
+    if(tab)tab.hidden=!isStaff();
+    if(!isStaff()&&acTab==='messages')acShowTab('profile');
+  }
+
+  async function mailboxLoad(){
+    if(!isStaff())return;
+    var list=document.getElementById('mailboxList');
+    if(!list)return;
+    var meta=document.getElementById('mailboxMeta');
+    try{
+      var data=await api('/api/messages');
+      mbItems=data.items||[];
+      mbStatuses=(data.statuses&&data.statuses.length)?data.statuses:MB_STATUSES.slice();
+      renderMailboxFilters();
+      renderMailbox();
+      if(meta)meta.textContent='共 '+mbItems.length+' 条留言'+(data.mailer_configured?'':' · 邮件未配置：留言只在网站内可见，班委暂时收不到邮件提醒');
+    }catch(err){
+      list.innerHTML='<div class="account-box"><h2>无法读取管理信箱</h2><p class="small-note">'+esc(err.message)+'</p></div>';
+    }
+  }
+
+  function renderMailboxFilters(){
+    var box=document.getElementById('mailboxFilters');
+    if(!box)return;
+    var all=['全部'].concat(mbStatuses);
+    box.innerHTML=all.map(function(s){
+      var count=s==='全部'?mbItems.length:mbItems.filter(function(m){return m.status===s}).length;
+      return '<button type="button" class="filter'+(s===mbFilter?' active':'')+'" data-mb-filter="'+esc(s)+'">'+esc(s)+' '+count+'</button>';
+    }).join('');
+    Array.prototype.forEach.call(box.querySelectorAll('[data-mb-filter]'),function(b){
+      b.addEventListener('click',function(){mbFilter=b.dataset.mbFilter;renderMailboxFilters();renderMailbox()});
+    });
+  }
+
+  function renderMailbox(){
+    var list=document.getElementById('mailboxList');
+    if(!list)return;
+    var items=mbItems.filter(function(m){return mbFilter==='全部'||m.status===mbFilter});
+    if(!items.length){
+      list.innerHTML='<div class="account-box"><h2>暂无留言 / No messages</h2><p class="small-note">同学从「咨询与合作」页面提交的问题、提案与合作需求，会出现在这里。</p></div>';
+      return;
+    }
+    list.innerHTML=items.map(function(m){
+      var mail=m.mailed?'邮件已发送':'邮件未发送'+(m.mail_detail?'（'+m.mail_detail+'）':'');
+      return '<div class="account-box">'
+        +'<div class="button-row"><span class="tag">'+esc(m.category)+'</span>'
+        +'<span class="tag">'+esc(m.status)+'</span>'
+        +'<span class="small-note">'+esc(m.name||'匿名')+(m.contact?' · '+esc(m.contact):'')+' · '+esc(String(m.created_at||'').slice(0,16).replace('T',' '))+'</span></div>'
+        +'<p style="white-space:pre-wrap">'+esc(m.body)+'</p>'
+        +(m.response?'<p class="small-note">处理记录：'+esc(m.response)+(m.handler?'（'+esc(m.handler)+'）':'')+'</p>':'')
+        +'<p class="small-note">'+esc(mail)+'</p>'
+        +'<label>处理备注（选填，会显示给提交人）<input data-mb-note="'+esc(m.id)+'" maxlength="1000" value="'+esc(m.response||'')+'"></label>'
+        +'<div class="button-row">'
+        +mbStatuses.map(function(s){
+            return '<button type="button" class="btn secondary" data-mb-set="'+esc(s)+'" data-mb-id="'+esc(m.id)+'"'+(s===m.status?' disabled':'')+'>标记为'+esc(s)+'</button>';
+          }).join('')
+        +'</div></div>';
+    }).join('');
+    Array.prototype.forEach.call(list.querySelectorAll('[data-mb-set]'),function(b){
+      b.addEventListener('click',async function(){
+        var id=b.dataset.mbId,status=b.dataset.mbSet;
+        var note=document.querySelector('[data-mb-note="'+id+'"]');
+        try{
+          await api('/api/messages/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({status:status,response:note?note.value.trim():''})});
+          await mailboxLoad();
+          var box=document.getElementById('mailboxMessage');
+          if(box){box.textContent='已更新留言状态。';box.style.color='#477256'}
+        }catch(err){
+          var box2=document.getElementById('mailboxMessage');
+          if(box2){box2.textContent=err.message;box2.style.color='#a51c30'}
+        }
+      });
+    });
+  }
+
+  window.mailboxApplyRole=function(){ensureMailbox()};
+
+  initContactForm();
+  ensureMailbox();
+  var origShowTab=acShowTab;
+  acShowTab=function(name){origShowTab(name);if(name==='messages')mailboxLoad()};
 })();
 </script>
 </body></html>

@@ -287,6 +287,20 @@ def feedback_admin_list():
                     "recipients": core.feedback_admin_emails()})
 
 
+@app.get("/api/messages")
+def messages_list():
+    _, user, error = require_user()
+    if error:
+        return error
+    if user["role"] in core.CONTENT_ROLES:
+        return jsonify({"items": core.message_list(), "scope": "all",
+                        "statuses": list(core.FEEDBACK_STATUSES),
+                        "mailer_configured": core.mailer_configured(),
+                        "recipients": core.staff_emails()})
+    return jsonify({"items": core.message_list(user_id=user["id"]), "scope": "mine",
+                    "statuses": list(core.FEEDBACK_STATUSES)})
+
+
 @app.get("/api/audit")
 def audit_log():
     _, user, error = require_user({"admin"})
@@ -309,6 +323,23 @@ def invites():
                     "email_allowed_domains": core.email_allowed_domains(),
                     "mailer_configured": core.mailer_configured(),
                     "roles": [{"value": r, "label": core.INVITE_ROLE_LABELS[r]} for r in core.INVITE_ROLES]})
+
+
+@app.post("/api/contact")
+def contact_submit():
+    """咨询与合作：未登录访客也能提交，写入数据库并转发到班委信箱。"""
+    error = require_origin()
+    if error:
+        return error
+    if limited("contact", 20):
+        return api_error(429, "提交太频繁，请稍后再试")
+    _, author = get_session()
+    try:
+        result = core.create_message(body(), author)
+    except Exception as exc:
+        return api_error(400, str(exc) or "请求格式不正确")
+    audit(author["id"] if author else None, "create", "message", result["id"])
+    return jsonify(result), 201
 
 
 @app.post("/api/feedback")
@@ -772,6 +803,25 @@ def update_profile():
         con.execute("UPDATE users SET display_name=? WHERE id=?", (name, user["id"]))
     audit(user["id"], "update", "profile", user["id"])
     return jsonify({"display_name": name})
+
+
+@app.patch("/api/messages/<message_id>")
+def message_handle(message_id):
+    session, user, error = require_user(core.CONTENT_ROLES)
+    if error:
+        return error
+    if not check_write(session):
+        return csrf_error()
+    try:
+        raw = body()
+        handled = core.handle_message(message_id, str(raw.get("status", "")).strip(),
+                                      raw.get("response", ""), user["id"])
+    except Exception as exc:
+        return api_error(400, str(exc) or "参数不正确")
+    if not handled:
+        return api_error(404, "留言不存在")
+    audit(user["id"], "handle-message:" + str(raw.get("status", "")).strip(), "message", message_id)
+    return jsonify({"ok": True})
 
 
 @app.patch("/api/feedback/<feedback_id>")

@@ -145,6 +145,15 @@ def init_db() -> None:
           body TEXT NOT NULL, contact TEXT NOT NULL DEFAULT '',
           created_at TEXT NOT NULL, mailed INTEGER NOT NULL DEFAULT 0, mail_detail TEXT NOT NULL DEFAULT ''
         );
+        CREATE TABLE IF NOT EXISTS messages (
+          id TEXT PRIMARY KEY, user_id TEXT REFERENCES users(id) ON DELETE SET NULL,
+          name TEXT NOT NULL DEFAULT '', contact TEXT NOT NULL DEFAULT '',
+          category TEXT NOT NULL DEFAULT '学业咨询', body TEXT NOT NULL,
+          status TEXT NOT NULL DEFAULT '待处理', response TEXT NOT NULL DEFAULT '',
+          handled_at TEXT, handled_by TEXT REFERENCES users(id) ON DELETE SET NULL,
+          mailed INTEGER NOT NULL DEFAULT 0, mail_detail TEXT NOT NULL DEFAULT '',
+          created_at TEXT NOT NULL
+        );
         """)
         ensure_user_columns(con)
         ensure_feedback_columns(con)
@@ -723,6 +732,82 @@ def feedback_list(limit: int = 100, user_id: str | None = None) -> list[dict]:
     return [dict(row) for row in rows]
 
 
+MESSAGE_CATEGORIES = ("学业咨询", "活动提案", "竞赛科研组队", "资源分享与合作", "其他建议")
+
+
+def staff_emails() -> list[str]:
+    """班委信箱收件人：优先 CONTACT_EMAIL / FEEDBACK_EMAIL，其次所有管理员、班委与导员。"""
+    override = os.environ.get("CONTACT_EMAIL", "").strip() or os.environ.get("FEEDBACK_EMAIL", "").strip()
+    if override:
+        return [x for x in re.split(r"[,;\s]+", override) if "@" in x]
+    init_db()
+    with connect() as con:
+        rows = con.execute(
+            "SELECT email FROM users WHERE role IN ('admin','officer','counselor') ORDER BY created_at").fetchall()
+    return [row["email"] for row in rows]
+
+
+def message_list(limit: int = 200, user_id: str | None = None) -> list[dict]:
+    init_db()
+    columns = ("m.id,m.user_id,m.name,m.contact,m.category,m.body,m.status,m.response,"
+               "m.handled_at,m.mailed,m.mail_detail,m.created_at,u.display_name AS author,"
+               "hu.display_name AS handler")
+    sql = ("SELECT " + columns + " FROM messages m LEFT JOIN users u ON u.id=m.user_id"
+           " LEFT JOIN users hu ON hu.id=m.handled_by")
+    params: tuple = ()
+    if user_id:
+        sql += " WHERE m.user_id=?"
+        params = (user_id,)
+    sql += " ORDER BY m.created_at DESC LIMIT ?"
+    params = params + (limit,)
+    with connect() as con:
+        rows = con.execute(sql, params).fetchall()
+    return [dict(row) for row in rows]
+
+
+def create_message(raw: dict, user: sqlite3.Row | None = None) -> dict:
+    """咨询与合作留言：任何人可提交，写入数据库并转发到班委信箱。"""
+    name = (clean_text(raw.get("name"), "称呼", maximum=60)
+            or (user["display_name"] if user else "") or "访客")
+    contact = (clean_text(raw.get("contact"), "联系方式", maximum=120)
+               or (user["email"] if user else ""))
+    category = clean_text(raw.get("category"), "事务类型", maximum=40) or MESSAGE_CATEGORIES[0]
+    if category not in MESSAGE_CATEGORIES:
+        category = MESSAGE_CATEGORIES[0]   # 表单里未选择时归入第一类，不直接报错
+    body_text = clean_text(raw.get("body"), "内容", required=True, maximum=2000)
+    message_id = str(uuid.uuid4())
+    created = utc_now()
+    recipients = staff_emails()
+    mailed, detail = 0, ""
+    if recipients:
+        subject = f"[DMT CLASS 01] 新的咨询与合作留言：{category}"
+        text = (f"称呼：{name}\n联系方式：{contact or '未填写'}\n事务类型：{category}\n"
+                f"提交时间：{created}\n\n{body_text}\n\n"
+                "可在网站「个人中心 → 管理信箱」中查看并标记处理状态。")
+        ok, note = send_mail(", ".join(recipients), subject, text)
+        mailed, detail = (1 if ok else 0), note
+    else:
+        detail = "没有可用的班委邮箱，留言已存档"
+    init_db()
+    with connect() as con:
+        con.execute("INSERT INTO messages(id,user_id,name,contact,category,body,status,response,"
+                    "created_at,mailed,mail_detail) VALUES(?,?,?,?,?,?,'待处理','',?,?,?)",
+                    (message_id, user["id"] if user else None, name, contact, category, body_text,
+                     created, mailed, detail))
+    return {"id": message_id, "created_at": created, "mailed": bool(mailed), "recipients": len(recipients)}
+
+
+def handle_message(message_id: str, status: str, response: object, staff_id: str) -> bool:
+    if status not in FEEDBACK_STATUSES:
+        raise ValueError("处理状态只能是：" + "、".join(FEEDBACK_STATUSES))
+    note = clean_text(response, "处理结果", maximum=1000)
+    init_db()
+    with connect() as con:
+        cur = con.execute("UPDATE messages SET status=?,response=?,handled_at=?,handled_by=? WHERE id=?",
+                          (status, note, utc_now(), staff_id, message_id))
+    return bool(cur.rowcount)
+
+
 def handle_feedback(feedback_id: str, status: str, response: object, admin_id: str) -> bool:
     if status not in FEEDBACK_STATUSES:
         raise ValueError("处理状态只能是：" + "、".join(FEEDBACK_STATUSES))
@@ -1202,6 +1287,17 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(200, {"items": feedback_list(), "scope": "all",
                                         "mailer_configured": mailer_configured(),
                                         "recipients": feedback_admin_emails()})
+        if path == "/api/messages":
+            _, user = self.require_user()
+            if not user:
+                return
+            if user["role"] in CONTENT_ROLES:
+                return self.send_json(200, {"items": message_list(), "scope": "all",
+                                            "statuses": list(FEEDBACK_STATUSES),
+                                            "mailer_configured": mailer_configured(),
+                                            "recipients": staff_emails()})
+            return self.send_json(200, {"items": message_list(user_id=user["id"]), "scope": "mine",
+                                        "statuses": list(FEEDBACK_STATUSES)})
         if path == "/api/audit":
             _, user = self.require_user({"admin"})
             if not user:
@@ -1449,6 +1545,22 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send_error_json(400, str(exc))
             self.audit(user["id"], "feedback:" + result["category"], "feedback", result["id"])
             return self.send_json(201, result)
+        if path == "/api/contact":
+            # 咨询与合作：未登录访客也能提交，写入数据库并转发到班委信箱
+            if not self.require_origin():
+                return
+            if self.limited("contact", 20):
+                return self.send_error_json(429, "提交太频繁，请稍后再试")
+            _, author = self.session()
+            try:
+                raw = self.body()
+                result = create_message(raw, author)
+            except (ValueError, json.JSONDecodeError) as exc:
+                return self.send_error_json(400, str(exc))
+            # 匿名提交没有对应账号，审计里记 NULL（后台显示为“系统”），不能写死字符串否则违反外键
+            self.audit(author["id"] if author else None, "create", "message", result["id"])
+            return self.send_json(201, {"ok": True, "mailed": result["mailed"],
+                                        "recipients": result["recipients"]})
         if path not in ("/api/register", "/api/login"):
             session, user = self.require_user(CONTENT_ROLES)
             if not user:
@@ -1670,6 +1782,21 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send_error_json(400, str(exc))
             self.audit(user["id"], "set-notice", "setting", "site_notice")
             return self.send_json(200, {"ok": True, "notice": value})
+        message_patch = re.fullmatch(r"/api/messages/([0-9a-f-]{36})", path)
+        if message_patch:
+            session, staff = self.require_user(CONTENT_ROLES)
+            if not staff or not self.check_csrf(session):
+                return
+            try:
+                raw = self.body()
+                handled = handle_message(message_patch.group(1), str(raw.get("status") or ""),
+                                         raw.get("response"), staff["id"])
+            except (ValueError, json.JSONDecodeError) as exc:
+                return self.send_error_json(400, str(exc))
+            if not handled:
+                return self.send_error_json(404, "留言不存在")
+            self.audit(staff["id"], "handle-message:" + str(raw.get("status") or ""), "message", message_patch.group(1))
+            return self.send_json(200, {"ok": True})
         feedback_patch = re.fullmatch(r"/api/feedback/([0-9a-f-]{36})", path)
         if feedback_patch:
             session, user = self.require_user({"admin"})
