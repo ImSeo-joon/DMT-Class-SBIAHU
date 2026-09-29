@@ -1023,7 +1023,7 @@ function applyVisitorGates(){
       Array.prototype.forEach.call(sec.children,el=>{if(el!==gate)el.hidden=true});
     }else{
       gate.hidden=true;
-      Array.prototype.forEach.call(sec.children,el=>{el.hidden=false});
+      Array.prototype.forEach.call(sec.children,el=>{if(el!==gate)el.hidden=false});
     }
   });
   // 首页课程速览与周课表同一权限
