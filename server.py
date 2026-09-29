@@ -39,6 +39,9 @@ SEED_PATH = ROOT / "content.json"
 COOKIE = "dmt_session"
 SESSION_DAYS = 14
 PBKDF2_ROUNDS = 310_000
+# 同一账号连续输错密码达到 5 次后锁定 15 分钟，防止换 IP 继续爆破
+LOGIN_MAX_FAILURES = 5
+LOGIN_LOCK_MINUTES = 15
 ROLES = {"admin", "officer", "counselor", "member"}
 ROLE_LABELS = {"admin": "管理员", "officer": "班委", "counselor": "导员", "member": "班级成员"}
 CONTENT_ROLES = {"admin", "officer", "counselor"}
@@ -192,6 +195,10 @@ def ensure_user_columns(con: sqlite3.Connection) -> None:
         con.execute("ALTER TABLE users ADD COLUMN email_verified_at TEXT")
     if "account_type" not in columns:
         con.execute("ALTER TABLE users ADD COLUMN account_type TEXT NOT NULL DEFAULT 'member'")
+    if "failed_logins" not in columns:
+        con.execute("ALTER TABLE users ADD COLUMN failed_logins INTEGER NOT NULL DEFAULT 0")
+    if "locked_until" not in columns:
+        con.execute("ALTER TABLE users ADD COLUMN locked_until TEXT")
 
 
 ACCOUNT_TYPES = ("member", "visitor")
@@ -1471,14 +1478,20 @@ class Handler(BaseHTTPRequestHandler):
         password = raw.get("password", "")
         with connect() as con:
             user = con.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
+        lock_note = account_locked(user)
+        if lock_note:
+            return self.send_error_json(429, lock_note)
         valid = False
         if user and isinstance(password, str):
             _, attempt = hash_password(password, user["password_salt"])
             valid = hmac.compare_digest(attempt, user["password_hash"])
         if not valid:
+            if user:
+                register_failed_login(user["id"])
             return self.send_error_json(401, "邮箱或密码不正确")
         with connect() as con:
             con.execute("DELETE FROM sessions WHERE user_id=?", (user["id"],))
+            con.execute("UPDATE users SET failed_logins=0, locked_until=NULL WHERE id=?", (user["id"],))
         self.audit(user["id"], "login", "user", user["id"])
         return self.create_session(user["id"])
 
@@ -1698,6 +1711,17 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send_error_json(404, "帖子不存在或已被删除")
             self.audit(user["id"], "delete", "team-post", team_delete.group(1))
             return self.send_json(200, {"ok": True})
+        user_delete = re.fullmatch(r"/api/users/([0-9a-f-]{36})", path)
+        if user_delete:
+            session, admin = self.require_user({"admin"})
+            if not admin or not self.check_csrf(session):
+                return
+            try:
+                result = delete_user(admin["id"], user_delete.group(1))
+            except ValueError as exc:
+                return self.send_error_json(400, str(exc))
+            self.audit(admin["id"], "delete-account", "user", user_delete.group(1))
+            return self.send_json(200, result)
         invite_match = re.fullmatch(r"/api/invites/([0-9a-f-]{36})", path)
         if invite_match:
             session, user = self.require_user({"admin"})
@@ -1762,6 +1786,88 @@ def bootstrap_admin() -> None:
     print("管理员账号已创建。请启动服务并使用该账号登录。")
 
 
+def lock_remaining_minutes(locked_until: str) -> int:
+    """Minutes left before a locked account can try again (at least 1)."""
+    try:
+        until = datetime.fromisoformat(str(locked_until))
+    except (TypeError, ValueError):
+        return LOGIN_LOCK_MINUTES
+    if until.tzinfo is None:
+        until = until.replace(tzinfo=timezone.utc)
+    seconds = (until - datetime.now(timezone.utc)).total_seconds()
+    return max(1, int((seconds + 59) // 60))
+
+
+def account_locked(user: sqlite3.Row | None) -> str:
+    """Return the lock message when the account is currently locked, else ''."""
+    if not user:
+        return ""
+    try:
+        locked_until = user["locked_until"]
+    except (IndexError, KeyError):
+        return ""
+    if not locked_until or str(locked_until) <= utc_now():
+        return ""
+    return f"该账号连续输错密码，已锁定，请 {lock_remaining_minutes(locked_until)} 分钟后重试"
+
+
+def clear_login_failures(user_id: str) -> None:
+    with connect() as con:
+        con.execute("UPDATE users SET failed_logins=0, locked_until=NULL WHERE id=?", (user_id,))
+
+
+def register_failed_login(user_id: str) -> None:
+    """Count a wrong password; lock the account once the limit is reached."""
+    init_db()
+    with connect() as con:
+        row = con.execute("SELECT failed_logins FROM users WHERE id=?", (user_id,)).fetchone()
+        failures = (row["failed_logins"] if row else 0) + 1
+        if failures >= LOGIN_MAX_FAILURES:
+            until = (datetime.now(timezone.utc) + timedelta(minutes=LOGIN_LOCK_MINUTES)).isoformat(timespec="seconds")
+            con.execute("UPDATE users SET failed_logins=0, locked_until=? WHERE id=?", (until, user_id))
+        else:
+            con.execute("UPDATE users SET failed_logins=? WHERE id=?", (failures, user_id))
+
+
+def unlock_account(email: str) -> bool:
+    init_db()
+    with connect() as con:
+        cur = con.execute("UPDATE users SET failed_logins=0, locked_until=NULL WHERE email=?", (email.strip().lower(),))
+    return bool(cur.rowcount)
+
+
+def delete_user(actor_id: str, target_id: str) -> dict:
+    """Remove one account. References from other tables are cleared first."""
+    init_db()
+    with connect() as con:
+        target = con.execute("SELECT id,display_name,email,role FROM users WHERE id=?", (target_id,)).fetchone()
+        if not target:
+            raise ValueError("账号不存在")
+        if target["id"] == actor_id:
+            raise ValueError("不能删除当前登录的账号")
+        if target["role"] == "admin":
+            admins = con.execute("SELECT COUNT(*) FROM users WHERE role='admin'").fetchone()[0]
+            if admins <= 1:
+                raise ValueError("至少保留一名管理员")
+        # 这些表没有 ON DELETE 规则，先解除引用，避免外键报错或留下悬空 ID
+        for statement in (
+            "UPDATE resources SET uploaded_by=NULL WHERE uploaded_by=?",
+            "UPDATE news SET updated_by=NULL WHERE updated_by=?",
+            "UPDATE events SET updated_by=NULL WHERE updated_by=?",
+            "UPDATE site_settings SET updated_by=NULL WHERE updated_by=?",
+            "UPDATE invite_codes SET created_by=NULL WHERE created_by=?",
+            "UPDATE audit_log SET actor_id=NULL WHERE actor_id=?",
+        ):
+            con.execute(statement, (target_id,))
+        # 会话与验证码由外键级联删除，这里显式删一遍更直观；帖子与回复的作者置空
+        con.execute("DELETE FROM sessions WHERE user_id=?", (target_id,))
+        con.execute("DELETE FROM email_tokens WHERE user_id=?", (target_id,))
+        con.execute("UPDATE team_posts SET author_id=NULL WHERE author_id=?", (target_id,))
+        con.execute("UPDATE team_replies SET author_id=NULL WHERE author_id=?", (target_id,))
+        con.execute("DELETE FROM users WHERE id=?", (target_id,))
+    return {"ok": True, "deleted": {"id": target["id"], "display_name": target["display_name"], "email": target["email"]}}
+
+
 def reset_password(email: str) -> None:
     init_db()
     password = getpass.getpass("新密码（至少 12 位）: ")
@@ -1770,12 +1876,13 @@ def reset_password(email: str) -> None:
         raise SystemExit("密码不匹配或长度不在 12–128 位范围内。")
     salt, digest = hash_password(password)
     with connect() as con:
-        cur = con.execute("UPDATE users SET password_salt=?,password_hash=? WHERE email=?", (salt, digest, email.lower()))
+        cur = con.execute("UPDATE users SET password_salt=?,password_hash=?,failed_logins=0,locked_until=NULL WHERE email=?",
+                          (salt, digest, email.lower()))
         if not cur.rowcount:
             raise SystemExit("未找到该邮箱对应的账号。")
         user = con.execute("SELECT id FROM users WHERE email=?", (email.lower(),)).fetchone()
         con.execute("DELETE FROM sessions WHERE user_id=?", (user["id"],))
-    print("密码已重置，现有会话已退出。")
+    print("密码已重置，现有会话已退出，登录锁定已解除。")
 
 
 def serve() -> None:
@@ -1821,5 +1928,20 @@ if __name__ == "__main__":
         print(("发送成功：" if sent else "发送失败：") + detail)
     elif len(sys.argv) > 2 and sys.argv[1] == "verify-email":
         print("已标记为已验证。" if mark_email_verified(sys.argv[2]) else "未找到该邮箱对应的账号。")
+    elif len(sys.argv) > 2 and sys.argv[1] == "unlock-user":
+        print("已解除登录锁定。" if unlock_account(sys.argv[2]) else "未找到该邮箱对应的账号。")
+    elif len(sys.argv) > 2 and sys.argv[1] == "delete-user":
+        target_email = sys.argv[2].strip().lower()
+        init_db()
+        with connect() as con:
+            row = con.execute("SELECT id FROM users WHERE email=?", (target_email,)).fetchone()
+        if not row:
+            print("未找到该邮箱对应的账号。")
+        else:
+            try:
+                removed = delete_user("", row["id"])
+                print(f"已删除账号：{removed['deleted']['display_name']} <{removed['deleted']['email']}>")
+            except ValueError as exc:
+                print(f"未删除：{exc}")
     else:
         serve()

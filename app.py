@@ -438,14 +438,20 @@ def login():
         return api_error(400, str(exc) or "请求格式不正确")
     with core.connect() as con:
         user = con.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
+    lock_note = core.account_locked(user)
+    if lock_note:
+        return api_error(429, lock_note)
     valid = False
     if user and isinstance(password, str):
         _, attempt = core.hash_password(password, user["password_salt"])
         valid = hmac.compare_digest(attempt, user["password_hash"])
     if not valid:
+        if user:
+            core.register_failed_login(user["id"])
         return api_error(401, "邮箱或密码不正确")
     with core.connect() as con:
         con.execute("DELETE FROM sessions WHERE user_id=?", (user["id"],))
+        con.execute("UPDATE users SET failed_logins=0, locked_until=NULL WHERE id=?", (user["id"],))
     audit(user["id"], "login", "user", user["id"])
     return new_session(user["id"])
 
@@ -851,6 +857,21 @@ def update_role(target_id):
         con.execute("UPDATE users SET role=? WHERE id=?", (role, target_id))
     audit(user["id"], "set-role:" + role, "user", target_id)
     return jsonify({"id": target_id, "role": role, "role_label": core.ROLE_LABELS[role]})
+
+
+@app.delete("/api/users/<user_id>")
+def delete_user_route(user_id):
+    session, admin, error = require_user({"admin"})
+    if error:
+        return error
+    if not check_write(session):
+        return csrf_error()
+    try:
+        result = core.delete_user(admin["id"], user_id)
+    except ValueError as exc:
+        return api_error(400, str(exc))
+    audit(admin["id"], "delete-account", "user", user_id)
+    return jsonify(result)
 
 
 @app.delete("/api/<table>/<item_id>")

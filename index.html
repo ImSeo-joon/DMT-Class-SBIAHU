@@ -1791,4 +1791,42 @@ lim (n → ∞) (1 + 1/n)^n = e</span>
   }
 })();
 </script>
+<script>
+/* ===== 账号删除按钮 / Delete-account button in the editorial desk =====
+   只在「编辑后台 → 账号权限」里给管理员多一个删除按钮；
+   列表每次重绘都能自动补上，不依赖 loadUsers 的内部实现。 */
+(function(){
+  function decorateUserRows(){
+    const list=document.getElementById('userAdminList');
+    if(!list)return;
+    if(!currentUser||currentUser.role!=='admin')return;
+    list.querySelectorAll('.user-row').forEach(row=>{
+      const save=row.querySelector('[data-save-role]');
+      if(!save||row.querySelector('[data-del-user]'))return;
+      const id=save.getAttribute('data-save-role');
+      if(currentUser.id===id)return;              // 自己不能删自己
+      const nameNode=row.querySelector('strong');
+      const btn=document.createElement('button');
+      btn.type='button';
+      btn.className='btn secondary';
+      btn.textContent='删除账号 / Delete';
+      btn.setAttribute('data-del-user', id);
+      btn.addEventListener('click',async()=>{
+        const name=nameNode?nameNode.textContent:id;
+        if(!confirm('确定删除账号「'+name+'」？\n\n该账号的登录会话与邮箱验证码会被清除，TA 发过的帖子和回复会保留但不再显示作者。此操作无法撤销，确定继续吗？'))return;
+        try{
+          await api('/api/users/'+encodeURIComponent(id),{method:'DELETE',body:'{}'});
+          showMessage('editorMessage','账号已删除 / Account deleted.',true);
+          if(typeof loadUsers==='function')await loadUsers();
+          decorateUserRows();
+        }catch(err){showMessage('editorMessage',err.message)}
+      });
+      save.parentNode.appendChild(btn);
+    });
+  }
+  const list=document.getElementById('userAdminList');
+  if(list)new MutationObserver(decorateUserRows).observe(list,{childList:true,subtree:true});
+  decorateUserRows();
+})();
+</script>
 </body></html>

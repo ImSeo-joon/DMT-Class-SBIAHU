@@ -24,12 +24,27 @@ SMTP_KEYS=(SMTP_HOST SMTP_PORT SMTP_SECURITY SMTP_USER SMTP_PASSWORD SMTP_SENDER
 
 read_env_file() {
   [[ -f "$ENV_FILE" ]] || return 0
-  # 只读取形如 KEY=VALUE 的行，忽略注释与空行
+  # 只读取形如 KEY=VALUE 的行，忽略注释与空行；成对的引号会被去掉，
+  # 这样带空格的值（例如 SMTP_SENDER_NAME="DMT CLASS 01"）也能安全读取
   while IFS= read -r line; do
     [[ "$line" =~ ^[[:space:]]*# ]] && continue
     [[ "$line" =~ ^([A-Za-z_][A-Za-z0-9_]*)=(.*)$ ]] || continue
-    printf '%s\n' "${BASH_REMATCH[1]}=${BASH_REMATCH[2]}"
+    local key="${BASH_REMATCH[1]}" value="${BASH_REMATCH[2]}"
+    if [[ "$value" == \"*\" || "$value" == \'*\' ]]; then
+      value="${value:1:${#value}-2}"
+    fi
+    printf '%s=%s\n' "$key" "$value"
   done < "$ENV_FILE"
+}
+
+quote_env_value() {
+  # 含空格的值必须加引号，否则被 source 时会当成命令执行
+  local value="$1"
+  if [[ "$value" == *[[:space:]]* ]]; then
+    printf '"%s"' "$value"
+  else
+    printf '%s' "$value"
+  fi
 }
 
 capture_current() {
@@ -70,11 +85,11 @@ need_app_python() {
 
 run_with_env() {
   local python="$1"; shift
-  # 把 env 文件里的变量加载到当前 shell，再以服务用户身份运行
-  set -a
-  # shellcheck disable=SC1090
-  source "$ENV_FILE"
-  set +a
+  # 逐行解析并导出变量，不用 source：值里含空格也不会被当成命令
+  local key value
+  while IFS='=' read -r key value; do
+    export "$key=$value"
+  done < <(read_env_file)
   if id "$RUN_USER" >/dev/null 2>&1; then
     sudo -u "$RUN_USER" --preserve-env=SMTP_HOST,SMTP_PORT,SMTP_SECURITY,SMTP_USER,SMTP_PASSWORD,SMTP_SENDER,SMTP_SENDER_NAME,DMT_DB_PATH,SITE_ORIGIN \
       "$python" "$APP_DIR/server.py" "$@"
@@ -121,13 +136,13 @@ prompt_and_write() {
   fi
   {
     echo "# ---- 发信：邮箱验证（由 deploy/setup-mail.sh 写入）----"
-    echo "SMTP_HOST=$host"
-    echo "SMTP_PORT=$port"
-    echo "SMTP_SECURITY=$security"
-    echo "SMTP_USER=$user"
-    echo "SMTP_PASSWORD=$password"
-    echo "SMTP_SENDER=$sender"
-    echo "SMTP_SENDER_NAME=$sender_name"
+    echo "SMTP_HOST=$(quote_env_value "$host")"
+    echo "SMTP_PORT=$(quote_env_value "$port")"
+    echo "SMTP_SECURITY=$(quote_env_value "$security")"
+    echo "SMTP_USER=$(quote_env_value "$user")"
+    echo "SMTP_PASSWORD=$(quote_env_value "$password")"
+    echo "SMTP_SENDER=$(quote_env_value "$sender")"
+    echo "SMTP_SENDER_NAME=$(quote_env_value "$sender_name")"
   } >> "$tmp"
   install -m 600 -o root -g root "$tmp" "$ENV_FILE"
   rm -f "$tmp"
