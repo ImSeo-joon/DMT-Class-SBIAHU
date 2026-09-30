@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="DMT 01 · DMT Class 01">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#3f070e"/>
+      <stop offset="0.5" stop-color="#8f1727"/>
+      <stop offset="1" stop-color="#c01f38"/>
+    </linearGradient>
+    <linearGradient id="arc" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff2f45"/>
+      <stop offset="1" stop-color="#e11d38"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 底：深红到暗红的对角渐变 -->
+  <rect width="192" height="192" rx="44" fill="url(#bg)"/>
+  <!-- 黑色描边，让图标在浅色标签栏上也有清晰边界 -->
+  <rect x="1.6" y="1.6" width="188.8" height="188.8" rx="42.6"
+        fill="none" stroke="#0d0c0d" stroke-opacity="0.55" stroke-width="3.2"/>
+  <!-- 鲜红弧线：动势 -->
+  <path d="M177 104 A 81 81 0 0 1 104 177" fill="none" stroke="url(#arc)"
+        stroke-width="11" stroke-linecap="round" opacity="0.92"/>
+  <!-- 顶部高光 -->
+  <path d="M44 6 H148" stroke="#ff6b7a" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- DMT -->
+  <text x="98" y="74" text-anchor="middle"
+        font-family="Segoe UI, Microsoft YaHei, Helvetica, Arial, sans-serif"
+        font-size="31" font-weight="700" letter-spacing="4.6" fill="#ffffff">DMT</text>
+  <line x1="62" y1="86" x2="134" y2="86" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1.6"/>
+
+  <!-- 01：黑色投影 + 白色主体 -->
+  <text x="99" y="148" text-anchor="middle"
+        font-family="Segoe UI, Microsoft YaHei, Helvetica, Arial, sans-serif"
+        font-size="76" font-weight="800" letter-spacing="1.5"
+        fill="#0d0c0d" fill-opacity="0.55">01</text>
+  <text x="96" y="144" text-anchor="middle"
+        font-family="Segoe UI, Microsoft YaHei, Helvetica, Arial, sans-serif"
+        font-size="76" font-weight="800" letter-spacing="1.5" fill="#ffffff">01</text>
+
+  <!-- 鲜红下划线 -->
+  <rect x="72" y="155" width="48" height="6.5" rx="3.25" fill="#ff2f45"/>
+</svg>
