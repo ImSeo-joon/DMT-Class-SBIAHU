@@ -1202,7 +1202,7 @@ async function refreshEventHistory(){
 .cr-note{font-size:11px;color:#8b948c;line-height:1.8;margin-top:26px}
 @media(max-width:980px){.cr-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:760px){.cr-grid{grid-template-columns:1fr}.cr-steps{padding:6px 14px}.cr-table{min-width:540px}}
-.cr-subnav{display:flex;gap:8px;flex-wrap:wrap;margin:-8px 0 26px;padding-left:20px}
+.cr-subnav{display:flex;gap:8px;flex-wrap:wrap;margin:-8px 0 26px}
 .cr-subnav a{font-size:12px;padding:8px 15px;border:1px solid var(--line);border-radius:20px;color:#5d6962;background:var(--paper);transition:.2s}
 .cr-subnav a:hover{border-color:#c6a15a;color:#202127}
 .cr-subnav a.active{background:#a51c30;border-color:#a51c30;color:#fff;font-weight:700}
@@ -1719,7 +1719,12 @@ lim (n → ∞) (1 + 1/n)^n = e</span>
       html+='<a href="#'+m[0]+'" data-sub="'+m[0]+'"'+(m[0]===item[0]?' class="active"':'')+'>'+m[1]+'</a>';
     }
     bar.innerHTML=html;
-    intro.parentNode.insertBefore(bar,intro.nextSibling);
+    // 放进内容容器里，保证和标题、卡片左对齐（直接插在 section 下会贴到页面最左边）
+    var holder=document.createElement('div');
+    holder.className='wrap';
+    holder.appendChild(bar);
+    view.__subnavHolder=holder;              // 供后面的模块区插入定位使用
+    intro.parentNode.insertBefore(holder,intro.nextSibling);
     bar.addEventListener('click',function(e){
       var a=e.target.closest?e.target.closest('a[data-sub]'):null;
       if(!a){return;}
@@ -1740,7 +1745,9 @@ lim (n → ∞) (1 + 1/n)^n = e</span>
         '<a href="#team"><div class="cr-label mono">MODULE 02 / TEAM-UP</div><h3>组队大厅</h3><p>面向班级成员的组队与协作板块，登录后可以发帖求助、回复同学，也能看到每条需求是谁发的。</p></a>'+
         '<a href="#tuimian"><div class="cr-label mono">MODULE 03 / RECOMMENDATION</div><h3>推免指南</h3><p>资格自检、政策要点、四年时间轴、三条路径与竞赛选择，信息量最大的一个模块。</p></a>'+
       '</div>';
-    if(host&&host.parentNode){host.parentNode.insertBefore(sec,host.nextSibling);}
+    var holder=affairs.__subnavHolder;
+    if(holder&&holder.parentNode){holder.parentNode.insertBefore(sec,holder.nextSibling);}
+    else if(host&&host.parentNode){host.parentNode.insertBefore(sec,host.nextSibling);}
     else{affairs.insertBefore(sec,affairs.firstChild);}
     sec.addEventListener('click',function(e){
       var a=e.target.closest?e.target.closest('a[href^="#"]'):null;
