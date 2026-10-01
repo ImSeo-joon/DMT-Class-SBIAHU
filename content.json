@@ -1,6 +1,20 @@
 {
   "news": [
     {
+      "id": "site-update-2026-09-30",
+      "category": "系统消息 / SYSTEM NOTICE",
+      "title_cn": "系统消息",
+      "title_en": "System Notice: Recommendation Guide and Competition List Updated",
+      "date": "2026.09.30",
+      "summary_cn": "推免指南的四年时间轴扩充为 7 个阶段，竞赛科研模块为 52 项赛事补齐报名入口，其中 40 项已核对官网地址。",
+      "summary_en": "The four-year timeline in the recommendation guide now covers seven stages, and 40 of 52 competitions list a verified official registration site.",
+      "body_cn": "班级网站本次更新集中在推免指南模块，具体如下。\n\n一、四年时间轴扩充。时间轴由原来的 5 个阶段调整为 7 个，新增大三暑假、大四上·9 月、大四上·10 月后三个节点。每个阶段现在包含四部分内容：本阶段目标、必须做（决定资格）、加分项（决定排名）、关键时间点（按月列出）与常见误区，原有的提醒保留在最后。其中大四上·9 月按天列出节点，包括 9 月 7 日前提交申请、9 月 11 日前后公示名单、9 月 28 日推免服务系统开放。\n\n二、竞赛报名入口。竞赛科研选择模块的 52 项赛事中，40 项已核对官方网站并直接给出报名 / 官网地址，点击即可打开；其余 12 项暂未收录固定入口，改为提供搜索链接，并注明以主办方当年通知为准。\n\n三、显示修正。修正了竞赛卡片内两个按钮间距异常的问题。\n\n本次更新已在本地预览生效；服务器恢复后将同步到线上。",
+      "body_en": "This update targets the recommendation guide module.\n\n1. Four-year timeline. The timeline now covers seven stages instead of five, adding the summer before senior year and two senior-year windows. Each stage states its goal, the requirements that decide eligibility, the items that affect ranking, key dates by month, and common pitfalls. The September window is broken down day by day.\n\n2. Competition registration links. Of the 52 competitions listed, 40 now carry a verified official site as a direct link on the card; the remaining 12 offer a search link and note that the entry point changes year to year.\n\n3. Layout fix. Competition cards where the two buttons previously touched now space correctly.\n\nThe changes are live on the local preview and will be synced to the server once it is back.",
+      "source_url": "",
+      "image_url": "",
+      "featured": true
+    },
+    {
       "id": "ets-update-2026",
       "category": "最新报道 / LATEST STORY",
       "title_cn": "初识 ETS 明方向，逐梦寰球启新程",
@@ -12,7 +26,7 @@
       "body_en": "To help the Class of 2026 understand international English tests, clarify language-learning expectations, and set university study goals, the college hosted an ETS exam update seminar at Wanjun Auditorium. All first-year students attended. An ETS East China regional manager introduced the organization, test options, preparation methods, and planning.\n\nThe talk outlined ETS and the TOEFL framework, then reviewed official 2026 updates to task formats, test duration, skill areas, scoring, and test-day rules. Students also received beginner-friendly preparation advice and a longer-term plan for building English skills through college.\n\nAn open Q&A and quiz helped students consolidate what they learned about ETS and TOEFL.",
       "source_url": "https://mp.weixin.qq.com/s/BgoD3uoPIf7CXLEYDdLt3w",
       "image_url": "assets/ets-seminar.jpg",
-      "featured": true
+      "featured": false
     },
     {
       "id": "peer-welcome-2026",
@@ -41,6 +55,20 @@
       "source_url": "",
       "image_url": "",
       "featured": false
+    },
+    {
+      "body_cn": "各位同学：\n\n班级网站已完成部署，现在进入为期数日的上线试用测试阶段。网址是 https://dmt01sbiahu.com ，手机和电脑都能打开，建议用系统浏览器访问（微信内置浏览器有时会先弹提示）。这段时间请大家帮忙完整试用一遍，把问题反馈给班委，测试期结束后正式启用。\n\n一、这次试用测什么\n重点看三件事：能不能顺利注册和登录；内容显示是否正常（周课表、班级新闻、公共资料、课程要点）；在手机上用起来是否顺手。发现问题就是这次测试的收获，请如实反馈。\n\n二、如何使用\n注册采用邀请码方式，请先向班委索取邀请码，注册后即可用邮箱登录。邮箱验证邮件目前可能收不到（发信服务仍在配置中），这不影响浏览和使用，班委可以手动帮同学标记为已验证。\n\n三、各板块能看到什么\n未登录访客可以浏览班级新闻、课程要点，以及组队大厅（只读，不能发帖）。\n登录后的班级成员还可以查看周课表、公共资料、事务中心与推免指南，并能在组队大厅发帖、回复。\n班委与导员登录后，个人中心会多出「管理信箱」，可以查看同学通过咨询与合作页面提交的留言。\n\n四、暂未完成的部分\n邮箱验证邮件还发不出去；部分新闻与资料仍在陆续整理上传；课程要点模块会随课程进度继续补充，目前已收录高级语言程序设计、应用微积分和汉语言文学三部分。\n\n五、发现问题怎么反馈\n请通过本站「咨询与合作」页面提交，留言会直接进入班委的管理信箱；也可以直接在班级群里说，注明“网站测试”即可。反馈时麻烦写清四点：你用的是手机还是电脑、什么浏览器、在哪一步出问题、屏幕上显示的提示内容。\n\n感谢大家配合，期待你们的反馈。\n\n班委\n2026 年 9 月 30 日",
+      "body_en": "Dear classmates,\n\nThe class website is now deployed and enters a short trial period for testing. Address: https://dmt01sbiahu.com — it works on both phones and computers, and is best opened in a normal browser, since in-app browsers sometimes show a warning first. Please help us test it thoroughly and report anything that looks wrong; the site will go fully live once the trial ends.\n\n1. What we need tested\nThree things matter most: whether registration and sign-in work smoothly; whether content displays correctly (weekly timetable, class news, shared resources, course essentials); and whether the site feels usable on a phone. Finding problems is exactly the point of this trial, so please report them honestly.\n\n2. How to use it\nRegistration is by invitation code, so please ask a class officer for one. Once registered you can sign in with your email address. Verification emails may not arrive yet because the mail service is still being configured — this does not block browsing or normal use, and officers can mark accounts as verified manually.\n\n3. What each part shows\nVisitors who are not signed in can read class news, course essentials, and the team-up hall in read-only mode.\nSigned-in members also get the weekly timetable, shared resources, the affairs centre and the recommendation guide, and can post and reply in the team-up hall.\nOfficers and counsellors get an extra \"Class inbox\" in their account page, showing messages submitted through the Contact and Collaboration form.\n\n4. Known gaps\nVerification emails are not being sent yet. Some news items and resources are still being uploaded. The course-essentials section will keep growing with the course; it currently covers Advanced Language Programming, Applied Calculus and Chinese Language and Literature.\n\n5. Reporting a problem\nSubmit it through the \"Contact and Collaboration\" page — messages go straight to the officers' inbox — or post in the class group with the tag \"website test\". Please include four things: your device (phone or computer), your browser, the step where it went wrong, and the exact message you saw.\n\nThank you for helping. We look forward to your feedback.\n\nClass Committee\n30 September 2026",
+      "category": "系统通知 / SYSTEM NOTICE",
+      "date": "2026.9.30",
+      "featured": false,
+      "id": "f035892d-9c53-4f69-b3f0-054c2bd9759f",
+      "image_url": "",
+      "source_url": "",
+      "summary_cn": "班级网站已完成部署，现在进入为期数日的试用测试阶段。请同学完整走一遍注册、浏览与反馈流程，把问题交给班委，测试期结束后正式启用。",
+      "summary_en": "The class website is deployed and now in a short trial period. Please run through registration, browsing and feedback, and report anything that looks wrong before it goes fully live.",
+      "title_cn": "班级网站上线试用：请帮忙测试并反馈",
+      "title_en": "Class Website Trial Run: Please Help Us Test and Report"
     }
   ],
   "events": [],

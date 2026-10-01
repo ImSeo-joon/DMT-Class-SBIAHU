@@ -101,6 +101,13 @@ AI_BASE_URL=https://api.deepseek.com
 
 登录后打开「编辑后台」，可以发布双语新闻、活动、上传或删除公共资料并编辑周课表。公共资料模块支持班级成员浏览和下载 PDF、Office 文档、文本、ZIP 与常见图片；单个文件上限 25 MB。编辑课表时可修改学期第 1 周周一，网站会据此按北京时间重新计算当前周次。新闻图片需先放进 `assets` 目录，再在后台填写相对路径，例如 `assets/event-photo.jpg`。
 
+`content.json` 只在数据库第一次创建时用来灌入初始内容。网站已经在运行之后再往这个文件里加新闻是不生效的，线上读的一直是数据库。如果某次代码更新里带了新的新闻条目，用 `deploy/sync-news.py` 把它们补进数据库（默认只做检查，加 `--apply` 才真正写入，featured 的互斥规则和后台一致）：
+
+```bash
+sudo -u dmt-site env DMT_DB_PATH=/var/lib/dmt-class-site/class_site.sqlite3 \
+  /opt/dmt-class-site/.venv/bin/python /opt/dmt-class-site/deploy/sync-news.py --apply
+```
+
 ## 腾讯云 Linux 上线准备
 
 `server.py` 保留给本地预览和 CLI 管理操作。公网服务入口使用 `app.py`（Flask WSGI）和 Waitress，由 Nginx 提供 HTTPS 反向代理。不要将 Python 开发服务器或 8000 端口直接暴露到公网。
