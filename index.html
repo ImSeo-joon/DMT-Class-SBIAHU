@@ -50,7 +50,7 @@ body{background:radial-gradient(ellipse at 12% 8%,#e9e5dc 0,transparent 31rem),v
 .notice-actions button{background:none;border:1px solid #ffffff40;color:#fff;font-size:10px;padding:3px 9px;border-radius:12px;cursor:pointer}
 .notice-actions button:hover{background:#ffffff1a}</style></head>
 <body><div class="notice-bar" id="noticeBar" hidden><div class="wrap notice-in"><span class="notice-tag">通知 / NOTICE</span><span class="notice-text" id="noticeText">正在读取通知…</span><span class="notice-actions"><button type="button" id="noticeEdit" hidden>编辑公告 / Edit</button><button type="button" id="noticeClose" aria-label="关闭通知栏 / Close">×</button></span></div></div>
-<header class="wrap nav"><a class="brand" href="#home" data-page="home"><span class="mark">D1</span><span>DMT CLASS 01 <span style="color:#919b94">| SBIAHU</span></span></a><nav class="links"><a href="#home" data-page="home">班级首页</a><a href="#news" data-page="news">班级新闻</a><a href="#affairs" data-page="affairs">事务中心</a><a href="#schedule" data-page="schedule">周课表</a><a href="#resources" data-page="resources">公共资料</a><a href="#opportunities" data-page="opportunities">竞赛科研</a><a href="#team" data-page="team">组队大厅</a><a href="#tuimian" data-page="tuimian">推免指南</a><a href="#contact" data-page="contact">咨询合作</a><a href="#admin" data-page="admin" id="adminNav" style="display:none">编辑后台</a></nav><div class="nav-right"><span class="nav-status"><i class="status-dot"></i> 班级空间 · 在线</span><span class="nav-divider"></span><a class="nav-account" href="#account" data-page="account" id="accountNav">注册 / 登录</a></div><button class="menu" aria-label="菜单" onclick="document.querySelector('.links').classList.toggle('show')">☰</button></header>
+<header class="wrap nav"><a class="brand" href="#home" data-page="home"><span class="mark">D1</span><span>DMT CLASS 01 <span style="color:#919b94">| SBIAHU</span></span></a><nav class="links"><a href="#home" data-page="home">班级首页</a><a href="#news" data-page="news">班级新闻</a><a href="#affairs" data-page="affairs">事务中心</a><a href="#schedule" data-page="schedule">周课表</a><a href="#resources" data-page="resources">公共资料</a><a href="#opportunities" data-page="opportunities">竞赛科研</a><a href="#team" data-page="team">组队大厅</a><a href="#tuimian" data-page="tuimian">推免指南</a><a href="#liuxue" data-page="liuxue">留学指南</a><a href="#contact" data-page="contact">咨询合作</a><a href="#admin" data-page="admin" id="adminNav" style="display:none">编辑后台</a></nav><div class="nav-right"><span class="nav-status"><i class="status-dot"></i> 班级空间 · 在线</span><span class="nav-divider"></span><a class="nav-account" href="#account" data-page="account" id="accountNav">注册 / 登录</a></div><button class="menu" aria-label="菜单" onclick="document.querySelector('.links').classList.toggle('show')">☰</button></header>
 <main id="top"><div class="page active" data-view="home"><section class="wrap hero" id="about"><div><div class="eyebrow mono">ANHUI UNIVERSITY × STONY BROOK</div><h1>DMT<br><span>Class 01</span></h1><p>安徽大学纽约石溪学院 · 数字媒体技术 1 班。一个连接创意、技术与彼此的班级空间。从日常事务到灵感协作，我们一起把想法变成作品。</p><div class="actions"><a class="btn primary" href="#affairs" data-page="affairs">进入事务中心 <span>↗</span></a><a class="btn secondary" href="#contact" data-page="contact">联系班委 <span>↓</span></a></div></div><div class="hero-art"><div class="art-top mono"><span>CLASS SPACE / 2026—2027</span><span>31° 51′ N</span></div><div class="orbit"></div><div class="core">DMT<br>01</div><i class="sat"></i><i class="sat sat2"></i><div class="art-bottom mono"><span>MAKE · SHARE · GROW</span><span>SBIAHU / AU</span></div></div></section>
 <a class="wrap news-lead" href="#news" data-page="news"><div class="lead-label mono">班级头条 / CLASS HEADLINE</div><div><h2>初识 ETS 明方向，逐梦寰球启新程</h2><p>Meet ETS, Find Your Direction — a guide to English tests and global pathways.</p></div><span class="lead-date mono">LATEST ↗</span></a>
 <div class="strip"><div class="wrap strip-in"><span>IDEAS INTO REALITY <i></i> DIGITAL MEDIA TECHNOLOGY <i></i> ONE CLASS, MANY POSSIBILITIES <i></i> IDEAS INTO REALITY <i></i> DIGITAL MEDIA TECHNOLOGY <i></i> ONE CLASS, MANY POSSIBILITIES</span></div></div>
@@ -74,6 +74,390 @@ body{background:radial-gradient(ellipse at 12% 8%,#e9e5dc 0,transparent 31rem),v
 <div class="wrap section"><div class="section-head"><div><div class="kicker mono">MODULE 06 / COMPETITION PICKER</div><h2>竞赛科研选择</h2></div></div><div class="resource-toolbar"><input id="tmRaceSearch" type="search" placeholder="搜索竞赛名称、主办单位或类别 / Search"><span id="tmRaceCount" class="small-note">加载中…</span></div><div class="filters" id="tmRaceCats"></div><div class="filters" id="tmRaceLevels"></div><div class="page-cards" id="tmRaceList"></div><div class="button-row" id="tmRaceMoreRow" hidden><button class="btn secondary" id="tmRaceMore" type="button">显示更多</button></div><p class="small-note">等级依据《安徽大学国际赛事认定项目汇总表（2023-03-15）》《安徽省大学生学科和技能竞赛 A、B 类项目列表（2019 年版）》与《全国普通高校大学生竞赛排行榜（2023 年目录）》整理；「建议年级」和「为什么值得参加」是班级整理的参考，最终加分认定以学院当年通知为准。</p></div>
 <div class="wrap section"><div class="account-box"><h2>我的备赛清单</h2><p class="small-note">在竞赛卡片上点「加入备赛清单」，清单会保存在这台设备上，换设备不会同步。</p><div id="tmPlanList" class="admin-list"></div><div class="button-row"><button class="btn secondary" id="tmPlanCopy" type="button">复制为文本</button><button class="btn secondary" id="tmPlanClear" type="button">清空清单</button></div><div id="tmPlanMessage" role="status"></div></div></div>
 </section>
+<section class="page" data-view="liuxue">
+  <div class="wrap page-intro">
+    <div class="kicker mono">08 / STUDY ABROAD</div>
+    <h1>留学指南</h1>
+    <p>路径选择、目的地对比、四年时间轴、申请材料与常见误区 · Study abroad guide</p>
+  </div>
+
+  <div class="wrap section">
+    <div class="section-head"><div><div class="kicker mono">MODULE 01 / FOUR ROUTES</div><h2>四条路径</h2></div></div>
+    <div class="cr-grid">
+      <article class="cr-card">
+        <div class="cr-label">ROUTE 01</div>
+        <strong>联合培养 / 双学位</strong>
+        <p>2+2、3+1 等形式，前段在国内、后段在合作院校完成学业，毕业取得双方学位。名额、绩点门槛与语言要求每年由学院发布，通常要提前一年准备。
+        <span class="cr-en">Joint and dual-degree tracks such as 2+2 or 3+1: the later years are finished at the partner university and both institutions award a degree. Quotas, GPA cut-offs and language requirements are published each year and are usually planned a year ahead.</span></p>
+      </article>
+      <article class="cr-card">
+        <div class="cr-label">ROUTE 02</div>
+        <strong>交换生</strong>
+        <p>一学期或一学年的院际交换，学分按学校规定互认。名额少、竞争集中，一般在大二下或大三申请，需要盯紧国际交流部门的通知。
+        <span class="cr-en">One-semester or one-year exchange, with credits transferred under the university rules. Places are few and competition is concentrated; applications usually open in the second half of year two or in year three, so watch the international office notices.</span></p>
+      </article>
+      <article class="cr-card">
+        <div class="cr-label">ROUTE 03</div>
+        <strong>本科毕业直接申请硕士</strong>
+        <p>最常见的一条路。大四上学期递交网申，次年秋季入学。美英港新多数项目集中在 9 至 12 月，部分采用滚动录取，越早递交越有利。
+        <span class="cr-en">The most common route: apply in the first term of year four and start the following autumn. Most programmes in the US, UK, Hong Kong and Singapore open between September and December, and rolling admission rewards early applications.</span></p>
+      </article>
+      <article class="cr-card">
+        <div class="cr-label">ROUTE 04</div>
+        <strong>语言课程 / 预科衔接</strong>
+        <p>语言成绩暂时不达标时，部分院校提供语言课程，读完并通过内部考核后进入正课。要额外算清这部分的时间与费用，并确认通过率与升学条件。
+        <span class="cr-en">When a language score falls short, some universities offer a pre-sessional course that leads into the degree on passing an internal assessment. Budget the extra time and cost, and check the pass rate and progression conditions.</span></p>
+      </article>
+    </div>
+    <p class="cr-note">四条路径的具体名额、门槛与时间由学院和合作院校每年发布，这里只做分类梳理；实际以学院通知与目标院校官网为准。<br>Quotas, thresholds and dates for each route are published yearly by the college and partner universities; this is only a classification, and the official notices remain authoritative.</p>
+  </div>
+
+  <div class="wrap section">
+    <div class="section-head"><div><div class="kicker mono">MODULE 02 / DESTINATIONS</div><h2>目的地对比</h2></div></div>
+    <div class="cr-tablewrap">
+      <table class="cr-table">
+        <thead><tr><th>目的地</th><th>硕士学制</th><th>语言参考</th><th>费用参考（学费 + 生活费）</th><th>特点</th></tr></thead>
+        <tbody>
+          <tr><td class="cr-mid">美国</td><td class="cr-c">1.5–2 年</td><td>托福 90+ / 雅思 6.5+，部分项目要 GRE</td><td>约 45–75 万人民币 / 年</td><td>科研与就业资源多，理工方向毕业后留美工作时间较长</td></tr>
+          <tr><td class="cr-mid">英国</td><td class="cr-c">1 年</td><td>雅思 6.5 左右，常要求小分 6.0</td><td>约 40–60 万人民币（一年制合计）</td><td>一年制硕士，课程紧凑，院校与专业选择多</td></tr>
+          <tr><td class="cr-mid">中国香港</td><td class="cr-c">1 年</td><td>雅思 6.0–6.5</td><td>约 30–50 万人民币（一年制合计）</td><td>离家近、往返方便，内地认可度高</td></tr>
+          <tr><td class="cr-mid">新加坡</td><td class="cr-c">1–1.5 年</td><td>雅思 6.5 左右</td><td>约 35–55 万人民币（含生活）</td><td>NUS、NTU 排名靠前，华人环境适应成本低</td></tr>
+          <tr><td class="cr-mid">欧洲大陆（德、法、荷等）</td><td class="cr-c">1–2 年</td><td>英语授课项目雅思 6.5 左右</td><td>约 15–30 万人民币 / 年</td><td>公立院校学费低，生活费为主；需注意授课语言与签证流程</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cr-note">表里的费用是「学费 + 生活费」合计的粗略区间，按近两年的常见水平估算；汇率波动、城市物价与是否住校都会明显影响结果。参考拆解（人民币）：美国学费约 25–50 万 + 生活费约 15–25 万；英国学费约 25–40 万 + 生活费约 12–20 万；中国香港学费约 15–30 万 + 生活费约 12–20 万；新加坡学费约 20–35 万 + 生活费约 12–20 万；欧洲大陆公立院校学费低，生活费约 10–20 万。语言分数与费用都以目标项目官网当年的要求页面为准。<br>The costs combine tuition and living expenses and are rough ranges drawn from recent years; exchange rates, city costs and on-campus versus off-campus housing all shift the result. Breakdown in RMB: US tuition about 250–500k plus living 150–250k; UK 250–400k plus 120–200k; Hong Kong 150–300k plus 120–200k; Singapore 200–350k plus 120–200k; continental Europe has low public tuition with living costs around 100–200k. Language scores and costs must be checked against the official programme page for the current year.</p>
+  </div>
+
+  <div class="wrap section">
+    <div class="section-head"><div><div class="kicker mono">MODULE 03 / FOUR-YEAR TIMELINE</div><h2>四年时间轴</h2></div></div>
+    <div class="editor-tabs" id="saStageTabs"></div>
+    <div class="account-box" id="saStagePanel"></div>
+  </div>
+
+  <div class="wrap section">
+    <div class="section-head"><div><div class="kicker mono">MODULE 04 / APPLICATION MATERIALS</div><h2>申请材料清单</h2></div><span class="small-note" id="saCheckScore">完成度 0/12</span></div>
+    <div class="account-box" id="saChecklist">
+      <label class="cr-check"><input type="checkbox"><span>中英文成绩单（教务处盖章）</span></label>
+      <label class="cr-check"><input type="checkbox"><span>在读证明 / 学位证与毕业证（中英文）</span></label>
+      <label class="cr-check"><input type="checkbox"><span>语言成绩（托福 / 雅思，需官方送分）</span></label>
+      <label class="cr-check"><input type="checkbox"><span>GRE 成绩（项目要求时提供）</span></label>
+      <label class="cr-check"><input type="checkbox"><span>推荐信 2–3 封（学术推荐优先）</span></label>
+      <label class="cr-check"><input type="checkbox"><span>个人陈述 / Statement of Purpose</span></label>
+      <label class="cr-check"><input type="checkbox"><span>简历 CV / Resume（一般控制在一页）</span></label>
+      <label class="cr-check"><input type="checkbox"><span>作品集（数字媒体、设计类专业通常必需）</span></label>
+      <label class="cr-check"><input type="checkbox"><span>护照（有效期覆盖整个留学期间）</span></label>
+      <label class="cr-check"><input type="checkbox"><span>资金证明 / 存款证明</span></label>
+      <label class="cr-check"><input type="checkbox"><span>课程描述或教学大纲（部分欧洲院校需要）</span></label>
+      <label class="cr-check"><input type="checkbox"><span>获奖证书与实习证明（补充材料）</span></label>
+    </div>
+    <p class="cr-note">勾选状态只保存在本机浏览器，换设备不会同步。<br>Tick marks are stored in this browser only and do not sync across devices.</p>
+  </div>
+
+  <div class="wrap section">
+    <div class="section-head"><div><div class="kicker mono">MODULE 05 / PITFALLS</div><h2>常见误区</h2></div></div>
+    <ul class="cr-bullets">
+      <li><b>以为大一成绩不重要。</b>多数项目按四年累计 GPA 评估，后两年权重更高，但补不回大一留下的窟窿。</li>
+      <li><b>语言成绩留到最后。</b>考位、出分、官方送分各要时间，至少提前半年开始，首考不理想还留有二战余地。</li>
+      <li><b>文书套模板。</b>招生官一年要读几百上千份，模板化的开头与结尾一眼就能认出来。</li>
+      <li><b>只看综合排名。</b>项目方向、课程设置、导师资源与就业去向，比名次更影响实际就读体验。</li>
+      <li><b>忽略先修课要求。</b>部分项目明确要求修过特定课程，缺课会在初审阶段被直接淘汰。</li>
+      <li><b>作品集临时拼凑。</b>数字媒体与设计方向，作品集的权重往往不低于 GPA，需要长期积累而不是突击。</li>
+      <li><b>推荐信不跟进。</b>老师事务繁忙，截止前两周提醒一次，并提前把材料与要点写清楚。</li>
+      <li><b>签证与资金证明准备太晚。</b>存款证明通常要求存满一定期限，递交前才想起会来不及。</li>
+    </ul>
+    <p class="cr-note">本模块为班级整理的通识性参考，不构成申请建议。各国签证政策、语言要求与录取标准由目标院校与使领馆发布，请以官网当年信息为准。<br>This module is general reference material compiled by the class and is not application advice. Visa policy, language requirements and admission standards are published by the target universities and consulates; the official pages for the current year remain authoritative.</p>
+  </div>
+<div class="wrap section">
+    <div class="section-head"><div><div class="kicker mono">MODULE 06 / AI ASSISTANT</div><h2>AI 申请助手</h2></div><span class="small-note" id="saAiState">未填写密钥</span></div>
+    <div class="editor-tabs" id="saAiTabs"><button class="filter active" data-sa-ai="write" type="button">申请书写作</button><button class="filter" data-sa-ai="pick" type="button">选校推荐</button></div>
+
+    <div class="account-box">
+      <h2>密钥与模型</h2>
+      <p class="small-note">助手采用「自带密钥」的方式：用自己的 DeepSeek API Key 调用，密钥只保存在你这台设备的浏览器里，请求经本站后端临时转发给 DeepSeek，服务器不保存、不记录密钥与内容。没有密钥也可以点「复制提示词」，把提示词粘到任意 AI 对话里自己跑。</p>
+      <label>DeepSeek API Key<input id="saAiKey" type="password" autocomplete="off" placeholder="sk-..."></label>
+      <div class="button-row"><button class="btn secondary" id="saAiSaveKey" type="button">保存在本机</button><button class="btn secondary" id="saAiClearKey" type="button">清除密钥</button><a class="text-link" href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener">去 DeepSeek 申请密钥 ↗</a></div>
+      <label>模型<select id="saAiModel"><option value="deepseek-chat">deepseek-chat（快、便宜）</option><option value="deepseek-reasoner">deepseek-reasoner（更强、较慢）</option></select></label>
+      <label class="check-label"><input id="saAiConsent" type="checkbox">我同意把下面填写的内容发送给 DeepSeek 用于生成</label>
+    </div>
+
+    <div class="account-box" data-sa-ai-panel="write">
+      <h2>个人陈述 / 申请书</h2>
+      <div class="editor-layout">
+        <label>目标院校与专业<input id="saWrSchool" maxlength="120" placeholder="例：NYU Tandon, MS in Computer Engineering"></label>
+        <label>文书类型<select id="saWrKind"><option>个人陈述 PS</option><option>动机信 SOP</option><option>学习计划 Study Plan</option><option>推荐信草稿</option><option>短篇 Essay</option></select></label>
+      </div>
+      <div class="editor-layout">
+        <label>目标字数<input id="saWrWords" type="number" min="200" max="2000" step="50" value="800"></label>
+        <label>输出语言<select id="saWrLang"><option>英文</option><option>中文</option><option>中英对照</option></select></label>
+      </div>
+      <label>我的背景与经历<textarea id="saWrBg" rows="5" maxlength="2000" placeholder="成绩与排名、做过的项目、实习或科研、竞赛获奖、想转的方向。写得越具体，生成的内容越贴你。"></textarea></label>
+      <label>想强调的方向或研究兴趣<input id="saWrFocus" maxlength="120" placeholder="例：人机交互 / 计算机视觉 / 生成式模型"></label>
+      <div class="button-row"><button class="btn primary" id="saAiRunWrite" type="button">生成文书草稿</button></div>
+      <p class="small-note">生成的是初稿：提示词里已要求模型只改写和重组你给的材料，不得编造经历与数据，材料里缺失的信息会留成【待补充】占位符。</p>
+    </div>
+
+    <div class="account-box" data-sa-ai-panel="pick" hidden>
+      <h2>选校推荐</h2>
+      <div class="editor-layout">
+        <label>本科专业与年级<input id="saPkMajor" maxlength="80" placeholder="例：数字媒体技术，大三"></label>
+        <label>加权平均分 / GPA<input id="saPkGpa" maxlength="40" placeholder="例：85.6（百分制）或 3.6 / 4.0"></label>
+      </div>
+      <div class="editor-layout">
+        <label>专业排名<input id="saPkRank" maxlength="40" placeholder="例：12/120，前 10%"></label>
+        <label>语言成绩<input id="saPkLang" maxlength="60" placeholder="例：雅思 6.5（小分 6.0）或 托福 95"></label>
+      </div>
+      <div class="editor-layout">
+        <label>GRE / 其他考试<input id="saPkGre" maxlength="60" placeholder="没有就写「无」"></label>
+        <label>预算上限（人民币 / 年）<input id="saPkBudget" maxlength="40" placeholder="例：60 万"></label>
+      </div>
+      <label>科研 / 竞赛 / 实习经历<textarea id="saPkBg" rows="4" maxlength="1600" placeholder="按「做了什么 + 结果」写，有数字更好。例：校级大创负责人，做了一个图像分类小工具，准确率 92%。"></textarea></label>
+      <label>目标地区<select id="saPkRegion"><option>美国</option><option>英国</option><option>中国香港</option><option>新加坡</option><option>欧洲大陆</option><option>不限（综合推荐）</option></select></label>
+      <div class="button-row"><button class="btn primary" id="saAiRunPick" type="button">生成选校建议</button></div>
+      <p class="small-note">结果按冲刺 / 匹配 / 保底三档给出，是参考而不是录取承诺。院校排名、项目设置与录取要求每年都在变，正式申请前请到项目官网逐项核对。</p>
+    </div>
+
+    <div class="account-box">
+      <h2>生成结果</h2>
+      <div id="saAiOut" style="white-space:pre-wrap;font-size:12.5px;line-height:1.85;color:#3d4640">还没有生成内容。</div>
+      <div class="button-row"><button class="btn secondary" id="saAiCopy" type="button">复制结果</button><button class="btn secondary" id="saAiCopyPrompt" type="button">复制提示词</button></div>
+      <div id="saAiMsg" role="status"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  function esc(v){return String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  var STAGES=[
+    {label:'大一',title:'先确定方向',goal:'这一年要回答一个问题：毕业之后是升学还是就业，留学是不是要认真准备的选项。',must:['把 GPA 尽量考高：留学看的是累计成绩，各校算法不同，但大一就已经计入分母','关注学院关于联合培养与交换项目的通知，看清楚门槛和申请时间','尽早把四六级考掉，为后面的托福雅思腾出时间'],plus:['参加和专业相关的项目或社团，为文书积累可写的素材','开始浏览目标国家和院校的官网，建立初步印象'],key:[['9–12 月','盯学院国际交流通知，记下报名截止时间'],['每学期末','核对成绩单，确认没有挂科记录']],watch:['以为 GPA 可以后面再刷：多数项目看四年累计，大一掉下去很难补','只背考试、不做任何项目，到大三写文书时无话可说'],tip:'这一年最值钱的是成绩和英语基础，方向可以慢慢定，但成绩不能慢慢补。'},
+    {label:'大二',title:'定方向、动语言',goal:'把目标国家和专业方向缩小到两三个，并正式启动语言考试。',must:['确定大致的目标国家与专业方向，据此决定考托福还是雅思','启动语言备考并完成首考，不要拖到大三下','核对目标项目是否要求 GRE 或先修课程'],plus:['联系专业课老师进课题组，或参加一次竞赛，积累科研与项目经历','暑假安排一段科研或实习，这是文书里最有说服力的部分','申请交换项目（如打算走交换路径）'],key:[['全年','语言考试报名，考位紧张需提前 2–3 个月抢'],['3–5 月','交换项目与暑期项目申请'],['7–8 月','暑期科研或实习']],watch:['语言拖到大四才考：考位、出分、送分都要时间，很容易赶不上截止','只准备考试不做项目，简历上只有课程名称'],tip:'大二是唯一能把语言和背景同时推进的一年，大三下再开始会很挤。'},
+    {label:'大三上',title:'出分、圈定学校',goal:'把语言成绩考到达标线，并把目标院校缩到一份可执行的名单。',must:['考出达标的语言成绩，不达标就安排二战','列出 8–12 所目标院校的初选名单，按冲刺、匹配、保底分档','逐项核对每所学校的先修课与材料要求'],plus:['开始写简历初稿，把大二的项目与实习落到纸面','物色 2–3 位推荐人，提前打招呼'],key:[['9–12 月','语言考试与刷分，同时准备期末考试'],['12 月','部分英国与香港项目首轮截止，先了解一下']],watch:['只按综合排名选校：方向不匹配的项目读了也难受，录取概率还低','忽略先修课要求，初审就被筛掉'],tip:'选校名单要“能落地”：既要有冲的，也要有把握住的。'},
+    {label:'大三下',title:'文书、暑期经历',goal:'文书成稿，暑期经历到位，申请材料基本成形。',must:['确定最终选校名单，并逐校记录截止日期与材料清单','写出个人陈述初稿，讲清楚为什么是这个方向、为什么是这所学校','确认推荐人并告知截止时间'],plus:['暑期继续做科研或实习，补足背景','参加目标院校的线上宣讲，了解录取偏好','数字媒体与设计方向开始整理作品集'],key:[['3–6 月','暑期项目与实习申请'],['6 月','文书初稿完成，找老师或学长学姐提意见']],watch:['文书套模板：开头千篇一律，招生官一眼就看出来','作品集临时拼凑，来不及打磨'],tip:'文书要写“你为什么合适”，不是把简历再抄一遍。'},
+    {label:'大四上',title:'递交申请',goal:'按各校截止日期分批递交，跟踪推荐信与材料状态。',must:['9–12 月按批次递交网申：成绩单、语言送分、推荐信、文书、简历、作品集','确认每所学校的语言送分代码与材料补交方式','跟踪推荐信是否已提交，必要时提醒老师'],plus:['准备可能的面试，梳理项目经历与研究兴趣','关注滚动录取，早递交的项目早点递'],key:[['9–10 月','文书定稿，材料扫描归档'],['10–12 月','分批递交网申'],['12 月–次年 1 月','多数英国与美国项目截止']],watch:['拖到截止日当天提交，系统拥堵或材料缺失就来不及补救','推荐信没人跟进，最后卡在这一项'],tip:'把截止日期倒排成一张表，按批次推进，不要堆到最后一周。'},
+    {label:'大四下',title:'结果与行前',goal:'拿到录取后做出选择，并把签证与行前手续办完。',must:['1–4 月接收录取结果，比较奖学金与总花费后做出选择','办理签证、体检与住宿申请','按学校要求提交最终成绩单与毕业证明'],plus:['提前联系学长学姐了解当地生活与选课','加入新生群，了解行前准备清单'],key:[['1–4 月','放榜与择校'],['5–7 月','签证、体检与行前准备'],['8–9 月','入学']],watch:['资金证明准备太晚：多数国家要求存款存满一定期限','签证材料与录取信息不一致，被要求补件'],tip:'拿到 offer 只是开始，签证和资金证明同样要提前排期。'}
+  ];
+  var tabs=document.getElementById('saStageTabs'),panel=document.getElementById('saStagePanel');
+  if(!tabs||!panel){return;}
+  var idx=0;
+  function renderTabs(){
+    var html='';
+    for(var i=0;i<STAGES.length;i++){
+      html+='<button class="filter'+(i===idx?' active':'')+'" data-sa-stage="'+i+'">'+esc(STAGES[i].label)+'</button>';
+    }
+    tabs.innerHTML=html;
+    var btns=tabs.querySelectorAll('[data-sa-stage]');
+    for(var k=0;k<btns.length;k++){
+      btns[k].onclick=function(){
+        idx=Number(this.getAttribute('data-sa-stage'));
+        renderTabs();renderPanel();
+      };
+    }
+  }
+  function renderPanel(){
+    var s=STAGES[idx];
+    var html='<h2>'+esc(s.label)+' · '+esc(s.title)+'</h2>';
+    html+='<p class="small-note" style="color:#5a6b60">'+esc(s.goal)+'</p>';
+    html+='<div class="editor-layout"><div><div class="kicker mono">必须做（决定能不能申请）</div>';
+    for(var i=0;i<s.must.length;i++){html+='<p class="small-note">· '+esc(s.must[i])+'</p>';}
+    html+='</div><div><div class="kicker mono">加分项（决定录取层次）</div>';
+    for(var j=0;j<s.plus.length;j++){html+='<p class="small-note">· '+esc(s.plus[j])+'</p>';}
+    html+='</div></div>';
+    html+='<div class="kicker mono">关键时间点 / KEY DATES</div><div style="display:grid;grid-template-columns:104px 1fr;gap:5px 16px;margin:8px 0 16px">';
+    for(var k=0;k<s.key.length;k++){
+      html+='<span class="mono" style="font-size:10px;color:#8a6a4a;padding-top:3px">'+esc(s.key[k][0])+'</span>';
+      html+='<span class="small-note" style="margin:0">'+esc(s.key[k][1])+'</span>';
+    }
+    html+='</div>';
+    html+='<div class="kicker mono">常见误区 / WATCH OUT</div>';
+    for(var m=0;m<s.watch.length;m++){html+='<p class="small-note">· '+esc(s.watch[m])+'</p>';}
+    html+='<p class="small-note">'+esc(s.tip)+'</p>';
+    panel.innerHTML=html;
+  }
+  renderTabs();renderPanel();
+
+  var boxes=document.querySelectorAll('#saChecklist input[type=checkbox]');
+  var score=document.getElementById('saCheckScore');
+  var KEY='sa-checklist-01';
+  var saved={};
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(err){saved={}}
+  function update(){
+    if(!score){return;}
+    var done=0;
+    for(var i=0;i<boxes.length;i++){if(boxes[i].checked){done++;}}
+    score.textContent='完成度 '+done+'/'+boxes.length;
+  }
+  for(var b=0;b<boxes.length;b++){
+    (function(box,key){
+      if(saved[key]){box.checked=true;}
+      box.addEventListener('change',function(){
+        saved[key]=box.checked;
+        try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(err){}
+        update();
+      });
+    })(boxes[b],b);
+  }
+  update();
+})();
+</script>
+<script>
+(function(){
+  var root=document.querySelector('[data-view="liuxue"]');
+  if(!root){return;}
+  var KEY='sa-ai-v1';
+  var mode='write';
+  var lastPrompt='';
+
+  function val(id){var el=document.getElementById(id);return el?(el.value||'').trim():'';}
+  function setText(id,text){var el=document.getElementById(id);if(el){el.textContent=text;}}
+  function stateText(){setText('saAiState',val('saAiKey')?'密钥已填入':'未填写密钥');}
+
+  var tabs=document.getElementById('saAiTabs');
+  var panels=root.querySelectorAll('[data-sa-ai-panel]');
+  function setMode(next){
+    mode=next;
+    if(tabs){
+      var bs=tabs.querySelectorAll('[data-sa-ai]');
+      for(var i=0;i<bs.length;i++){
+        if(bs[i].getAttribute('data-sa-ai')===mode){bs[i].classList.add('active');}else{bs[i].classList.remove('active');}
+      }
+    }
+    for(var p=0;p<panels.length;p++){
+      panels[p].hidden=(panels[p].getAttribute('data-sa-ai-panel')!==mode);
+    }
+  }
+  if(tabs){
+    tabs.addEventListener('click',function(e){
+      var b=e.target.closest?e.target.closest('[data-sa-ai]'):null;
+      if(!b){return;}
+      setMode(b.getAttribute('data-sa-ai'));
+    });
+  }
+
+  function buildWrite(){
+    var L=[];
+    L.push('你要帮助一名中国本科生撰写留学申请文书。');
+    L.push('');
+    L.push('【硬性要求】');
+    L.push('1. 只使用我提供的材料，不得编造任何经历、数字、奖项、课程或成绩。');
+    L.push('2. 材料里没有但对文书重要的信息，写成【待补充：需要什么】占位，不要自己填一个看起来合理的版本。');
+    L.push('3. 不要使用「从小我就……」「我热爱……」这类套话开头，也不要堆砌 passionate、dream 这类空词。');
+    L.push('4. 具体、克制、有信息量：多用动词和细节，每一段都要有实在内容，宁短勿空。');
+    L.push('');
+    L.push('【基本信息】');
+    L.push('目标院校与专业：'+(val('saWrSchool')||'【待补充：目标院校与专业】'));
+    L.push('文书类型：'+(val('saWrKind')||'个人陈述 PS'));
+    L.push('目标字数：'+(val('saWrWords')||'800')+' 词左右，允许上下浮动一成');
+    L.push('输出语言：'+(val('saWrLang')||'英文'));
+    L.push('希望强调的方向：'+(val('saWrFocus')||'【待补充：研究方向或兴趣】'));
+    L.push('');
+    L.push('【我的背景与经历】');
+    L.push(val('saWrBg')||'【待补充：成绩排名、项目、实习、科研、竞赛等】');
+    L.push('');
+    L.push('【结构与写法】');
+    L.push('1. 开头：用一件具体的事、一个具体的问题或一次具体的失败切入，让读者马上知道你是谁。');
+    L.push('2. 中段：把我做过的事与申请方向连起来，写清「我做了什么 — 我学到了什么 — 为什么这个项目能补上我还缺的部分」。');
+    L.push('3. 结尾：写清读完这个项目之后的打算，越具体越好，不要表决心。');
+    L.push('4. 输出正文即可，不要写解释性文字。');
+    L.push('5. 正文之后，用最多 5 条列出「需要我补充的真实细节」。');
+    return L.join('\n');
+  }
+
+  function buildPick(){
+    var L=[];
+    L.push('你要为一名中国本科生做留学选校建议。');
+    L.push('');
+    L.push('【硬性要求】');
+    L.push('1. 只根据我提供的条件判断，不要假设我没写出来的背景。');
+    L.push('2. 学校必须是真实存在、且位于我指定地区的正规院校；项目名称不确定时写「以官网为准」，不要编造项目名。');
+    L.push('3. 不要给出录取承诺，也不要用「保底」暗示一定能录。');
+    L.push('');
+    L.push('【我的情况】');
+    L.push('本科专业与年级：'+(val('saPkMajor')||'【待补充】'));
+    L.push('加权平均分 / GPA：'+(val('saPkGpa')||'【待补充】'));
+    L.push('专业排名：'+(val('saPkRank')||'【待补充】'));
+    L.push('语言成绩：'+(val('saPkLang')||'【待补充】'));
+    L.push('GRE 或其他考试：'+(val('saPkGre')||'无'));
+    L.push('科研 / 竞赛 / 实习经历：'+(val('saPkBg')||'【待补充】'));
+    L.push('目标地区：'+(val('saPkRegion')||'不限'));
+    L.push('预算上限：'+(val('saPkBudget')||'【待补充：人民币每年】'));
+    L.push('');
+    L.push('【输出格式】');
+    L.push('1. 先用两三句话给一个总体判断：以我现在的情况，大致能冲到什么档位，短板在哪里。');
+    L.push('2. 然后按 冲刺 / 匹配 / 保底 三档分开写，每档 3 到 5 所，用表格列出：学校 | 项目名称 | 所在地区 | 为什么适合我 | 需要特别注意的门槛。');
+    L.push('3. 如果我的条件和当地常见录取水平差距明显，直接指出差在哪、需要补什么。');
+    L.push('4. 最后按优先级列出接下来半年最该做的 3 到 5 件事。');
+    L.push('5. 结尾用一句话说明：这只是基于我提供信息的参考，不构成录取承诺，正式申请前须以项目官网为准。');
+    return L.join('\n');
+  }
+
+  function currentPrompt(){return mode==='write'?buildWrite():buildPick();}
+
+  function canRun(){
+    if(!val('saAiKey')){showMessage('saAiMsg','先填入你自己的 DeepSeek API Key。');return false;}
+    var consent=document.getElementById('saAiConsent');
+    if(!consent||!consent.checked){showMessage('saAiMsg','请先勾选同意，才会把内容发送给模型服务。');return false;}
+    return true;
+  }
+
+  async function run(){
+    if(!canRun()){return;}
+    var prompt=currentPrompt();
+    lastPrompt=prompt;
+    var btn=document.getElementById(mode==='write'?'saAiRunWrite':'saAiRunPick');
+    if(btn){btn.disabled=true;}
+    setText('saAiOut','生成中，请稍候（通常 5–30 秒）…');
+    showMessage('saAiMsg','正在生成…');
+    try{
+      var data=await api('/api/ai/resume',{method:'POST',body:JSON.stringify({
+        apiKey:val('saAiKey'),
+        model:(document.getElementById('saAiModel')||{}).value||'deepseek-chat',
+        prompt:prompt})});
+      setText('saAiOut',(data.text||'').trim()||'（返回内容为空，可以换个模型或再试一次）');
+      showMessage('saAiMsg','生成完成。结果只是初稿，请核对每一处细节后再使用。',true);
+    }catch(err){
+      setText('saAiOut','生成失败。');
+      showMessage('saAiMsg',err.message||'生成失败');
+    }finally{
+      if(btn){btn.disabled=false;}
+    }
+  }
+
+  function copyText(text,okMsg){
+    if(!text){showMessage('saAiMsg','没有可复制的内容。');return;}
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){showMessage('saAiMsg',okMsg,true);},function(){showMessage('saAiMsg','复制失败，请手动选中复制。');});
+    }else{
+      showMessage('saAiMsg','当前浏览器不支持一键复制，请手动选中复制。');
+    }
+  }
+
+  try{var saved=localStorage.getItem(KEY);if(saved){var el=document.getElementById('saAiKey');if(el){el.value=saved;}}}catch(err){}
+  stateText();
+
+  var saveBtn=document.getElementById('saAiSaveKey');
+  if(saveBtn){saveBtn.onclick=function(){
+    try{localStorage.setItem(KEY,val('saAiKey'));showMessage('saAiMsg','密钥已保存在这台设备上。',true);}catch(err){showMessage('saAiMsg','保存失败，浏览器可能禁用了本地存储。');}
+    stateText();
+  };}
+  var clearBtn=document.getElementById('saAiClearKey');
+  if(clearBtn){clearBtn.onclick=function(){
+    try{localStorage.removeItem(KEY);}catch(err){}
+    var el=document.getElementById('saAiKey');if(el){el.value='';}
+    stateText();showMessage('saAiMsg','已清除本机保存的密钥。',true);
+  };}
+  var runW=document.getElementById('saAiRunWrite');
+  if(runW){runW.onclick=function(){setMode('write');run();};}
+  var runP=document.getElementById('saAiRunPick');
+  if(runP){runP.onclick=function(){setMode('pick');run();};}
+  var copyBtn=document.getElementById('saAiCopy');
+  if(copyBtn){copyBtn.onclick=function(){copyText((document.getElementById('saAiOut')||{}).textContent,'结果已复制，可以粘到 Word 里继续改。');};}
+  var copyPromptBtn=document.getElementById('saAiCopyPrompt');
+  if(copyPromptBtn){copyPromptBtn.onclick=function(){copyText(lastPrompt||currentPrompt(),'提示词已复制，可以粘到任意 AI 对话里使用。');};}
+
+  setMode('write');
+})();
+</script>
 <section class="page" data-view="contact"><div class="wrap page-intro"><div class="kicker mono">04 / CONTACT & COLLABORATION</div><h1>咨询与合作</h1><p>课程咨询、班级建议、活动提案或合作机会，欢迎告诉我们。</p><form class="form" id="contactForm"><input required placeholder="你的称呼"><select><option>选择事务类型</option><option>学业咨询</option><option>活动提案</option><option>竞赛科研组队</option><option>资源分享与合作</option><option>其他建议</option></select><textarea required placeholder="简单描述你的问题或想法"></textarea><button class="btn primary" type="submit">提交给班委 ↗</button></form></div></section>
 <section class="page" data-view="account"><div class="wrap page-intro"><div class="kicker mono">05 / PERSONAL ACCOUNT</div><h1>个人中心</h1><p>登录查看账号与角色权限 · Sign in to view your account and access</p></div><div class="wrap" id="authPanel"><div class="account-grid"><form class="account-box" id="loginForm"><h2>登录 / Sign in</h2><label>邮箱 / Email<input name="email" type="email" required autocomplete="username"></label><label>密码 / Password<input name="password" type="password" required autocomplete="current-password"></label><button class="btn primary" type="submit">登录 / Sign in</button><p class="small-note">班级成员登录后可查看个人资料；编辑权限由管理员分配。</p></form><form class="account-box" id="registerForm"><h2>注册 / Create account</h2><label>注册身份 / Identity<select name="account_type"><option value="member">DMT Class 01 成员 / Member（需要邀请码）</option><option value="visitor">访客 / Visitor（无需邀请码）</option></select><small>访客只能浏览班级新闻、组队大厅与首页互动模块。</small></label><label>姓名或昵称 / Display name<input name="display_name" required maxlength="60" autocomplete="name"></label><label>邮箱 / Email<input name="email" type="email" required autocomplete="email"></label><label id="inviteCodeField" hidden>邀请码 / Invite code<input name="invite_code" maxlength="64" autocomplete="off" spellcheck="false"></label><label>密码 / Password<input name="password" type="password" required minlength="12" maxlength="128" autocomplete="new-password"><small>至少 12 位 / At least 12 characters.</small></label><button class="btn secondary" type="submit">注册 / Create account</button><p class="small-note" id="registerPolicyNote">注册需要邀请码，邀请码决定初始身份；管理与编辑权限由管理员分配。</p></form></div></div><div class="wrap" id="profilePanel" hidden><div class="account-box profile-box"><div class="profile-head"><div><div class="kicker mono">SIGNED IN / 已登录</div><h2 id="profileName">个人账号</h2></div><span class="role-pill" id="profileRole"></span></div><div class="profile-meta" id="profileMeta"></div><div class="account-tabs" id="acTabs"><button class="filter active" data-ac-tab="profile">个人资料 / Profile</button><button class="filter" data-ac-tab="electives">个人选修 / Electives</button><button class="filter" data-ac-tab="plan">备赛清单 / Plan</button><button class="filter" data-ac-tab="resume">我的简历 / Resume</button><button class="filter" data-ac-tab="feedback">反馈 / Feedback</button><button class="filter" data-ac-tab="inbox" hidden>反馈收件箱 / Inbox</button></div><div data-ac-panel="profile"><form class="form" id="profileForm"><label>显示名称<input name="display_name" required maxlength="60"></label><button class="btn secondary" type="submit">保存个人资料</button></form><p id="permissionInfo" class="small-note"></p><div id="verifyBox" hidden><h2>邮箱验证 / Email verification</h2><p class="small-note" id="verifyState">正在读取邮箱状态…</p><form class="form" id="verifyCodeForm" hidden><label>邮箱验证码 / Code<input name="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></label><div class="button-row"><button class="btn primary" type="submit">确认验证</button><button class="btn secondary" id="verifyResend" type="button">重新发送验证码</button></div></form><div id="verifyMessage" role="status"></div></div></div><div data-ac-panel="electives" hidden><h2>个人选修 / My Electives</h2><p class="small-note">暂无选修课程可选 / No elective courses available at the moment.</p><p class="small-note">当前学期课表里的课程全部是必修课；等教务处开放选修课后，这个面板会自动恢复成可选列表 / Every course in this term is required; this panel becomes selectable once electives open.</p><div id="acElectiveList"></div><h2>本周课程 / Courses This Week</h2><div id="acWeekList"></div></div><div data-ac-panel="plan" hidden><h2>我的备赛清单 / My Competition Plan</h2><p class="small-note">与推免指南的竞赛选择器共用同一份清单。</p><div id="acPlanList" class="admin-list"></div><div class="button-row"><a class="text-link" href="#tuimian" data-page="tuimian">去推免指南挑竞赛 →</a></div></div><div data-ac-panel="resume" hidden><h2>我的简历 / My Resume</h2><div id="acResumeSummary"></div><div class="button-row"><a class="text-link" href="#tuimian" data-page="tuimian">打开自制简历 →</a></div></div><div data-ac-panel="feedback" hidden><h2>意见反馈 / Feedback</h2><p class="small-note">这里提的建议、发现的问题会直接发送给管理员邮箱，同时存档在服务器上，不会公开显示。</p><form class="form" id="feedbackForm"><label>类别 / Category<select name="category"><option value="功能建议">功能建议 / Suggestion</option><option value="问题反馈">问题反馈 / Bug</option><option value="内容纠错">内容纠错 / Correction</option><option value="其他">其他 / Other</option></select></label><label>反馈内容 / Message<textarea name="body" rows="5" maxlength="2000" required placeholder="请写清你遇到的问题或想要的功能，越具体越好。"></textarea></label><label>回信邮箱 / Contact（可留空，默认用注册邮箱）<input name="contact" maxlength="120" placeholder="留空即用注册邮箱"></label><div class="button-row"><button class="btn primary" type="submit">提交反馈 / Send</button></div><div id="feedbackMessage" role="status"></div><p class="small-note" id="feedbackMailTip"></p></form></div><div data-ac-panel="inbox" hidden><h2 id="inboxTitle">反馈收件箱 / Feedback Inbox</h2><p class="small-note" id="inboxMeta">正在读取…</p><div class="filters" id="inboxFilters"></div><div id="inboxList" class="admin-list"></div><div class="button-row"><button class="btn secondary" id="inboxReload" type="button">刷新 / Refresh</button></div><div id="inboxMessage" role="status"></div></div><button class="btn secondary" id="logoutButton" type="button">退出登录 / Sign out</button></div></div><div class="wrap" id="accountMessage" role="status"></div></section>
 <section class="page" data-view="admin"><div class="wrap page-intro"><div class="kicker mono">06 / EDITORIAL DESK</div><h1>编辑后台</h1><p>新闻、活动和课程数据 · Content tools for authorized class editors</p></div><div class="wrap" id="editorDenied"><div class="account-box"><h2>需要编辑权限</h2><p>此后台仅对管理员、班委和导员开放。普通班级成员可浏览网站内容。</p></div></div><div class="wrap" id="editorPanel" hidden><div class="editor-tabs"><button class="filter active" data-editor-tab="news">新闻</button><button class="filter" data-editor-tab="events">活动</button><button class="filter" data-editor-tab="schedule">课表</button><button class="filter" data-editor-tab="resources">公共资料</button><button class="filter admin-only" data-editor-tab="users" hidden>账号权限</button><button class="filter admin-only" data-editor-tab="invites" hidden>邀请码</button></div><section class="editor-section" data-editor-section="news"><div class="editor-layout"><form class="account-box" id="newsForm"><h2>发布 / 编辑新闻</h2><input type="hidden" name="id"><label>分类 / Category<input name="category" placeholder="班级动态 / CLASS UPDATE"></label><label>中文标题<input name="title_cn" required></label><label>英文标题<input name="title_en"></label><label>日期<input name="date" placeholder="2026.09.27 或 留空"></label><label>中文摘要<textarea name="summary_cn"></textarea></label><label>English summary<textarea name="summary_en"></textarea></label><label>中文正文<textarea name="body_cn"></textarea></label><label>English body<textarea name="body_en"></textarea></label><label>原文链接<input name="source_url" type="url" placeholder="https://..."></label><label>图片相对路径<input name="image_url" placeholder="assets/example.jpg"></label><label class="check-label"><input name="featured" type="checkbox">设为首页头条 / Feature on home</label><div class="button-row"><button class="btn primary" type="submit">保存新闻</button><button class="btn secondary" id="clearNewsForm" type="button">清空</button></div><p class="small-note">新闻支持中英双语。保存后会写入数据库并即时显示。</p></form><div class="account-box"><h2>已发布新闻</h2><div id="newsAdminList" class="admin-list"></div></div></div></section><section class="editor-section" data-editor-section="events" hidden><div class="editor-layout"><form class="account-box" id="eventForm"><h2>添加活动</h2><input type="hidden" name="id"><label>中文标题<input name="title_cn" required></label><label>英文标题<input name="title_en"></label><label>日期 / Date<input name="date" required placeholder="2026.10.12"></label><label>原文链接 / Source URL<input name="source_url" placeholder="https://..."></label><label>阶段 / Phase<select name="phase"><option value="upcoming">近期活动 / Upcoming</option><option value="past">往期活动 / Past</option></select></label><label>分类<input name="category"></label><label>地点<input name="location"></label><label>中文简介<textarea name="summary_cn"></textarea></label><label>English summary<textarea name="summary_en"></textarea></label><div class="button-row"><button class="btn primary" type="submit">保存活动</button><button class="btn secondary" id="clearEventForm" type="button">清空</button></div></form><div class="account-box"><h2>活动日历</h2><div id="eventAdminList" class="admin-list"></div></div></div></section><section class="editor-section" data-editor-section="resources" hidden><div class="editor-layout"><form class="account-box" id="resourceForm"><h2>上传共享资料</h2><label>资料名称<input name="title" maxlength="120" placeholder="留空时使用文件名"></label><label>分类<input name="category" maxlength="60" value="课程资料" placeholder="课程资料 / 竞赛科研 / 活动"></label><label>资料说明<textarea name="description" maxlength="1000" placeholder="简要说明资料内容与适用范围"></textarea></label><label>选择文件<input name="file" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.csv,.txt,.md,.zip,.png,.jpg,.jpeg,.webp" required></label><div class="button-row"><button class="btn primary" type="submit">上传到公共资料</button></div><p class="small-note">支持 PDF、Office 文档、文本、ZIP 和常见图片，单个文件不超过 25 MB。管理员、班委和导员可上传或删除；全班可浏览和下载。</p><div id="resourceMessage" role="status"></div></form><div class="account-box"><h2>已上传资料</h2><div id="resourceAdminList" class="admin-list"></div></div></div></section><section class="editor-section" data-editor-section="schedule" hidden><div class="account-box"><h2>编辑课程表</h2><p class="small-note">数据格式为 JSON：教学周起始日期和课程数组。修改后保存，周次会按北京时间重新计算。</p><textarea id="scheduleEditor" class="code-editor" spellcheck="false"></textarea><div class="button-row"><button class="btn primary" id="saveSchedule" type="button">保存课表</button></div></div></section><section class="editor-section admin-only" data-editor-section="users" hidden><div class="account-box"><h2>账号与角色</h2><p class="small-note">注册账号默认是班级成员。仅管理员可授予或调整角色。</p><div id="userAdminList" class="admin-list"></div></div><div class="account-box"><h2>管理记录</h2><div id="auditList" class="admin-list"></div></div></section><section class="editor-section admin-only" data-editor-section="invites" hidden><div class="editor-layout"><div><form class="account-box" id="inviteForm"><h2>生成邀请码</h2><label>备注 / Label<input name="label" maxlength="60" placeholder="例如 2026 级新生 / Officers"></label><label>初始身份 / Role<select name="role"><option value="member">班级成员 / Member</option><option value="officer">班委 / Officer</option><option value="counselor">导员 / Counselor</option></select></label><label>可用次数 / Uses<input name="max_uses" type="number" min="1" max="500" value="1"></label><label>有效天数 / Valid days<input name="expires_in_days" type="number" min="0" max="3650" value="0"><small>0 表示不限时间 / 0 means no expiry.</small></label><div class="button-row"><button class="btn primary" type="submit">生成邀请码</button></div><p class="small-note">邀请码只发给本班同学、班委或导员，删除后立即失效，已注册的账号不受影响。</p><div id="inviteMessage" role="status"></div></form><form class="account-box" id="registrationModeForm"><h2>注册方式</h2><label>当前策略 / Mode<select id="registrationMode" name="mode"><option value="invite">仅邀请码注册 / Invite only</option><option value="open">自由注册 / Open</option><option value="closed">关闭注册 / Closed</option></select></label><div class="button-row"><button class="btn secondary" type="submit">保存注册方式</button></div><p class="small-note">建议保持“仅邀请码注册”，确保注册者都是拿到邀请码的本班同学、班委或导员。</p></form><form class="account-box" id="emailVerificationForm"><h2>邮箱验证</h2><p class="small-note" id="mailerStatus">正在读取发信状态…</p><label>验证要求 / Requirement<select id="emailVerificationMode" name="mode"><option value="notify">注册后提示验证，不限制功能</option><option value="gate">未验证不能下载公共资料</option><option value="off">关闭邮箱验证</option></select></label><label>邮箱域名校验 / Domain check<select id="emailDomainCheck" name="domain_check"><option value="strict">严格：域名必须能收信</option><option value="warn">只记录提示，不拦截</option><option value="off">关闭域名校验</option></select></label><label>仅允许的邮箱域名 / Allowed domains<input name="domains" maxlength="300" placeholder="例如 stu.example.edu.cn, example.edu.cn"><small>留空表示不限制；多个域名用逗号或空格分隔。</small></label><div class="button-row"><button class="btn primary" type="submit">保存邮箱验证设置</button></div><div id="verifyAdminMessage" role="status"></div></form><form class="account-box" id="testMailForm"><h2>发送测试邮件</h2><label>收件邮箱 / Test recipient<input name="email" type="email" maxlength="254" placeholder="you@example.com"></label><div class="button-row"><button class="btn secondary" type="submit">发送测试邮件</button></div><p class="small-note">用于确认发信配置是否可用；建议上线前先给自己的邮箱发一封。</p></form></div><div class="account-box"><h2>已生成邀请码</h2><div id="inviteAdminList" class="admin-list"></div></div></div></section></div><div class="wrap" id="editorMessage" role="status"></div></section></main>
@@ -1047,7 +1431,7 @@ async function noticeEdit(){
 </script>
 <script>
 /* ===== 访客身份 / Visitor account：注册身份选择 + 板块门禁 ===== */
-const VISITOR_BLOCKED_VIEWS=['affairs','schedule','resources','tuimian'];
+const VISITOR_BLOCKED_VIEWS=['affairs','schedule','resources','tuimian','liuxue'];
 function isVisitorAccount(){return !!(currentUser&&currentUser.account_type==='visitor')}
 function isNonMemberAccount(){return !(currentUser&&currentUser.account_type==='member')}
 function applyAccountTypeUI(){
@@ -1255,7 +1639,7 @@ async function refreshEventHistory(){
 .cr-bullets li{font-size:12.5px;line-height:1.8;margin-bottom:8px}
 .cr-check{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-top:1px solid var(--line);font-size:12.5px;line-height:1.7;cursor:pointer}
 .cr-check:first-of-type{border-top:0}
-.cr-check input{margin-top:3px;accent-color:#a51c30}
+.cr-check input{margin-top:3px;accent-color:#a51c30}.account-box label.cr-check{display:flex;align-items:flex-start;gap:10px;margin:0;color:inherit;font-size:12.5px}
 .cr-bar{height:9px;border-radius:6px;background:#eee7dc;overflow:hidden;margin-top:7px;min-width:90px}
 .cr-bar span{display:block;height:100%;background:#a51c30}
 .cr-note{font-size:11px;color:#8b948c;line-height:1.8;margin-top:26px}
@@ -1756,11 +2140,12 @@ lim (n → ∞) (1 + 1/n)^n = e</span>
     ['affairs','事务总览'],
     ['opportunities','竞赛科研'],
     ['team','组队大厅'],
-    ['tuimian','推免指南']
+    ['tuimian','推免指南'],
+    ['liuxue','留学指南']
   ];
   var nav=document.querySelector('.links');
   if(nav){
-    ['opportunities','team','tuimian'].forEach(function(v){
+    ['opportunities','team','tuimian','liuxue'].forEach(function(v){
       var a=nav.querySelector('[data-page="'+v+'"]');
       if(a&&a.parentNode){a.parentNode.removeChild(a);}
     });
@@ -1793,7 +2178,7 @@ lim (n → ∞) (1 + 1/n)^n = e</span>
   });
   var affairs=document.querySelector('[data-view="affairs"]');
   var ap=affairs?affairs.querySelector('.page-intro p'):null;
-  if(ap){ap.textContent='活动、学业、资源与班级服务，以及竞赛科研、组队大厅、推免指南三个子模块，都从这里进入。';}
+  if(ap){ap.textContent='活动、学业、资源与班级服务，以及竞赛科研、组队大厅、推免指南、留学指南四个子模块，都从这里进入。';}
   if(affairs&&!affairs.querySelector('.cr-hub')){
     var host=affairs.querySelector('.cr-subnav');
     var sec=document.createElement('div');
