@@ -112,9 +112,39 @@ sudo -u dmt-site env DMT_DB_PATH=/var/lib/dmt-class-site/class_site.sqlite3 \
   /opt/dmt-class-site/.venv/bin/python /opt/dmt-class-site/deploy/sync-news.py --apply
 ```
 
-## 腾讯云 Linux 上线准备
+## 阿里云 Linux 上线准备
 
 `server.py` 保留给本地预览和 CLI 管理操作。公网服务入口使用 `app.py`（Flask WSGI）和 Waitress，由 Nginx 提供 HTTPS 反向代理。不要将 Python 开发服务器或 8000 端口直接暴露到公网。
+
+### 日常更新（改完代码怎么上线）
+
+本地改完 → 推到 GitHub → 到服务器上拉取并重启：
+
+```bash
+cd /opt/dmt-class-site
+sudo -u dmt-site git -C /opt/dmt-class-site pull
+sudo systemctl restart dmt-class-site
+```
+
+如果 `git pull` 报 `detected dubious ownership in repository`，说明仓库属主和服务账号对不上（git 2.35+ 的保护）。两种解法任选其一：
+
+```bash
+sudo chown -R dmt-site:dmt-site /opt/dmt-class-site
+# 或者：临时放行这个目录
+sudo -u dmt-site git -c safe.directory=/opt/dmt-class-site -C /opt/dmt-class-site pull
+```
+
+不要直接照抄 git 提示里的 `git config --global --add safe.directory ...`：若你当前登录的不是服务账号，那行只会写进你这个账号的配置，对 `sudo -u dmt-site` 那次执行无效。
+
+拉完自查（应与仓库里的文件一致）：
+
+```bash
+wc -c /opt/dmt-class-site/index.html
+sha256sum /opt/dmt-class-site/index.html
+curl -s http://127.0.0.1:8000/ | grep -o og:title
+```
+
+若更新里带了新新闻条目，再补一条 `deploy/sync-news.py --apply`（见上一节）。改了 `assets/` 里的图标或图片时，浏览器和手机可能要吃一次强制刷新才会换（`index.html` 本身是 `no-cache`，普通刷新即可；图片是 `max-age=3600`）。
 
 ### 代码与数据
 
