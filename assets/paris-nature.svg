@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="1200" height="420" role="img" aria-label="Paysage naturel français">
+  <title>Paysage français · 自然景致</title>
+
+  <!-- 云：几笔轻轻扫过的横线 -->
+  <g stroke="#2f3049" stroke-linecap="round" fill="none" opacity=".18">
+    <path d="M120 70h150M170 84h120" stroke-width="6"/>
+    <path d="M760 54h180M800 70h140M850 86h110" stroke-width="6"/>
+    <path d="M420 40h130" stroke-width="5"/>
+  </g>
+
+  <!-- 远山 -->
+  <g fill="#2f3049" opacity=".16">
+    <path d="M0 214c120-54 220-62 320-24 70 26 130 34 200 26 120-14 230-58 340-44 120 16 220 52 340 42v56H0Z"/>
+  </g>
+  <g fill="#2f3049" opacity=".24">
+    <path d="M0 250c140-40 240-34 340 0 90 30 170 30 260 8 130-32 250-52 360-30 90 18 160 34 240 26v46H0Z"/>
+  </g>
+
+  <!-- 远山上的一座庄园剪影 + 教堂尖塔 -->
+  <g fill="#2f3049" opacity=".32">
+    <rect x="176" y="188" width="86" height="30"/>
+    <polygon points="176,188 186,172 252,172 262,188"/>
+    <rect x="204" y="160" width="8" height="14"/><rect x="230" y="160" width="8" height="14"/>
+    <rect x="212" y="146" width="14" height="26"/>
+    <ellipse cx="219" cy="142" rx="9" ry="9"/>
+    <polygon points="1046,168 1052,116 1058,168"/>
+    <rect x="1032" y="168" width="40" height="50"/>
+  </g>
+
+  <!-- 湖面 -->
+  <g fill="#2f3049" opacity=".22">
+    <path d="M330 286c90-16 190-16 280 4 80 18 160 20 250 2v34c-90 16-176 14-260-4-96-20-190-18-270-2Z"/>
+  </g>
+  <g stroke="#2f3049" stroke-width="3" stroke-linecap="round" fill="none" opacity=".28">
+    <path d="M430 300h90M560 312h120M470 324h70M700 306h80"/>
+  </g>
+
+  <!-- 树丛：不同大小、错落分布 -->
+  <g fill="#2f3049">
+    <g opacity=".34">
+      <circle cx="300" cy="252" r="26"/><circle cx="336" cy="260" r="20"/><circle cx="268" cy="262" r="18"/>
+      <circle cx="900" cy="246" r="28"/><circle cx="940" cy="256" r="20"/><circle cx="862" cy="258" r="18"/>
+    </g>
+    <g opacity=".46">
+      <circle cx="120" cy="300" r="34"/><circle cx="180" cy="312" r="24"/><circle cx="76" cy="314" r="22"/>
+      <circle cx="1080" cy="296" r="34"/><circle cx="1024" cy="310" r="24"/><circle cx="1140" cy="312" r="22"/>
+    </g>
+    <g opacity=".6">
+      <circle cx="250" cy="372" r="44"/><circle cx="330" cy="388" r="30"/><circle cx="196" cy="390" r="26"/>
+      <circle cx="960" cy="368" r="44"/><circle cx="884" cy="386" r="30"/><circle cx="1016" cy="388" r="26"/>
+    </g>
+    <!-- 树干 -->
+    <g opacity=".34">
+      <rect x="246" y="404" width="8" height="16"/>
+      <rect x="956" y="400" width="8" height="20"/>
+      <rect x="117" y="326" width="6" height="14"/>
+      <rect x="1077" y="322" width="6" height="14"/>
+    </g>
+  </g>
+
+  <!-- 前景草坡上的一丛丛草 -->
+  <g stroke="#2f3049" stroke-width="3" stroke-linecap="round" opacity=".3">
+    <path d="M470 410c-4-14-10-22-20-28M484 410c2-14 8-22 18-28M476 410c0-16 0-24-4-32"/>
+    <path d="M700 412c-4-14-10-22-20-28M714 412c2-14 8-22 18-28M706 412c0-16 0-24-4-32"/>
+    <path d="M580 404c-3-10-7-16-14-20M590 404c2-10 6-16 12-20"/>
+  </g>
+
+  <!-- 归鸟 -->
+  <g stroke="#2f3049" stroke-width="3" fill="none" stroke-linecap="round" opacity=".3">
+    <path d="M620 112c6-6 10-6 14 0 4-6 8-6 14 0"/>
+    <path d="M672 132c5-5 8-5 11 0 3-5 6-5 11 0"/>
+  </g>
+</svg>

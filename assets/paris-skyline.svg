@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 360" width="1600" height="360" role="img" aria-label="Paris rooftop skyline">
+  <title>Paris · toits haussmanniens</title>
+  <defs>
+    <!-- 前排立面：窗格纹理靠它裁剪 -->
+    <clipPath id="facades">
+      <rect x="36" y="206" width="216" height="150"/>
+      <rect x="258" y="196" width="176" height="160"/>
+      <rect x="440" y="158" width="206" height="198"/>
+      <rect x="652" y="208" width="176" height="148"/>
+      <rect x="834" y="176" width="216" height="180"/>
+      <rect x="1056" y="214" width="186" height="142"/>
+      <rect x="1248" y="186" width="216" height="170"/>
+      <rect x="1470" y="222" width="112" height="134"/>
+    </clipPath>
+  </defs>
+
+  <!-- 远景：更淡的一排屋顶、圆顶与尖塔 -->
+  <g fill="#2f3049" opacity=".28">
+    <rect x="150" y="182" width="150" height="124"/>
+    <polygon points="176,182 226,132 276,182"/>
+    <rect x="700" y="172" width="126" height="134"/>
+    <polygon points="722,172 762,128 802,172"/>
+    <rect x="1088" y="190" width="146" height="116"/>
+    <polygon points="1114,190 1160,142 1206,190"/>
+    <!-- 圆顶教堂 -->
+    <ellipse cx="330" cy="152" rx="44" ry="30"/>
+    <rect x="322" y="118" width="16" height="38"/>
+    <ellipse cx="330" cy="106" rx="12" ry="17"/>
+    <!-- 远处尖塔 -->
+    <polygon points="1160,142 1166,58 1172,142"/>
+  </g>
+
+  <!-- 中景 -->
+  <g fill="#2f3049" opacity=".5">
+    <rect x="86" y="188" width="120" height="118"/>
+    <polygon points="104,188 146,146 188,188"/>
+    <rect x="520" y="176" width="130" height="130"/>
+    <polygon points="540,176 585,132 630,176"/>
+    <rect x="920" y="192" width="140" height="114"/>
+    <polygon points="940,192 990,150 1040,192"/>
+    <rect x="1330" y="196" width="128" height="110"/>
+    <polygon points="1350,196 1394,154 1438,196"/>
+  </g>
+
+  <!-- 前排：奥斯曼式立面（梯形芒萨尔屋顶 + 烟囱） -->
+  <g fill="#2f3049">
+    <rect x="36" y="206" width="216" height="150"/>
+    <polygon points="36,206 58,178 230,178 252,206"/>
+    <rect x="60" y="160" width="11" height="20"/>
+    <rect x="120" y="160" width="11" height="20"/>
+    <rect x="196" y="160" width="11" height="20"/>
+
+    <rect x="258" y="196" width="176" height="160"/>
+    <polygon points="258,196 278,162 414,162 434,196"/>
+    <rect x="286" y="142" width="10" height="22"/>
+    <rect x="384" y="142" width="10" height="22"/>
+
+    <rect x="440" y="158" width="206" height="198"/>
+    <polygon points="440,158 462,120 624,120 646,158"/>
+    <rect x="470" y="100" width="11" height="22"/>
+    <rect x="546" y="100" width="11" height="22"/>
+    <rect x="606" y="100" width="11" height="22"/>
+
+    <rect x="652" y="208" width="176" height="148"/>
+    <polygon points="652,208 672,176 808,176 828,208"/>
+    <rect x="680" y="156" width="10" height="22"/>
+    <rect x="782" y="156" width="10" height="22"/>
+
+    <rect x="834" y="176" width="216" height="180"/>
+    <polygon points="834,176 856,140 1028,140 1050,176"/>
+    <rect x="862" y="120" width="11" height="22"/>
+    <rect x="944" y="120" width="11" height="22"/>
+    <rect x="1010" y="120" width="11" height="22"/>
+
+    <rect x="1056" y="214" width="186" height="142"/>
+    <polygon points="1056,214 1078,184 1220,184 1242,214"/>
+    <rect x="1086" y="164" width="10" height="22"/>
+    <rect x="1188" y="164" width="10" height="22"/>
+
+    <rect x="1248" y="186" width="216" height="170"/>
+    <polygon points="1248,186 1270,148 1442,148 1464,186"/>
+    <rect x="1278" y="128" width="11" height="22"/>
+    <rect x="1352" y="128" width="11" height="22"/>
+    <rect x="1420" y="128" width="11" height="22"/>
+
+    <rect x="1470" y="222" width="112" height="134"/>
+    <polygon points="1470,222 1490,196 1562,196 1582,222"/>
+    <rect x="1500" y="176" width="10" height="22"/>
+
+    <!-- 街边的树 -->
+    <circle cx="286" cy="330" r="26"/>
+    <circle cx="316" cy="338" r="18"/>
+    <circle cx="700" cy="332" r="24"/>
+    <circle cx="726" cy="340" r="16"/>
+    <circle cx="1200" cy="334" r="22"/>
+    <circle cx="1520" cy="336" r="20"/>
+  </g>
+
+  <!-- 窗与阳台：只在前排立面上叠一层细纹，像铜版画的排线 -->
+  <g clip-path="url(#facades)" fill="#15162a" opacity=".26">
+    <g>
+      <rect x="52" y="222" width="16" height="30"/><rect x="92" y="222" width="16" height="30"/><rect x="132" y="222" width="16" height="30"/><rect x="172" y="222" width="16" height="30"/><rect x="212" y="222" width="16" height="30"/>
+      <rect x="52" y="272" width="16" height="30"/><rect x="92" y="272" width="16" height="30"/><rect x="132" y="272" width="16" height="30"/><rect x="172" y="272" width="16" height="30"/><rect x="212" y="272" width="16" height="30"/>
+      <rect x="52" y="322" width="16" height="26"/><rect x="92" y="322" width="16" height="26"/><rect x="132" y="322" width="16" height="26"/><rect x="172" y="322" width="16" height="26"/><rect x="212" y="322" width="16" height="26"/>
+    </g>
+    <g>
+      <rect x="274" y="214" width="16" height="28"/><rect x="314" y="214" width="16" height="28"/><rect x="354" y="214" width="16" height="28"/><rect x="394" y="214" width="16" height="28"/>
+      <rect x="274" y="262" width="16" height="28"/><rect x="314" y="262" width="16" height="28"/><rect x="354" y="262" width="16" height="28"/><rect x="394" y="262" width="16" height="28"/>
+      <rect x="274" y="310" width="16" height="28"/><rect x="314" y="310" width="16" height="28"/><rect x="354" y="310" width="16" height="28"/><rect x="394" y="310" width="16" height="28"/>
+    </g>
+    <g>
+      <rect x="456" y="176" width="17" height="30"/><rect x="500" y="176" width="17" height="30"/><rect x="544" y="176" width="17" height="30"/><rect x="588" y="176" width="17" height="30"/>
+      <rect x="456" y="228" width="17" height="30"/><rect x="500" y="228" width="17" height="30"/><rect x="544" y="228" width="17" height="30"/><rect x="588" y="228" width="17" height="30"/>
+      <rect x="456" y="280" width="17" height="30"/><rect x="500" y="280" width="17" height="30"/><rect x="544" y="280" width="17" height="30"/><rect x="588" y="280" width="17" height="30"/>
+      <rect x="456" y="330" width="17" height="26"/><rect x="500" y="330" width="17" height="26"/><rect x="544" y="330" width="17" height="26"/><rect x="588" y="330" width="17" height="26"/>
+    </g>
+    <g>
+      <rect x="668" y="226" width="16" height="28"/><rect x="708" y="226" width="16" height="28"/><rect x="748" y="226" width="16" height="28"/><rect x="788" y="226" width="16" height="28"/>
+      <rect x="668" y="274" width="16" height="28"/><rect x="708" y="274" width="16" height="28"/><rect x="748" y="274" width="16" height="28"/><rect x="788" y="274" width="16" height="28"/>
+      <rect x="668" y="322" width="16" height="28"/><rect x="708" y="322" width="16" height="28"/><rect x="748" y="322" width="16" height="28"/><rect x="788" y="322" width="16" height="28"/>
+    </g>
+    <g>
+      <rect x="850" y="194" width="17" height="30"/><rect x="894" y="194" width="17" height="30"/><rect x="938" y="194" width="17" height="30"/><rect x="982" y="194" width="17" height="30"/><rect x="1026" y="194" width="17" height="30"/>
+      <rect x="850" y="246" width="17" height="30"/><rect x="894" y="246" width="17" height="30"/><rect x="938" y="246" width="17" height="30"/><rect x="982" y="246" width="17" height="30"/><rect x="1026" y="246" width="17" height="30"/>
+      <rect x="850" y="298" width="17" height="30"/><rect x="894" y="298" width="17" height="30"/><rect x="938" y="298" width="17" height="30"/><rect x="982" y="298" width="17" height="30"/><rect x="1026" y="298" width="17" height="30"/>
+    </g>
+    <g>
+      <rect x="1072" y="232" width="16" height="28"/><rect x="1112" y="232" width="16" height="28"/><rect x="1152" y="232" width="16" height="28"/><rect x="1192" y="232" width="16" height="28"/>
+      <rect x="1072" y="280" width="16" height="28"/><rect x="1112" y="280" width="16" height="28"/><rect x="1152" y="280" width="16" height="28"/><rect x="1192" y="280" width="16" height="28"/>
+      <rect x="1072" y="328" width="16" height="28"/><rect x="1112" y="328" width="16" height="28"/><rect x="1152" y="328" width="16" height="28"/><rect x="1192" y="328" width="16" height="28"/>
+    </g>
+    <g>
+      <rect x="1264" y="204" width="17" height="30"/><rect x="1308" y="204" width="17" height="30"/><rect x="1352" y="204" width="17" height="30"/><rect x="1396" y="204" width="17" height="30"/><rect x="1440" y="204" width="17" height="30"/>
+      <rect x="1264" y="256" width="17" height="30"/><rect x="1308" y="256" width="17" height="30"/><rect x="1352" y="256" width="17" height="30"/><rect x="1396" y="256" width="17" height="30"/><rect x="1440" y="256" width="17" height="30"/>
+      <rect x="1264" y="308" width="17" height="30"/><rect x="1308" y="308" width="17" height="30"/><rect x="1352" y="308" width="17" height="30"/><rect x="1396" y="308" width="17" height="30"/><rect x="1440" y="308" width="17" height="30"/>
+    </g>
+    <g>
+      <rect x="1486" y="240" width="14" height="26"/><rect x="1520" y="240" width="14" height="26"/><rect x="1554" y="240" width="14" height="26"/>
+      <rect x="1486" y="284" width="14" height="26"/><rect x="1520" y="284" width="14" height="26"/><rect x="1554" y="284" width="14" height="26"/>
+      <rect x="1486" y="328" width="14" height="26"/><rect x="1520" y="328" width="14" height="26"/><rect x="1554" y="328" width="14" height="26"/>
+    </g>
+  </g>
+
+  <!-- 阳台铁栏：几道极细的横线，示意锻铁栏杆 -->
+  <g stroke="#2f3049" stroke-width="2" opacity=".4" fill="none">
+    <path d="M40 268H248M262 258H430M444 220H642M656 270H824M838 238H1046M1060 276H1238M1252 248H1460M1474 284H1578"/>
+  </g>
+</svg>

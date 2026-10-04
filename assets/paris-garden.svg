@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="1200" height="420" role="img" aria-label="Jardin à la française">
+  <title>Jardin à la française · 法式花园</title>
+
+  <!-- 远景：树带 + 隐约的宅邸 -->
+  <g fill="#2f3049" opacity=".20">
+    <circle cx="70" cy="196" r="34"/><circle cx="120" cy="204" r="26"/><circle cx="30" cy="206" r="22"/>
+    <circle cx="1160" cy="194" r="34"/><circle cx="1110" cy="204" r="26"/><circle cx="1180" cy="206" r="22"/>
+    <rect x="470" y="176" width="260" height="46"/>
+    <polygon points="470,176 494,148 706,148 730,176"/>
+    <rect x="520" y="132" width="10" height="18"/><rect x="596" y="132" width="10" height="18"/><rect x="670" y="132" width="10" height="18"/>
+    <rect x="590" y="118" width="20" height="32"/>
+    <ellipse cx="600" cy="112" rx="12" ry="12"/>
+  </g>
+
+  <!-- 绿篱墙 -->
+  <g fill="#2f3049" opacity=".34">
+    <rect x="0" y="212" width="1200" height="14"/>
+    <circle cx="0" cy="212" r="14"/><circle cx="60" cy="210" r="16"/><circle cx="130" cy="212" r="14"/>
+    <circle cx="1080" cy="212" r="14"/><circle cx="1150" cy="210" r="16"/>
+  </g>
+
+  <!-- 透视小径：四条向中心收拢的碎石路 -->
+  <g fill="#2f3049" opacity=".16">
+    <polygon points="0,226 130,226 520,392 300,420"/>
+    <polygon points="1200,226 1070,226 680,392 900,420"/>
+    <polygon points="240,226 300,226 520,420 380,420"/>
+    <polygon points="960,226 900,226 680,420 820,420"/>
+  </g>
+
+  <!-- 中央水池与喷泉 -->
+  <g fill="#2f3049" opacity=".40">
+    <ellipse cx="600" cy="330" rx="96" ry="34"/>
+    <ellipse cx="600" cy="326" rx="78" ry="26" fill="#ffffff" opacity=".22"/>
+    <rect x="595" y="272" width="10" height="56"/>
+    <ellipse cx="600" cy="266" rx="14" ry="8"/>
+    <path d="M600 258c-9-12-14-19-14-26a14 14 0 0 1 28 0c0 7-5 14-14 26Z"/>
+  </g>
+
+  <!-- 花坛：两侧对称的模纹绿篱 -->
+  <g fill="#2f3049" opacity=".30">
+    <path d="M150 250c70-8 120 12 150 44-46 14-104 8-150-44Z"/>
+    <path d="M1050 250c-70-8-120 12-150 44 46 14 104 8 150-44Z"/>
+    <path d="M196 320c46-10 84 2 108 28-34 12-76 6-108-28Z"/>
+    <path d="M1004 320c-46-10-84 2-108 28 34 12 76 6 108-28Z"/>
+    <circle cx="330" cy="304" r="18"/>
+    <circle cx="870" cy="304" r="18"/>
+  </g>
+
+  <!-- 修剪成球的黄杨，沿路一字排开 -->
+  <g fill="#2f3049" opacity=".46">
+    <circle cx="120" cy="240" r="13"/><circle cx="200" cy="248" r="13"/><circle cx="280" cy="258" r="12"/>
+    <circle cx="360" cy="270" r="12"/><circle cx="440" cy="284" r="11"/>
+    <circle cx="1080" cy="240" r="13"/><circle cx="1000" cy="248" r="13"/><circle cx="920" cy="258" r="12"/>
+    <circle cx="840" cy="270" r="12"/><circle cx="760" cy="284" r="11"/>
+  </g>
+
+  <!-- 两座石雕花钵 -->
+  <g fill="#2f3049" opacity=".5">
+    <rect x="146" y="386" width="28" height="22"/>
+    <path d="M140 372h40l-6 16h-28Z"/>
+    <circle cx="160" cy="366" r="10"/>
+    <rect x="1026" y="386" width="28" height="22"/>
+    <path d="M1020 372h40l-6 16h-28Z"/>
+    <circle cx="1040" cy="366" r="10"/>
+  </g>
+
+  <!-- 前景草坪上的几丛草 -->
+  <g stroke="#2f3049" stroke-width="3" stroke-linecap="round" opacity=".3">
+    <path d="M420 414c-4-12-8-18-16-24M432 414c2-12 6-18 14-24M426 414c0-14 0-20-2-28"/>
+    <path d="M760 414c-4-12-8-18-16-24M772 414c2-12 6-18 14-24M766 414c0-14 0-20-2-28"/>
+  </g>
+</svg>

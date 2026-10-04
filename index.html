@@ -3460,4 +3460,93 @@ img{filter:saturate(1.14) contrast(1.05) brightness(1.02)}
   .page-intro h1::after,.hero h1::after{width:150px;margin-top:16px}
 }
 </style>
+<style id="paris-hero">
+/* ==========================================================================
+   主页 hero：奥斯曼式屋顶做成浅浅的底纹（主色一个都没改）+ 一处法文点缀
+   · .hero::after      —— 巴黎屋顶天际线，压在 hero 底部，上缘用遮罩淡出
+   · .hero-art::after  —— 那块"醒目但不重要"的装饰画布上加一句法文
+   想关掉：删掉整个 <style id="paris-hero"> 块即可。
+   ========================================================================== */
+.hero{position:relative;isolation:isolate}
+.hero::after{
+  content:"";position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);
+  width:min(1420px,122%);height:min(62%,320px);
+  background:url("assets/paris-skyline.svg") center bottom/contain no-repeat;
+  opacity:.17;pointer-events:none;z-index:0;
+  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.30) 0%,rgba(0,0,0,.78) 34%,#000 62%);
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.30) 0%,rgba(0,0,0,.78) 34%,#000 62%);
+}
+.hero > *{position:relative;z-index:1}
+
+.hero-art::after{
+  content:"Paris, Ville Lumière";
+  position:absolute;left:25px;bottom:52px;
+  font-family:var(--oil-serif);font-style:italic;font-weight:400;
+  font-size:15px;letter-spacing:.095em;color:rgba(216,182,118,.92);
+  pointer-events:none;
+}
+
+@media(max-width:760px){
+  /* 手机端 hero 是上下堆叠的，底部在折叠线以下；改成压在标题区下方，第一屏就能看到 */
+  .hero::after{
+    opacity:.13;width:min(1420px,152%);top:150px;bottom:auto;height:320px;
+    -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.22) 0%,rgba(0,0,0,.7) 40%,#000 72%);
+    mask-image:linear-gradient(180deg,rgba(0,0,0,.22) 0%,rgba(0,0,0,.7) 40%,#000 72%);
+  }
+  .hero-art::after{font-size:13px;bottom:46px;letter-spacing:.07em}
+}
+</style>
+<style id="estate-scenes">
+/* ==========================================================================
+   各模块的淡背景：法式庄园 / 法式花园 / 自然景致
+   统一做法：米白底上的浅墨色剪影，透明度 .11，下缘用遮罩淡出；左右交替摆放，
+   让每个模块的背景都不一样，又只是"底纹"，不抢正文。
+   想关掉：删掉整个 <style id="estate-scenes"> 块即可。
+   ========================================================================== */
+.page{position:relative;isolation:isolate}
+.page::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:min(620px,74vh);
+  background-repeat:no-repeat;background-size:min(1180px,94%) auto;background-position:50% top;
+  opacity:.13;pointer-events:none;z-index:0;
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.6) 56%,rgba(0,0,0,0) 100%);
+  mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.6) 56%,rgba(0,0,0,0) 100%);
+}
+.page > *{position:relative;z-index:1}
+
+/* 庄园 —— 班级新闻、推免指南、留学指南、公共资料 */
+.page[data-view="news"]::before{background-image:url("assets/paris-chateau.svg");background-position:94% top}
+.page[data-view="tuimian"]::before{background-image:url("assets/paris-chateau.svg");background-position:6% top}
+.page[data-view="liuxue"]::before{background-image:url("assets/paris-chateau.svg");background-position:94% top}
+.page[data-view="resources"]::before{background-image:url("assets/paris-chateau.svg");background-position:6% top}
+
+/* 花园 —— 事务中心、个人中心、组队大厅、咨询合作 */
+.page[data-view="affairs"]::before{background-image:url("assets/paris-garden.svg");background-position:8% top}
+.page[data-view="account"]::before{background-image:url("assets/paris-garden.svg");background-position:92% top}
+.page[data-view="team"]::before{background-image:url("assets/paris-garden.svg");background-position:8% top}
+.page[data-view="contact"]::before{background-image:url("assets/paris-garden.svg");background-position:92% top}
+
+/* 自然 —— 周课表、竞赛科研、生活专区、课程要点 */
+.page[data-view="schedule"]::before{background-image:url("assets/paris-nature.svg");background-position:92% top}
+.page[data-view="opportunities"]::before{background-image:url("assets/paris-nature.svg");background-position:6% top}
+.page[data-view="life"]::before{background-image:url("assets/paris-nature.svg");background-position:92% top}
+.page[data-view^="life-"]::before{background-image:url("assets/paris-nature.svg");background-position:8% top}
+.page[data-view^="course"]::before{background-image:url("assets/paris-nature.svg");background-position:92% top}
+
+/* 首页用 paris-hero 层的巴黎屋顶；编辑后台不加底纹 */
+.page[data-view="home"]::before,.page[data-view="admin"]::before{content:none}
+
+/* 主页：DMT 01 与下面那段中文之间，插入法语班级名 */
+.hero p::before{
+  content:"Classe 01 · Technologie des Médias Numériques";
+  display:block;
+  font-family:var(--oil-serif);font-style:italic;font-weight:400;
+  font-size:17px;line-height:1.45;letter-spacing:.07em;color:#a8853f;
+  margin:0 0 14px;
+}
+
+@media(max-width:760px){
+  .page::before{opacity:.11;height:min(400px,48vh);background-size:min(1180px,150%) auto;background-position:50% top !important}
+  .hero p::before{font-size:14px;letter-spacing:.04em;margin-bottom:10px}
+}
+</style>
 </body></html>
