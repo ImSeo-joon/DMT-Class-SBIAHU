@@ -48,7 +48,34 @@ body{background:radial-gradient(ellipse at 12% 8%,#e9e5dc 0,transparent 31rem),v
 .notice-sep{opacity:.45;padding:0 4px}
 .notice-actions{display:flex;gap:6px;align-items:center}
 .notice-actions button{background:none;border:1px solid #ffffff40;color:#fff;font-size:10px;padding:3px 9px;border-radius:12px;cursor:pointer}
-.notice-actions button:hover{background:#ffffff1a}</style></head>
+.notice-actions button:hover{background:#ffffff1a}</style><style>
+/* ---------- 手机端排版修正（放在最后，确保覆盖前面的规则） ---------- */
+@media(max-width:760px){
+  /* 通知栏：标签一行、内容一行，关闭按钮不再挤占文字宽度 */
+  .notice-in{display:block;position:relative;padding:9px 46px 10px 20px}
+  .notice-tag{display:block;font-size:8px;letter-spacing:.12em;margin-bottom:4px}
+  .notice-text{display:block;font-size:11.5px;line-height:1.65}
+  .notice-actions{position:absolute;right:14px;top:7px}
+  /* 页头：品牌名单行显示，窄屏隐去 SBIAHU 后缀 */
+  .brand{font-size:12px;gap:9px;white-space:nowrap;letter-spacing:0}
+  .brand > span > span{display:none}
+  /* 新闻封面：原来 min-height:205px 会把大标题裁掉，改为按内容撑开 */
+  .news-feature .feature-art{min-height:0;padding:24px;gap:14px}
+  .news-feature .feature-art .art-word{font-size:27px;line-height:1.02;letter-spacing:-.05em}
+  /* 周课表：单元格文字缩小、留白收紧 */
+  .timetable th,.timetable td{padding:7px;font-size:11.5px}
+  .timetable .lesson{padding:7px}
+  .timetable .lesson strong{font-size:11.5px;line-height:1.4}
+  .timetable .lesson small{font-size:9px;line-height:1.5}
+  /* 事务中心入口卡：窄屏单列，卡片之间的间距略收紧 */
+  .wrap .cr-hub{gap:12px;grid-template-columns:1fr}
+}
+@media(min-width:761px){
+  /* 事务中心子模块从 3 个变成 4 个，两列排布比 3+1 更整齐 */
+  .wrap .cr-hub{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
 <body><div class="notice-bar" id="noticeBar" hidden><div class="wrap notice-in"><span class="notice-tag">通知 / NOTICE</span><span class="notice-text" id="noticeText">正在读取通知…</span><span class="notice-actions"><button type="button" id="noticeEdit" hidden>编辑公告 / Edit</button><button type="button" id="noticeClose" aria-label="关闭通知栏 / Close">×</button></span></div></div>
 <header class="wrap nav"><a class="brand" href="#home" data-page="home"><span class="mark">D1</span><span>DMT CLASS 01 <span style="color:#919b94">| SBIAHU</span></span></a><nav class="links"><a href="#home" data-page="home">班级首页</a><a href="#news" data-page="news">班级新闻</a><a href="#affairs" data-page="affairs">事务中心</a><a href="#schedule" data-page="schedule">周课表</a><a href="#resources" data-page="resources">公共资料</a><a href="#opportunities" data-page="opportunities">竞赛科研</a><a href="#team" data-page="team">组队大厅</a><a href="#tuimian" data-page="tuimian">推免指南</a><a href="#liuxue" data-page="liuxue">留学指南</a><a href="#contact" data-page="contact">咨询合作</a><a href="#admin" data-page="admin" id="adminNav" style="display:none">编辑后台</a></nav><div class="nav-right"><span class="nav-status"><i class="status-dot"></i> 班级空间 · 在线</span><span class="nav-divider"></span><a class="nav-account" href="#account" data-page="account" id="accountNav">注册 / 登录</a></div><button class="menu" aria-label="菜单" onclick="document.querySelector('.links').classList.toggle('show')">☰</button></header>
 <main id="top"><div class="page active" data-view="home"><section class="wrap hero" id="about"><div><div class="eyebrow mono">ANHUI UNIVERSITY × STONY BROOK</div><h1>DMT<br><span>Class 01</span></h1><p>安徽大学纽约石溪学院 · 数字媒体技术 1 班。一个连接创意、技术与彼此的班级空间。从日常事务到灵感协作，我们一起把想法变成作品。</p><div class="actions"><a class="btn primary" href="#affairs" data-page="affairs">进入事务中心 <span>↗</span></a><a class="btn secondary" href="#contact" data-page="contact">联系班委 <span>↓</span></a></div></div><div class="hero-art"><div class="art-top mono"><span>CLASS SPACE / 2026—2027</span><span>31° 51′ N</span></div><div class="orbit"></div><div class="core">DMT<br>01</div><i class="sat"></i><i class="sat sat2"></i><div class="art-bottom mono"><span>MAKE · SHARE · GROW</span><span>SBIAHU / AU</span></div></div></section>
@@ -500,7 +527,7 @@ const courseDetails={
 '思想道德与法治':{teacher:'杜永春',credit:'3.0',location:'龙河校区互联大楼 309'},
 '形势与政策':{teacher:'王楠楠',credit:'课表未提供',location:'龙河校区主教楼东 325'}
 };
-function renderWeek(w){week=Math.max(1,w);if(!document.querySelector(`#weekSelect option[value="${week}"]`))document.getElementById('weekSelect').insertAdjacentHTML('beforeend',`<option value="${week}">第 ${week} 周</option>`);document.getElementById('weekLabel').textContent=`第 ${week} 周${week===actualWeek?' · 本周':''}`;document.getElementById('weekSelect').value=week;updateWeekNote();let body='';for(let p=1;p<=13;p++){body+=`<tr><td class="period">第 ${periodLabel(p,null)} 节<br><span class="mono">${periodTimeRange(p)}</span></td>`;for(let d=0;d<7;d++){let found=lessons.map((l,i)=>({...l,_index:i})).filter(l=>l.d===d&&l.p===p&&activeAt(l,week));body+=`<td>${found.length?found.map(l=>`<button type="button" class="lesson lesson-button" data-course-index="${l._index}" aria-label="查看${htmlSafe(l.n)}课程详情"><strong>${htmlSafe(l.n)}</strong><small>第 ${periodLabel(p,l)} 节 ${periodTimeRange(p,l.d)} · ${l.weeks.map(x=>x[0]===x[1]?`第${x[0]}周`:`第${x[0]}–${x[1]}周`).join('、')} · 点击查看详情</small></button>`).join(''):''}</td>`}body+='</tr>'}document.getElementById('tableBody').innerHTML=body}
+function renderWeek(w){week=Math.max(1,w);if(!document.querySelector(`#weekSelect option[value="${week}"]`))document.getElementById('weekSelect').insertAdjacentHTML('beforeend',`<option value="${week}">第 ${week} 周</option>`);document.getElementById('weekLabel').textContent=`第 ${week} 周${week===actualWeek?' · 本周':''}`;document.getElementById('weekSelect').value=week;updateWeekNote();let body='';for(let p=1;p<=13;p++){body+=`<tr><td class="period">第 ${periodLabel(p,null)} 节<br><span class="mono">${periodTimeRange(p)}</span></td>`;for(let d=0;d<7;d++){let found=lessons.map((l,i)=>({...l,_index:i})).filter(l=>l.d===d&&l.p===p&&activeAt(l,week));body+=`<td>${found.length?found.map(l=>`<button type="button" class="lesson lesson-button" data-course-index="${l._index}" aria-label="查看${htmlSafe(l.n)}课程详情"><strong>${htmlSafe(l.n)}</strong><small>第 ${periodLabel(p,l)} 节 ${periodTimeRange(p,l.d)} · ${l.weeks.map(x=>x[0]===x[1]?`第${x[0]}周`:`第${x[0]}–${x[1]}周`).join('、')} ${window.innerWidth<=760?'· 详情':'· 点击查看详情'}</small></button>`).join(''):''}</td>`}body+='</tr>'}document.getElementById('tableBody').innerHTML=body}
 document.getElementById('tableBody').addEventListener('click',e=>{const button=e.target.closest('[data-course-index]');if(!button)return;const lesson=lessons[Number(button.dataset.courseIndex)];if(!lesson)return;const meta=courseDetails[lesson.n]||{};document.getElementById('courseDialogTitle').textContent=lesson.n;document.getElementById('courseTeacher').textContent=meta.teacher||'待补充';document.getElementById('courseCredit').textContent=meta.credit||'待补充';document.getElementById('courseLocation').textContent=meta.location||'待补充';document.getElementById('courseTime').textContent='第 '+periodLabel(lesson.p,lesson)+' 节 · '+periodTimeRange(lesson.p,lesson.d)+'（按学校作息时间表）';document.getElementById('coursePlatform').textContent='待班级补充';document.getElementById('courseDetailDialog').showModal()});
 for(let w=1;w<=18;w++)document.getElementById('weekSelect').insertAdjacentHTML('beforeend',`<option value="${w}">第 ${w} 周</option>`);renderWeek(week);renderHomeWeek(actualWeek);document.getElementById('prevWeek').onclick=()=>renderWeek(Math.max(1,week-1));document.getElementById('nextWeek').onclick=()=>renderWeek(Math.min(52,week+1));document.getElementById('weekSelect').onchange=e=>renderWeek(+e.target.value);
 function refreshAcademicWeek(){const fresh=currentAcademicWeek();if(fresh!==actualWeek){const wasFollowingCurrent=week===actualWeek;actualWeek=fresh;renderHomeWeek(actualWeek);if(wasFollowingCurrent)renderWeek(actualWeek);else updateWeekNote()}}
@@ -2183,11 +2210,12 @@ lim (n → ∞) (1 + 1/n)^n = e</span>
     var host=affairs.querySelector('.cr-subnav');
     var sec=document.createElement('div');
     sec.className='wrap section';
-    sec.innerHTML='<div class="section-head"><div><div class="kicker mono">MODULE HUB / 事务中心模块</div><h2>事务中心里的三个子模块</h2><p class="small-note">竞赛科研、组队大厅与推免指南已并入事务中心：可以从这里进入，也可以用页面顶部的选项卡直接切换。</p></div></div>'+
+    sec.innerHTML='<div class="section-head"><div><div class="kicker mono">MODULE HUB / 事务中心模块</div><h2>事务中心里的四个子模块</h2><p class="small-note">竞赛科研、组队大厅、推免指南与留学指南已并入事务中心：可以从这里进入，也可以用页面顶部的选项卡直接切换。</p></div></div>'+
       '<div class="cr-hub">'+
         '<a href="#opportunities"><div class="cr-label mono">MODULE 01 / RESEARCH</div><h3>竞赛与科研</h3><p>发布机会、寻找队友、组建跨方向小组，把兴趣做成项目，并附竞赛科研选择器与等级依据说明。</p></a>'+
         '<a href="#team"><div class="cr-label mono">MODULE 02 / TEAM-UP</div><h3>组队大厅</h3><p>面向班级成员的组队与协作板块，登录后可以发帖求助、回复同学，也能看到每条需求是谁发的。</p></a>'+
         '<a href="#tuimian"><div class="cr-label mono">MODULE 03 / RECOMMENDATION</div><h3>推免指南</h3><p>资格自检、政策要点、四年时间轴、三条路径与竞赛选择，信息量最大的一个模块。</p></a>'+
+        '<a href="#liuxue"><div class="cr-label mono">MODULE 04 / STUDY ABROAD</div><h3>留学指南</h3><p>四条路径、目的地对比、四年时间轴、申请材料清单，以及写文书与选校推荐的 AI 申请助手。</p></a>'+
       '</div>';
     var holder=affairs.__subnavHolder;
     if(holder&&holder.parentNode){holder.parentNode.insertBefore(sec,holder.nextSibling);}
