@@ -511,11 +511,11 @@ body{background:radial-gradient(ellipse at 12% 8%,#e9e5dc 0,transparent 31rem),v
     <p>以合肥为中心的班级生活指南 · 出行线路从龙河校区旁的「三里庵」地铁站（2 号线）出发 · A Hefei-centred life guide for the class</p>
   </div>
   <div class="wrap section">
-    <div class="section-head"><div><div class="kicker mono">MODULE HUB / 生活专区</div><h2>四个生活子模块</h2></div></div>
+    <div class="section-head"><div><div class="kicker mono">MODULE HUB / 生活专区</div><h2>五个生活子模块</h2></div></div>
     <div class="cr-hub">
       <a href="#life-meet"><div class="cr-label mono">LIFE 01 / MEET UP</div><h3>相约同行</h3><p>团建与出行邀约：现成方案照着走，也可以自己发起，同学在下面商量。</p></a>
       <a href="#life-food"><div class="cr-label mono">LIFE 02 / TAKEOUT PICKER</div><h3>外卖推荐器</h3><p>不知道吃什么的时候，选个预算和心情，让它替你决定。</p></a>
-      <a href="#life-spots"><div class="cr-label mono">LIFE 03 / PLACES</div><h3>景点速览</h3><p>合肥及周边 14 个去处：花销、适合季节、要花多久，一眼看完。</p></a>
+      <a href="#life-eat"><div class="cr-label mono">LIFE 05 / WHERE TO EAT</div><h3>美食推荐</h3><p>学校附近五个吃饭的商圈：出门就到的小店、三里庵商场、步行街、罍街和龙虾街，含地图入口。</p></a><a href="#life-spots"><div class="cr-label mono">LIFE 03 / PLACES</div><h3>景点速览</h3><p>合肥及周边 14 个去处：花销、适合季节、要花多久，一眼看完。</p></a>
       <a href="#life-holiday"><div class="cr-label mono">LIFE 04 / HOLIDAY PLANNER</div><h3>假期规划</h3><p>短期在合肥周边，长假出省；按天数和预算挑一条就行。</p></a>
     </div>
     <p class="cr-note">所有价格与交通时长都是参考值，会随季节和票价变动，出门前请以官方渠道（12306、景区公众号、美团/饿了么）为准。<br>All prices and travel times are indicative and change with season and availability; check official channels before you go.</p>
@@ -566,28 +566,37 @@ body{background:radial-gradient(ellipse at 12% 8%,#e9e5dc 0,transparent 31rem),v
     <p>不知道吃什么的时候，交给它 · Let it decide what you eat today</p>
   </div>
 
+<div class="wrap section">
+    <div class="account-box">
+      <h2>点外卖就填这个地址<span class="cr-sub" style="font-size:12px">Delivery address</span></h2>
+      <p class="small-note" id="lifeAddrText" style="font-size:14px;color:#202127;background:#f7f5ef;border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:6px 0 12px">合肥市蜀山区肥西路3号安徽大学龙河校区南门外卖柜</p>
+      <div class="button-row"><button class="btn secondary" id="lifeAddrCopy" type="button">复制地址 / Copy</button></div>
+      <div id="lifeAddrMsg" role="status"></div>
+      <p class="small-note">写全「校区 + 外卖柜」，骑手才知道放哪儿；取餐按短信或 App 里的取餐码开柜。注意别填成北门或其他校区的柜子，下单前确认一次送达位置。<br>Include both the campus and the locker name so the courier knows where to drop it. Do not pick the north gate or the wrong campus locker, and check the address before ordering.</p>
+    </div>
+  </div>
   <div class="wrap section">
-    <div class="section-head"><div><div class="kicker mono">PICKER / 帮我决定</div><h2>选个预算和心情</h2></div></div>
+    <div class="section-head"><div><div class="kicker mono">PICKER / 帮我决定</div><h2>选个预算和心情<span class="cr-sub" style="font-size:14px">Budget and mood</span></h2></div></div>
     <div class="account-box">
       <div class="editor-layout">
-        <label>今天想吃什么类别<select id="lifeFoodCat"><option value="">不限（让系统挑）</option></select></label>
-        <label>预算<select id="lifeFoodBudget"><option>15 元以内（凑合一顿）</option><option selected>15–25 元（常规）</option><option>25–40 元（想吃好点）</option><option>40 元以上（犒劳自己）</option></select></label>
+        <label>今天想吃什么类别 / Category<select id="lifeFoodCat"><option value="">不限（让系统挑） / Any</option></select></label>
+        <label>预算 / Budget<select id="lifeFoodBudget"><option>15 元以内（凑合一顿） / Under ¥15</option><option selected>15–25 元（常规） / ¥15–25</option><option>25–40 元（想吃好点） / ¥25–40</option><option>40 元以上（犒劳自己） / Over ¥40</option></select></label>
       </div>
       <div class="editor-layout">
-        <label>心情 / 场景<select id="lifeFoodMood"><option>赶时间，越快越好</option><option selected>正常吃一顿</option><option>想吃得健康一点</option><option>夜宵，想吃重口</option><option>想和朋友拼单</option></select></label>
-        <label>忌口（可留空）<input id="lifeFoodAvoid" maxlength="40" placeholder="例：不吃辣 / 不吃香菜"></label>
+        <label>心情 / 场景 Mood<select id="lifeFoodMood"><option>赶时间，越快越好 / In a hurry</option><option selected>正常吃一顿 / Normal meal</option><option>想吃得健康一点 / Eat healthy</option><option>夜宵，想吃重口 / Late night, strong flavours</option><option>想和朋友拼单 / Sharing with friends</option></select></label>
+        <label>忌口（可留空） / Avoid<input id="lifeFoodAvoid" maxlength="40" placeholder="例：不吃辣 / 不吃香菜 · e.g. no chilli, no coriander"></label>
       </div>
-      <div class="button-row"><button class="btn primary" id="lifeFoodPick" type="button">帮我决定</button><button class="btn secondary" id="lifeFoodAgain" type="button">换一个</button></div>
+      <div class="button-row"><button class="btn primary" id="lifeFoodPick" type="button">帮我决定 / Decide for me</button><button class="btn secondary" id="lifeFoodAgain" type="button">换一个 / Shuffle</button></div>
       <div id="lifeFoodResult" class="account-box" style="margin-top:16px;background:#f7f5ef">
         <h2 style="font-size:15px">还没选</h2>
-        <p class="small-note">点「帮我决定」，它会从下面的清单里挑一个。</p>
+        <p class="small-note">点「帮我决定」，它会从下面的清单里挑一个。<br>Tap “Decide for me” and it will pick one dish from the list below.</p>
       </div>
-      <p class="small-note">说明：这里推荐的是<strong>吃什么品类</strong>，不是具体店家——店面和价格每天在变，具体哪家请以美团/饿了么上的实时信息为准。忌口会写进推荐里提醒你备注。</p>
+      <p class="small-note">说明：这里推荐的是<strong>吃什么品类</strong>，不是具体店家——店面和价格每天在变，具体哪家请以美团/饿了么上的实时信息为准。忌口会写进推荐里提醒你备注。<br>Note: what it recommends is a <strong>category</strong>, not a specific shop — shops and prices change daily, so check Meituan / Ele.me for what is actually available. Any dietary restriction you type is written into the result as a reminder to add a note.</p>
     </div>
   </div>
 
   <div class="wrap section">
-    <div class="section-head"><div><div class="kicker mono">MENU / 清单</div><h2>常见外卖品类</h2></div></div>
+    <div class="section-head"><div><div class="kicker mono">MENU / 清单</div><h2>常见外卖品类<span class="cr-sub" style="font-size:14px">Common takeout categories</span></h2></div></div>
     <div id="lifeFoodList" class="page-cards"></div>
     <p class="cr-note">点外卖的几个小提醒：主食 + 一份蔬菜比纯主食扛饿；汤类在宿舍不好端，尽量选干一些的；拼单前先确认起送价与配送费；夜宵档 21:00 后配送会明显变慢。<br>Small tips: pair a staple with a vegetable dish, avoid soup if you are carrying it back, check the minimum order before splitting a bill, and expect slower delivery after 21:00.</p>
   </div>
@@ -606,6 +615,36 @@ body{background:radial-gradient(ellipse at 12% 8%,#e9e5dc 0,transparent 31rem),v
   </div>
 </section>
 
+<section class="page" data-view="life-eat">
+  <div class="wrap page-intro">
+    <div class="kicker mono">LIFE 05 / WHERE TO EAT</div>
+    <h1>美食推荐<span class="cr-sub">Where to Eat</span></h1>
+    <p>龙河校区周边的线下餐饮，按商圈整理 · Offline food around Longhe Campus, grouped by area</p>
+  </div>
+
+  <div class="wrap section">
+    <div class="section-head"><div><div class="kicker mono">HOW TO READ / 怎么用</div><h2>先说清楚一件事<span class="cr-sub" style="font-size:14px">One thing to be clear about first</span></h2></div></div>
+    <div class="account-box">
+      <h2>我没有编店名<span class="cr-sub" style="font-size:14px">No invented shop names</span></h2>
+      <p class="small-note">这一栏按<strong>商圈</strong>组织，而不是直接列店名。原因很直接：具体店名、菜单、评分和评价每天都在变，我无法逐一核实——编一个看起来像真的店名或菜单，比不写更糟。我也试过从地图数据里取，OpenStreetMap 在龙河校区 2 公里内只登记了 3 个食堂和 1 个咖啡店，商业店铺基本没有；高德和大众点评的页面都是脚本渲染的，取不到数据。<br>This section is organised by <strong>area</strong> rather than by shop name, for a simple reason: shop names, menus, ratings and reviews change every day and cannot be verified one by one — inventing a plausible-looking shop or menu would be worse than leaving it out. I also tried pulling from map data: OpenStreetMap lists only three canteens and one cafe within 2 km of the Longhe campus, and the Amap and Dianping pages are script-rendered, so the data cannot be extracted.</p>
+      <p class="small-note">所以每张卡片给的是：<strong>这个商圈是什么、怎么去、大概花多少钱</strong>，加上一个<strong>高德地图入口</strong>——点进去就是这一带的店铺列表，带评分和用户评价，可以直接看菜单图片、营业时间和最新评价。<br>So each card tells you what the area is, how to get there and roughly what it costs, plus an <strong>Amap entry point</strong> — tap it and you get the list of shops in that area with ratings and user reviews, menu photos and opening hours.</p>
+      <p class="small-note">如果你愿意把吃过的店整理给我（店名 + 招牌菜 + 人均 + 一句评价 + 照片），我可以把它们做成真正的店铺卡片放进这一栏，比跳转好用得多。班委也可以随时补充。<br>If you send me the places you have actually eaten at (name + signature dish + average spend + one-line review + a photo), I can turn them into real shop cards in this section — far more useful than a redirect. Class committee members can add to it at any time.</p>
+    </div>
+  </div>
+
+  <div class="wrap section">
+    <div class="section-head"><div><div class="kicker mono">NEARBY / 周边实时</div><h2>学校周边的店（实时）<span class="cr-sub" style="font-size:14px">Shops near campus, live</span></h2></div><span class="small-note" id="eatCount">正在读取… / Loading…</span></div>
+    <div class="filters" id="eatCats"></div>
+    <div class="page-cards" id="eatList"></div>
+    <p class="cr-note">以上数据来自<strong>高德地图开放平台</strong>，按龙河校区（肥西路 3 号）周边 1500 米实时查询：店名、类型、评分、人均、营业时间和地址都由平台提供，会随时间变化。店面照片与完整菜单评价请点每张卡的「在地图上查看」跳到高德上看（那里有图片和用户评价）。数据每 6 小时更新一次缓存。<br>Live data from the Amap open platform, queried within 1.5 km of the Longhe campus: name, category, rating, average spend, opening hours and address. Tap "view on map" for photos and full reviews.</p>
+  </div>
+
+  <div class="wrap section">
+    <div class="section-head"><div><div class="kicker mono">AREAS / 按商圈</div><h2>五个吃饭的去处<span class="cr-sub" style="font-size:14px">Five places to eat</span></h2></div></div>
+    <div class="page-cards"><article class="page-card"><span class="tag">出门就到 · Outside the gate</span><h3>校门口 · 肥西路一带</h3><p>最近的一圈：小炒、面馆、快餐、饮品都有，适合下课顺路吃、赶时间或不想走远。</p><p class="small-note">怎么去：出门就到 · 耗时：步行 1–10 分钟 · 人均 10–35 元<br>Right outside the gate · 1–10 min on foot · ¥10–35 per person</p><div class="button-row"><a class="btn secondary" href="https://www.amap.com/search?query=%E8%82%A5%E8%A5%BF%E8%B7%AF%20%E5%AE%89%E5%BE%BD%E5%A4%A7%E5%AD%A6%E9%BE%99%E6%B2%B3%E6%A0%A1%E5%8C%BA%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">看这一带的店 / Shops here ↗</a><a class="btn secondary" href="https://www.amap.com/search?query=%E8%82%A5%E8%A5%BF%E8%B7%AF%20%E5%AE%89%E5%BE%BD%E5%A4%A7%E5%AD%A6%E9%BE%99%E6%B2%B3%E6%A0%A1%E5%8C%BA%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">地图 / Map ↗</a></div><p class="cr-en">Right outside the gate: stir-fries, noodle shops, fast food and drink shops. Best for a quick meal between classes.</p></article><article class="page-card"><span class="tag">步行 15 分钟 / 骑行 5 分钟 · 15 min walk / 5 min bike</span><h3>三里庵商圈 · 之心城 / 国购广场</h3><p>龙河校区最近的一个成熟商圈，商场里餐饮层集中，火锅、烤肉、日料、连锁快餐、奶茶咖啡都有；正餐、聚会、过生日都合适。</p><p class="small-note">怎么去：步行 15 分钟 / 骑行 5 分钟 · 耗时：不用坐地铁 · 人均 40–100 元<br>15 min on foot or 5 min by bike, no metro needed · ¥40–100 per person</p><div class="button-row"><a class="btn secondary" href="https://www.amap.com/search?query=%E5%90%88%E8%82%A5%E4%B9%8B%E5%BF%83%E5%9F%8E%20%E7%BE%8E%E9%A3%9F%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">看这一带的店 / Shops here ↗</a><a class="btn secondary" href="https://www.amap.com/search?query=%E5%90%88%E8%82%A5%E4%B9%8B%E5%BF%83%E5%9F%8E%20%E7%BE%8E%E9%A3%9F%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">地图 / Map ↗</a></div><p class="cr-en">The nearest proper shopping district: a whole restaurant floor plus chains, hotpot, barbecue and coffee. Good for a sit-down meal or a group gathering.</p></article><article class="page-card"><span class="tag">2 号线 4 站到大东门 · Metro L2, 4 stops</span><h3>淮河路步行街 · 老城区</h3><p>合肥最有名的一条步行街，老字号、小吃、连锁都在一条街上；离逍遥津公园和李鸿章故居很近，适合顺便逛一整天。</p><p class="small-note">怎么去：2 号线 4 站到大东门 · 耗时：地铁约 25 分钟 · 人均 30–80 元<br>Metro Line 2, 4 stops to Dadongmen · about 25 min · ¥30–80 per person</p><div class="button-row"><a class="btn secondary" href="https://www.amap.com/search?query=%E5%90%88%E8%82%A5%E6%B7%AE%E6%B2%B3%E8%B7%AF%E6%AD%A5%E8%A1%8C%E8%A1%97%20%E7%BE%8E%E9%A3%9F%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">看这一带的店 / Shops here ↗</a><a class="btn secondary" href="https://www.amap.com/search?query=%E5%90%88%E8%82%A5%E6%B7%AE%E6%B2%B3%E8%B7%AF%E6%AD%A5%E8%A1%8C%E8%A1%97%20%E7%BE%8E%E9%A3%9F%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">地图 / Map ↗</a></div><p class="cr-en">Hefei's best-known pedestrian street: local classics, snacks and chains, next to Xiaoyaojin Park.</p></article><article class="page-card"><span class="tag">2 号线转 1 号线到秋浦河路 · L2 → L1 to Qiupuhe Rd</span><h3>罍街 · 夜市小吃</h3><p>合肥的夜宵地标，小龙虾、烧烤、糖水、地方小吃集中在一条街，晚上最热闹；适合周末晚上打车或坐地铁过去。</p><p class="small-note">怎么去：2 号线转 1 号线到秋浦河路 · 耗时：地铁约 40 分钟 · 人均 40–70 元<br>Metro Line 2 to Line 1, alight at Qiupuhe Road · about 40 min · ¥40–70 per person</p><div class="button-row"><a class="btn secondary" href="https://www.amap.com/search?query=%E5%90%88%E8%82%A5%E7%BD%8D%E8%A1%97%20%E7%BE%8E%E9%A3%9F%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">看这一带的店 / Shops here ↗</a><a class="btn secondary" href="https://www.amap.com/search?query=%E5%90%88%E8%82%A5%E7%BD%8D%E8%A1%97%20%E7%BE%8E%E9%A3%9F%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">地图 / Map ↗</a></div><p class="cr-en">Hefei's late-night food street: crayfish, barbecue and desserts. Busiest after dark.</p></article><article class="page-card"><span class="tag">夏季限定 · Summer only</span><h3>宁国路 · 龙虾一条街</h3><p>合肥吃小龙虾的老地方，每年 5–8 月最热闹；人多的时候适合宿舍一起拼一桌。</p><p class="small-note">怎么去：夏季限定 · 耗时：打车约 20 分钟 · 人均 60–120 元<br>Summer only · about 20 min by taxi · ¥60–120 per person</p><div class="button-row"><a class="btn secondary" href="https://www.amap.com/search?query=%E5%90%88%E8%82%A5%E5%AE%81%E5%9B%BD%E8%B7%AF%20%E9%BE%99%E8%99%BE%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">看这一带的店 / Shops here ↗</a><a class="btn secondary" href="https://www.amap.com/search?query=%E5%90%88%E8%82%A5%E5%AE%81%E5%9B%BD%E8%B7%AF%20%E9%BE%99%E8%99%BE%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">地图 / Map ↗</a></div><p class="cr-en">The classic Hefei spot for crayfish, best from May to August.</p></article></div>
+    <p class="cr-note">距离和时间按龙河校区（肥西路）估算，从校门口或最近的地铁站「三里庵」（2 号线，约 1.1 公里）起算。营业时间、菜单和价格请以店家和平台上的实时信息为准。<br>Distances are measured from the Longhe campus gate; hours, menus and prices change, so check the live listing on the map platform.</p>
+  </div>
+</section>
 <section class="page" data-view="life-holiday">
   <div class="wrap page-intro">
     <div class="kicker mono">LIFE 04 / HOLIDAY PLANNER</div>
@@ -629,7 +668,7 @@ body{background:radial-gradient(ellipse at 12% 8%,#e9e5dc 0,transparent 31rem),v
 <script>
 (function(){
   function boot(){
-  var MODULES=[['life','总览'],['life-meet','相约同行'],['life-food','外卖推荐器'],['life-spots','景点速览'],['life-holiday','假期规划']];
+  var MODULES=[['life','总览'],['life-meet','相约同行'],['life-food','外卖推荐器'],['life-eat','美食推荐'],['life-spots','景点速览'],['life-holiday','假期规划']];
   MODULES.forEach(function(item){
     var view=document.querySelector('[data-view="'+item[0]+'"]');
     if(!view||view.querySelector('.cr-subnav')){return;}
@@ -690,14 +729,20 @@ body{background:radial-gradient(ellipse at 12% 8%,#e9e5dc 0,transparent 31rem),v
 
   /* ---- 外卖推荐器 ---- */
   var FOOD={
-    '米饭炒菜':[['黄焖鸡米饭','出餐快、有汤有肉，一个人吃刚好'],['盖浇饭','便宜管饱，双拼更划算'],['小炒肉盖饭','口味重、下饭'],['砂锅饭','天冷时最舒服'],['煲仔饭','带锅巴，稍微贵一点但值']],
-    '面食':[['牛肉汤配烧饼','合肥早餐标配，人均十五上下'],['兰州拉面','快、便宜、稳定不出错'],['刀削面','分量大，男生更合适'],['炒面 / 炒饭','夜宵档常客'],['重庆小面','想提神的时候']],
-    '麻辣烫冒菜':[['麻辣烫','自己夹菜，最好控制预算'],['冒菜','不用挑，端上来就能吃'],['麻辣香锅','两三个人拼最划算'],['关东煮','清淡一点，适合加个主食']],
-    '烧烤炸串':[['炸串','按签算钱，当宵夜正好'],['烧烤','人多才热闹，适合团建之后'],['铁板鱿鱼','路边摊经典'],['烤冷面','便宜又能饱']],
-    '日韩料理':[['韩式炸鸡','配可乐，宿舍里最受欢迎'],['石锅拌饭','有菜有饭，不太油腻'],['寿司 / 饭团','清淡、不用热'],['日式拉面','汤好喝，适合下雨天']],
-    '汉堡炸鸡':[['炸鸡汉堡','赶时间首选'],['披萨','宿舍拼单更划算'],['鸡排 + 饮料','边走边吃']],
-    '粥粉汤面':[['皮蛋瘦肉粥','肠胃不舒服时最合适'],['螺蛳粉','重口味的快乐，注意宿舍味道'],['牛肉粉','清汤管饱'],['馄饨','快，适合当加餐']],
-    '轻食甜品':[['沙拉碗','想吃清淡的时候'],['奶茶 + 鸡蛋仔','下午茶标配'],['水果捞','夏天最合适'],['酸奶碗','想吃甜又不想太罪恶']]
+    '米饭炒菜 / Rice dishes':[['黄焖鸡米饭','出餐快、有汤有肉，一个人吃刚好','Braised chicken with rice, quick and filling','Braised chicken rice'],['盖浇饭','便宜管饱，双拼更划算','Rice with toppings, cheap and filling','Rice with toppings'],['小炒肉盖饭','口味重、下饭','Stir-fried pork over rice, punchy flavour','Stir-fried pork rice'],['砂锅饭','天冷时最舒服','Claypot rice, best when it is cold','Casserole rice'],['煲仔饭','带锅巴，稍微贵一点但值','Claypot rice with a crispy crust','Claypot rice'],['木桶饭','配菜多，适合想吃丰富一点','Wooden-bucket rice with several sides','Bucket rice'],['烤肉拌饭','甜辣口，学生常点','Korean-style BBQ rice bowl','BBQ rice bowl']],
+    '面食 / Noodles':[['牛肉汤配烧饼','合肥早餐标配，人均十五上下','Beef soup with flatbread, the local breakfast','Beef soup with flatbread'],['兰州拉面','快、便宜、稳定不出错','Lanzhou beef noodles, quick and reliable','Lanzhou beef noodles'],['刀削面','分量大','Hand-cut noodles, big portion','Sliced noodles'],['炒面 / 炒饭','夜宵档常客','Fried noodles or rice, a late-night staple','Fried noodles / rice'],['重庆小面','想提神的时候','Chongqing spicy noodles','Chongqing noodles'],['饺子 / 云吞','清淡也能吃饱','Dumplings or wontons','Dumplings / wontons'],['番茄鸡蛋面','不辣，肠胃友好','Tomato and egg noodles, not spicy','Tomato egg noodles']],
+    '麻辣烫冒菜 / Malatang':[['麻辣烫','自己夹菜，最好控制预算','Pick your own ingredients, easy on the budget','Malatang'],['冒菜','不用挑，端上来就能吃','A ready-made bowl, no picking needed','Maocai'],['麻辣香锅','两三个人拼最划算','Spicy stir-fry pot, best shared','Spicy stir-fry pot'],['串串香','按签算，适合慢吃','Skewers charged per stick','Hotpot skewers'],['钵钵鸡','夏天吃很爽','Cold Sichuan skewers, great in summer','Bobo chicken']],
+    '烧烤炸串 / BBQ and fried skewers':[['炸串','按签算钱，当宵夜正好','Fried skewers, ideal as a late snack','Fried skewers'],['烧烤','人多才热闹','Barbecue, better with a crowd','Barbecue'],['铁板鱿鱼','路边摊经典','Grilled squid, a street classic','Grilled squid'],['烤冷面','便宜又能饱','Grilled cold noodles, cheap and filling','Grilled cold noodles'],['烤鸡架','啃起来过瘾','Roast chicken rack','Roast chicken rack'],['锡纸花甲粉','带汤带粉，一份管饱','Clam and vermicelli baked in foil','Clam vermicelli in foil']],
+    '汉堡炸鸡 / Burgers and fried chicken':[['炸鸡汉堡','赶时间首选','Fried chicken burger, the fastest option','Fried chicken burger'],['披萨','宿舍拼单更划算','Pizza, cheaper when split','Pizza'],['鸡排 + 饮料','边走边吃','Chicken cutlet and a drink','Chicken cutlet + drink'],['炸鸡桶','三四个人一起分','A bucket of fried chicken to share','Fried chicken bucket']],
+    '日韩料理 / Japanese and Korean':[['韩式炸鸡','配可乐，宿舍里最受欢迎','Korean fried chicken, the dorm favourite','Korean fried chicken'],['石锅拌饭','有菜有饭，不太油腻','Bibimbap, vegetables and rice','Bibimbap'],['寿司 / 饭团','清淡、不用热','Sushi or rice balls, no reheating','Sushi / rice balls'],['日式拉面','汤好喝，适合下雨天','Japanese ramen, good on a rainy day','Japanese ramen']],
+    '粥粉汤饭 / Porridge and soup':[['皮蛋瘦肉粥','肠胃不舒服时最合适','Century egg and pork porridge','Century egg porridge'],['螺蛳粉','重口味的快乐，注意宿舍味道','Luosifen, strong smell, mind the dorm','Luosifen'],['牛肉粉','清汤管饱','Beef rice noodles in clear broth','Beef rice noodles'],['馄饨','快，适合当加餐','Wonton soup, a quick extra meal','Wonton soup'],['瓦罐汤 + 拌粉','江西口味，便宜实惠','Claypot soup with mixed rice noodles','Claypot soup + mixed noodles']],
+    '轻食沙拉 / Light and salad':[['沙拉碗','想吃清淡的时候','Salad bowl, for a light meal','Salad bowl'],['鸡胸肉轻食','健身或想控热量','Chicken breast meal, low calorie','Chicken breast meal'],['三明治','冷食，不用等','Sandwich, no waiting','Sandwich'],['杂粮饭套餐','比沙拉更抗饿','Multigrain rice set, more filling','Multigrain rice set']],
+    '奶茶果茶 / Milk tea and fruit tea':[['珍珠奶茶','经典款，糖度别点全糖','Classic bubble milk tea','Bubble milk tea'],['水果茶','夏天首选，清爽','Fruit tea, refreshing in summer','Fruit tea'],['杨枝甘露','芒果控','Mango pomelo sago','Mango pomelo sago'],['柠檬茶','解腻，配烧烤正好','Lemon tea, cuts through greasy food','Lemon tea'],['奶绿 / 波霸','下午提神','Milk green tea with boba','Milk green tea / boba'],['芋泥啵啵','当甜品喝，热量不低','Taro milk tea, more dessert than drink','Taro milk tea']],
+    '咖啡 / Coffee':[['美式','提神、热量最低','Americano, strongest and lightest','Americano'],['生椰拿铁','接受度最高的一款','Coconut latte, the safest choice','Coconut latte'],['拿铁 / 澳白','奶香重、不太苦','Latte or flat white, milky and mild','Latte / flat white'],['冷萃','夏天适合','Cold brew, best in summer','Cold brew'],['挂耳 / 速溶','宿舍自己冲，最省','Drip bags or instant, cheapest in the dorm','Drip bag / instant']],
+    '甜品冰品 / Desserts':[['芋圆 / 烧仙草','料多，当一顿也行','Taro balls and grass jelly, very filling','Taro balls / grass jelly'],['冰淇淋','夏天','Ice cream','Ice cream'],['蛋挞 / 泡芙','配咖啡','Egg tart or cream puff, good with coffee','Egg tart / cream puff'],['水果捞','比冰淇淋清爽','Fruit bowl, lighter than ice cream','Fruit bowl'],['双皮奶 / 糖水','广式甜品','Double-skin milk and Cantonese sweets','Double-skin milk / sweet soup']],
+    '早餐 / Breakfast':[['包子 + 豆浆','最快的组合','Buns with soy milk, the fastest combo','Buns + soy milk'],['煎饼果子','边走边吃','Jianbing, eat it on the way','Jianbing'],['鸡蛋灌饼','一个顶一顿','Egg-filled pancake, a meal in one','Egg-filled pancake'],['三明治 + 牛奶','不油腻','Sandwich and milk, not greasy','Sandwich + milk'],['热干面 / 拌面','想吃重口早餐','Hot dry noodles, a heavier breakfast','Hot dry noodles']],
+    '夜宵小吃 / Late-night snacks':[['关东煮','清淡一点的夜宵','Oden, a lighter late-night option','Oden'],['章鱼小丸子','一份刚好解馋','Takoyaki, just enough to satisfy','Takoyaki'],['卤味 / 熟食','配米饭或直接吃','Braised snacks, with rice or on their own','Braised snacks'],['烤肠 / 肉串','便利店里就有','Sausage or meat skewers, from any convenience store','Sausage / meat skewers'],['泡面 + 卤蛋','最省钱的选择','Instant noodles with a braised egg','Instant noodles + egg'],['炸鸡 + 可乐','经典的深夜组合','Fried chicken and cola, the classic','Fried chicken + cola']],
+    '地方菜 / Regional dishes':[['徽菜（臭鳜鱼、毛豆腐）','本地特色，适合聚餐','Anhui cuisine, good for a group dinner','Anhui cuisine'],['川湘菜','重油重辣，人多好点菜','Sichuan and Hunan, spicy and easy to share','Sichuan & Hunan'],['东北菜','量大实惠，适合拼桌','Northeastern, big portions and cheap','Northeastern Chinese'],['粤式快餐','清淡不辣','Cantonese fast food, mild','Cantonese fast food'],['江浙菜','偏甜，口味温和','Jiangsu-Zhejiang, sweeter and mild','Jiangsu-Zhejiang'],['火锅 / 干锅','宿舍聚餐首选','Hotpot or dry pot, top pick for a dorm dinner','Hotpot / dry pot']]
   };
   var catSel=document.getElementById('lifeFoodCat');
   if(catSel){
@@ -724,8 +769,8 @@ body{background:radial-gradient(ellipse at 12% 8%,#e9e5dc 0,transparent 31rem),v
     if(mood.indexOf('夜宵')===0){tips.push('夜宵档 21:00 后配送变慢，尽量提前下单。');}
     if(mood.indexOf('拼单')===0){tips.push('拼单先看起送价和配送费，分摊后往往比单点便宜。');}
     if(avoid){tips.push('备注里写上「'+avoid.replace(/</g,'')+'」，多数店家都会照做。');}
-    result.innerHTML='<h2 style="font-size:17px">今天就吃：'+htmlSafe(cat)+' · '+htmlSafe(item[0])+'</h2>'+
-      '<p class="small-note">'+htmlSafe(item[1])+'</p>'+
+    result.innerHTML='<h2 style="font-size:17px">今天就吃 Today: '+htmlSafe(cat)+' · '+htmlSafe(item[0])+' / '+htmlSafe(item[3])+'</h2>'+
+      '<p class="small-note">'+htmlSafe(item[1])+(item[2]?'　<span style="color:#8b948c">'+htmlSafe(item[2])+'</span>':'')+'</p>'+
       (tips.length?'<ul class="cr-bullets">'+tips.map(function(t){return '<li>'+htmlSafe(t)+'</li>';}).join('')+'</ul>':'')+
       '<p class="small-note">再点一次「换一个」可以重摇；具体哪家店请以美团 / 饿了么的实时信息为准。</p>';
   }
@@ -733,11 +778,71 @@ body{background:radial-gradient(ellipse at 12% 8%,#e9e5dc 0,transparent 31rem),v
   if(pickBtn){pickBtn.onclick=function(){pickFood(false);};}
   var againBtn=document.getElementById('lifeFoodAgain');
   if(againBtn){againBtn.onclick=function(){pickFood(true);};}
+
+  var addrCopy=document.getElementById('lifeAddrCopy');
+  if(addrCopy){
+    addrCopy.onclick=function(){
+      var text=(document.getElementById('lifeAddrText')||{}).textContent||'';
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text.trim()).then(
+          function(){showMessage('lifeAddrMsg','配送地址已复制。',true);},
+          function(){showMessage('lifeAddrMsg','复制失败，请手动选中复制。');});
+      }else{
+        showMessage('lifeAddrMsg','当前浏览器不支持一键复制，请手动选中复制。');
+      }
+    };
+  }
   var foodList=document.getElementById('lifeFoodList');
   if(foodList){
     foodList.innerHTML=Object.keys(FOOD).map(function(cat){
-      return '<article class="page-card"><span class="tag">'+htmlSafe(cat)+'</span><h3>'+htmlSafe(cat)+'</h3><p class="small-note">'+FOOD[cat].map(function(x){return htmlSafe(x[0]);}).join(' · ')+'</p></article>';
+      return '<article class="page-card"><span class="tag">'+htmlSafe(cat)+'</span><h3>'+htmlSafe(cat)+'</h3><p class="small-note">'+FOOD[cat].map(function(x){return htmlSafe(x[0]);}).join(' · ')+'</p>'+'<p class="cr-en">'+FOOD[cat].map(function(x){return htmlSafe(x[3]);}).join(' · ')+'</p></article>';
     }).join('');
+  }
+
+
+  /* ---- 美食推荐：周边实时店铺 ---- */
+  var EAT_CATS=[['餐厅','Restaurants'],['快餐','Fast food'],['咖啡','Coffee'],['奶茶','Milk tea'],['小吃','Snacks'],['火锅','Hotpot'],['面馆','Noodles'],['烧烤','BBQ']];
+  var eatCat='餐厅';
+  function eatMapUrl(name){return 'https://www.amap.com/search?query='+encodeURIComponent(name);}
+  async function loadEat(){
+    var list=document.getElementById('eatList'),count=document.getElementById('eatCount');
+    if(!list){return;}
+    list.innerHTML='<article class="page-card resource-empty"><h3>正在查询…</h3></article>';
+    try{
+      var data=await api('/api/nearby-food?keyword='+encodeURIComponent(eatCat)+'&radius=1500');
+      var items=data.items||[];
+      if(count){count.textContent='「'+eatCat+'」1500 米内 '+items.length+' 家 / '+items.length+' places within 1.5 km';}
+      list.innerHTML=items.length?items.map(function(x){
+        var meta=[];
+        if(x.rating){meta.push('评分 Rating '+x.rating);}
+        if(x.cost){meta.push('人均 Per person ¥'+x.cost);}
+        if(x.open_time){meta.push('营业 Hours '+x.open_time);}
+        var dist=x.distance?(' · 约 '+Math.round(Number(x.distance))+' 米 / ~'+Math.round(Number(x.distance))+' m'):'';
+        var tel=x.tel?String(x.tel).split(';')[0]:'';
+        return '<article class="page-card"><span class="tag">'+htmlSafe(x.type||eatCat)+'</span>'
+          +'<h3>'+htmlSafe(x.name)+'</h3>'
+          +'<p class="small-note">'+htmlSafe(x.address||'')+dist+'</p>'
+          +(meta.length?'<p class="small-note">'+htmlSafe(meta.join(' · '))+'</p>':'')
+          +(tel?'<p class="small-note">电话 Tel：'+htmlSafe(tel)+'</p>':'')
+          +'<div class="button-row"><a class="btn secondary" href="'+eatMapUrl(x.name)+'" target="_blank" rel="noopener noreferrer">在地图上查看 / View on map ↗</a></div>'
+          +'</article>';
+      }).join(''):'<article class="page-card resource-empty"><h3>这一带没查到结果</h3><p>换个类别试试。</p></article>';
+    }catch(err){
+      list.innerHTML='<article class="page-card resource-empty"><h3>暂时查不到</h3><p>'+htmlSafe(err.message||'')+'</p></article>';
+      if(count){count.textContent='';}
+    }
+  }
+  var eatCats=document.getElementById('eatCats');
+  if(eatCats){
+    eatCats.innerHTML=EAT_CATS.map(function(c){return '<button class="filter'+(c[0]===eatCat?' active':'')+'" data-eat-cat="'+c[0]+'" type="button">'+c[0]+' / '+c[1]+'</button>';}).join('');
+    eatCats.addEventListener('click',function(e){
+      var b=e.target.closest?e.target.closest('[data-eat-cat]'):null;
+      if(!b){return;}
+      eatCat=b.getAttribute('data-eat-cat');
+      eatCats.querySelectorAll('[data-eat-cat]').forEach(function(x){x.classList.toggle('active',x===b);});
+      loadEat();
+    });
+    loadEat();
   }
 
   /* ---- 假期规划 标签切换 ---- */

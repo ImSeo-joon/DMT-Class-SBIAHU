@@ -18,6 +18,7 @@ import subprocess
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 import uuid
 from email.message import EmailMessage
@@ -58,6 +59,66 @@ AI_TIMEOUT = 60
 # 限流窗口（秒）。默认 15 分钟；同一个网络出口的同学会共用额度，所以阈值不能太小。
 RATE_WINDOW = int(os.environ.get("RATE_WINDOW", "900") or 900)
 AI_MAX_PROMPT = 6000
+
+# ---- 高德周边搜索（生活专区「美食推荐」用）----
+# Key 只放在服务器的 /etc/dmt-class-site.env 里，绝不写进前端或仓库。
+AMAP_KEY = os.environ.get("AMAP_KEY", "").strip()
+AMAP_TIMEOUT = 15
+# 龙河校区（肥西路 3 号）坐标；用高德坐标系，可由环境变量覆盖。
+CAMPUS_LNG_LAT = os.environ.get("CAMPUS_LNG_LAT", "117.2501336,31.8471875")
+FOOD_RADIUS_MAX = 3000
+FOOD_CACHE_TTL = int(os.environ.get("FOOD_CACHE_TTL", "21600") or 21600)   # 6 小时
+FOOD_CACHE: dict[str, tuple[float, list]] = {}
+
+
+def nearby_food(keyword: str, radius: int) -> list[dict]:
+    """查龙河校区周边的餐饮，结果缓存 6 小时，避免反复消耗高德配额。"""
+    cache_key = "%s|%d" % (keyword, radius)
+    now = time.time()
+    hit = FOOD_CACHE.get(cache_key)
+    if hit and hit[0] > now:
+        return hit[1]
+    if not AMAP_KEY:
+        raise ValueError("服务器还没有配置高德 Key（AMAP_KEY）")
+    params = urllib.parse.urlencode({
+        "key": AMAP_KEY,
+        "location": CAMPUS_LNG_LAT,
+        "keywords": keyword,
+        "radius": str(radius),
+        "offset": "25",
+        "page": "1",
+        "extensions": "all",
+        "sortrule": "weight",
+    })
+    req = urllib.request.Request("https://restapi.amap.com/v3/place/around?" + params,
+                                 headers={"User-Agent": "DMT-Class-Site/1.0"})
+    try:
+        with urllib.request.urlopen(req, timeout=AMAP_TIMEOUT) as resp:
+            payload = json.loads(resp.read().decode("utf-8", "ignore"))
+    except Exception as exc:
+        raise ValueError("高德接口请求失败：%s" % type(exc).__name__)
+    if str(payload.get("status")) != "1":
+        raise ValueError("高德返回错误：%s" % (payload.get("info") or "未知"))
+    items = []
+    for poi in payload.get("pois") or []:
+        biz = poi.get("biz_ext") or {}
+        if isinstance(biz, list):
+            biz = {}
+        name = (poi.get("name") or "").strip()
+        if not name:
+            continue
+        items.append({
+            "name": name,
+            "type": (poi.get("type") or "").split(";")[-1],
+            "address": poi.get("address") or "",
+            "distance": poi.get("distance") or "",
+            "rating": biz.get("rating") or "",
+            "cost": biz.get("cost") or "",
+            "open_time": biz.get("open_time") or "",
+            "tel": poi.get("tel") or "",
+        })
+    FOOD_CACHE[cache_key] = (now + FOOD_CACHE_TTL, items)
+    return items
 
 
 
@@ -1034,6 +1095,22 @@ class Handler(BaseHTTPRequestHandler):
             if not is_member(folder_viewer):
                 return self.send_error_json(403, VISITOR_BLOCKED)
             return self.send_json(200, list_folders())
+        if path == "/api/nearby-food":
+            query = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+            if self.limited("nearby-food", 40):
+                return self.send_error_json(429, "查询太频繁，请稍后再试")
+            keyword = (query.get("keyword") or ["餐厅"])[0].strip()[:20] or "餐厅"
+            try:
+                radius = int((query.get("radius") or ["1500"])[0])
+            except ValueError:
+                radius = 1500
+            radius = max(300, min(FOOD_RADIUS_MAX, radius))
+            try:
+                items = nearby_food(keyword, radius)
+            except ValueError as exc:
+                return self.send_error_json(503, str(exc))
+            return self.send_json(200, {"keyword": keyword, "radius": radius,
+                                        "campus": CAMPUS_LNG_LAT, "items": items})
         match = re.fullmatch(r"/api/resources/([0-9a-f-]{36})/download", path)
         if match:
             _, download_user = self.session()

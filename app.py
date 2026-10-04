@@ -216,6 +216,24 @@ def folders():
     return jsonify(core.list_folders())
 
 
+@app.get("/api/nearby-food")
+def nearby_food():
+    if limited("nearby-food", 40):
+        return api_error(429, "查询太频繁，请稍后再试")
+    keyword = (request.args.get("keyword") or "餐厅").strip()[:20] or "餐厅"
+    try:
+        radius = int(request.args.get("radius") or 1500)
+    except (TypeError, ValueError):
+        radius = 1500
+    radius = max(300, min(core.FOOD_RADIUS_MAX, radius))
+    try:
+        items = core.nearby_food(keyword, radius)
+    except ValueError as exc:
+        return api_error(503, str(exc))
+    return jsonify({"keyword": keyword, "radius": radius,
+                    "campus": core.CAMPUS_LNG_LAT, "items": items})
+
+
 @app.get("/api/resources/<resource_id>/download")
 def download_resource(resource_id):
     _, download_user = get_session()
