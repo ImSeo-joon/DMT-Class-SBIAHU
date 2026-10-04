@@ -87,10 +87,16 @@ body{background:radial-gradient(ellipse at 12% 8%,#e9e5dc 0,transparent 31rem),v
 .folder-actions button:hover{border-color:#c6a15a;color:#202127}
 .admin-actions select{font:inherit;font-size:11px;padding:5px 8px;border:1px solid var(--line);border-radius:14px;background:var(--paper);color:#5d6962}
 .admin-actions a,.admin-actions button{white-space:nowrap}
+<style>
+/* ---------- 生活专区：方案配图 ---------- */
+.life-photo{margin:0 0 14px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#eee7dc}
+.life-photo img{display:block;width:100%;height:168px;object-fit:cover}
+.life-photo-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:0 0 14px}
+.life-photo-strip img{display:block;width:100%;height:112px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
 </style>
 </head>
 <body><div class="notice-bar" id="noticeBar" hidden><div class="wrap notice-in"><span class="notice-tag">通知 / NOTICE</span><span class="notice-text" id="noticeText">正在读取通知…</span><span class="notice-actions"><button type="button" id="noticeEdit" hidden>编辑公告 / Edit</button><button type="button" id="noticeClose" aria-label="关闭通知栏 / Close">×</button></span></div></div>
-<header class="wrap nav"><a class="brand" href="#home" data-page="home"><span class="mark">D1</span><span>DMT CLASS 01 <span style="color:#919b94">| SBIAHU</span></span></a><nav class="links"><a href="#home" data-page="home">班级首页</a><a href="#news" data-page="news">班级新闻</a><a href="#affairs" data-page="affairs">事务中心</a><a href="#schedule" data-page="schedule">周课表</a><a href="#resources" data-page="resources">公共资料</a><a href="#opportunities" data-page="opportunities">竞赛科研</a><a href="#team" data-page="team">组队大厅</a><a href="#tuimian" data-page="tuimian">推免指南</a><a href="#liuxue" data-page="liuxue">留学指南</a><a href="#contact" data-page="contact">咨询合作</a><a href="#admin" data-page="admin" id="adminNav" style="display:none">编辑后台</a></nav><div class="nav-right"><span class="nav-status"><i class="status-dot"></i> 班级空间 · 在线</span><span class="nav-divider"></span><a class="nav-account" href="#account" data-page="account" id="accountNav">注册 / 登录</a></div><button class="menu" aria-label="菜单" onclick="document.querySelector('.links').classList.toggle('show')">☰</button></header>
+<header class="wrap nav"><a class="brand" href="#home" data-page="home"><span class="mark">D1</span><span>DMT CLASS 01 <span style="color:#919b94">| SBIAHU</span></span></a><nav class="links"><a href="#home" data-page="home">班级首页</a><a href="#news" data-page="news">班级新闻</a><a href="#affairs" data-page="affairs">事务中心</a><a href="#schedule" data-page="schedule">周课表</a><a href="#resources" data-page="resources">公共资料</a><a href="#opportunities" data-page="opportunities">竞赛科研</a><a href="#team" data-page="team">组队大厅</a><a href="#tuimian" data-page="tuimian">推免指南</a><a href="#liuxue" data-page="liuxue">留学指南</a><a href="#life" data-page="life">生活专区</a><a href="#contact" data-page="contact">咨询合作</a><a href="#admin" data-page="admin" id="adminNav" style="display:none">编辑后台</a></nav><div class="nav-right"><span class="nav-status"><i class="status-dot"></i> 班级空间 · 在线</span><span class="nav-divider"></span><a class="nav-account" href="#account" data-page="account" id="accountNav">注册 / 登录</a></div><button class="menu" aria-label="菜单" onclick="document.querySelector('.links').classList.toggle('show')">☰</button></header>
 <main id="top"><div class="page active" data-view="home"><section class="wrap hero" id="about"><div><div class="eyebrow mono">ANHUI UNIVERSITY × STONY BROOK</div><h1>DMT<br><span>Class 01</span></h1><p>安徽大学纽约石溪学院 · 数字媒体技术 1 班。一个连接创意、技术与彼此的班级空间。从日常事务到灵感协作，我们一起把想法变成作品。</p><div class="actions"><a class="btn primary" href="#affairs" data-page="affairs">进入事务中心 <span>↗</span></a><a class="btn secondary" href="#contact" data-page="contact">联系班委 <span>↓</span></a></div></div><div class="hero-art"><div class="art-top mono"><span>CLASS SPACE / 2026—2027</span><span>31° 51′ N</span></div><div class="orbit"></div><div class="core">DMT<br>01</div><i class="sat"></i><i class="sat sat2"></i><div class="art-bottom mono"><span>MAKE · SHARE · GROW</span><span>SBIAHU / AU</span></div></div></section>
 <a class="wrap news-lead" href="#news" data-page="news"><div class="lead-label mono">班级头条 / CLASS HEADLINE</div><div><h2>初识 ETS 明方向，逐梦寰球启新程</h2><p>Meet ETS, Find Your Direction — a guide to English tests and global pathways.</p></div><span class="lead-date mono">LATEST ↗</span></a>
 <div class="strip"><div class="wrap strip-in"><span>IDEAS INTO REALITY <i></i> DIGITAL MEDIA TECHNOLOGY <i></i> ONE CLASS, MANY POSSIBILITIES <i></i> IDEAS INTO REALITY <i></i> DIGITAL MEDIA TECHNOLOGY <i></i> ONE CLASS, MANY POSSIBILITIES</span></div></div>
@@ -496,6 +502,259 @@ body{background:radial-gradient(ellipse at 12% 8%,#e9e5dc 0,transparent 31rem),v
   if(copyPromptBtn){copyPromptBtn.onclick=function(){copyText(lastPrompt||currentPrompt(),'提示词已复制，可以粘到任意 AI 对话里使用。');};}
 
   setMode('write');
+})();
+</script>
+<section class="page" data-view="life">
+  <div class="wrap page-intro">
+    <div class="kicker mono">09 / CAMPUS LIFE</div>
+    <h1>Campus Life<span class="cr-sub">生活专区</span></h1>
+    <p>以合肥为中心的班级生活指南 · A Hefei-centred life guide for the class</p>
+  </div>
+  <div class="wrap section">
+    <div class="section-head"><div><div class="kicker mono">MODULE HUB / 生活专区</div><h2>四个生活子模块</h2></div></div>
+    <div class="cr-hub">
+      <a href="#life-meet"><div class="cr-label mono">LIFE 01 / MEET UP</div><h3>相约同行</h3><p>团建与出行邀约：现成方案照着走，也可以自己发起，同学在下面商量。</p></a>
+      <a href="#life-food"><div class="cr-label mono">LIFE 02 / TAKEOUT PICKER</div><h3>外卖推荐器</h3><p>不知道吃什么的时候，选个预算和心情，让它替你决定。</p></a>
+      <a href="#life-spots"><div class="cr-label mono">LIFE 03 / PLACES</div><h3>景点速览</h3><p>合肥及周边 14 个去处：花销、适合季节、要花多久，一眼看完。</p></a>
+      <a href="#life-holiday"><div class="cr-label mono">LIFE 04 / HOLIDAY PLANNER</div><h3>假期规划</h3><p>短期在合肥周边，长假出省；按天数和预算挑一条就行。</p></a>
+    </div>
+    <p class="cr-note">所有价格与交通时长都是参考值，会随季节和票价变动，出门前请以官方渠道（12306、景区公众号、美团/饿了么）为准。<br>All prices and travel times are indicative and change with season and availability; check official channels before you go.</p>
+  </div>
+</section>
+
+<section class="page" data-view="life-meet">
+  <div class="wrap page-intro">
+    <div class="kicker mono">LIFE 01 / MEET UP</div>
+    <h1>相约同行<span class="cr-sub">Meet Up · Team Outings</span></h1>
+    <p>想出门但没人一起？先看下面的现成方案，或者直接发起自己的邀约 · Ready-made plans, or start your own</p>
+  </div>
+
+  <div class="wrap section">
+    <div class="section-head"><div><div class="kicker mono">PLANS / 现成方案</div><h2>十个直接能用的团建方案</h2></div></div>
+    <div class="page-cards">
+      <article class="page-card"><span class="tag">经开区，离学校最近</span><h3>半天 · 翡翠湖环湖骑行</h3><p class="small-note">花销：免费（吃饭另算） · 人数：2–6 人</p><div class="cr-label" style="font-size:10px;letter-spacing:.1em;color:#8c2632;margin-top:10px">时间安排 / SCHEDULE</div><ul class="cr-bullets" style="margin-top:6px"><li>14:00 校门口集合</li><li>14:20 到湖边，取车或直接开骑</li><li>14:20–16:30 环湖一圈，中途停下来拍照</li><li>16:30 湖边歇脚、喝点东西</li><li>17:30 附近吃晚饭</li><li>19:00 回校</li></ul><p class="small-note"><b>交通：</b>地铁：3 号线「安大磬苑校区」→「工大翡翠湖校区」，1 站约 2 分钟，出站就是湖边；不坐地铁也可以直接骑过去</p><p class="small-note"><b>附近美食：</b>翡翠湖周边的社区小馆，以本地家常菜和面食为主，人均 30–50</p><div class="button-row"><a class="btn secondary" href="https://www.amap.com/search?query=%E7%BF%A1%E7%BF%A0%E6%B9%96%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">地图 / 导航 ↗</a></div><p class="cr-en">Half a day: cycling round Feicui Lake. One metro stop from campus, or just cycle over; dinner nearby for 30-50 yuan each.</p></article><article class="page-card"><span class="tag">市区，工业风园区</span><h3>半天 · 合柴1972 文创园</h3><p class="small-note">花销：园区免费（展览另计） · 人数：2–4 人</p><div class="cr-label" style="font-size:10px;letter-spacing:.1em;color:#8c2632;margin-top:10px">时间安排 / SCHEDULE</div><ul class="cr-bullets" style="margin-top:6px"><li>13:30 校门口集合出发</li><li>14:15 到园区</li><li>14:30–17:00 逛展、拍照、喝咖啡</li><li>17:30 附近吃晚饭</li><li>19:00 回校</li></ul><p class="small-note"><b>交通：</b>打车直达约 30 分钟；坐地铁需先到市区再换乘打车，最后一段不挨着地铁站，这一段请用下面的地图链接导航</p><p class="small-note"><b>附近美食：</b>园区内有咖啡和简餐；正餐建议到附近商圈，人均 50–80</p><div class="button-row"><a class="btn secondary" href="https://www.amap.com/search?query=%E5%90%88%E6%9F%B41972%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">地图 / 导航 ↗</a></div><p class="cr-en">Half a day at Hechai 1972, a former factory turned design district: photos, coffee and small exhibitions.</p></article><article class="page-card"><div class="life-photo"><img src="assets/scene-dashu.jpg" alt="一天 · 大蜀山 + 半边街" loading="lazy"></div><span class="tag">市区西边</span><h3>一天 · 大蜀山 + 半边街</h3><p class="small-note">花销：免费（吃饭另算） · 人数：3–8 人</p><div class="cr-label" style="font-size:10px;letter-spacing:.1em;color:#8c2632;margin-top:10px">时间安排 / SCHEDULE</div><ul class="cr-bullets" style="margin-top:6px"><li>08:30 校门口集合出发</li><li>09:30 山脚开始登山</li><li>11:00 登顶休息、看合肥全景</li><li>12:00 下山</li><li>12:30 半边街午饭</li><li>14:00 附近走走</li><li>15:00 返程</li></ul><p class="small-note"><b>交通：</b>地铁：3 号线「安大磬苑校区」→「西七里塘」换 2 号线（往南岗方向）→「大蜀山」站；出站就是半边街，步行上山</p><p class="small-note"><b>附近美食：</b>半边街小吃：烤肉、锅贴、甜品、豆腐脑，人均 40–60</p><div class="button-row"><a class="btn secondary" href="https://www.amap.com/search?query=%E5%A4%A7%E8%9C%80%E5%B1%B1%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">地图 / 导航 ↗</a></div><p class="cr-en">A full day: climb Dashu Mountain in the morning, then eat your way along Banbian Street.</p></article><article class="page-card"><div class="life-photo-strip"><img src="assets/scene-xiaoyaojin.jpg" alt="逍遥津公园" loading="lazy"><img src="assets/scene-huaihe.jpg" alt="淮河路步行街" loading="lazy"><img src="assets/scene-lihongzhang.jpg" alt="李鸿章故居" loading="lazy"></div><span class="tag">老城区</span><h3>一天 · 逍遥津 + 淮河路步行街 + 李鸿章故居</h3><p class="small-note">花销：故居门票约 20 元 · 人数：2–6 人</p><div class="cr-label" style="font-size:10px;letter-spacing:.1em;color:#8c2632;margin-top:10px">时间安排 / SCHEDULE</div><ul class="cr-bullets" style="margin-top:6px"><li>09:30 到大东门，先进逍遥津公园</li><li>09:30–11:30 逛园、划船</li><li>12:00 步行街午饭</li><li>13:30 李鸿章故居（约 1 小时）</li><li>15:00 步行街逛街</li><li>17:30 晚饭</li><li>19:00 返程</li></ul><p class="small-note"><b>交通：</b>地铁：3 号线「安大磬苑校区」→「西七里塘」换 2 号线（往撮镇方向）→「大东门」站（靠近逍遥津）或「四牌楼」站（步行街西端）</p><p class="small-note"><b>附近美食：</b>淮河路步行街及周边的老字号和小吃，人均 50–80</p><div class="button-row"><a class="btn secondary" href="https://www.amap.com/search?query=%E6%9D%8E%E9%B8%BF%E7%AB%A0%E6%95%85%E5%B1%85%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">地图 / 导航 ↗</a></div><p class="cr-en">A classic downtown day: Xiaoyaojin Park, Huaihe Road pedestrian street and the Li Hongzhang Residence.</p></article><article class="page-card"><div class="life-photo"><img src="assets/scene-sanhe.jpg" alt="一天 · 三河古镇" loading="lazy"></div><span class="tag">肥西县</span><h3>一天 · 三河古镇</h3><p class="small-note">花销：古镇免费，小景点单独收费 · 人数：4–10 人</p><div class="cr-label" style="font-size:10px;letter-spacing:.1em;color:#8c2632;margin-top:10px">时间安排 / SCHEDULE</div><ul class="cr-bullets" style="margin-top:6px"><li>08:00 校门口集合出发</li><li>09:00 到古镇</li><li>09:00–12:00 老街闲逛、拍桥</li><li>12:00 古镇午饭</li><li>13:30 小景点或坐船</li><li>15:30 返程</li><li>17:00 到校</li></ul><p class="small-note"><b>交通：</b>没有地铁直达：公交或拼车，单程约 1 小时；人多拼车更划算，具体线路以地图链接为准</p><p class="small-note"><b>附近美食：</b>三河米饺、油炸臭干、米酒、土菜，人均 40–60</p><div class="button-row"><a class="btn secondary" href="https://www.amap.com/search?query=%E4%B8%89%E6%B2%B3%E5%8F%A4%E9%95%87%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">地图 / 导航 ↗</a></div><p class="cr-en">A day in Sanhe Ancient Town: stone streets, canals and local snacks. Best with a group.</p></article><article class="page-card"><span class="tag">巢湖岸边</span><h3>一天 · 滨湖森林公园野餐</h3><p class="small-note">花销：免费（自带食物） · 人数：4–12 人</p><div class="cr-label" style="font-size:10px;letter-spacing:.1em;color:#8c2632;margin-top:10px">时间安排 / SCHEDULE</div><ul class="cr-bullets" style="margin-top:6px"><li>09:30 集合出发</li><li>10:30 到公园选点</li><li>11:00–14:00 野餐 + 骑行或放风筝</li><li>14:30 湖边散步</li><li>16:30 返程</li></ul><p class="small-note"><b>交通：</b>地铁：3 号线「安大磬苑校区」→「图书馆」换 4 号线（往综保区方向）→「合肥南站」换 1 号线（往九联圩方向）→「塘西河公园」站，出站再打车约 10 分钟</p><p class="small-note"><b>附近美食：</b>建议自带食物和野餐垫；园内餐饮选择少、价格偏高</p><div class="button-row"><a class="btn secondary" href="https://www.amap.com/search?query=%E5%90%88%E8%82%A5%E6%BB%A8%E6%B9%96%E5%9B%BD%E5%AE%B6%E6%A3%AE%E6%9E%97%E5%85%AC%E5%9B%AD%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">地图 / 导航 ↗</a></div><p class="cr-en">A picnic day at Binhu Forest Park by Chaohu Lake: cycling, kites and lake views.</p></article><article class="page-card"><span class="tag">市区，晚上更热闹</span><h3>晚上 · 罍街夜市觅食</h3><p class="small-note">花销：人均 40–70 · 人数：2–6 人</p><div class="cr-label" style="font-size:10px;letter-spacing:.1em;color:#8c2632;margin-top:10px">时间安排 / SCHEDULE</div><ul class="cr-bullets" style="margin-top:6px"><li>17:30 校门口集合出发</li><li>18:30 到罍街</li><li>18:30–21:00 边走边吃</li><li>21:30 返程</li><li>22:15 到校</li></ul><p class="small-note"><b>交通：</b>打车约 30 分钟；坐地铁可先到市区再换乘，最后一小段按地图链接导航</p><p class="small-note"><b>附近美食：</b>小龙虾、烧烤、糖水、本地小吃，人均 40–70</p><div class="button-row"><a class="btn secondary" href="https://www.amap.com/search?query=%E7%BD%8D%E8%A1%97%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">地图 / 导航 ↗</a></div><p class="cr-en">An evening at Lei Street: Hefei food street with crayfish, barbecue and desserts.</p></article><article class="page-card"><span class="tag">文旅城，预算偏高</span><h3>一天 · 融创乐园</h3><p class="small-note">花销：门票约 200 元起 · 人数：4–10 人</p><div class="cr-label" style="font-size:10px;letter-spacing:.1em;color:#8c2632;margin-top:10px">时间安排 / SCHEDULE</div><ul class="cr-bullets" style="margin-top:6px"><li>09:00 集合出发</li><li>10:00 入园</li><li>10:00–12:00 先玩排队久的项目</li><li>12:00 园内午饭</li><li>13:00–17:00 继续玩</li><li>18:00 返程</li></ul><p class="small-note"><b>交通：</b>地铁：3 号线「安大磬苑校区」→「图书馆」换 4 号线（往综保区方向）→「合肥南站」换 1 号线（往九联圩方向）→「万达城」站，出站即到</p><p class="small-note"><b>附近美食：</b>园内餐饮偏贵，可自带少量零食；正餐建议出园后吃</p><div class="button-row"><a class="btn secondary" href="https://www.amap.com/search?query=%E5%90%88%E8%82%A5%E8%9E%8D%E5%88%9B%E4%B9%90%E5%9B%AD%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">地图 / 导航 ↗</a></div><p class="cr-en">A day at Sunac Land for the bigger group outing; tickets from about 200 yuan, avoid peak holidays.</p></article><article class="page-card"><div class="life-photo"><img src="assets/scene-baogongyuan.jpg" alt="半天 · 包公园 + 步行街" loading="lazy"></div><span class="tag">老城区，人文景点</span><h3>半天 · 包公园 + 步行街</h3><p class="small-note">花销：包公园约 50 元 · 人数：2–6 人</p><div class="cr-label" style="font-size:10px;letter-spacing:.1em;color:#8c2632;margin-top:10px">时间安排 / SCHEDULE</div><ul class="cr-bullets" style="margin-top:6px"><li>13:30 校门口集合出发</li><li>14:30 到包公园</li><li>14:30–16:30 逛包公祠、清风阁</li><li>17:00 步行街或附近晚饭</li><li>19:00 返程</li></ul><p class="small-note"><b>交通：</b>地铁：3 号线「安大磬苑校区」→「西七里塘」换 2 号线（往撮镇方向）→「大东门」换 1 号线（往九联圩方向）→「包公园」站</p><p class="small-note"><b>附近美食：</b>包公园周边的本地菜馆，或到淮河路步行街吃，人均 50–80</p><div class="button-row"><a class="btn secondary" href="https://www.amap.com/search?query=%E5%90%88%E8%82%A5%E5%8C%85%E5%85%AC%E5%9B%AD%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">地图 / 导航 ↗</a></div><p class="cr-en">Half a day at Bao Park, then dinner near the pedestrian street.</p></article><article class="page-card"><div class="life-photo"><img src="assets/scene-tianehui.jpg" alt="半天 · 天鹅湖 + 政务区" loading="lazy"></div><span class="tag">市区，拍照散步</span><h3>半天 · 天鹅湖 + 政务区</h3><p class="small-note">花销：免费 · 人数：2–6 人</p><div class="cr-label" style="font-size:10px;letter-spacing:.1em;color:#8c2632;margin-top:10px">时间安排 / SCHEDULE</div><ul class="cr-bullets" style="margin-top:6px"><li>14:00 校门口集合出发</li><li>14:40 到天鹅湖</li><li>14:40–17:00 环湖散步、拍照</li><li>17:30 政务区吃晚饭</li><li>19:00 返程</li></ul><p class="small-note"><b>交通：</b>地铁：3 号线「安大磬苑校区」→「市政务中心」站，直达不用换乘</p><p class="small-note"><b>附近美食：</b>政务区商圈餐饮选择多，人均 50–90</p><div class="button-row"><a class="btn secondary" href="https://www.amap.com/search?query=%E5%90%88%E8%82%A5%E5%A4%A9%E9%B9%85%E6%B9%96%20%E5%90%88%E8%82%A5" target="_blank" rel="noopener noreferrer">地图 / 导航 ↗</a></div><p class="cr-en">Half a day at Swan Lake in the government district; a direct metro ride with no transfer.</p></article>
+    </div>
+    <p class="cr-note">方案配图来自 Wikimedia Commons，均为可自由使用的授权（CC BY-SA 4.0 / CC BY-SA 3.0 / CC BY 3.0 / CC0）：大蜀山、三河古镇、淮河路步行街、逍遥津、李鸿章故居、安徽博物院、包公园、天鹅湖。完整出处与作者见各图片的 Commons 文件页。少数方案没有配图——不是忘了，是 Commons 上没有该地点可用的实景照片，与其放一张不相干的图，不如空着。<br>Photos come from Wikimedia Commons under CC BY-SA 4.0 / CC BY-SA 3.0 / CC BY 3.0 / CC0. Plans without a photo simply have no suitable freely-licensed image available.</p>
+    <p class="cr-note">方案是班级整理的参考路线，时间轴按「从学校出发再回校」排的，人数和花销按平时估算。交通耗时是参考值，出发前在群里再确认一次集合时间，并留意天气、预约和末班车时间。美食给的是<strong>街区和品类</strong>，具体店以大众点评/美团上的实时评价为准。交通按合肥地铁现行线路写（1–8 号线），换乘站和方向都核对过；地铁线路与首末班时间仍可能调整，出发前请以车站公告为准。<br>These are suggested routes compiled by the class. Confirm times in the group chat and check the weather and any booking requirements.</p>
+  </div>
+
+  <div class="wrap section">
+    <div class="section-head"><div><div class="kicker mono">POST / 发起邀约</div><h2>发起一个邀约</h2></div></div>
+    <div class="editor-layout">
+      <form class="account-box" id="lifeMeetForm">
+        <h2>写清楚时间、地点和还差谁</h2>
+        <label>标题 / Title<input name="title" maxlength="80" required placeholder="例：周六下午去翡翠湖骑行"></label>
+        <label>具体安排 / Details<textarea name="body" rows="4" maxlength="2000" required placeholder="集合时间与地点、怎么去、大概花销、需要注意什么"></textarea></label>
+        <label>还差几个人 / Who is needed<input name="needed" maxlength="200" placeholder="例：还差 2 人，会骑车就行"></label>
+        <div class="button-row"><button class="btn primary" type="submit">发布邀约</button></div>
+        <p class="small-note">发布需要登录。邀约会同步出现在「组队大厅 → 活动」分类里，同学可以在那里回复商量。</p>
+        <div id="lifeMeetMessage" role="status"></div>
+      </form>
+      <div class="account-box">
+        <h2>已经发起的邀约</h2>
+        <div id="lifeMeetList" class="admin-list"><p class="small-note">正在读取…</p></div>
+        <div class="button-row"><button class="btn secondary" id="lifeMeetReload" type="button">刷新 / Refresh</button><a class="text-link" href="#team" data-page="team">去组队大厅看全部 →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page" data-view="life-food">
+  <div class="wrap page-intro">
+    <div class="kicker mono">LIFE 02 / TAKEOUT PICKER</div>
+    <h1>外卖推荐器<span class="cr-sub">Takeout Picker</span></h1>
+    <p>不知道吃什么的时候，交给它 · Let it decide what you eat today</p>
+  </div>
+
+  <div class="wrap section">
+    <div class="section-head"><div><div class="kicker mono">PICKER / 帮我决定</div><h2>选个预算和心情</h2></div></div>
+    <div class="account-box">
+      <div class="editor-layout">
+        <label>今天想吃什么类别<select id="lifeFoodCat"><option value="">不限（让系统挑）</option></select></label>
+        <label>预算<select id="lifeFoodBudget"><option>15 元以内（凑合一顿）</option><option selected>15–25 元（常规）</option><option>25–40 元（想吃好点）</option><option>40 元以上（犒劳自己）</option></select></label>
+      </div>
+      <div class="editor-layout">
+        <label>心情 / 场景<select id="lifeFoodMood"><option>赶时间，越快越好</option><option selected>正常吃一顿</option><option>想吃得健康一点</option><option>夜宵，想吃重口</option><option>想和朋友拼单</option></select></label>
+        <label>忌口（可留空）<input id="lifeFoodAvoid" maxlength="40" placeholder="例：不吃辣 / 不吃香菜"></label>
+      </div>
+      <div class="button-row"><button class="btn primary" id="lifeFoodPick" type="button">帮我决定</button><button class="btn secondary" id="lifeFoodAgain" type="button">换一个</button></div>
+      <div id="lifeFoodResult" class="account-box" style="margin-top:16px;background:#f7f5ef">
+        <h2 style="font-size:15px">还没选</h2>
+        <p class="small-note">点「帮我决定」，它会从下面的清单里挑一个。</p>
+      </div>
+      <p class="small-note">说明：这里推荐的是<strong>吃什么品类</strong>，不是具体店家——店面和价格每天在变，具体哪家请以美团/饿了么上的实时信息为准。忌口会写进推荐里提醒你备注。</p>
+    </div>
+  </div>
+
+  <div class="wrap section">
+    <div class="section-head"><div><div class="kicker mono">MENU / 清单</div><h2>常见外卖品类</h2></div></div>
+    <div id="lifeFoodList" class="page-cards"></div>
+    <p class="cr-note">点外卖的几个小提醒：主食 + 一份蔬菜比纯主食扛饿；汤类在宿舍不好端，尽量选干一些的；拼单前先确认起送价与配送费；夜宵档 21:00 后配送会明显变慢。<br>Small tips: pair a staple with a vegetable dish, avoid soup if you are carrying it back, check the minimum order before splitting a bill, and expect slower delivery after 21:00.</p>
+  </div>
+</section>
+
+<section class="page" data-view="life-spots">
+  <div class="wrap page-intro">
+    <div class="kicker mono">LIFE 03 / PLACES</div>
+    <h1>景点速览<span class="cr-sub">Places Around Hefei</span></h1>
+    <p>合肥及周边 14 个去处 · 14 places in and around Hefei</p>
+  </div>
+  <div class="wrap section">
+    <div class="section-head"><div><div class="kicker mono">LIST / 一览表</div><h2>花销、时长、适合季节</h2></div></div>
+    <div class="cr-tablewrap"><table class="cr-table"><thead><tr><th>名称 / Place</th><th>参考花费</th><th>建议时长</th><th>适合季节</th><th>预约 / 购票</th><th>亮点 / Highlights</th></tr></thead><tbody><tr><td>逍遥津公园<br><span class='cr-en' style='margin:0'>Xiaoyaojin Park</span><br><span class='small-note'>市区公园</span></td><td>免费</td><td>半天</td><td>春 / 秋</td><td><b>无需预约</b></td><td>合肥最老的公园之一，三国古战场，可划船，紧邻淮河路步行街。<br><span class='cr-en' style='margin:0'>Hefei's oldest park, site of a Three Kingdoms battle; boats, and next to Huaihe Road.</span></td></tr><tr><td>李鸿章故居<br><span class='cr-en' style='margin:0'>Li Hongzhang Residence</span><br><span class='small-note'>历史人文</span></td><td>约 20 元</td><td>1–2 小时</td><td>全年</td><td><b>需购票</b><br><a class="text-link" href="https://www.baidu.com/s?wd=%E6%9D%8E%E9%B8%BF%E7%AB%A0%E6%95%85%E5%B1%85%20%E5%AE%98%E6%96%B9%20%E9%A2%84%E7%BA%A6" target="_blank" rel="noopener noreferrer">搜索官方入口 ↗</a><br><span class="small-note">旺季或节假日可能限流，建议先查当日政策</span></td><td>晚清名臣李鸿章的家宅，就在步行街上，看完顺路逛街。<br><span class='cr-en' style='margin:0'>The former residence of the late-Qing statesman, right on the pedestrian street.</span></td></tr><tr><td>安徽博物院<br><span class='cr-en' style='margin:0'>Anhui Museum</span><br><span class='small-note'>博物馆</span></td><td>免费</td><td>半天</td><td>全年</td><td><b>需预约</b><br><a class="text-link" href="https://www.baidu.com/s?wd=%E5%AE%89%E5%BE%BD%E5%8D%9A%E7%89%A9%E9%99%A2%20%E5%AE%98%E6%96%B9%20%E9%A2%84%E7%BA%A6" target="_blank" rel="noopener noreferrer">搜索官方入口 ↗</a><br><span class="small-note">免费但需实名预约，凭预约码入馆；通常走官方微信公众号/小程序</span></td><td>想了解安徽历史与徽州文化，这里最系统。<br><span class='cr-en' style='margin:0'>The most systematic place to understand Anhui history; free but book ahead.</span></td></tr><tr><td>渡江战役纪念馆 / 安徽名人馆<br><span class='cr-en' style='margin:0'>Memorial of the Crossing Campaign</span><br><span class='small-note'>纪念馆</span></td><td>免费</td><td>半天</td><td>全年</td><td><b>需预约</b><br><a class="text-link" href="https://www.baidu.com/s?wd=%E6%B8%A1%E6%B1%9F%E6%88%98%E5%BD%B9%E7%BA%AA%E5%BF%B5%E9%A6%86%20/%20%E5%AE%89%E5%BE%BD%E5%90%8D%E4%BA%BA%E9%A6%86%20%E5%AE%98%E6%96%B9%20%E9%A2%84%E7%BA%A6" target="_blank" rel="noopener noreferrer">搜索官方入口 ↗</a><br><span class="small-note">免费但需预约，一般通过官方公众号</span></td><td>两馆相邻，可一并参观，适合主题团日。<br><span class='cr-en' style='margin:0'>Two adjacent free museums, a good fit for a themed class activity.</span></td></tr><tr><td>三河古镇<br><span class='cr-en' style='margin:0'>Sanhe Ancient Town</span><br><span class='small-note'>古镇</span></td><td>古镇免费，小景点单独收费</td><td>一天</td><td>春 / 秋</td><td><b>建议预约</b><br><a class="text-link" href="https://www.baidu.com/s?wd=%E4%B8%89%E6%B2%B3%E5%8F%A4%E9%95%87%20%E5%AE%98%E6%96%B9%20%E9%A2%84%E7%BA%A6" target="_blank" rel="noopener noreferrer">搜索官方入口 ↗</a><br><span class="small-note">古镇本身开放，个别小景点与节假日限流时段需要预约</span></td><td>肥西的水乡古镇，青石板街与米饺、米酒是标配。<br><span class='cr-en' style='margin:0'>A canal town in Feixi county: stone streets, rice dumplings and local rice wine.</span></td></tr><tr><td>大蜀山森林公园<br><span class='cr-en' style='margin:0'>Dashu Mountain</span><br><span class='small-note'>登山</span></td><td>免费</td><td>半天</td><td>春 / 秋</td><td><b>无需预约</b></td><td>市区内的山，爬上去约一小时，山顶能俯瞰合肥。<br><span class='cr-en' style='margin:0'>A mountain inside the city; about an hour up, with a view over Hefei.</span></td></tr><tr><td>半边街<br><span class='cr-en' style='margin:0'>Banbian Street</span><br><span class='small-note'>小吃街</span></td><td>人均 40–60</td><td>1–2 小时</td><td>全年</td><td><b>无需预约</b></td><td>大蜀山脚下的小吃街，爬山下来正好吃饭。<br><span class='cr-en' style='margin:0'>A snack street at the foot of Dashu Mountain, ideal after the climb.</span></td></tr><tr><td>翡翠湖<br><span class='cr-en' style='margin:0'>Feicui Lake</span><br><span class='small-note'>湖景 / 骑行</span></td><td>免费</td><td>半天</td><td>春 / 秋</td><td><b>无需预约</b></td><td>离学校最近的一片湖，环湖骑行、傍晚散步都合适。<br><span class='cr-en' style='margin:0'>The closest lake to campus; good for cycling and evening walks.</span></td></tr><tr><td>合肥滨湖国家森林公园<br><span class='cr-en' style='margin:0'>Binhu National Forest Park</span><br><span class='small-note'>湿地 / 骑行</span></td><td>免费</td><td>半天至一天</td><td>春 / 秋</td><td><b>无需预约</b><br><span class="small-note">重大节假日可能临时限流</span></td><td>巢湖岸边的森林公园，适合野餐、骑行、放风筝。<br><span class='cr-en' style='margin:0'>A forest park on Chaohu Lake, good for picnics, cycling and kites.</span></td></tr><tr><td>骆岗公园<br><span class='cr-en' style='margin:0'>Luogang Park</span><br><span class='small-note'>新型城市公园</span></td><td>免费</td><td>半天</td><td>春 / 秋</td><td><b>无需预约</b><br><span class="small-note">个别展馆单独预约或购票</span></td><td>原机场改建的超大公园，草坪、步道和花海，适合拍照。<br><span class='cr-en' style='margin:0'>A huge park converted from the old airport; lawns, paths and flower fields.</span></td></tr><tr><td>合柴1972<br><span class='cr-en' style='margin:0'>Hechai 1972</span><br><span class='small-note'>文创园区</span></td><td>园区免费</td><td>半天</td><td>全年</td><td><b>无需预约</b><br><span class="small-note">园区开放，个别展览单独购票</span></td><td>老厂房改造的文创园，工业风拍照、咖啡、展览。<br><span class='cr-en' style='margin:0'>A former factory turned creative district: industrial backdrops, coffee and exhibitions.</span></td></tr><tr><td>巢湖 · 中庙 / 姥山岛<br><span class='cr-en' style='margin:0'>Chaohu Lake · Zhongmiao</span><br><span class='small-note'>湖岛</span></td><td>中庙免费，船票另计</td><td>一天</td><td>春 / 秋</td><td><b>需购票</b><br><a class="text-link" href="https://www.baidu.com/s?wd=%E5%B7%A2%E6%B9%96%20%C2%B7%20%E4%B8%AD%E5%BA%99%20/%20%E5%A7%A5%E5%B1%B1%E5%B2%9B%20%E5%AE%98%E6%96%B9%20%E9%A2%84%E7%BA%A6" target="_blank" rel="noopener noreferrer">搜索官方入口 ↗</a><br><span class="small-note">上姥山岛需买船票，旺季建议提前确认班次</span></td><td>五大淡水湖之一，坐船上姥山岛，湖风很舒服。<br><span class='cr-en' style='margin:0'>One of China's five largest freshwater lakes; take a boat to Laoshan Island.</span></td></tr><tr><td>紫蓬山国家森林公园<br><span class='cr-en' style='margin:0'>Zipeng Mountain</span><br><span class='small-note'>登山 / 森林</span></td><td>约 30 元</td><td>一天</td><td>春 / 秋</td><td><b>需购票</b><br><a class="text-link" href="https://www.baidu.com/s?wd=%E7%B4%AB%E8%93%AC%E5%B1%B1%E5%9B%BD%E5%AE%B6%E6%A3%AE%E6%9E%97%E5%85%AC%E5%9B%AD%20%E5%AE%98%E6%96%B9%20%E9%A2%84%E7%BA%A6" target="_blank" rel="noopener noreferrer">搜索官方入口 ↗</a><br><span class="small-note">一般现场购票即可</span></td><td>比大蜀山更野一些，适合想走远一点的周末。<br><span class='cr-en' style='margin:0'>Wilder than Dashu Mountain, a good weekend option for a longer walk.</span></td></tr><tr><td>半汤温泉<br><span class='cr-en' style='margin:0'>Bantang Hot Springs</span><br><span class='small-note'>温泉</span></td><td>人均 150–300</td><td>一天 / 过夜</td><td>秋 / 冬</td><td><b>需预订</b><br><a class="text-link" href="https://www.baidu.com/s?wd=%E5%8D%8A%E6%B1%A4%E6%B8%A9%E6%B3%89%20%E5%AE%98%E6%96%B9%20%E9%A2%84%E7%BA%A6" target="_blank" rel="noopener noreferrer">搜索官方入口 ↗</a><br><span class="small-note">温泉与酒店一般需要提前预订，旺季价格上浮</span></td><td>巢湖半汤的温泉区，天冷时泡一次很解乏。<br><span class='cr-en' style='margin:0'>Hot springs near Chaohu, best in cold weather.</span></td></tr><tr><td>合肥融创乐园<br><span class='cr-en' style='margin:0'>Sunac Land</span><br><span class='small-note'>主题乐园</span></td><td>约 200 元起</td><td>一天</td><td>春 / 秋</td><td><b>需购票</b><br><a class="text-link" href="https://www.baidu.com/s?wd=%E5%90%88%E8%82%A5%E8%9E%8D%E5%88%9B%E4%B9%90%E5%9B%AD%20%E5%AE%98%E6%96%B9%20%E9%A2%84%E7%BA%A6" target="_blank" rel="noopener noreferrer">搜索官方入口 ↗</a><br><span class="small-note">建议提前线上购票，节假日排队久</span></td><td>过山车与水上项目，适合大团建。<br><span class='cr-en' style='margin:0'>Roller coasters and water rides; great for a big group, crowded on holidays.</span></td></tr></tbody></table></div>
+    <p class="cr-note">预约政策、票价与开放时间都会变。表里的「搜索官方入口」是<strong>搜索链接</strong>，不是固定网址——我逐个核实时发现，很多景区的官网域名并不像想象中那样（有一个我试的域名实际指向了无关的视频站），所以不敢把没核实过的地址写上来。请在搜索结果里认准带「官方」标识的公众号或小程序；博物馆、纪念馆类通常需要实名预约，凭预约码入馆。<br>Tickets and opening hours change, and museums usually need advance booking; check the official channel before leaving.</p>
+  </div>
+</section>
+
+<section class="page" data-view="life-holiday">
+  <div class="wrap page-intro">
+    <div class="kicker mono">LIFE 04 / HOLIDAY PLANNER</div>
+    <h1>假期规划<span class="cr-sub">Holiday Planner</span></h1>
+    <p>短期在合肥周边，长假再考虑出省 · Short breaks near Hefei, longer trips further out</p>
+  </div>
+  <div class="wrap section">
+    <div class="editor-tabs" id="lifeHolidayTabs"><button class="filter active" data-life-holiday="short" type="button">短期 · 合肥周边</button><button class="filter" data-life-holiday="long" type="button">长期 · 出省</button></div>
+    <div data-life-holiday-panel="short">
+      <div class="section-head"><div><div class="kicker mono">SHORT / 1–2 天</div><h2>周末就能走</h2></div></div>
+      <div class="cr-tablewrap"><table class="cr-table"><thead><tr><th>目的地 / Route</th><th>天数</th><th>交通（参考）</th><th>人均预算</th><th>适合</th><th>说明 / Notes</th></tr></thead><tbody><tr><td>市内一日经典线<br><span class='cr-en' style='margin:0'>逍遥津公园 → 淮河路步行街 → 李鸿章故居 → 罍街夜市</span></td><td>1 天</td><td>地铁 + 步行</td><td>人均 80–150</td><td>春 / 秋</td><td>第一次带外地同学逛合肥，这条线最稳。<br><span class='cr-en' style='margin:0'>The classic downtown day, best for showing visitors around.</span></td></tr><tr><td>半日轻出行<br><span class='cr-en' style='margin:0'>翡翠湖环湖骑行 + 湖边咖啡</span></td><td>半天</td><td>骑行 / 步行</td><td>人均 30–60</td><td>春 / 秋</td><td>不用规划，出校门就能走，适合临时起意。<br><span class='cr-en' style='margin:0'>No planning needed; just leave campus and go.</span></td></tr><tr><td>一天山野线<br><span class='cr-en' style='margin:0'>大蜀山登山 + 半边街小吃</span></td><td>1 天</td><td>地铁 + 步行</td><td>人均 60–100</td><td>春 / 秋</td><td>想动一动又不想跑远，选这条。<br><span class='cr-en' style='margin:0'>Get some exercise without leaving the city.</span></td></tr><tr><td>周边古镇一日<br><span class='cr-en' style='margin:0'>三河古镇（肥西）</span></td><td>1 天</td><td>公交 / 拼车约 1 小时</td><td>人均 80–120</td><td>春 / 秋</td><td>水乡老街，人多一起去更有氛围。<br><span class='cr-en' style='margin:0'>A canal town about an hour away; better with a group.</span></td></tr><tr><td>两天温泉线<br><span class='cr-en' style='margin:0'>巢湖中庙 + 姥山岛 + 半汤温泉</span></td><td>2 天 1 晚</td><td>高铁 / 大巴 + 打车</td><td>人均 400–700</td><td>秋 / 冬</td><td>泡温泉 + 看湖，冬天最合适。<br><span class='cr-en' style='margin:0'>Lake views plus hot springs; ideal in winter.</span></td></tr><tr><td>两天山野线<br><span class='cr-en' style='margin:0'>紫蓬山 + 岱山湖</span></td><td>2 天 1 晚</td><td>拼车 / 自驾</td><td>人均 300–500</td><td>春 / 秋</td><td>人少的森林与湖，适合安静一点的团建。<br><span class='cr-en' style='margin:0'>Quieter forests and lakes for a calmer group trip.</span></td></tr></tbody></table></div>
+      <p class="cr-note">短期线的重点是不折腾：优先挑单程 1 小时以内的目的地，不要把时间花在路上。<br>For short breaks, keep the travel time down and spend the day at the destination.</p>
+    </div>
+    <div data-life-holiday-panel="long" hidden>
+      <div class="section-head"><div><div class="kicker mono">LONG / 3 天以上</div><h2>长假再出发</h2></div></div>
+      <div class="cr-tablewrap"><table class="cr-table"><thead><tr><th>目的地 / Destination</th><th>天数</th><th>交通（参考）</th><th>人均预算</th><th>适合</th><th>说明 / Notes</th></tr></thead><tbody><tr><td>黄山 + 宏村</td><td>3–4 天</td><td>高铁约 1.5 小时</td><td>人均 900–1600</td><td>春 / 秋</td><td>安徽旅游的门面。爬山看云海，再到宏村看徽派村落。<br><span class='cr-en' style='margin:0'>Anhui's headline trip: sunrise over Huangshan, then the Hui-style village of Hongcun.</span></td></tr><tr><td>南京</td><td>2–3 天</td><td>高铁约 1 小时</td><td>人均 500–900</td><td>春 / 秋</td><td>最近的一座大城，中山陵、夫子庙、秦淮河、博物院都值得去。<br><span class='cr-en' style='margin:0'>The nearest big city: Sun Yat-sen Mausoleum, Confucius Temple and the Qinhuai River.</span></td></tr><tr><td>苏州 + 周庄</td><td>3 天</td><td>高铁约 2.5 小时</td><td>人均 700–1200</td><td>春 / 秋</td><td>园林与古镇的组合，拙政园、平江路、周庄一条线走完。<br><span class='cr-en' style='margin:0'>Gardens plus a water town: the Humble Administrator's Garden, Pingjiang Road and Zhouzhuang.</span></td></tr><tr><td>杭州</td><td>3 天</td><td>高铁约 3 小时</td><td>人均 800–1300</td><td>春 / 秋</td><td>西湖一整天都逛不完，灵隐寺、龙井、河坊街可以再排一天。<br><span class='cr-en' style='margin:0'>West Lake alone takes a day; add Lingyin Temple and Hefang Street.</span></td></tr><tr><td>武汉</td><td>3 天</td><td>高铁约 2 小时</td><td>人均 700–1100</td><td>春 / 秋</td><td>黄鹤楼、东湖、汉口江滩，还有过早的热干面与豆皮。<br><span class='cr-en' style='margin:0'>Yellow Crane Tower, East Lake, the Hankou riverside and a proper Wuhan breakfast.</span></td></tr><tr><td>上海</td><td>3 天</td><td>高铁约 3 小时</td><td>人均 900–1500</td><td>春 / 秋</td><td>外滩、武康路、博物馆、迪士尼，怎么排都够。<br><span class='cr-en' style='margin:0'>The Bund, Wukang Road, museums and Disneyland: plenty to fill three days.</span></td></tr><tr><td>青岛</td><td>3–4 天</td><td>高铁约 6 小时</td><td>人均 1000–1600</td><td>夏</td><td>海边城市，栈桥、八大关、崂山；夏天去最合适。<br><span class='cr-en' style='margin:0'>A seaside city: Zhanqiao Pier, Badaguan and Laoshan; best in summer.</span></td></tr><tr><td>西安</td><td>4 天</td><td>高铁约 5 小时</td><td>人均 1200–2000</td><td>春 / 秋</td><td>兵马俑、城墙、回民街、陕西历史博物馆，历史爱好者别错过。<br><span class='cr-en' style='margin:0'>Terracotta Warriors, the city wall and Shaanxi History Museum.</span></td></tr><tr><td>厦门</td><td>4 天</td><td>高铁约 6 小时 / 飞机</td><td>人均 1500–2200</td><td>春 / 秋</td><td>鼓浪屿、环岛路、厦大；节奏慢，适合放松。<br><span class='cr-en' style='margin:0'>Gulangyu, the island ring road and Xiamen University; a slower pace.</span></td></tr><tr><td>成都 + 重庆</td><td>4–5 天</td><td>高铁约 6 小时 / 飞机</td><td>人均 1500–2500</td><td>春 / 秋</td><td>火锅、熊猫、洪崖洞与轻轨穿楼，两座城市连起来玩。<br><span class='cr-en' style='margin:0'>Hotpot, pandas and Chongqing's cliffside cityscape, two cities in one trip.</span></td></tr></tbody></table></div>
+      <p class="cr-note">长假出行请提前买票、订房，高铁票通常提前 15 天开售；节假日第一天和最后一天最挤，能错峰就错峰。<br>Book trains and hotels early; tickets usually open about 15 days ahead and the first and last days of a holiday are the busiest.</p>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  function boot(){
+  var MODULES=[['life','总览'],['life-meet','相约同行'],['life-food','外卖推荐器'],['life-spots','景点速览'],['life-holiday','假期规划']];
+  MODULES.forEach(function(item){
+    var view=document.querySelector('[data-view="'+item[0]+'"]');
+    if(!view||view.querySelector('.cr-subnav')){return;}
+    var intro=view.querySelector('.page-intro');
+    if(!intro){return;}
+    var bar=document.createElement('div');
+    bar.className='cr-subnav';
+    bar.innerHTML=MODULES.map(function(m){
+      return '<a href="#'+m[0]+'" data-life-go="'+m[0]+'"'+(m[0]===item[0]?' class="active"':'')+'>'+m[1]+'</a>';
+    }).join('');
+    var holder=document.createElement('div');
+    holder.className='wrap';
+    holder.appendChild(bar);
+    intro.parentNode.insertBefore(holder,intro.nextSibling);
+    bar.addEventListener('click',function(e){
+      var a=e.target.closest?e.target.closest('a[data-life-go]'):null;
+      if(!a){return;}
+      e.preventDefault();
+      go(a.getAttribute('data-life-go'));
+    });
+  });
+
+  /* ---- 相约同行 ---- */
+  async function loadMeet(){
+    var box=document.getElementById('lifeMeetList');
+    if(!box){return;}
+    try{
+      var data=await api('/api/team');
+      var posts=(data&&data.posts?data.posts:[]).filter(function(p){return p.track==='活动';});
+      box.innerHTML=posts.length?posts.map(function(p){
+        return '<div class="admin-row"><div><strong>'+htmlSafe(p.title)+'</strong><small>'+htmlSafe(String(p.body||'').slice(0,80))+(p.needed?' · 还差：'+htmlSafe(p.needed):'')+'</small></div><div class="admin-actions"><span class="small-note">'+htmlSafe(String(p.created_at||'').slice(0,10))+'</span></div></div>';
+      }).join(''):'<p class="small-note">还没有邀约，做第一个发起的同学吧。</p>';
+    }catch(err){
+      box.innerHTML='<p class="small-note">邀约暂时无法加载，请稍后刷新。</p>';
+    }
+  }
+  var meetForm=document.getElementById('lifeMeetForm');
+  if(meetForm){
+    meetForm.addEventListener('submit',async function(e){
+      e.preventDefault();
+      if(!currentUser){showMessage('lifeMeetMessage','发布邀约需要先登录。');return;}
+      var f=e.target;
+      try{
+        await api('/api/team',{method:'POST',body:JSON.stringify({
+          track:'活动',
+          title:f.elements.title.value,
+          body:f.elements.body.value,
+          needed:f.elements.needed.value})});
+        f.reset();
+        await loadMeet();
+        showMessage('lifeMeetMessage','邀约已发布，也同步到了「组队大厅 → 活动」。',true);
+      }catch(err){showMessage('lifeMeetMessage',err.message||'发布失败');}
+    });
+  }
+  var meetReload=document.getElementById('lifeMeetReload');
+  if(meetReload){meetReload.onclick=loadMeet;}
+  loadMeet();
+
+  /* ---- 外卖推荐器 ---- */
+  var FOOD={
+    '米饭炒菜':[['黄焖鸡米饭','出餐快、有汤有肉，一个人吃刚好'],['盖浇饭','便宜管饱，双拼更划算'],['小炒肉盖饭','口味重、下饭'],['砂锅饭','天冷时最舒服'],['煲仔饭','带锅巴，稍微贵一点但值']],
+    '面食':[['牛肉汤配烧饼','合肥早餐标配，人均十五上下'],['兰州拉面','快、便宜、稳定不出错'],['刀削面','分量大，男生更合适'],['炒面 / 炒饭','夜宵档常客'],['重庆小面','想提神的时候']],
+    '麻辣烫冒菜':[['麻辣烫','自己夹菜，最好控制预算'],['冒菜','不用挑，端上来就能吃'],['麻辣香锅','两三个人拼最划算'],['关东煮','清淡一点，适合加个主食']],
+    '烧烤炸串':[['炸串','按签算钱，当宵夜正好'],['烧烤','人多才热闹，适合团建之后'],['铁板鱿鱼','路边摊经典'],['烤冷面','便宜又能饱']],
+    '日韩料理':[['韩式炸鸡','配可乐，宿舍里最受欢迎'],['石锅拌饭','有菜有饭，不太油腻'],['寿司 / 饭团','清淡、不用热'],['日式拉面','汤好喝，适合下雨天']],
+    '汉堡炸鸡':[['炸鸡汉堡','赶时间首选'],['披萨','宿舍拼单更划算'],['鸡排 + 饮料','边走边吃']],
+    '粥粉汤面':[['皮蛋瘦肉粥','肠胃不舒服时最合适'],['螺蛳粉','重口味的快乐，注意宿舍味道'],['牛肉粉','清汤管饱'],['馄饨','快，适合当加餐']],
+    '轻食甜品':[['沙拉碗','想吃清淡的时候'],['奶茶 + 鸡蛋仔','下午茶标配'],['水果捞','夏天最合适'],['酸奶碗','想吃甜又不想太罪恶']]
+  };
+  var catSel=document.getElementById('lifeFoodCat');
+  if(catSel){
+    Object.keys(FOOD).forEach(function(k){
+      var o=document.createElement('option');o.value=k;o.textContent=k;catSel.appendChild(o);
+    });
+  }
+  function pickFood(again){
+    var result=document.getElementById('lifeFoodResult');
+    if(!result){return;}
+    var cats=catSel&&catSel.value?[catSel.value]:Object.keys(FOOD);
+    var cat=cats[Math.floor(Math.random()*cats.length)];
+    var items=FOOD[cat];
+    var item=items[Math.floor(Math.random()*items.length)];
+    var budget=(document.getElementById('lifeFoodBudget')||{}).value||'';
+    var mood=(document.getElementById('lifeFoodMood')||{}).value||'';
+    var avoid=((document.getElementById('lifeFoodAvoid')||{}).value||'').trim();
+    var tips=[];
+    if(budget.indexOf('15 元以内')===0){tips.push('这个预算优先看「单人套餐」和「满减」，别单点。');}
+    else if(budget.indexOf('25–40')===0){tips.push('这个预算可以挑带汤或带小菜的套餐，吃得更完整。');}
+    else if(budget.indexOf('40 元以上')===0){tips.push('预算宽松，可以点一份主食加一份小菜，或者两个人拼单。');}
+    if(mood.indexOf('赶时间')===0){tips.push('选出餐快、距离 1 公里以内的店，配送时间会明显短。');}
+    if(mood.indexOf('健康')===0){tips.push('尽量选蒸煮类，主食换成杂粮饭或加一份青菜。');}
+    if(mood.indexOf('夜宵')===0){tips.push('夜宵档 21:00 后配送变慢，尽量提前下单。');}
+    if(mood.indexOf('拼单')===0){tips.push('拼单先看起送价和配送费，分摊后往往比单点便宜。');}
+    if(avoid){tips.push('备注里写上「'+avoid.replace(/</g,'')+'」，多数店家都会照做。');}
+    result.innerHTML='<h2 style="font-size:17px">今天就吃：'+htmlSafe(cat)+' · '+htmlSafe(item[0])+'</h2>'+
+      '<p class="small-note">'+htmlSafe(item[1])+'</p>'+
+      (tips.length?'<ul class="cr-bullets">'+tips.map(function(t){return '<li>'+htmlSafe(t)+'</li>';}).join('')+'</ul>':'')+
+      '<p class="small-note">再点一次「换一个」可以重摇；具体哪家店请以美团 / 饿了么的实时信息为准。</p>';
+  }
+  var pickBtn=document.getElementById('lifeFoodPick');
+  if(pickBtn){pickBtn.onclick=function(){pickFood(false);};}
+  var againBtn=document.getElementById('lifeFoodAgain');
+  if(againBtn){againBtn.onclick=function(){pickFood(true);};}
+  var foodList=document.getElementById('lifeFoodList');
+  if(foodList){
+    foodList.innerHTML=Object.keys(FOOD).map(function(cat){
+      return '<article class="page-card"><span class="tag">'+htmlSafe(cat)+'</span><h3>'+htmlSafe(cat)+'</h3><p class="small-note">'+FOOD[cat].map(function(x){return htmlSafe(x[0]);}).join(' · ')+'</p></article>';
+    }).join('');
+  }
+
+  /* ---- 假期规划 标签切换 ---- */
+  var tabs=document.getElementById('lifeHolidayTabs');
+  if(tabs){
+    tabs.addEventListener('click',function(e){
+      var b=e.target.closest?e.target.closest('[data-life-holiday]'):null;
+      if(!b){return;}
+      var which=b.getAttribute('data-life-holiday');
+      tabs.querySelectorAll('[data-life-holiday]').forEach(function(x){x.classList.toggle('active',x===b);});
+      document.querySelectorAll('[data-life-holiday-panel]').forEach(function(p){
+        p.hidden=(p.getAttribute('data-life-holiday-panel')!==which);
+      });
+    });
+  }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',boot);}else{boot();}
 })();
 </script>
 <section class="page" data-view="contact"><div class="wrap page-intro"><div class="kicker mono">04 / CONTACT & COLLABORATION</div><h1>咨询与合作</h1><p>课程咨询、班级建议、活动提案或合作机会，欢迎告诉我们。</p><form class="form" id="contactForm"><input required placeholder="你的称呼"><select><option>选择事务类型</option><option>学业咨询</option><option>活动提案</option><option>竞赛科研组队</option><option>资源分享与合作</option><option>其他建议</option></select><textarea required placeholder="简单描述你的问题或想法"></textarea><button class="btn primary" type="submit">提交给班委 ↗</button></form></div></section>

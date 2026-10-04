@@ -427,6 +427,9 @@ def send_mail(to: str, subject: str, text: str) -> tuple[bool, str]:
         return False, f"{type(exc).__name__}: {exc}"
 
 
+TEAM_TRACKS = ("竞赛", "科研", "活动", "课程", "其他")
+
+
 def validate_team_post(raw: dict) -> dict:
     track = clean_text(raw.get("track"), "分类", maximum=20) or TEAM_TRACKS[0]
     if track not in TEAM_TRACKS:
