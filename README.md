@@ -20,15 +20,13 @@ python server.py create-invite          # 默认：班级成员身份，1 次有
 python server.py create-invite officer 5 班委
 ```
 
-注册还会校验邮箱域名，并在注册后发送一封 6 位验证码邮件：
+首次启动服务会将 `content.json` 的新闻、活动和课表导入 `var/class_site.sqlite3`。之后的后台修改保存在 SQLite 数据库中；修改 `content.json` 不会覆盖已有数据库内容。
+
+发信账号用于把「咨询合作」和「意见反馈」转发到班委邮箱，可以试发一封确认是否可用：
 
 ```powershell
-python server.py check-email student@example.edu.cn   # 只看域名能不能收信
 python server.py test-mail you@example.com            # 试发一封测试邮件
-python server.py verify-email student@example.edu.cn  # 收不到邮件时由管理员手动标记已验证
 ```
-
-首次启动服务会将 `content.json` 的新闻、活动和课表导入 `var/class_site.sqlite3`。之后的后台修改保存在 SQLite 数据库中；修改 `content.json` 不会覆盖已有数据库内容。
 
 ## 角色与权限
 
@@ -45,17 +43,7 @@ python server.py verify-email student@example.edu.cn  # 收不到邮件时由管
 
 服务端在注册接口里校验邀请码是否存在、是否被禁用、是否已用尽、是否过期，用尽次数在同一个事务内累加；每次注册都会在管理记录里留下 `register-invite:<备注>` 条目，便于核对是哪一批邀请码带来的账号。
 
-## 邮箱域名校验与邮箱验证
-
-注册时会先检查邮箱域名：命中一次性临时邮箱黑名单、不在允许域名列表内、或域名查不到收信记录（NXDOMAIN）都会被拒绝，用来拦住 `gmail.con` 这类拼写错误和随手编造的地址。域名查询优先用 `dnspython` 查 MX 记录（`requirements.txt` 已包含）；没有安装时回退到系统 `nslookup`，再不行才用地址解析。域名解析本身出错（超时、SERVFAIL）时按「本次放行」处理，避免 DNS 抖动导致全班无法注册。管理后台可切换为只记录不拦截，或完全关闭。
-
-真正证明「这个邮箱是本人的」靠 6 位验证码邮件：注册成功后自动发送，30 分钟内有效，只保存码的 SHA-256 哈希，最多尝试 5 次，重新发送会作废旧码。个人中心显示已验证 / 未验证，并可随时重新发送；后台「邀请码与验证」页面可设置三种要求：
-
-| 模式 | 行为 |
-|---|---|
-| `notify`（默认） | 注册后提示验证，不限制任何功能 |
-| `gate` | 未验证的账号不能下载公共资料 |
-| `off` | 关闭邮箱验证，不发信也不校验验证码 |
+## 邮件通知（发信配置）
 
 发信通过 SMTP，配置写在服务器的 `/etc/dmt-class-site.env`（绝不要提交到仓库）。一键写入并试发：`sudo bash deploy/setup-mail.sh`；各邮箱服务商的参数对照和说明见 `deploy/dmt-class-site.env.example`；只发测试邮件用 `sudo bash deploy/setup-mail.sh --test 你的邮箱`，查看当前配置用 `--show`。
 
@@ -70,7 +58,7 @@ SMTP_SENDER_NAME=DMT CLASS 01
 SMTP_SECURITY=ssl
 ```
 
-腾讯云、阿里云等主机默认封禁 25 端口，所以请用 465 或 587 提交端口，并使用邮件服务商或班级邮箱的授权码。自建发信需要配置 SPF/DKIM，否则容易被判为垃圾邮件；上线前先用后台的「发送测试邮件」或 `python server.py test-mail` 验证一次。学生收不到邮件时，管理员可以用 `python server.py verify-email 邮箱` 直接把该账号标记为已验证。
+腾讯云、阿里云等主机默认封禁 25 端口，所以请用 465 或 587 提交端口，并使用邮件服务商或班级邮箱的授权码。自建发信需要配置 SPF/DKIM，否则容易被判为垃圾邮件；上线前先用后台的「发送测试邮件」或 `python server.py test-mail` 验证一次。
 
 ## 组队大厅
 
@@ -100,6 +88,8 @@ AI_BASE_URL=https://api.deepseek.com
 ## 更新流程
 
 登录后打开「编辑后台」，可以发布双语新闻、活动、上传或删除公共资料并编辑周课表。公共资料模块支持班级成员浏览和下载 PDF、Office 文档、文本、ZIP 与常见图片；单个文件上限 25 MB。编辑课表时可修改学期第 1 周周一，网站会据此按北京时间重新计算当前周次。新闻图片需先放进 `assets` 目录，再在后台填写相对路径，例如 `assets/event-photo.jpg`。
+
+公共资料支持文件夹：班委及以上可以在「公共资料」页面点「＋ 新建文件夹」，点中某个文件夹后可以重命名或删除（删除文件夹不会删资料，里面的文件会回到「未归档」）。上传时可以在表单里选择「放入文件夹」，已经上传的资料也可以在「编辑后台 → 公共资料」的列表里用下拉框随时改所属文件夹。文件夹只有一层，不做嵌套。
 
 `content.json` 只在数据库第一次创建时用来灌入初始内容。网站已经在运行之后再往这个文件里加新闻是不生效的，线上读的一直是数据库。如果某次代码更新里带了新的新闻条目，用 `deploy/sync-news.py` 把它们补进数据库（默认只做检查，加 `--apply` 才真正写入，featured 的互斥规则和后台一致）：
 
@@ -147,7 +137,7 @@ sudo -u dmt-site env DMT_DB_PATH=/var/lib/dmt-class-site/class_site.sqlite3 \
 
 重置密码使用同一个数据库路径运行 `server.py reset-password 管理员邮箱`。不要把生产数据库复制进 GitHub。
 
-**开放前的待办**：完成备案；确认证书和 HTTPS；设置数据库备份；核对系统服务、防火墙和域名来源配置。内地服务器须在备案完成后才对公网开放网站。当前注册功能不发送邮箱验证或密码重置邮件，忘记密码由服务器管理员重置。
+**开放前的待办**：完成备案；确认证书和 HTTPS；设置数据库备份；核对系统服务、防火墙和域名来源配置。内地服务器须在备案完成后才对公网开放网站。注册不发送验证邮件，忘记密码由服务器管理员重置。
 
 ## 本地启动
 

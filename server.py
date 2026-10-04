@@ -58,18 +58,7 @@ AI_TIMEOUT = 60
 # 限流窗口（秒）。默认 15 分钟；同一个网络出口的同学会共用额度，所以阈值不能太小。
 RATE_WINDOW = int(os.environ.get("RATE_WINDOW", "900") or 900)
 AI_MAX_PROMPT = 6000
-EMAIL_VERIFICATION_MODES = ("off", "notify", "gate")
-EMAIL_DOMAIN_CHECK_MODES = ("strict", "warn", "off")
-EMAIL_CODE_TTL_MINUTES = 30
-EMAIL_CODE_MAX_ATTEMPTS = 5
-EMAIL_CACHE_TTL = 600
-EMAIL_CACHE: dict[str, tuple[float, tuple[str, str]]] = {}
-DISPOSABLE_DOMAINS = {
-    "mailinator.com", "10minutemail.com", "guerrillamail.com", "sharklasers.com", "tempmail.com",
-    "temp-mail.org", "yopmail.com", "trashmail.com", "disposablemail.com", "maildrop.cc",
-    "getnada.com", "fakeinbox.com", "mailnesia.com", "throwawaymail.com", "spam4.me",
-    "guerrillamailblock.com", "grr.la", "mailcatch.com", "mytemp.email", "tmpmail.org",
-}
+
 
 
 def connect() -> sqlite3.Connection:
@@ -116,6 +105,10 @@ def init_db() -> None:
           stored_name TEXT NOT NULL UNIQUE, mime_type TEXT NOT NULL, size INTEGER NOT NULL,
           uploaded_by TEXT REFERENCES users(id), created_at TEXT NOT NULL
         );
+        CREATE TABLE IF NOT EXISTS resource_folders (
+          id TEXT PRIMARY KEY, name TEXT NOT NULL,
+          created_by TEXT REFERENCES users(id), created_at TEXT NOT NULL
+        );
         CREATE TABLE IF NOT EXISTS invite_codes (
           id TEXT PRIMARY KEY, code TEXT NOT NULL UNIQUE, label TEXT NOT NULL DEFAULT '',
           role TEXT NOT NULL DEFAULT 'member' CHECK(role IN ('member','officer','counselor')),
@@ -157,6 +150,7 @@ def init_db() -> None:
         """)
         ensure_user_columns(con)
         ensure_feedback_columns(con)
+        ensure_resource_columns(con)
         seeded = con.execute("SELECT 1 FROM site_settings WHERE key='seed_version'").fetchone()
         if not seeded:
             seed = json.loads(SEED_PATH.read_text(encoding="utf-8"))
@@ -175,11 +169,13 @@ def init_db() -> None:
             seed = json.loads(SEED_PATH.read_text(encoding="utf-8"))
             con.execute("INSERT INTO site_settings(key,value,updated_at) VALUES('schedule',?,?)",
                         (json.dumps(seed["schedule"], ensure_ascii=False), utc_now()))
+        for key, value in (("site_notice", ""),):
+            if con.execute("SELECT 1 FROM site_settings WHERE key=?", (key,)).fetchone() is None:
+                con.execute("INSERT INTO site_settings(key,value,updated_at) VALUES(?,?,?)", (key, value, utc_now()))
         if con.execute("SELECT 1 FROM site_settings WHERE key='registration_mode'").fetchone() is None:
             con.execute("INSERT INTO site_settings(key,value,updated_at) VALUES('registration_mode',?,?)",
                         ("invite", utc_now()))
-        for key, value in (("email_verification", "notify"), ("email_domain_check", "strict"),
-                           ("email_allowed_domains", ""), ("site_notice", "")):
+
             if con.execute("SELECT 1 FROM site_settings WHERE key=?", (key,)).fetchone() is None:
                 con.execute("INSERT INTO site_settings(key,value,updated_at) VALUES(?,?,?)", (key, value, utc_now()))
 
@@ -210,6 +206,45 @@ def ensure_user_columns(con: sqlite3.Connection) -> None:
         con.execute("ALTER TABLE users ADD COLUMN failed_logins INTEGER NOT NULL DEFAULT 0")
     if "locked_until" not in columns:
         con.execute("ALTER TABLE users ADD COLUMN locked_until TEXT")
+
+
+def ensure_resource_columns(con: sqlite3.Connection) -> None:
+    """资源库的文件夹功能是后加的，老库需要补一列。"""
+    columns = {row["name"] for row in con.execute("PRAGMA table_info(resources)")}
+    if "folder_id" not in columns:
+        con.execute("ALTER TABLE resources ADD COLUMN folder_id TEXT")
+
+
+def list_folders() -> list[dict]:
+    """资料文件夹，附带每个文件夹里的资料数量。"""
+    init_db()
+    with connect() as con:
+        rows = con.execute(
+            "SELECT f.id,f.name,f.created_at,"
+            "(SELECT COUNT(*) FROM resources r WHERE r.folder_id=f.id) AS count "
+            "FROM resource_folders f ORDER BY f.name COLLATE NOCASE"
+        ).fetchall()
+    return [dict(row) for row in rows]
+
+
+def clean_folder_id(value: object) -> str | None:
+    """把前端传来的 folder_id 规范化；空值表示“不放入文件夹”。"""
+    if value is None:
+        return None
+    text = str(value).strip()
+    if not text:
+        return None
+    if not re.fullmatch(r"[0-9a-f-]{36}", text):
+        raise ValueError("文件夹不存在")
+    return text
+
+
+def folder_exists(folder_id: str | None) -> bool:
+    if not folder_id:
+        return True
+    init_db()
+    with connect() as con:
+        return con.execute("SELECT 1 FROM resource_folders WHERE id=?", (folder_id,)).fetchone() is not None
 
 
 ACCOUNT_TYPES = ("member", "visitor")
@@ -340,42 +375,8 @@ def set_setting(key: str, value: str) -> str:
     return value
 
 
-def email_verification_mode() -> str:
-    value = setting_value("email_verification", "notify").strip().lower()
-    return value if value in EMAIL_VERIFICATION_MODES else "notify"
-
-
-def set_email_verification_mode(mode: str) -> str:
-    if mode not in EMAIL_VERIFICATION_MODES:
-        raise ValueError("邮箱验证方式只能是 off、notify 或 gate")
-    return set_setting("email_verification", mode)
-
-
-def email_domain_check_mode() -> str:
-    value = os.environ.get("EMAIL_DOMAIN_CHECK", "").strip().lower() or setting_value("email_domain_check", "strict")
-    value = value.strip().lower()
-    return value if value in EMAIL_DOMAIN_CHECK_MODES else "strict"
-
-
-def set_email_domain_check_mode(mode: str) -> str:
-    if mode not in EMAIL_DOMAIN_CHECK_MODES:
-        raise ValueError("域名校验方式只能是 strict、warn 或 off")
-    return set_setting("email_domain_check", mode)
-
-
 def parse_domain_list(raw: object) -> list[str]:
     return [item.strip().lower().lstrip("@") for item in re.split(r"[,\s;]+", str(raw or "")) if item.strip()]
-
-
-def email_allowed_domains() -> list[str]:
-    raw = os.environ.get("EMAIL_ALLOWED_DOMAINS", "").strip() or setting_value("email_allowed_domains", "")
-    return parse_domain_list(raw)
-
-
-def set_email_allowed_domains(raw: object) -> list[str]:
-    domains = parse_domain_list(raw)
-    set_setting("email_allowed_domains", ", ".join(domains))
-    return domains
 
 
 def mailer_config() -> dict:
@@ -424,192 +425,6 @@ def send_mail(to: str, subject: str, text: str) -> tuple[bool, str]:
         return True, "已发送"
     except Exception as exc:  # network, auth, TLS and address problems all land here
         return False, f"{type(exc).__name__}: {exc}"
-
-
-def _nslookup_mx(domain: str) -> tuple[str, str]:
-    """Fallback MX lookup through the system nslookup binary."""
-    try:
-        proc = subprocess.run(["nslookup", "-type=mx", domain], capture_output=True, text=True, timeout=8)
-    except FileNotFoundError:
-        try:
-            proc = subprocess.run(["nslookup", "-query=mx", domain], capture_output=True, text=True, timeout=8)
-        except Exception:
-            return "", ""
-    except Exception:
-        return "", ""
-    output = f"{proc.stdout or ''}\n{proc.stderr or ''}"
-    lowered = output.lower()
-    if "non-existent domain" in lowered or "nxdomain" in lowered:
-        return "none", "域名不存在"
-    if "no answer" in lowered or "has no mx" in lowered or "no mx record" in lowered:
-        return "", ""  # 域名存在但没有 MX：交给 A/AAAA 解析再判断
-    if "can't find" in lowered:
-        return "none", "域名不存在"
-    hosts = re.findall(r"mail exchanger\s*=\s*([^\s]+)", output, re.I)
-    if hosts:
-        return "mx", ", ".join(host.rstrip(".") for host in hosts[:3])
-    return "", ""
-
-
-def _domain_verdict_uncached(domain: str) -> tuple[str, str]:
-    """Return ("mx"|"a"|"none"|"error", detail) for a mail domain."""
-    try:
-        import dns.resolver  # optional: strict MX lookups when dnspython is installed
-    except Exception:
-        resolver = None
-    else:
-        resolver = dns.resolver
-    if resolver is not None:
-        try:
-            records = resolver.resolve(domain, "MX", lifetime=8)
-            hosts = sorted(str(record.exchange).rstrip(".") for record in records)
-            if hosts:
-                return "mx", ", ".join(hosts[:3])
-        except resolver.NXDOMAIN:
-            return "none", "域名不存在"
-        except resolver.NoAnswer:
-            pass
-        except Exception as exc:
-            return "error", type(exc).__name__
-        for record_type in ("A", "AAAA"):
-            try:
-                resolver.resolve(domain, record_type, lifetime=8)
-                return "a", f"无 MX 记录，但存在 {record_type} 记录"
-            except resolver.NXDOMAIN:
-                return "none", "域名不存在"
-            except Exception:
-                continue
-        return "none", "没有可用的收信记录"
-    verdict, detail = _nslookup_mx(domain)
-    if verdict:
-        return verdict, detail
-    try:
-        socket_hosts = socket.getaddrinfo(domain, None)
-    except OSError:
-        return "none", "域名不存在"
-    except Exception as exc:
-        return "error", type(exc).__name__
-    return ("a", "仅有地址记录，未确认 MX") if socket_hosts else ("none", "域名不存在")
-
-
-def email_domain_verdict(domain: str) -> tuple[str, str]:
-    now = time.time()
-    cached = EMAIL_CACHE.get(domain)
-    if cached and cached[0] > now:
-        return cached[1]
-    verdict = _domain_verdict_uncached(domain)
-    EMAIL_CACHE[domain] = (now + EMAIL_CACHE_TTL, verdict)
-    return verdict
-
-
-def check_email_address(address: str) -> tuple[bool, str]:
-    """Validate the mail domain of an address. Returns (accepted, note)."""
-    domain = str(address or "").rsplit("@", 1)[-1].strip().lower().rstrip(".")
-    if not domain:
-        return False, "邮箱格式不正确。"
-    if domain in DISPOSABLE_DOMAINS:
-        return False, "不支持一次性临时邮箱，请使用常用邮箱注册。"
-    allowed = email_allowed_domains()
-    if allowed and not any(domain == item or domain.endswith("." + item) for item in allowed):
-        return False, "请使用学校邮箱注册（仅接受：" + "、".join(allowed) + "）。"
-    mode = email_domain_check_mode()
-    if mode == "off":
-        return True, ""
-    verdict, detail = email_domain_verdict(domain)
-    if verdict in ("mx", "a"):
-        return True, ""
-    if verdict == "error":
-        return True, f"域名校验未能完成（{detail}），本次先放行"
-    return False, "邮箱域名不存在或无法接收邮件，请检查是否输错（例如把 com 写成 con）。"
-
-
-def generate_email_code() -> str:
-    return f"{secrets.randbelow(1_000_000):06d}"
-
-
-def _email_code_hash(token_id: str, code: str) -> str:
-    return hashlib.sha256(f"{token_id}:{code}".encode()).hexdigest()
-
-
-def issue_email_code(user_id: str, purpose: str = "verify") -> str:
-    """Create a fresh 6-digit code for a user and invalidate earlier ones."""
-    code = generate_email_code()
-    token_id = str(uuid.uuid4())
-    expires = (datetime.now(timezone.utc) + timedelta(minutes=EMAIL_CODE_TTL_MINUTES)).isoformat(timespec="seconds")
-    init_db()
-    with connect() as con:
-        con.execute("UPDATE email_tokens SET used_at=? WHERE user_id=? AND purpose=? AND used_at IS NULL",
-                    (utc_now(), user_id, purpose))
-        con.execute("INSERT INTO email_tokens(id,user_id,purpose,code_hash,attempts,expires_at,used_at,created_at)"
-                    " VALUES(?,?,?,?,0,?,NULL,?)",
-                    (token_id, user_id, purpose, _email_code_hash(token_id, code), expires, utc_now()))
-    return code
-
-
-def confirm_email_code(email: str, code: str) -> tuple[bool, str, str | None]:
-    """Check a submitted code. Returns (ok, message, user_id)."""
-    address = str(email or "").strip().lower()
-    submitted = re.sub(r"\D", "", str(code or ""))
-    if not address or len(submitted) != 6:
-        return False, "请输入邮件里的 6 位验证码。", None
-    init_db()
-    with connect() as con:
-        user = con.execute("SELECT id,email FROM users WHERE email=?", (address,)).fetchone()
-        if not user:
-            return False, "验证码无效或已过期，请重新获取。", None
-        token = con.execute("SELECT * FROM email_tokens WHERE user_id=? AND purpose='verify' AND used_at IS NULL"
-                            " ORDER BY created_at DESC LIMIT 1", (user["id"],)).fetchone()
-        if not token:
-            return False, "还没有待验证的验证码，请先获取。", user["id"]
-        if token["expires_at"] <= utc_now():
-            return False, "验证码已过期，请重新获取。", user["id"]
-        if token["attempts"] >= EMAIL_CODE_MAX_ATTEMPTS:
-            return False, "尝试次数过多，请重新获取验证码。", user["id"]
-        if not hmac.compare_digest(_email_code_hash(token["id"], submitted), token["code_hash"]):
-            con.execute("UPDATE email_tokens SET attempts=attempts+1 WHERE id=?", (token["id"],))
-            return False, "验证码不正确。", user["id"]
-        now = utc_now()
-        con.execute("UPDATE email_tokens SET used_at=? WHERE user_id=? AND purpose='verify' AND used_at IS NULL",
-                    (now, user["id"]))
-        con.execute("UPDATE users SET email_verified=1,email_verified_at=? WHERE id=?", (now, user["id"]))
-    return True, "邮箱验证成功。", user["id"]
-
-
-def mark_email_verified(email: str) -> bool:
-    """Used by the CLI when a student cannot receive the code."""
-    address = str(email or "").strip().lower()
-    init_db()
-    with connect() as con:
-        cur = con.execute("UPDATE users SET email_verified=1,email_verified_at=? WHERE email=?", (utc_now(), address))
-        if cur.rowcount:
-            con.execute("UPDATE email_tokens SET used_at=? WHERE user_id=(SELECT id FROM users WHERE email=?)"
-                        " AND used_at IS NULL", (utc_now(), address))
-    return bool(cur.rowcount)
-
-
-def verification_email_text(email: str, code: str) -> tuple[str, str]:
-    origin = os.environ.get("SITE_ORIGIN", "").strip().rstrip("/")
-    subject = "DMT CLASS 01 邮箱验证码 / Email verification code"
-    lines = [
-        "你好，",
-        "",
-        f"你的验证码是：{code}",
-        f"有效期 {EMAIL_CODE_TTL_MINUTES} 分钟，请勿转发给他人。",
-        "",
-        f"Your verification code is {code}, valid for {EMAIL_CODE_TTL_MINUTES} minutes.",
-    ]
-    if origin:
-        lines += ["", f"DMT CLASS 01 网站 / Site: {origin}"]
-    lines += ["", "如果不是你本人操作，请忽略这封邮件。", "If you did not request this, you can safely ignore it."]
-    return subject, "\n".join(lines)
-
-
-def send_verification_email(email: str, code: str) -> tuple[bool, str]:
-    subject, text = verification_email_text(email, code)
-    return send_mail(email, subject, text)
-
-
-TEAM_TRACKS = ("竞赛", "科研", "活动", "课程", "其他")
 
 
 def validate_team_post(raw: dict) -> dict:
@@ -1187,7 +1002,6 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(200, {"ok": True})
         if path == "/api/config":
             return self.send_json(200, {"registration_mode": registration_mode(),
-                                        "email_verification": email_verification_mode(),
                                         "mailer_configured": mailer_configured()})
         if path == "/api/notifications":
             _, viewer = self.session()
@@ -1210,15 +1024,18 @@ class Handler(BaseHTTPRequestHandler):
             if not is_member(viewer):
                 return self.send_error_json(403, VISITOR_BLOCKED)
             with connect() as con:
-                rows = con.execute("SELECT id,title,description,category,original_name,mime_type,size,uploaded_by,created_at FROM resources ORDER BY created_at DESC").fetchall()
+                rows = con.execute("SELECT id,title,description,category,original_name,mime_type,size,uploaded_by,created_at,folder_id FROM resources ORDER BY created_at DESC").fetchall()
             return self.send_json(200, [dict(row) for row in rows])
+        if path == "/api/folders":
+            _, folder_viewer = self.session()
+            if not is_member(folder_viewer):
+                return self.send_error_json(403, VISITOR_BLOCKED)
+            return self.send_json(200, list_folders())
         match = re.fullmatch(r"/api/resources/([0-9a-f-]{36})/download", path)
         if match:
             _, download_user = self.session()
             if not is_member(download_user):
                 return self.send_error_json(403, VISITOR_BLOCKED)
-            if email_verification_mode() == "gate" and not (download_user and download_user["email_verified"]):
-                return self.send_error_json(403, "请先完成邮箱验证后再下载资料。")
             with connect() as con:
                 resource = con.execute("SELECT original_name,stored_name,mime_type FROM resources WHERE id=?", (match.group(1),)).fetchone()
             if not resource:
@@ -1256,9 +1073,6 @@ class Handler(BaseHTTPRequestHandler):
             if not user:
                 return
             return self.send_json(200, {"registration_mode": registration_mode(), "invites": invite_list(),
-                                        "email_verification": email_verification_mode(),
-                                        "email_domain_check": email_domain_check_mode(),
-                                        "email_allowed_domains": email_allowed_domains(),
                                         "mailer_configured": mailer_configured(),
                                         "roles": [{"value": r, "label": INVITE_ROLE_LABELS[r]} for r in INVITE_ROLES]})
         if path == "/api/team":
@@ -1358,7 +1172,7 @@ class Handler(BaseHTTPRequestHandler):
                         payload = part.get_payload(decode=True) or b""
                         if name == "file" and filename:
                             uploaded = (filename, payload)
-                        elif name in {"title", "description", "category"}:
+                        elif name in {"title", "description", "category", "folder_id"}:
                             fields[name] = payload.decode(part.get_content_charset() or "utf-8", errors="replace")
                 if not uploaded or not uploaded[1]:
                     raise ValueError("请选择要上传的文件")
@@ -1371,6 +1185,9 @@ class Handler(BaseHTTPRequestHandler):
                 title = clean_text(fields.get("title") or Path(original_name).stem, "资料名称", required=True, maximum=120)
                 description = clean_text(fields.get("description", ""), "资料说明", maximum=1000)
                 category = clean_text(fields.get("category", "班级共享"), "资料分类", maximum=60) or "班级共享"
+                folder_id = clean_folder_id(fields.get("folder_id"))
+                if not folder_exists(folder_id):
+                    raise ValueError("选定的文件夹不存在")
                 resource_id = str(uuid.uuid4())
                 stored_name = resource_id + suffix
                 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
@@ -1379,14 +1196,15 @@ class Handler(BaseHTTPRequestHandler):
                 created_at = utc_now()
                 try:
                     with connect() as con:
-                        con.execute("INSERT INTO resources(id,title,description,category,original_name,stored_name,mime_type,size,uploaded_by,created_at) VALUES(?,?,?,?,?,?,?,?,?,?)",
-                                    (resource_id, title, description, category, original_name, stored_name, mime_type, len(uploaded[1]), user["id"], created_at))
+                        con.execute("INSERT INTO resources(id,title,description,category,original_name,stored_name,mime_type,size,uploaded_by,created_at,folder_id) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                                    (resource_id, title, description, category, original_name, stored_name, mime_type, len(uploaded[1]), user["id"], created_at, folder_id))
                 except Exception:
                     (UPLOAD_DIR / stored_name).unlink(missing_ok=True)
                     raise
                 self.audit(user["id"], "upload", "resource", resource_id)
                 return self.send_json(201, {"id": resource_id, "title": title, "description": description, "category": category,
-                    "original_name": original_name, "mime_type": mime_type, "size": len(uploaded[1]), "uploaded_by": user["id"], "created_at": created_at})
+                    "original_name": original_name, "mime_type": mime_type, "size": len(uploaded[1]), "uploaded_by": user["id"], "created_at": created_at,
+                    "folder_id": folder_id})
             except (ValueError, UnicodeError) as exc:
                 return self.send_error_json(400, str(exc))
         if path == "/api/logout":
@@ -1412,63 +1230,24 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send_error_json(400, str(exc) or "邀请码参数不正确")
             self.audit(user["id"], "create-invite:" + invite["role"], "invite", invite["id"])
             return self.send_json(201, invite)
-        if path in ("/api/verify/request", "/api/verify/confirm", "/api/verify/test"):
-            if not self.require_origin():
+        if path == "/api/test-mail":
+            session, user = self.require_user({"admin"})
+            if not user or not self.check_csrf(session):
                 return
-            if path == "/api/verify/test":
-                session, user = self.require_user({"admin"})
-                if not user or not self.check_csrf(session):
-                    return
-                if self.limited("mail-test", 5):
-                    return self.send_error_json(429, "测试邮件发送过于频繁，请稍后再试")
-                try:
-                    raw = self.body()
-                except (ValueError, json.JSONDecodeError) as exc:
-                    return self.send_error_json(400, str(exc))
-                target = clean_text(raw.get("email"), "邮箱", required=True, maximum=254).lower()
-                if not valid_email(target):
-                    return self.send_error_json(400, "请输入有效邮箱")
-                sent, detail = send_mail(target, "DMT CLASS 01 测试邮件 / Test message",
-                                         "这是一封来自 DMT CLASS 01 班级网站的测试邮件。\n\n"
-                                         "If you received this message, the class site mailer works.")
-                self.audit(user["id"], "test-mail", "email", target)
-                return self.send_json(200, {"sent": sent, "detail": detail})
+            if self.limited("mail-test", 5):
+                return self.send_error_json(429, "测试邮件发送过于频繁，请稍后再试")
             try:
                 raw = self.body()
+                target = clean_text(raw.get("email"), "邮箱", required=True, maximum=254).lower()
             except (ValueError, json.JSONDecodeError) as exc:
                 return self.send_error_json(400, str(exc))
-            if path == "/api/verify/request":
-                if self.limited("verify-request", 20):
-                    return self.send_error_json(429, "操作太频繁，请 15 分钟后再试")
-                email = clean_text(raw.get("email"), "邮箱", required=True, maximum=254).lower()
-                if not valid_email(email):
-                    return self.send_error_json(400, "请输入有效邮箱")
-                with connect() as con:
-                    target_user = con.execute("SELECT id,email,email_verified FROM users WHERE email=?", (email,)).fetchone()
-                if not target_user:
-                    return self.send_json(200, {"ok": True, "sent": False})
-                if target_user["email_verified"]:
-                    return self.send_json(200, {"ok": True, "sent": False, "already_verified": True})
-                if email_verification_mode() == "off":
-                    return self.send_error_json(400, "当前未开启邮箱验证。")
-                if not mailer_configured():
-                    return self.send_error_json(503, "服务器尚未配置发信账号，请联系管理员。")
-                code = issue_email_code(target_user["id"])
-                sent, detail = send_verification_email(email, code)
-                self.audit(target_user["id"], "request-verify", "user", target_user["id"])
-                if not sent:
-                    print(f"[email] 重发验证码失败 {email}: {detail}", file=sys.stderr)
-                    return self.send_error_json(502, "验证码发送失败，请稍后重试或联系管理员。")
-                return self.send_json(200, {"ok": True, "sent": True, "expires_minutes": EMAIL_CODE_TTL_MINUTES})
-            if self.limited("verify-confirm", 40):
-                return self.send_error_json(429, "尝试次数过多，请 15 分钟后再试")
-            email = clean_text(raw.get("email"), "邮箱", required=True, maximum=254).lower()
-            ok, message, verified_user = confirm_email_code(email, raw.get("code"))
-            if not ok:
-                return self.send_error_json(400, message)
-            if verified_user:
-                self.audit(verified_user, "verify-email", "user", verified_user)
-            return self.send_json(200, {"ok": True, "message": message})
+            if not valid_email(target):
+                return self.send_error_json(400, "请输入有效邮箱")
+            sent, detail = send_mail(target, "DMT CLASS 01 测试邮件 / Test message",
+                                     "这是一封来自 DMT CLASS 01 班级网站的测试邮件。\n\n"
+                                     "If you received this message, the class site mailer works.")
+            self.audit(user["id"], "test-mail", "email", target)
+            return self.send_json(200, {"sent": sent, "detail": detail})
         if path == "/api/ai/polish":
             session, user = self.require_user()
             if not user or not self.check_csrf(session):
@@ -1597,11 +1376,6 @@ class Handler(BaseHTTPRequestHandler):
         password = raw.get("password", "")
         if not valid_email(email):
             return self.send_error_json(400, "请输入有效邮箱")
-        domain_ok, domain_note = check_email_address(email)
-        if not domain_ok:
-            return self.send_error_json(400, domain_note)
-        if domain_note:
-            print(f"[email] {email} 域名校验提示：{domain_note}", file=sys.stderr)
         if not isinstance(password, str) or len(password) < 12 or len(password) > 128:
             return self.send_error_json(400, "密码长度须为 12–128 个字符")
         account_type = str(raw.get("account_type") or "member").strip().lower()
@@ -1633,14 +1407,7 @@ class Handler(BaseHTTPRequestHandler):
         self.audit(user_id, "register", "user", user_id)
         if invite:
             self.audit(user_id, "register-invite:" + (invite["label"] or "未命名邀请码"), "invite", invite["id"])
-        extra: dict = {}
-        if email_verification_mode() != "off":
-            code = issue_email_code(user_id)
-            sent, detail = send_verification_email(email, code)
-            extra["email_verification"] = "sent" if sent else "failed"
-            if not sent:
-                print(f"[email] 向 {email} 发送验证码失败：{detail}", file=sys.stderr)
-        return self.create_session(user_id, extra)
+        return self.create_session(user_id)
 
     def login(self, raw: dict) -> None:
         email = clean_text(raw.get("email"), "邮箱", required=True, maximum=254).lower()
@@ -1685,6 +1452,15 @@ class Handler(BaseHTTPRequestHandler):
     def handle_editor_post(self, path: str, user: sqlite3.Row) -> None:
         try:
             raw = self.body()
+            if path == "/api/folders":
+                name = clean_text(raw.get("name"), "文件夹名称", required=True, maximum=60)
+                folder_id = str(uuid.uuid4())
+                created_at = utc_now()
+                with connect() as con:
+                    con.execute("INSERT INTO resource_folders(id,name,created_by,created_at) VALUES(?,?,?,?)",
+                                (folder_id, name, user["id"], created_at))
+                self.audit(user["id"], "create", "folder", folder_id)
+                return self.send_json(201, {"id": folder_id, "name": name, "created_at": created_at, "count": 0})
             if path == "/api/news":
                 item = validate_news(raw)
                 item_id = str(uuid.uuid4())
@@ -1753,24 +1529,40 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_PATCH(self) -> None:
         path = unquote(urlparse(self.path).path)
-        if path == "/api/email-verification":
-            session, user = self.require_user({"admin"})
-            if not user or not self.check_csrf(session):
+        folder_patch = re.fullmatch(r"/api/folders/([0-9a-f-]{36})", path)
+        if folder_patch:
+            session, staff = self.require_user(CONTENT_ROLES)
+            if not staff or not self.check_csrf(session):
                 return
             try:
                 raw = self.body()
-                mode = set_email_verification_mode(str(raw.get("mode", "")).strip().lower())
-                if "domain_check" in raw:
-                    set_email_domain_check_mode(str(raw.get("domain_check", "")).strip().lower())
-                if "domains" in raw:
-                    set_email_allowed_domains(raw.get("domains"))
+                name = clean_text(raw.get("name"), "文件夹名称", required=True, maximum=60)
             except (ValueError, json.JSONDecodeError) as exc:
                 return self.send_error_json(400, str(exc))
-            self.audit(user["id"], "set-email-verification:" + mode, "setting", "email_verification")
-            return self.send_json(200, {"email_verification": mode,
-                                        "email_domain_check": email_domain_check_mode(),
-                                        "email_allowed_domains": email_allowed_domains(),
-                                        "mailer_configured": mailer_configured()})
+            with connect() as con:
+                cur = con.execute("UPDATE resource_folders SET name=? WHERE id=?", (name, folder_patch.group(1)))
+            if not cur.rowcount:
+                return self.send_error_json(404, "文件夹不存在")
+            self.audit(staff["id"], "rename", "folder", folder_patch.group(1))
+            return self.send_json(200, {"id": folder_patch.group(1), "name": name})
+        resource_patch = re.fullmatch(r"/api/resources/([0-9a-f-]{36})", path)
+        if resource_patch:
+            session, staff = self.require_user(CONTENT_ROLES)
+            if not staff or not self.check_csrf(session):
+                return
+            try:
+                raw = self.body()
+                folder_id = clean_folder_id(raw.get("folder_id"))
+                if not folder_exists(folder_id):
+                    raise ValueError("选定的文件夹不存在")
+            except (ValueError, json.JSONDecodeError) as exc:
+                return self.send_error_json(400, str(exc))
+            with connect() as con:
+                cur = con.execute("UPDATE resources SET folder_id=? WHERE id=?", (folder_id, resource_patch.group(1)))
+            if not cur.rowcount:
+                return self.send_error_json(404, "资料不存在")
+            self.audit(staff["id"], "move", "resource", resource_patch.group(1))
+            return self.send_json(200, {"id": resource_patch.group(1), "folder_id": folder_id})
         if path == "/api/site-notice":
             session, user = self.require_user({"admin"})
             if not user or not self.check_csrf(session):
@@ -1920,6 +1712,17 @@ class Handler(BaseHTTPRequestHandler):
         session, user = self.require_user(CONTENT_ROLES)
         if not user or not self.check_csrf(session):
             return
+        folder_match = re.fullmatch(r"/api/folders/([0-9a-f-]{36})", path)
+        if folder_match:
+            folder_id = folder_match.group(1)
+            with connect() as con:
+                exists = con.execute("SELECT 1 FROM resource_folders WHERE id=?", (folder_id,)).fetchone()
+                if not exists:
+                    return self.send_error_json(404, "文件夹不存在")
+                con.execute("UPDATE resources SET folder_id=NULL WHERE folder_id=?", (folder_id,))
+                con.execute("DELETE FROM resource_folders WHERE id=?", (folder_id,))
+            self.audit(user["id"], "delete", "folder", folder_id)
+            return self.send_json(200, {"ok": True})
         resource_match = re.fullmatch(r"/api/resources/([0-9a-f-]{36})", path)
         if resource_match:
             resource_id = resource_match.group(1)
@@ -2099,19 +1902,11 @@ if __name__ == "__main__":
         print("请把这个邀请码发给本班同学、班委或导员；管理员后台可随时查看或删除。")
     elif len(sys.argv) > 2 and sys.argv[1] == "reset-password":
         reset_password(sys.argv[2])
-    elif len(sys.argv) > 2 and sys.argv[1] == "check-email":
-        address = sys.argv[2].strip().lower()
-        verdict, detail = email_domain_verdict(address.rsplit("@", 1)[-1].strip().lower())
-        ok, note = check_email_address(address)
-        print(f"域名记录：{verdict}（{detail}）")
-        print(f"结论：{'可以通过注册校验' if ok else '会被拒绝'}{'（' + note + '）' if note else ''}")
     elif len(sys.argv) > 2 and sys.argv[1] == "test-mail":
         sent, detail = send_mail(sys.argv[2], "DMT CLASS 01 测试邮件 / Test message",
                                  "这是一封来自 DMT CLASS 01 班级网站的测试邮件。\n\n"
                                  "If you received this message, the class site mailer works.")
         print(("发送成功：" if sent else "发送失败：") + detail)
-    elif len(sys.argv) > 2 and sys.argv[1] == "verify-email":
-        print("已标记为已验证。" if mark_email_verified(sys.argv[2]) else "未找到该邮箱对应的账号。")
     elif len(sys.argv) > 2 and sys.argv[1] == "unlock-user":
         print("已解除登录锁定。" if unlock_account(sys.argv[2]) else "未找到该邮箱对应的账号。")
     elif len(sys.argv) > 2 and sys.argv[1] == "delete-user":

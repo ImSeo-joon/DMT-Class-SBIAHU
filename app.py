@@ -173,7 +173,6 @@ def health():
 @app.get("/api/config")
 def site_config():
     return jsonify({"registration_mode": core.registration_mode(),
-                    "email_verification": core.email_verification_mode(),
                     "mailer_configured": core.mailer_configured()})
 
 
@@ -205,8 +204,16 @@ def resources():
     if not core.is_member(viewer):
         return api_error(403, core.VISITOR_BLOCKED)
     with core.connect() as con:
-        rows = con.execute("SELECT id,title,description,category,original_name,mime_type,size,uploaded_by,created_at FROM resources ORDER BY created_at DESC").fetchall()
+        rows = con.execute("SELECT id,title,description,category,original_name,mime_type,size,uploaded_by,created_at,folder_id FROM resources ORDER BY created_at DESC").fetchall()
     return jsonify([dict(row) for row in rows])
+
+
+@app.get("/api/folders")
+def folders():
+    _, viewer = get_session()
+    if not core.is_member(viewer):
+        return api_error(403, core.VISITOR_BLOCKED)
+    return jsonify(core.list_folders())
 
 
 @app.get("/api/resources/<resource_id>/download")
@@ -214,8 +221,6 @@ def download_resource(resource_id):
     _, download_user = get_session()
     if not core.is_member(download_user):
         return api_error(403, core.VISITOR_BLOCKED)
-    if core.email_verification_mode() == "gate" and not (download_user and download_user["email_verified"]):
-        return api_error(403, "请先完成邮箱验证后再下载资料。")
     with core.connect() as con:
         item = con.execute("SELECT original_name,stored_name FROM resources WHERE id=?", (resource_id,)).fetchone()
     if not item:
@@ -318,9 +323,6 @@ def invites():
     if error:
         return error
     return jsonify({"registration_mode": core.registration_mode(), "invites": core.invite_list(),
-                    "email_verification": core.email_verification_mode(),
-                    "email_domain_check": core.email_domain_check_mode(),
-                    "email_allowed_domains": core.email_allowed_domains(),
                     "mailer_configured": core.mailer_configured(),
                     "roles": [{"value": r, "label": core.INVITE_ROLE_LABELS[r]} for r in core.INVITE_ROLES]})
 
@@ -410,11 +412,6 @@ def register():
         password = raw.get("password", "")
         if not core.valid_email(email):
             return api_error(400, "请输入有效邮箱")
-        domain_ok, domain_note = core.check_email_address(email)
-        if not domain_ok:
-            return api_error(400, domain_note)
-        if domain_note:
-            print(f"[email] {email} 域名校验提示：{domain_note}", file=sys.stderr)
         if not isinstance(password, str) or len(password) < 12 or len(password) > 128:
             return api_error(400, "密码长度须为 12–128 个字符")
     except Exception as exc:
@@ -448,14 +445,7 @@ def register():
     audit(user_id, "register", "user", user_id)
     if invite:
         audit(user_id, "register-invite:" + (invite["label"] or "未命名邀请码"), "invite", invite["id"])
-    extra: dict = {}
-    if core.email_verification_mode() != "off":
-        code = core.issue_email_code(user_id)
-        sent, detail = core.send_verification_email(email, code)
-        extra["email_verification"] = "sent" if sent else "failed"
-        if not sent:
-            print(f"[email] 向 {email} 发送验证码失败：{detail}", file=sys.stderr)
-    return new_session(user_id, extra)
+    return new_session(user_id)
 
 
 @app.post("/api/login")
@@ -508,59 +498,7 @@ def create_invite_route():
     return jsonify(invite), 201
 
 
-@app.post("/api/verify/request")
-def verify_request():
-    error = require_origin()
-    if error:
-        return error
-    if limited("verify-request", 20):
-        return api_error(429, "操作太频繁，请 15 分钟后再试")
-    try:
-        email = core.clean_text(body().get("email"), "邮箱", required=True, maximum=254).lower()
-    except Exception as exc:
-        return api_error(400, str(exc) or "请求格式不正确")
-    if not core.valid_email(email):
-        return api_error(400, "请输入有效邮箱")
-    with core.connect() as con:
-        target = con.execute("SELECT id,email,email_verified FROM users WHERE email=?", (email,)).fetchone()
-    if not target:
-        return jsonify({"ok": True, "sent": False})
-    if target["email_verified"]:
-        return jsonify({"ok": True, "sent": False, "already_verified": True})
-    if core.email_verification_mode() == "off":
-        return api_error(400, "当前未开启邮箱验证。")
-    if not core.mailer_configured():
-        return api_error(503, "服务器尚未配置发信账号，请联系管理员。")
-    code = core.issue_email_code(target["id"])
-    sent, detail = core.send_verification_email(email, code)
-    audit(target["id"], "request-verify", "user", target["id"])
-    if not sent:
-        print(f"[email] 重发验证码失败 {email}: {detail}", file=sys.stderr)
-        return api_error(502, "验证码发送失败，请稍后重试或联系管理员。")
-    return jsonify({"ok": True, "sent": True, "expires_minutes": core.EMAIL_CODE_TTL_MINUTES})
-
-
-@app.post("/api/verify/confirm")
-def verify_confirm():
-    error = require_origin()
-    if error:
-        return error
-    if limited("verify-confirm", 40):
-        return api_error(429, "尝试次数过多，请 15 分钟后再试")
-    try:
-        raw = body()
-        email = core.clean_text(raw.get("email"), "邮箱", required=True, maximum=254).lower()
-    except Exception as exc:
-        return api_error(400, str(exc) or "请求格式不正确")
-    ok, message, verified_user = core.confirm_email_code(email, raw.get("code"))
-    if not ok:
-        return api_error(400, message)
-    if verified_user:
-        audit(verified_user, "verify-email", "user", verified_user)
-    return jsonify({"ok": True, "message": message})
-
-
-@app.post("/api/verify/test")
+@app.post("/api/test-mail")
 def verify_test():
     session, user, error = require_user({"admin"})
     if error:
@@ -662,6 +600,9 @@ def upload_resource():
                                 "资料名称", required=True, maximum=120)
         description = core.clean_text(request.form.get("description", ""), "资料说明", maximum=1000)
         category = core.clean_text(request.form.get("category", "班级共享"), "资料分类", maximum=60) or "班级共享"
+        folder_id = core.clean_folder_id(request.form.get("folder_id"))
+        if not core.folder_exists(folder_id):
+            raise ValueError("选定的文件夹不存在")
     except ValueError as exc:
         return api_error(400, str(exc))
     resource_id = str(uuid.uuid4())
@@ -672,16 +613,16 @@ def upload_resource():
     created_at = core.utc_now()
     try:
         with core.connect() as con:
-            con.execute("INSERT INTO resources(id,title,description,category,original_name,stored_name,mime_type,size,uploaded_by,created_at) VALUES(?,?,?,?,?,?,?,?,?,?)",
+            con.execute("INSERT INTO resources(id,title,description,category,original_name,stored_name,mime_type,size,uploaded_by,created_at,folder_id) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
                         (resource_id, title, description, category, original_name, stored_name,
-                         mime_type, len(data), user["id"], created_at))
+                         mime_type, len(data), user["id"], created_at, folder_id))
     except Exception:
         (core.UPLOAD_DIR / stored_name).unlink(missing_ok=True)
         raise
     audit(user["id"], "upload", "resource", resource_id)
     return jsonify({"id": resource_id, "title": title, "description": description, "category": category,
                     "original_name": original_name, "mime_type": mime_type, "size": len(data),
-                    "uploaded_by": user["id"], "created_at": created_at}), 201
+                    "uploaded_by": user["id"], "created_at": created_at, "folder_id": folder_id}), 201
 
 
 @app.post("/api/logout")
@@ -703,6 +644,15 @@ def logout():
 def editor_post(path: str, user):
     try:
         raw = body()
+        if path == "/api/folders":
+            name = core.clean_text(raw.get("name"), "文件夹名称", required=True, maximum=60)
+            folder_id = str(uuid.uuid4())
+            created_at = core.utc_now()
+            with core.connect() as con:
+                con.execute("INSERT INTO resource_folders(id,name,created_by,created_at) VALUES(?,?,?,?)",
+                            (folder_id, name, user["id"], created_at))
+            audit(user["id"], "create", "folder", folder_id)
+            return jsonify({"id": folder_id, "name": name, "created_at": created_at, "count": 0}), 201
         if path == "/api/news":
             item = core.validate_news(raw)
             item_id = str(uuid.uuid4())
@@ -894,29 +844,6 @@ def update_registration_mode():
     return jsonify({"registration_mode": mode})
 
 
-@app.patch("/api/email-verification")
-def update_email_verification():
-    session, user, error = require_user({"admin"})
-    if error:
-        return error
-    if not check_write(session):
-        return csrf_error()
-    try:
-        raw = body()
-        mode = core.set_email_verification_mode(str(raw.get("mode", "")).strip().lower())
-        if "domain_check" in raw:
-            core.set_email_domain_check_mode(str(raw.get("domain_check", "")).strip().lower())
-        if "domains" in raw:
-            core.set_email_allowed_domains(raw.get("domains"))
-    except (ValueError, TypeError) as exc:
-        return api_error(400, str(exc) or "参数不正确")
-    audit(user["id"], "set-email-verification:" + mode, "setting", "email_verification")
-    return jsonify({"email_verification": mode,
-                    "email_domain_check": core.email_domain_check_mode(),
-                    "email_allowed_domains": core.email_allowed_domains(),
-                    "mailer_configured": core.mailer_configured()})
-
-
 @app.patch("/api/users/<target_id>")
 def update_role(target_id):
     session, user, error = require_user({"admin"})
@@ -940,6 +867,46 @@ def update_role(target_id):
         con.execute("UPDATE users SET role=? WHERE id=?", (role, target_id))
     audit(user["id"], "set-role:" + role, "user", target_id)
     return jsonify({"id": target_id, "role": role, "role_label": core.ROLE_LABELS[role]})
+
+
+@app.patch("/api/folders/<folder_id>")
+def rename_folder(folder_id):
+    session, user, error = require_user(core.CONTENT_ROLES)
+    if error:
+        return error
+    if not check_write(session):
+        return csrf_error()
+    try:
+        name = core.clean_text(body().get("name"), "文件夹名称", required=True, maximum=60)
+    except Exception as exc:
+        return api_error(400, str(exc))
+    with core.connect() as con:
+        cur = con.execute("UPDATE resource_folders SET name=? WHERE id=?", (name, folder_id))
+    if not cur.rowcount:
+        return api_error(404, "文件夹不存在")
+    audit(user["id"], "rename", "folder", folder_id)
+    return jsonify({"id": folder_id, "name": name})
+
+
+@app.patch("/api/resources/<resource_id>")
+def move_resource(resource_id):
+    session, user, error = require_user(core.CONTENT_ROLES)
+    if error:
+        return error
+    if not check_write(session):
+        return csrf_error()
+    try:
+        folder_id = core.clean_folder_id(body().get("folder_id"))
+        if not core.folder_exists(folder_id):
+            raise ValueError("选定的文件夹不存在")
+    except Exception as exc:
+        return api_error(400, str(exc))
+    with core.connect() as con:
+        cur = con.execute("UPDATE resources SET folder_id=? WHERE id=?", (folder_id, resource_id))
+    if not cur.rowcount:
+        return api_error(404, "资料不存在")
+    audit(user["id"], "move", "resource", resource_id)
+    return jsonify({"id": resource_id, "folder_id": folder_id})
 
 
 @app.delete("/api/users/<user_id>")
@@ -987,6 +954,20 @@ def delete_item(table, item_id):
         if not cur.rowcount:
             return api_error(404, "邀请码不存在")
         audit(user["id"], "delete", "invite", item_id)
+        return jsonify({"ok": True})
+    if table == "folders":
+        session, user, error = require_user(core.CONTENT_ROLES)
+        if error:
+            return error
+        if not check_write(session):
+            return csrf_error()
+        with core.connect() as con:
+            exists = con.execute("SELECT 1 FROM resource_folders WHERE id=?", (item_id,)).fetchone()
+            if not exists:
+                return api_error(404, "文件夹不存在")
+            con.execute("UPDATE resources SET folder_id=NULL WHERE folder_id=?", (item_id,))
+            con.execute("DELETE FROM resource_folders WHERE id=?", (item_id,))
+        audit(user["id"], "delete", "folder", item_id)
         return jsonify({"ok": True})
     if table not in ("news", "events", "resources"):
         return api_error(404, "找不到此接口")
