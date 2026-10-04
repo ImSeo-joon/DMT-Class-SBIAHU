@@ -7,7 +7,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Serif+SC:wght@400;500;600;700&display=swap');
 :root{--bg:#f6f5f0;--ink:#14251f;--muted:#748079;--green:#b9f36b;--line:#dfe2d9;--dark:#172c25;--paper:#fffefa;--orange:#f1845c}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Manrope,'Noto Sans SC',sans-serif}a{color:inherit;text-decoration:none}button{font:inherit}.wrap{max-width:1220px;margin:auto;padding:0 36px}.mono{font-family:'DM Mono',monospace;letter-spacing:.06em}.nav{height:82px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:14px;letter-spacing:.02em}.mark{height:35px;width:35px;border-radius:50%;background:var(--green);display:grid;place-items:center;font-size:11px;font-weight:900}.links{display:flex;gap:32px;color:#5d6962;font-size:13px}.links a:hover{color:#14251f}.nav-right{display:flex;align-items:center;gap:10px;font-size:12px}.status-dot{height:8px;width:8px;border-radius:50%;background:#62ba69;box-shadow:0 0 0 4px #62ba6920}.menu{display:none;border:0;background:none;font-size:23px}.hero{padding:66px 0 54px;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}.eyebrow{font-size:11px;color:#758079;display:flex;align-items:center;gap:10px}.eyebrow:before{content:'';width:23px;height:1px;background:#829188}.hero h1{font-size:clamp(48px,7.4vw,91px);line-height:.99;letter-spacing:-.07em;margin:25px 0 21px;font-weight:800}.hero h1 span{color:#87928b}.hero p{max-width:510px;color:#64716a;line-height:1.85;font-size:14px;margin:0}.actions{display:flex;gap:12px;margin-top:27px}.btn{border:1px solid var(--ink);border-radius:3px;padding:13px 18px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:12px;transition:.2s}.btn.primary{background:var(--ink);color:white}.btn:hover{transform:translateY(-2px)}.btn.secondary{border-color:var(--line);background:transparent}.hero-art{min-height:340px;background:var(--dark);border-radius:4px;position:relative;overflow:hidden;padding:25px;color:white}.art-top{display:flex;justify-content:space-between;font-size:10px;color:#a3b5ab}.orbit{position:absolute;width:255px;height:255px;border:1px solid #557165;border-radius:50%;left:50%;top:53%;transform:translate(-50%,-50%)}.orbit:before,.orbit:after{content:'';position:absolute;border:1px solid #557165;border-radius:50%;inset:29px}.orbit:after{inset:67px}.core{position:absolute;left:50%;top:53%;transform:translate(-50%,-50%);height:88px;width:88px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:var(--ink);font-size:21px;font-weight:900;letter-spacing:-2px;box-shadow:0 0 58px #b9f36b55}.sat{position:absolute;width:13px;height:13px;border-radius:50%;background:var(--orange);left:calc(50% + 112px);top:calc(53% - 83px);box-shadow:0 0 20px #f1845c}.sat2{background:#e6e9df;left:calc(50% - 117px);top:calc(53% + 43px);width:8px;height:8px}.art-bottom{position:absolute;bottom:21px;left:25px;right:25px;display:flex;justify-content:space-between;color:#a3b5ab;font-size:10px}.strip{background:var(--green);padding:14px 0;overflow:hidden;white-space:nowrap}.strip-in{display:flex;justify-content:space-between;gap:25px;font-size:10px;font-weight:700;letter-spacing:.08em}.strip span{display:flex;align-items:center;gap:25px}.strip i{height:5px;width:5px;border-radius:50%;background:#48602f}.section{padding:83px 0}.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:27px}.kicker{color:#7a867f;font-size:10px;letter-spacing:.11em}.section h2{font-size:36px;letter-spacing:-.05em;margin:9px 0 0}.text-link{font-size:12px;border-bottom:1px solid #7a867f;padding-bottom:6px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.card{background:var(--paper);padding:23px;border:1px solid var(--line);min-height:235px;display:flex;flex-direction:column;transition:.2s}.card:hover{transform:translateY(-4px);border-color:#a2b294}.card-top{display:flex;justify-content:space-between;align-items:center}.tag{font-size:10px;padding:6px 9px;background:#eff3e9;color:#56654d;border-radius:2px}.arrow{font-size:18px;color:#849087}.card h3{font-size:19px;letter-spacing:-.04em;margin:29px 0 9px}.card p{font-size:12px;line-height:1.8;color:#718078;margin:0}.card-foot{margin-top:auto;padding-top:23px;display:flex;justify-content:space-between;font-size:10px;color:#929b95}.split{display:grid;grid-template-columns:1fr 1fr;gap:65px;align-items:center}.schedule{background:var(--dark);color:white;padding:30px;border-radius:4px}.schedule-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.schedule h3{font-size:19px;margin:0}.week{font-size:10px;color:#b9f36b}.class-row{display:grid;grid-template-columns:54px 1fr auto;gap:13px;align-items:center;padding:15px 0;border-top:1px solid #ffffff20}.class-time{font-size:10px;color:#9daf9f}.class-name{font-size:13px;font-weight:600}.class-meta{font-size:10px;color:#9daf9f;margin-top:5px}.class-type{font-size:9px;color:#b9f36b}.calendar{padding:8px 0}.calendar h2{margin-bottom:12px}.calendar>p{color:#68756e;font-size:13px;line-height:1.8;max-width:450px}.event{display:grid;grid-template-columns:48px 1fr auto;gap:13px;padding:17px 0;border-top:1px solid var(--line);align-items:center}.date{font-size:10px;color:#78847c}.event-title{font-size:12px;font-weight:700}.event-type{font-size:9px;color:#7b8780;margin-top:4px}.event-go{font-size:16px;color:#89948c}.cta{background:var(--green);padding:35px;display:flex;justify-content:space-between;align-items:center;margin-top:20px}.cta h3{font-size:25px;letter-spacing:-.05em;margin:0}.cta p{font-size:12px;color:#56684b;margin:7px 0 0}.cta .btn{background:var(--ink);color:white;border-color:var(--ink)}footer{padding:27px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:#78847d;font-size:10px}.footer-brand{font-weight:800;color:var(--ink);font-size:12px}.filters{display:flex;gap:7px}.filter{cursor:pointer;border:1px solid var(--line);background:transparent;padding:7px 11px;font-size:10px;color:#78847d}.filter.active{background:var(--ink);color:#fff;border-color:var(--ink)}.toast{position:fixed;bottom:25px;left:50%;transform:translate(-50%,20px);background:var(--dark);color:white;padding:12px 18px;font-size:12px;opacity:0;transition:.25s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:760px){.wrap{padding:0 20px}.nav{height:68px}.links,.nav-right{display:none}.menu{display:block}.hero{padding:49px 0 35px;grid-template-columns:1fr;gap:29px}.hero h1{font-size:57px}.hero-art{min-height:285px}.strip-in{justify-content:flex-start;width:max-content;animation:scroll 22s linear infinite}@keyframes scroll{to{transform:translateX(-40%)}}.section{padding:60px 0}.section h2{font-size:30px}.cards{grid-template-columns:1fr}.card{min-height:195px}.split{grid-template-columns:1fr;gap:42px}.section-head{align-items:start;gap:15px}.filters{flex-wrap:wrap;justify-content:flex-end}.cta{padding:25px;gap:20px;align-items:flex-start;flex-direction:column}.cta h3{font-size:22px}footer{gap:15px;flex-wrap:wrap}.class-row{grid-template-columns:47px 1fr auto}}
 .links{gap:20px;font-size:12px}.links.show{display:flex;position:absolute;z-index:8;right:20px;top:62px;padding:18px;background:var(--paper);border:1px solid var(--line);flex-direction:column;gap:18px}.page{display:none;min-height:65vh}.page.active{display:block}.page-intro{padding:54px 0 26px}.page-intro h1{font-size:48px;letter-spacing:-.06em;margin:10px 0}.page-intro p{color:#68756e;font-size:13px}.weekbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:22px 0}.weekbar button,.weekbar select{border:1px solid var(--line);background:var(--paper);padding:10px 13px;color:var(--ink);cursor:pointer}.weekbar .current-week{background:var(--green);border-color:var(--green);font-weight:700}.week-label{font-weight:800;margin:0 7px}.week-note{font-size:11px;color:#79857e}.table-wrap{overflow-x:auto;background:var(--paper);border:1px solid var(--line)}.timetable{width:100%;border-collapse:collapse;min-width:760px}.timetable th,.timetable td{border:1px solid var(--line);padding:10px;vertical-align:top}.timetable th{background:#eef1e9;text-align:left;font-size:11px}.timetable td{height:85px;width:13%}.timetable .period{width:8%;font-size:10px;color:#738078;text-align:center}.lesson{background:#edf4e6;border-left:3px solid #82b65d;padding:8px;margin:3px 0;border-radius:2px}.lesson strong{font-size:11px;display:block;line-height:1.5}.lesson small{font-size:9px;color:#65736b}.empty-day{color:#ccd1c9;font-size:10px}.table-foot{padding:14px;font-size:10px;color:#7c8781}.page-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding-bottom:70px}.page-card{background:var(--paper);border:1px solid var(--line);padding:24px;min-height:180px}.page-card h3{font-size:18px;margin:16px 0 7px}.page-card p{font-size:12px;line-height:1.8;color:#758078}.page-card button{margin-top:10px;background:none;border:0;border-bottom:1px solid var(--ink);padding:0 0 5px;cursor:pointer;font-size:11px}.form{max-width:600px;display:grid;gap:12px;margin:25px 0 75px}.form input,.form textarea,.form select{padding:13px;border:1px solid var(--line);background:var(--paper);font:inherit;font-size:12px}.form textarea{min-height:110px}.form button{justify-self:start;cursor:pointer}.home-only{}
@@ -3098,4 +3098,162 @@ const CN_GENRES=[
   acShowTab=function(name){origShowTab(name);if(name==='messages')mailboxLoad()};
 })();
 </script>
+<style id="oil-painting">
+/* ==========================================================================
+   旧时法国油画皮肤 · Old French oil-painting skin
+   思路：配色一个都没改（米白 #f6f5f0 / 暗红 #a51c30 / 墨绿 #14251f / 陈金 #c6a15a），
+   只在最上层叠四样东西——暖色罩染、帆布经纬、陈年清漆颗粒、四边暗角；
+   再把卡片做成细金画框、标题换成衬线体、照片罩一层淡光油。
+   想关掉：删掉整个 <style id="oil-painting"> 块即可，下面没有任何 JS 依赖。
+   ========================================================================== */
+:root{
+  --oil-royal:rgba(58,74,140,.26);
+  --oil-gilt:rgba(178,140,72,.5);
+  --oil-gilt-soft:rgba(206,170,96,.34);
+  --oil-umber:rgba(70,58,96,.45);
+  --oil-serif:"Cormorant Garamond","EB Garamond",Georgia,"Palatino Linotype","Book Antiqua","Times New Roman","Noto Serif SC","Source Han Serif SC","Songti SC",SimSun,serif;
+  --oil-serif-text:Georgia,"Palatino Linotype","Book Antiqua","Times New Roman","Noto Serif SC","Songti SC",SimSun,serif;
+  --oil-gilt-warm:#c6a15a;
+}
+
+/* 1 · 底色：米白作画布，四角罩上印象派的玫瑰 / 长春花蓝 / 灰绿 / 金，中间留亮
+       —— 影子一律用紫蓝，不用棕，这是法国印象派和荷兰老画最直观的区别 */
+body{
+  background-color:var(--bg);
+  background-image:
+    linear-gradient(180deg, rgba(246,245,240,0) 0%, rgba(246,245,240,.5) 56%, rgba(246,245,240,.94) 100%),
+    linear-gradient(100deg, rgba(242,174,198,.30), rgba(120,148,222,.27) 34%, rgba(224,180,94,.25) 66%, rgba(116,168,144,.27)),
+    radial-gradient(56% 44% at 2% -2%, rgba(242,174,198,.3), rgba(242,174,198,0) 72%),
+    radial-gradient(50% 40% at 100% 3%, rgba(120,148,222,.28), rgba(120,148,222,0) 74%),
+    radial-gradient(52% 42% at 95% 95%, rgba(224,180,94,.26), rgba(224,180,94,0) 76%),
+    radial-gradient(74% 54% at 28% 106%, rgba(116,168,144,.26), rgba(116,168,144,0) 78%),
+    radial-gradient(64% 54% at 50% 44%, rgba(255,254,250,.72), rgba(255,254,250,0) 74%);
+  background-size:100% 196px,100% 196px,auto,auto,auto,auto,auto;
+  background-repeat:no-repeat;
+  background-attachment:fixed;
+}
+
+/* 2 · 细颗粒 + 清漆淤积（不规则，乘算，只压暗一点点） */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncR type='linear' slope='0.035' intercept='0.965'/><feFuncG type='linear' slope='0.035' intercept='0.965'/><feFuncB type='linear' slope='0.035' intercept='0.965'/></feComponentTransfer></filter><rect width='300' height='300' filter='url(%23f)'/></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='760' height='760'><filter id='b'><feTurbulence type='fractalNoise' baseFrequency='0.013' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncR type='linear' slope='0.04' intercept='0.96'/><feFuncG type='linear' slope='0.04' intercept='0.96'/><feFuncB type='linear' slope='0.04' intercept='0.96'/></feComponentTransfer></filter><rect width='760' height='760' filter='url(%23b)'/></svg>");
+  mix-blend-mode:multiply;
+}
+
+/* 3 · 四边暗角：印象派的影子是紫的，不是棕的 */
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background-image:radial-gradient(134% 106% at 50% 44%, rgba(255,246,230,0) 58%, rgba(74,64,116,.12) 100%);
+  mix-blend-mode:multiply;
+}
+
+/* 4 · 卡片 = 细金画框 + 米色卡纸留白 + 内金线（真正的装裱结构） + 清漆高光 */
+.page-card,.account-box,.cr-card{
+  border-color:var(--oil-gilt);
+  background-image:linear-gradient(168deg,rgba(255,253,249,.95),rgba(250,247,243,.92) 46%,rgba(245,243,243,.94));
+  box-shadow:
+    inset 0 0 0 1px rgba(206,170,96,.52),
+    inset 0 0 0 4px rgba(255,253,248,.92),
+    inset 0 0 0 5px rgba(198,161,90,.34),
+    inset 0 0 0 6px var(--oil-royal),
+    inset 0 1px 0 rgba(255,255,255,.85),
+    0 20px 34px -26px var(--oil-umber);
+}
+.page-card{border-radius:3px}
+
+/* 5 · 深色画布（首页那块墨绿）右侧透一点皇家蓝 */
+.hero-art{
+  background-image:
+    radial-gradient(120% 110% at 24% 0%, rgba(255,234,198,.18), rgba(255,234,198,0) 60%),
+    radial-gradient(92% 82% at 92% 100%, rgba(96,118,192,.2), rgba(96,118,192,0) 70%);
+  box-shadow:inset 0 0 0 1px rgba(198,161,90,.3), 0 18px 34px -24px rgba(20,14,6,.75);
+}
+
+/* 6 · 按钮：暗红上一层釉；次要按钮做成米色小铜牌 */
+.btn{border-radius:2px}
+.btn.primary,.filter.active,.cn-chips button.active,.folder-chip.active{
+  background:linear-gradient(180deg,#b4243a 0%,#a51c30 46%,#891627 100%);
+  border-color:#7f1424;color:#fff7ec;
+  box-shadow:inset 0 0 0 1px rgba(216,182,112,.45), inset 0 1px 0 rgba(255,255,255,.22), 0 10px 18px -12px rgba(120,20,35,.75);
+}
+.btn.secondary{
+  background:linear-gradient(180deg,#fffdf7,#f3ecdc);
+  border-color:var(--oil-gilt);color:#3b2f23;
+}
+
+/* 7 · 小标签与胶囊：旧纸牌 */
+.tag{border:1px solid rgba(182,146,84,.32)}
+.folder-chip,.cn-chips button{
+  border-color:rgba(182,146,84,.42);
+  background-image:linear-gradient(180deg,#fffdf7,#f6efe1);
+}
+
+/* 8 · 字体：大标题用 Garamond 一系的法文衬线，小标题用 Georgia，墨色偏海军蓝 */
+h1,h2,.brand{
+  font-family:var(--oil-serif);
+  font-weight:700;
+  color:#1c2434;
+  text-wrap:balance;
+}
+h3,h4{
+  font-family:var(--oil-serif-text);
+  font-weight:700;
+  color:#1c2434;
+  text-wrap:balance;
+}
+h1{letter-spacing:-.004em;line-height:1.06}
+h2{letter-spacing:-.008em}
+.hero h1{font-weight:700;letter-spacing:-.022em;line-height:1.02}
+.page-intro h1{letter-spacing:-.012em}
+/* 英文小注用皇家蓝灰，序号拉开字距，像铜版画的落款 */
+.cr-sub,.eyebrow{color:#7c85a8;letter-spacing:.012em}
+.page-intro .kicker{color:#6b7396}
+.kicker{letter-spacing:.16em}
+.btn{letter-spacing:.02em}
+
+/* 8b · 标题下一条古典花饰：左右两段金线收细，中间一颗金菱形 */
+.page-intro h1::after,.hero h1::after{
+  content:"";display:block;height:9px;width:172px;margin:20px 0 4px;
+  background-image:
+    linear-gradient(90deg,rgba(198,161,90,0),rgba(198,161,90,.9) 22%,rgba(198,161,90,.9) 78%,rgba(198,161,90,0)),
+    radial-gradient(circle at 50% 50%, var(--oil-gilt-warm) 0 2.1px, rgba(198,161,90,0) 2.4px);
+  background-size:100% 1px,10px 9px;
+  background-position:0 50%,50% 50%;
+  background-repeat:no-repeat;
+}
+.hero h1::after{width:206px}
+
+/* 8c · 小节标题下一条更短的同款花饰，保持同一套语法 */
+.section-head h2::after{
+  content:"";display:block;height:8px;width:118px;margin:12px 0 0;
+  background-image:
+    linear-gradient(90deg,rgba(198,161,90,0),rgba(198,161,90,.82) 24%,rgba(198,161,90,.82) 76%,rgba(198,161,90,0)),
+    radial-gradient(circle at 50% 50%, var(--oil-gilt-warm) 0 1.7px, rgba(198,161,90,0) 2px);
+  background-size:100% 1px,8px 8px;
+  background-position:0 50%,50% 50%;
+  background-repeat:no-repeat;
+}
+
+/* 9 · 照片当画看：提亮一点、色彩更鲜，像印象派留在画布上的光 */
+img{filter:saturate(1.08) contrast(1.03) brightness(1.02) sepia(.05)}
+.feature-art img{filter:saturate(1.04) contrast(1.02) sepia(.12)}
+.life-photo{border-color:var(--oil-gilt)}
+.life-photo img,.life-photo-strip img{border:1px solid var(--oil-gilt)}
+
+/* 10 · 页头页脚：金线下面再压一道极淡的皇家蓝，凡尔赛那种蓝金配色 */
+.nav,footer{border-color:var(--oil-gilt)}
+.nav{box-shadow:0 2px 0 -1px rgba(58,74,140,.18)}
+
+/* 11 · 代码块与公式：旧书页 */
+.cr-code,.cr-formula{
+  background-image:linear-gradient(180deg,#fbf7ec,#f5eee0);
+  border-color:var(--oil-gilt-soft);
+}
+.cr-cmd{background:#f4ecdd}
+
+/* 12 · 选中文字用暗红，像朱笔圈过 */
+::selection{background:rgba(165,28,48,.18)}
+</style>
 </body></html>
