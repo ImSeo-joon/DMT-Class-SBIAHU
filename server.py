@@ -1734,20 +1734,33 @@ class Handler(BaseHTTPRequestHandler):
             target_id = path.rsplit("/", 1)[1]
             try:
                 raw = self.body(); role = raw.get("role")
-                if role not in ROLES:
+                if role is not None and role not in ROLES:
                     raise ValueError("未知的账号角色")
+                new_name = None
+                if raw.get("display_name") is not None:
+                    new_name = clean_text(raw.get("display_name"), "姓名或昵称",
+                                          required=True, maximum=60)
+                if role is None and new_name is None:
+                    raise ValueError("没有要更新的内容")
             except ValueError as exc:
                 return self.send_error_json(400, str(exc))
             with connect() as con:
                 target = con.execute("SELECT id,role FROM users WHERE id=?", (target_id,)).fetchone()
                 if not target:
                     return self.send_error_json(404, "账号不存在")
-                admins = con.execute("SELECT COUNT(*) FROM users WHERE role='admin'").fetchone()[0]
-                if target["role"] == "admin" and role != "admin" and admins <= 1:
-                    return self.send_error_json(400, "至少保留一名管理员")
-                con.execute("UPDATE users SET role=? WHERE id=?", (role, target_id))
-            self.audit(user["id"], "set-role:" + role, "user", target_id)
-            return self.send_json(200, {"id": target_id, "role": role, "role_label": ROLE_LABELS[role]})
+                if role is not None:
+                    admins = con.execute("SELECT COUNT(*) FROM users WHERE role='admin'").fetchone()[0]
+                    if target["role"] == "admin" and role != "admin" and admins <= 1:
+                        return self.send_error_json(400, "至少保留一名管理员")
+                    con.execute("UPDATE users SET role=? WHERE id=?", (role, target_id))
+                if new_name is not None:
+                    con.execute("UPDATE users SET display_name=? WHERE id=?", (new_name, target_id))
+            if role is not None:
+                self.audit(user["id"], "set-role:" + role, "user", target_id)
+            if new_name is not None:
+                self.audit(user["id"], "rename-user:" + new_name, "user", target_id)
+            return self.send_json(200, {"id": target_id, "role": role, "display_name": new_name,
+                                       "role_label": ROLE_LABELS[role] if role else None})
         return self.send_error_json(404, "找不到此接口")
 
     def do_DELETE(self) -> None:

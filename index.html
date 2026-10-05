@@ -3681,4 +3681,75 @@ img{filter:saturate(1.14) contrast(1.05) brightness(1.02)}
   window.addEventListener('load',function(){setTimeout(check,1200)});
 })();
 </script>
+<script>
+/* ===== 管理员给账号改名 / Rename an account in the editorial desk =====
+   在「编辑后台 → 账号权限」每行加一个姓名输入框 + 改名按钮；列表每次重绘自动补上。
+   （本人改自己在「个人中心 → 个人资料 → 显示名称」。） */
+(function(){
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function decorate(){
+    const list=document.getElementById('userAdminList');
+    if(!list)return;
+    if(!currentUser||currentUser.role!=='admin')return;
+    list.querySelectorAll('.user-row').forEach(row=>{
+      const save=row.querySelector('[data-save-role]');
+      if(!save||row.querySelector('[data-rename-user]'))return;
+      const id=save.getAttribute('data-save-role');
+      const nameNode=row.querySelector('strong');
+      const box=document.createElement('span');
+      box.className='rename-box';
+      box.innerHTML='<input data-rename-user="'+esc(id)+'" maxlength="60" aria-label="姓名或昵称" value="'
+        +esc(nameNode?nameNode.textContent:'')+'">'
+        +'<button type="button" class="btn secondary" data-save-name="'+esc(id)+'">改名 / Rename</button>';
+      const actions=row.querySelector('.admin-actions')||row;
+      actions.insertBefore(box,actions.firstChild);
+      const input=box.querySelector('input');
+      input.addEventListener('keydown',function(e){
+        if(e.key==='Enter'){e.preventDefault();box.querySelector('button').click()}
+      });
+    });
+  }
+  document.addEventListener('click',async function(e){
+    const btn=e.target.closest?e.target.closest('[data-save-name]'):null;
+    if(!btn)return;
+    const id=btn.getAttribute('data-save-name');
+    const input=document.querySelector('[data-rename-user="'+id+'"]');
+    if(!input)return;
+    const name=input.value.trim();
+    if(!name){showMessage('editorMessage','姓名不能为空 / Name is required.');return}
+    btn.disabled=true;
+    try{
+      await api('/api/users/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({display_name:name})});
+      showMessage('editorMessage','姓名已更新 / Name updated.',true);
+      if(typeof loadUsers==='function')await loadUsers();
+      decorate();
+    }catch(err){showMessage('editorMessage',err.message)}
+    finally{btn.disabled=false}
+  });
+  const list=document.getElementById('userAdminList');
+  if(list)new MutationObserver(decorate).observe(list,{childList:true,subtree:true});
+  decorate();
+
+  /* 冷启动直接打开 #admin 时，权限判断可能跑在账号信息之前，管理员会看到"需要编辑权限"。
+     账号就绪后（renderProfile 被调用）若后台已经是当前页，就重新判定一次。 */
+  if(typeof renderProfile==='function'){
+    var baseProfile=renderProfile;
+    renderProfile=function(){
+      baseProfile.apply(this,arguments);
+      try{
+        var page=document.querySelector('.page.active');
+        if(page&&page.dataset&&page.dataset.view==='admin'&&typeof refreshAdmin==='function')refreshAdmin();
+      }catch(e){}
+    };
+  }
+})();
+</script>
+<style>
+.rename-box{display:inline-flex;gap:6px;align-items:center;margin-right:6px}
+.rename-box input{border:1px solid var(--line);border-radius:6px;padding:7px 9px;font:inherit;font-size:12px;
+  background:var(--paper);color:var(--ink);width:132px}
+.rename-box input:focus{outline:none;border-color:#c6a15a}
+@media(max-width:760px){.rename-box{width:100%}.rename-box input{flex:1;width:auto}}
+</style>
 </body></html>
