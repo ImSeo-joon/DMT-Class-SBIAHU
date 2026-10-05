@@ -3549,4 +3549,136 @@ img{filter:saturate(1.14) contrast(1.05) brightness(1.02)}
   .hero p::before{font-size:14px;letter-spacing:.04em;margin-bottom:10px}
 }
 </style>
+<style id="scroll-mail">
+/* ==========================================================================
+   班委来信 · 金边法式锦帛卷轴（打开网站时展开一次，提示新的留言）
+   只用现成的 /api/messages 判断"待处理"条数，不动后端。
+   想关掉：删掉整个 <style id="scroll-mail"> 块和下面那段 <script> 即可。
+   ========================================================================== */
+#mailScroll{position:fixed;inset:0;z-index:9997;display:grid;place-items:center;padding:20px;
+  background:radial-gradient(120% 100% at 50% 40%,rgba(26,20,42,.32),rgba(26,20,42,.56));
+  -webkit-backdrop-filter:blur(2.5px) saturate(.92);backdrop-filter:blur(2.5px) saturate(.92);
+  animation:msFade .32s ease both}
+#mailScroll[hidden]{display:none}
+.ms-roll{width:min(560px,94vw);filter:drop-shadow(0 26px 42px rgba(52,34,10,.4))}
+.ms-rod{position:relative;height:15px;border-radius:8px;
+  background:linear-gradient(180deg,#f7e5b8,#d3aa5d 38%,#a87d2a 74%,#ead096);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72),inset 0 -1px 0 rgba(88,62,16,.5)}
+.ms-rod:before,.ms-rod:after{content:"";position:absolute;top:50%;width:17px;height:17px;border-radius:50%;
+  transform:translateY(-50%);background:radial-gradient(circle at 34% 30%,#fcf1cf,#d0a85c 58%,#8b6523)}
+.ms-rod:before{left:-15px}.ms-rod:after{right:-15px}
+.ms-sheet{position:relative;margin:0;padding:26px 30px 20px;text-align:center;
+  background:
+    repeating-linear-gradient(90deg,rgba(178,132,58,.055) 0 1px,transparent 1px 3px),
+    repeating-linear-gradient(0deg,rgba(178,132,58,.05) 0 1px,transparent 1px 3px),
+    repeating-conic-gradient(from 45deg at 50% 50%,rgba(198,161,90,.05) 0 25%,rgba(198,161,90,0) 0 50%),
+    radial-gradient(120% 80% at 22% 8%,rgba(255,253,246,.96),rgba(255,253,246,0) 62%),
+    linear-gradient(168deg,#fdfaf1,#f7f0de 46%,#f2e8d3);
+  background-size:auto,auto,26px 26px,auto,auto;
+  border-left:1px solid rgba(198,161,90,.6);border-right:1px solid rgba(198,161,90,.6);
+  box-shadow:inset 0 0 0 1px rgba(198,161,90,.32),inset 0 0 0 7px rgba(255,253,246,.72),inset 0 0 0 8px rgba(198,161,90,.22);
+  transform-origin:50% 0;animation:msUnroll .62s cubic-bezier(.18,.85,.24,1) both}
+.ms-sheet:before,.ms-sheet:after{content:"❦";position:absolute;color:#c2a15c;opacity:.5;font-size:15px}
+.ms-sheet:before{left:15px;top:13px}
+.ms-sheet:after{right:15px;bottom:13px}
+@keyframes msFade{from{opacity:0}to{opacity:1}}
+@keyframes msUnroll{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
+.ms-kicker{font-family:var(--oil-serif-text,Georgia,serif);font-size:10.5px;letter-spacing:.22em;
+  color:#8d7a4e;text-transform:uppercase}
+.ms-title{font-family:var(--oil-serif,Georgia,serif);font-size:27px;line-height:1.2;color:#233b52;margin:12px 0 0}
+.ms-title span{display:block;font-size:13.5px;letter-spacing:.14em;color:#a8853f;font-style:italic;margin-top:7px;font-weight:400}
+.ms-rule{height:9px;width:172px;margin:16px auto 14px;
+  background-image:
+    linear-gradient(90deg,rgba(198,161,90,0),rgba(198,161,90,.9) 22%,rgba(198,161,90,.9) 78%,rgba(198,161,90,0)),
+    radial-gradient(circle at 50% 50%,#c0913c 0 2.2px,rgba(198,161,90,0) 2.5px);
+  background-size:100% 1px,11px 9px;background-position:0 50%,50% 50%;background-repeat:no-repeat}
+.ms-body{font-size:13.5px;line-height:1.9;color:#4d5a63;margin:0}
+.ms-preview{margin:13px auto 0;max-width:432px;font-size:12.5px;line-height:1.85;color:#6b7370;
+  font-family:var(--oil-serif-text,Georgia,serif);font-style:italic;
+  border-left:2px solid rgba(198,161,90,.5);padding:2px 0 2px 12px;text-align:left}
+.ms-actions{display:flex;gap:10px;justify-content:center;margin:20px 0 12px;flex-wrap:wrap}
+.ms-note{font-size:10.5px;color:#929b95;margin:0;letter-spacing:.04em}
+@media(max-width:760px){
+  .ms-sheet{padding:22px 20px 18px}
+  .ms-title{font-size:22px}
+  .ms-actions .btn{flex:1}
+}
+</style>
+<script>
+/* ===== 班委来信：打开网站时用金边卷轴提示新的「管理信箱」留言 ===== */
+(function(){
+  var ACK_KEY='dmt-mailbox-ack';
+  var STAFF=['admin','officer','counselor'];
+  var PENDING='待处理';
+
+  function staff(){try{return !!(currentUser&&STAFF.indexOf(currentUser.role)>=0)}catch(e){return false}}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function ackId(){try{return localStorage.getItem(ACK_KEY)||''}catch(e){return ''}}
+  function setAck(v){try{localStorage.setItem(ACK_KEY,v||'')}catch(e){}}
+
+  function build(pending,latest){
+    var el=document.createElement('div');
+    el.id='mailScroll';
+    el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-label','班级来信');
+    var body=String(latest.body||'');
+    var when=String(latest.created_at||'').slice(0,16).replace('T',' ');
+    el.innerHTML='<div class="ms-roll">'
+      +'<div class="ms-rod"></div>'
+      +'<div class="ms-sheet">'
+      +'<div class="ms-kicker">Courrier de la classe</div>'
+      +'<h2 class="ms-title">有 '+pending+' 条新留言<span>Nouvelles de vos camarades</span></h2>'
+      +'<div class="ms-rule"></div>'
+      +'<p class="ms-body">同学从「咨询与合作」提交的问题、提案与合作需求，正等着班委处理。</p>'
+      +'<p class="ms-preview">「'+esc(latest.category||'留言')+'」· '+esc(latest.name||'匿名')+' · '+esc(when)
+      +'<br>'+esc(body.slice(0,84))+(body.length>84?'…':'')+'</p>'
+      +'<div class="ms-actions">'
+      +'<button class="btn primary" type="button" data-ms-go>去管理信箱查看</button>'
+      +'<button class="btn secondary" type="button" data-ms-later>稍后再说</button>'
+      +'</div>'
+      +'<p class="ms-note">只在新留言到达时提醒一次 · Un rappel par nouvelle lettre</p>'
+      +'</div><div class="ms-rod"></div></div>';
+    document.body.appendChild(el);
+
+    function close(goInbox){
+      setAck(latest.id||'');
+      el.hidden=true;
+      setTimeout(function(){try{el.parentNode&&el.parentNode.removeChild(el)}catch(e){}},260);
+      if(goInbox){
+        try{go('account')}catch(e){}
+        setTimeout(function(){try{acShowTab('messages')}catch(e){}},90);
+      }
+    }
+    var go1=el.querySelector('[data-ms-go]'),later=el.querySelector('[data-ms-later]');
+    if(go1)go1.addEventListener('click',function(){close(true)});
+    if(later)later.addEventListener('click',function(){close(false)});
+    el.addEventListener('click',function(e){if(e.target===el)close(false)});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close(false)},{once:true});
+  }
+
+  var busy=false,done=false;
+  async function check(){
+    if(busy||done||!staff())return;
+    busy=true;
+    try{
+      var data=await api('/api/messages');
+      var items=(data&&data.items)||[];
+      var pending=items.filter(function(m){return m.status===PENDING});
+      if(!pending.length)return;
+      var latest=pending[0];
+      if((latest.id||'')===ackId())return;
+      done=true;
+      build(pending.length,latest);
+    }catch(e){}
+    finally{busy=false}
+  }
+
+  /* renderProfile 在「刷新账号信息」与「登录成功」后都会调用，用它当登录态就绪的信号 */
+  if(typeof renderProfile==='function'){
+    var baseProfile=renderProfile;
+    renderProfile=function(){baseProfile.apply(this,arguments);setTimeout(check,600)};
+  }
+  window.addEventListener('load',function(){setTimeout(check,1200)});
+})();
+</script>
 </body></html>
