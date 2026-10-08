@@ -2145,10 +2145,17 @@ async function refreshEventHistory(){
         <span class="cr-en">The 29 September 2026 orientation session: positioning, curriculum map, terminology checks, Windows setup, assessment and study method.</span>
         <span class="cr-go">进入第一课 / Open Lesson 1 →</span>
       </a>
+      <a href="#course-app-02">
+        <div class="cr-label mono">LESSON 02 / COMPUTER ORGANISATION</div>
+        <h3>Lesson 2: Computer Organisation and How a Program Runs<span class="cr-alt">计算机组成原理与运行机制</span></h3>
+        <p>2026 年 10 月 8 日：冯·诺依曼结构、地址与数据、三类总线、指令周期与节拍、二进制与存储层级；附对会议 AI 笔记的纠错、澄清与扩充。</p>
+        <span class="cr-en">Von Neumann architecture, addresses versus data, the three buses, the instruction cycle, binary and the memory hierarchy — with corrections to the AI meeting notes.</span>
+        <span class="cr-go">进入第二课 / Open Lesson 2 →</span>
+      </a>
       <div class="cr-hub-soon">
-        <div class="cr-label mono">LESSON 02 / TO BE ADDED</div>
+        <div class="cr-label mono">LESSON 03 / TO BE ADDED</div>
         <h3>Later lessons<span class="cr-alt">后续课时</span></h3>
-        <p>后续课时会按同样结构补充：变量与数据类型、控制流、函数与模块化、指针与内存管理等。</p>
+        <p>后续课时会按同样结构补充：变量与数据类型、控制流、函数与模块化、指针与内存管理、调试方法等。</p>
         <span class="cr-en">Later lessons will follow the same structure.</span>
       </div>
     </div>
@@ -2282,6 +2289,161 @@ int main(void) {
     </div>
 
     <p class="cr-note">资料来源：2026 年 9 月 29 日“高级语言程序设计课程讲解”开课宣讲纪要，经整理、核对与扩充；价格、日期与免考缓考流程等以教师和学院最新通知为准。后续模块将补充指针与内存、调试方法、常见错误与作业范例。<br>Source: the course orientation session of 29 September 2026, expanded and fact-checked. Fees, dates and exemption procedures follow the latest instructor and college notice. Later modules will cover pointers and memory, debugging, common errors and worked examples.</p>
+  </div>
+</section>
+<section class="page" data-view="course-app-02" data-sections="Von Neumann architecture · the instruction cycle · addresses versus data · the three buses · the program counter and clock ticks · binary, bits and bytes · the memory hierarchy · corrections to the meeting notes · self-check<br>包含：冯·诺依曼结构 · 指令执行流程 · 地址与数据 · 三类总线 · PC 与时钟节拍 · 二进制与位、字节 · 存储层级 · 对会议笔记的纠错 · 学习自检">
+  <div class="wrap page-intro">
+    <div class="kicker mono">LESSON 02 / COMPUTER ORGANISATION</div><div class="fr-mot">Organisation de l'ordinateur</div>
+    <h1>Lesson 2: Computer Organisation and How a Program Runs<span class="cr-sub">计算机组成原理与运行机制</span></h1>
+    <p>2026 年 10 月 8 日课堂讲解整理 · 会议 AI 笔记已逐条核对、纠错与扩充 / Based on the lecture of 8 October 2026; the AI meeting notes were fact-checked and expanded</p>
+  </div>
+  <div class="wrap section">
+    <div class="cr-subnav cr-nav-course" data-active="course-app"></div>
+    <div class="section-head">
+      <div>
+        <div class="kicker mono">LESSON CONTENT / 本课内容</div>
+        <h2>From one memory cell to a running C program<span class="cr-alt">从一格内存到跑起来的 C 程序</span></h2>
+      </div>
+      <span class="tag mono">2026.10.08 · CN / EN</span>
+    </div>
+
+    <div class="cr-grid">
+      <div class="cr-card"><div class="cr-label mono">STRUCTURE</div><strong>Code and data share one memory</strong><span class="cr-alt">程序与数据同存一室</span><p>冯·诺依曼结构的核心是"存储程序"：指令和数据放在同一个存储器里，CPU 逐条取指执行。今天所有通用的电脑、手机都还是这个框架。<span class="cr-en">The stored-program idea: instructions and data share one memory, and the CPU fetches and runs them one at a time. Every general-purpose computer today still follows this design.</span></p></div>
+      <div class="cr-card"><div class="cr-label mono">ADDRESS</div><strong>The address is the key to pointers</strong><span class="cr-alt">地址是理解指针的钥匙</span><p>内存被切成编了号的小格子：<b>地址是门牌号，数据是屋里的东西</b>。C 的指针就是"专门存门牌号的变量"。课堂原话：C 语言难就难在地址。<span class="cr-en">Memory is a row of numbered cells: the address is the house number, the datum is what sits inside. A C pointer is simply a variable that holds a house number.</span></p></div>
+      <div class="cr-card"><div class="cr-label mono">BUS</div><strong>Three buses, three jobs</strong><span class="cr-alt">三类总线各管一件事</span><p>地址总线报门牌、数据总线搬内容、控制总线发号令。地址总线的宽度决定这台机器最多能寻址多大内存。<span class="cr-en">The address bus names the cell, the data bus carries the contents, and the control bus carries the commands. The width of the address bus caps how much memory can be addressed.</span></p></div>
+      <div class="cr-card"><div class="cr-label mono">CYCLE</div><strong>One instruction takes several ticks</strong><span class="cr-alt">一条指令要好几拍</span><p>取指 → 译码 → 执行（访存 / 写回）。主频是节拍的快慢，不等于"每秒执行多少条指令"。<span class="cr-en">Fetch, decode, execute (with memory access and write-back). The clock speed sets the tick rate, not the number of instructions per second.</span></p></div>
+      <div class="cr-card"><div class="cr-label mono">BINARY</div><strong>Two states are enough</strong><span class="cr-alt">两种状态就够了</span><p>电路最容易稳定区分"通 / 断"两种状态，于是用 0 和 1 编码；1 字节 = 8 位，1 KB = 1024 字节。<span class="cr-en">A circuit distinguishes two stable states most reliably, so information is encoded in 0s and 1s. One byte is eight bits; one kilobyte is 1024 bytes.</span></p></div>
+      <div class="cr-card"><div class="cr-label mono">HIERARCHY</div><strong>Fast, small, expensive — and vice versa</strong><span class="cr-alt">越快越小越贵</span><p>寄存器 → 缓存 → 内存 → 外存。越靠近 CPU 越快、越小、越贵；程序只显式管内存和外存，缓存由硬件自动调度。<span class="cr-en">Registers, cache, main memory, then storage. The closer to the CPU, the faster, smaller and dearer. Programs manage memory and storage explicitly; the cache is handled by hardware.</span></p></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Von Neumann architecture and the five parts<span class="cr-alt">冯·诺依曼结构与五大部件</span></h3>
+      <p>1945 年，冯·诺依曼在 EDVAC 报告草案里提出"存储程序"的机器模型：程序本身也当成数据存进存储器。整台机器拆成五个部分——<b>运算器</b>（算术与逻辑运算）、<b>控制器</b>（指挥时序）、<b>存储器</b>（存放指令与数据）、<b>输入设备</b>、<b>输出设备</b>。今天说的 CPU，就是运算器加控制器，再加寄存器。</p>
+      <p class="cr-en">In the 1945 EDVAC draft, von Neumann set out the stored-program model: the program itself is stored as data. The machine has five parts — arithmetic unit, control unit, memory, input and output. What we now call the CPU is the arithmetic unit plus the control unit, together with registers.</p>
+      <p>这套设计带来的最大副作用是<b>冯·诺依曼瓶颈</b>：指令和数据共用一条通道往返 CPU 与内存，CPU 再快也要等数据。现代计算机用缓存、流水线和多核来缓解，但结构本身没有变——这正是课堂上那句话的意思：<b>"很多软件、很多大模型出来了，但是计算机底层的东西没有变。"</b></p>
+      <p class="cr-en">The price of this design is the von Neumann bottleneck: instructions and data share one path between CPU and memory, so a fast CPU still waits for data. Caches, pipelines and multiple cores soften it, but the structure itself has not changed — which is exactly what the lecturer meant by "plenty of software and big models have appeared, yet the fundamentals of the computer have not changed".</p>
+      <ol class="cr-steps">
+        <li><b>取指</b>：PC 指向的那条指令被取进 CPU。<span class="cr-en">Fetch: the instruction the program counter points at is pulled into the CPU.</span></li>
+        <li><b>译码</b>：控制器识别这是"加"还是"存"，算出要操作哪个地址（旧称解码，英文都是 decode）。<span class="cr-en">Decode: the control unit works out what the instruction does and which address it touches.</span></li>
+        <li><b>执行</b>：按操作码发出控制信号，运算器完成运算。<span class="cr-en">Execute: control signals are issued and the arithmetic unit does the work.</span></li>
+        <li><b>访存 / 写回</b>：需要的数据从内存取来，结果写回内存或寄存器。<span class="cr-en">Memory access and write-back: operands come from memory and results go back to memory or a register.</span></li>
+        <li><b>PC 前移</b>：程序计数器指向下一条指令，于是程序一条条往下跑。<span class="cr-en">The program counter moves on, so the program runs instruction after instruction.</span></li>
+      </ol>
+      <div class="cr-code">；把 0x20 与 0x24 两格里的数相加，结果写回 0x28
+mov  eax, [0x20]     ；取数：把 0x20 号单元的内容装进寄存器 eax
+add  eax, [0x24]     ；运算：eax = eax + 0x24 号单元的内容
+mov  [0x28], eax     ；写回：把结果写进 0x28 号单元</div>
+      <p class="small-note">这三行是课堂"加法示例"的等价写法（Intel 语法，方括号表示"取这个地址里的内容"，不是数字本身）。看懂这三行，就分清了地址与数据。</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>Addresses versus data<span class="cr-alt">地址与数据：差一个方括号</span></h3>
+      <p>内存像一排编号的抽屉。<span class="cr-cmd">0x20</span> 是抽屉编号（地址），抽屉里放的东西才是数据。同一个数字既可能是地址也可能是数据，<b>全靠指令的上下文来区分</b>——写汇编时用不用方括号，写 C 时用不用 <span class="cr-cmd">*</span>，说的就是这件事。这正是指针最容易绕晕人的地方。</p>
+      <p class="cr-en">Memory is a row of numbered drawers. 0x20 is the drawer number (an address); the value inside is the data. The same number can be either one, and only the instruction's context tells them apart — that is what square brackets in assembly and the asterisk in C are for, and it is exactly where pointers confuse beginners.</p>
+      <ul class="cr-bullets">
+        <li><b>十六进制的两种写法</b>：C 语言写 <span class="cr-cmd">0x1A</span>；汇编与调试器里常见后缀写法 <span class="cr-cmd">1Ah</span>。两种都对，但不要混着写。<span class="cr-en">Two notations: 0x1A in C, and 1Ah as a suffix in assembly or debuggers. Both are valid — just do not mix them in one expression.</span></li>
+        <li><b>为什么偏爱十六进制</b>：一个十六进制位恰好等于四个二进制位，一个字节写成两个十六进制位（如 <span class="cr-cmd">0x1A</span> = 0001 1010），比一串 0 和 1 好读太多。<span class="cr-en">One hex digit is exactly four bits, so a byte is two hex digits — far easier to read than a run of 0s and 1s.</span></li>
+        <li><b>C 里的地址</b>：<span class="cr-cmd">int x = 42; int *p = &amp;x;</span> —— <span class="cr-cmd">&amp;</span> 取地址，<span class="cr-cmd">*</span> 按地址取内容。指针变量本身也占内存，大小由地址总线位宽决定：32 位机器 4 字节，64 位机器 8 字节。<span class="cr-en">In C, &amp; takes an address and * dereferences it. A pointer variable is itself stored in memory, and its size follows the address width: four bytes on a 32-bit machine, eight on a 64-bit one.</span></li>
+        <li><b>数组为什么能用指针访问</b>：数组名会退化成首元素的地址，<span class="cr-cmd">p + 1</span> 不是"加一个字节"，而是"跳到下一个同类型元素"。<span class="cr-en">An array name decays to the address of its first element, and p + 1 moves by one element rather than one byte.</span></li>
+      </ul>
+    </div>
+
+    <div class="cr-block">
+      <h3>The three buses<span class="cr-alt">三类总线：谁搬什么</span></h3>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>总线 / Bus</th><th>搬的是什么 / What it carries</th><th>方向 / Direction</th><th class="cr-c">谁发起</th></tr></thead>
+        <tbody>
+          <tr><td class="cr-mid">地址总线<span class="cr-en">Address bus</span></td><td>地址号（门牌号），指出这次要访问哪一格<span class="cr-en">The address: which cell is being accessed</span></td><td>单向：CPU → 外部<span class="cr-en">One way, CPU to the outside</span></td><td class="cr-c">CPU</td></tr>
+          <tr><td class="cr-mid">数据总线<span class="cr-en">Data bus</span></td><td>真正的指令与数据内容，读进来也写出去<span class="cr-en">The actual instruction or datum, read in or written out</span></td><td>双向<span class="cr-en">Two-way</span></td><td class="cr-c">CPU</td></tr>
+          <tr><td class="cr-mid">控制总线<span class="cr-en">Control bus</span></td><td>读 / 写信号、中断、时钟等"号令"<span class="cr-en">Read/write signals, interrupts, the clock</span></td><td>双向（每根线单向）<span class="cr-en">Two-way overall, one way per line</span></td><td class="cr-c">CPU</td></tr>
+        </tbody>
+      </table></div>
+      <p>位宽是这里最实用的一个概念：32 位地址总线最多寻址 2³² 字节 = 4 GB，这就是"32 位系统装不满 4 GB 以上内存"的由来；64 位地址总线在工程实现上远大于这个数，足够用很久。数据总线宽度则决定一次能搬几字节（64 位 = 8 字节），也是"64 位 CPU"的另一半含义。</p>
+      <p class="cr-en">Bus width is the practical takeaway: a 32-bit address bus can address 2^32 bytes, about 4 GB — the reason 32-bit systems cannot use much more memory. A 64-bit address bus is far larger in practice. The data bus width decides how many bytes move at once.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>The program counter and clock ticks<span class="cr-alt">PC 指令计数器与时钟节拍</span></h3>
+      <p>PC（Program Counter，程序计数器）里存的是<b>下一条</b>指令的地址。取完一条，PC 自动加上这条指令的长度，于是程序顺着内存往下走——这就是"顺序执行"。一旦遇到跳转、分支、循环、函数调用，本质都是<b>改写 PC</b>：把它改成别处的地址，程序就从那里继续。</p>
+      <p class="cr-en">The program counter holds the address of the next instruction. After each fetch it advances by the instruction's length, which is what makes execution sequential. Jumps, branches, loops and function calls all amount to rewriting the PC.</p>
+      <p>时钟节拍是计算机的心跳：主频 1 Hz 表示每秒一拍，3.0 GHz 表示每秒 30 亿拍。但<b>一条指令通常要好几拍</b>（取指、译码、执行各占若干拍），所以主频不能直接换算成"每秒多少条指令"。现代 CPU 再靠流水线（像流水线那样把多条指令的不同阶段叠着做）、乱序执行和多核把吞吐拉上去。</p>
+      <p class="cr-en">The clock is the heartbeat: 3.0 GHz means three billion ticks a second. One instruction usually takes several ticks, so clock speed is not a direct measure of instructions per second. Pipelines, out-of-order execution and multiple cores are what raise throughput.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>Binary, bits and bytes<span class="cr-alt">二进制、位与字节</span></h3>
+      <p>为什么是二进制？因为电子器件最容易、最便宜、最抗干扰地稳定区分两种状态：通与断、高电平与低电平。要区分十种状态，器件就得做得很精密，成本和出错率都会上去。二进制还和逻辑门（与、或、非）天然对应，这也是整个数字电路的基础。</p>
+      <p class="cr-en">Why binary? Because a circuit distinguishes two stable states — on and off, high and low — cheaply and reliably. Ten states would demand far more precision. Binary also maps naturally onto logic gates, which is the foundation of all digital circuits.</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th class="cr-c">十进制</th><th class="cr-c">二进制</th><th class="cr-c">十六进制</th><th>怎么读 / How to read it</th></tr></thead>
+        <tbody>
+          <tr><td class="cr-c">0 / 1</td><td class="cr-c">0 / 1</td><td class="cr-c">0 / 1</td><td>一位二进制就是一路电信号的通断<span class="cr-en">One bit, one circuit on or off</span></td></tr>
+          <tr><td class="cr-c">2 / 3</td><td class="cr-c">10 / 11</td><td class="cr-c">2 / 3</td><td>逢二进一，所以"2"写成 10<span class="cr-en">Carry at two, so 2 is written 10</span></td></tr>
+          <tr><td class="cr-c">8</td><td class="cr-c">1000</td><td class="cr-c">8</td><td>记住权衡 8 / 4 / 2 / 1，八位以内心算最快<span class="cr-en">Weights 8-4-2-1 make mental arithmetic quick</span></td></tr>
+          <tr><td class="cr-c">10</td><td class="cr-c">1010</td><td class="cr-c">A</td><td>十六进制用 A–F 补齐十个数字之外的六个<span class="cr-en">Hex uses A to F for the six extra values</span></td></tr>
+          <tr><td class="cr-c">15</td><td class="cr-c">1111</td><td class="cr-c">F</td><td>一个 F 就是四位全 1，即一个字节的低四位<span class="cr-en">One F is four bits set, the low nibble of a byte</span></td></tr>
+          <tr><td class="cr-c">255</td><td class="cr-c">1111 1111</td><td class="cr-c">FF</td><td>一个字节能表示的最大无符号数<span class="cr-en">The largest value in one unsigned byte</span></td></tr>
+        </tbody>
+      </table></div>
+      <ul class="cr-bullets">
+        <li><b>位与字节</b>：<span class="cr-cmd">bit</span> 是最小单位，只能表示 0 或 1；<span class="cr-cmd">byte</span> 是 8 个 bit（1 B = 8 bit）。中文叫"字节"，"字节跳动"这个名字就来自这里——算是本课的一个趣味延伸，本身不属于计算机原理。<span class="cr-en">A bit is one binary digit, a byte is eight bits. The name of the company ByteDance comes from that unit — a bit of trivia rather than computer architecture.</span></li>
+        <li><b>十进制对人友好，二进制对机器友好</b>：人习惯十根手指，机器习惯两种电平。两者之间靠"按权展开"互相换算：二进制 1010 = 8 + 2 = 10。<span class="cr-en">Decimal suits people, binary suits machines. Converting between them is positional weighting: 1010 is 8 + 2 = 10.</span></li>
+        <li><b>常用英文词</b>：decimal（十进制）、binary（二进制）、hexadecimal（十六进制）、bit（位）、byte（字节）、address（地址）、bus（总线）、instruction（指令）。<span class="cr-en">Vocabulary to keep: decimal, binary, hexadecimal, bit, byte, address, bus, instruction.</span></li>
+      </ul>
+    </div>
+
+    <div class="cr-block">
+      <h3>Memory units and the storage hierarchy<span class="cr-alt">容量单位与存储层级</span></h3>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>单位 / Unit</th><th class="cr-c">等于</th><th>说明 / Note</th></tr></thead>
+        <tbody>
+          <tr><td class="cr-mid">1 KB</td><td class="cr-c">2¹⁰ B = 1024 B</td><td>计算机按二进制算，所以是 1024 而不是 1000<span class="cr-en">Computers count in binary, hence 1024 rather than 1000</span></td></tr>
+          <tr><td class="cr-mid">1 MB</td><td class="cr-c">1024 KB</td><td>约一百万字节能塞进一张老式软盘<span class="cr-en">Roughly a million bytes</span></td></tr>
+          <tr><td class="cr-mid">1 GB</td><td class="cr-c">1024 MB</td><td>一部两小时的标清视频量级<span class="cr-en">About one standard-definition film</span></td></tr>
+          <tr><td class="cr-mid">1 TB</td><td class="cr-c">1024 GB</td><td>硬盘厂商标称用 1000 进制，所以 1 TB 硬盘在系统里显示约 931 GB<span class="cr-en">Drive makers use powers of 1000, so a 1 TB disk shows about 931 GB in the system</span></td></tr>
+        </tbody>
+      </table></div>
+      <p>存储层级是同一件事的另一面：<b>越靠近 CPU 的存储越快、越小、越贵</b>。程序里声明一个变量、读一个文件，走的正是这条链路，只是缓存那一层由硬件自动完成，我们看不见。</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>层级 / Level</th><th>典型容量</th><th>速度量级</th><th>断电后</th></tr></thead>
+        <tbody>
+          <tr><td class="cr-mid">寄存器<span class="cr-en">Registers</span></td><td>几十个 × 8 字节</td><td>一个节拍内</td><td>丢失</td></tr>
+          <tr><td class="cr-mid">缓存 L1 / L2 / L3<span class="cr-en">Cache</span></td><td>几十 KB → 几十 MB</td><td>几拍到几十拍</td><td>丢失</td></tr>
+          <tr><td class="cr-mid">内存 RAM<span class="cr-en">Main memory</span></td><td>GB 量级</td><td>约一百拍（~100 ns）</td><td>丢失，所以文件要保存</td></tr>
+          <tr><td class="cr-mid">外存 SSD / HDD<span class="cr-en">Storage</span></td><td>百 GB → TB</td><td>微秒到毫秒，比内存慢千倍以上</td><td>保留</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small-note">这也解释了两件常见的事：程序"保存文件"是把内存里的东西写进外存；程序崩溃丢掉未保存的内容，是因为那些数据还只在内存里。</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>Corrections and clarifications to the meeting notes<span class="cr-alt">对会议 AI 笔记的纠错与澄清</span></h3>
+      <p>本次课程的会议 AI 笔记由工具自动生成，原文自己也标注"可能不准确"。下面是把笔记与教材、课堂内容逐条核对后的结论。</p>
+      <ul class="cr-bullets">
+        <li><b>"先将代码批量取至寄存器"</b>不够准确。CPU 是<b>逐条</b>取指执行，不会一次把整段代码装进寄存器；真正"批量搬运"的是程序从外存<b>加载到内存</b>那一步，由操作系统完成。<span class="cr-en">The CPU fetches and executes one instruction at a time; nothing is loaded into registers wholesale. What is moved in bulk is the program being loaded from storage into memory by the operating system.</span></li>
+        <li><b>"H 代表十六进制"</b>需要补一句：C 语言里写 <span class="cr-cmd">0x</span> 前缀（0x1A），汇编与调试器里常见 <span class="cr-cmd">h</span> 后缀（1Ah）。两种写法都对，但同一个表达式里不能混用。<span class="cr-en">Add the notation detail: 0x as a prefix in C, h as a suffix in assembly. Both valid, never mixed.</span></li>
+        <li><b>"内存支持双向的数据存取"</b>对 RAM 成立；ROM / Flash 以只读为主、需要擦写才能改，不能一概而论。<span class="cr-en">Two-way access holds for RAM. ROM and flash are read-mostly and must be erased before rewriting.</span></li>
+        <li><b>"二进制只有 0 和 1，可以构成全部的数"</b>——严谨的说法是：任何进制都能表示全部的数，二进制的优势在于与<b>器件的两种稳定状态一一对应</b>。<span class="cr-en">Strictly, every base can represent all numbers; binary wins because it maps one-to-one onto two stable physical states.</span></li>
+        <li><b>主频与指令数不能直接换算</b>：3.0 GHz 是每秒 30 亿个节拍，一条指令要若干节拍，还要等内存。笔记里"时钟节拍周期"这一点方向是对的，只是不要读成"每秒执行 30 亿条指令"。<span class="cr-en">Clock speed is ticks per second, not instructions per second — an instruction costs several ticks and often waits on memory.</span></li>
+        <li><b>"字节跳动命名来源"</b>是趣味延伸，不属于计算机组成原理，放在这里只为帮助记住"字节"这个单位。<span class="cr-en">The ByteDance naming story is trivia, included only to make the byte memorable.</span></li>
+      </ul>
+    </div>
+
+    <div class="cr-block">
+      <h3>Self-check before the next lesson<span class="cr-alt">下课前的自检</span></h3>
+      <div class="account-box">
+        <label class="cr-check"><input type="checkbox"><span>能说出冯·诺依曼结构的五大部件，并解释"存储程序"是什么意思。<span class="cr-en">Name the five parts and explain the stored-program idea.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能按顺序复述一条指令的执行过程：取指、译码、执行、访存、写回。<span class="cr-en">Recite the instruction cycle in order.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能区分"地址"与"数据"，并说出 0x1A 与 1Ah 两种写法的差别。<span class="cr-en">Tell addresses from data, and the two hex notations apart.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说出三类总线各自搬运什么、方向如何。<span class="cr-en">State what each of the three buses carries and in which direction.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能解释 PC 的作用，并说明循环与函数调用是怎么"改写 PC"的。<span class="cr-en">Explain the PC and how loops and calls rewrite it.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>会做八位以内的十进制、二进制、十六进制互转，知道一个字节为什么是 FF。<span class="cr-en">Convert within eight bits across decimal, binary and hex.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说出 1 B = 8 bit、1 KB = 1024 B，并解释硬盘容量"缩水"的原因。<span class="cr-en">Quote the units and explain why disks look smaller than advertised.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能按从快到慢排出寄存器、缓存、内存、外存，并说明为什么需要缓存。<span class="cr-en">Order the storage hierarchy and justify the cache.</span></span></label>
+      </div>
+    </div>
+
+    <p class="cr-note">资料来源：2026 年 10 月 8 日"计算机底层原理与运行机制讲解"课堂（08:16–09:36）与同场会议的飞书 AI 笔记（原笔记由工具自动生成并标注"可能存在不准确之处"）；本页逐条核对、纠错、补充术语与表格后整理，双语对照。下一课进入指针与内存管理。<br>Source: the lecture of 8 October 2026 and the Feishu AI meeting notes for the same session (auto-generated, flagged as possibly inaccurate). This page fact-checks, corrects and expands that material into the bilingual format used by Lesson 1.</p>
   </div>
 </section>
 <section class="page" data-view="course-calc">
