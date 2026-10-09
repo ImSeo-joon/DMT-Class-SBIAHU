@@ -1,13 +1,25 @@
 # Replace class.example.edu with the exact domain after ICP filing is approved
 # and a TLS certificate has been issued for it.
+#
+# 安装位置：/etc/nginx/conf.d/dmt-class-site.conf
+# 本文件依赖同目录的 00-dmt-ratelimit.conf（先装它，否则 nginx -t 会因为
+# 找不到 dmt_general / dmt_write / dmt_global / dmt_conn 这些 zone 而报错）。
+#
+# 改完执行：sudo nginx -t && sudo systemctl reload nginx
 server {
     listen 80;
     listen [::]:80;
     server_name class.example.edu;
+
+    # 证书续签要用到这里，所以 80 端口要保留跳转、不能直接关掉。
     return 301 https://$host$request_uri;
 }
 
 server {
+    # 若你的 Nginx 是 1.25.1 及以上，建议改成：
+    #     listen 443 ssl;
+    #     http2 on;
+    # 老版本不支持 http2 on; 这个写法，保持现状即可（只会有一条弃用警告，不影响运行）。
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
     server_name class.example.edu;
@@ -18,13 +30,71 @@ server {
     # Must stay above the app's 25 MB upload cap (server.py MAX_RESOURCE_BYTES / app.py MAX_CONTENT_LENGTH).
     client_max_body_size 26m;
 
-    location / {
+    # 下面这几条 proxy_* 写在 server 层，会被所有 location 继承，不用重复写。
+    # 注意：某个 location 里只要再写一条 proxy_set_header，继承就会整体失效，
+    # 所以这些头只在服务器层写一次。
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    # 必须是单值的 $remote_addr，不能改成 $proxy_add_x_forwarded_for：
+    # app.py 用 ProxyFix(x_for=1) 只读最右边一个地址，追加式的头会让真实 IP 错位、
+    # 把不同同学的限流记到同一个人头上。
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_read_timeout 30s;
+
+    # ---------- 限流（zone 定义在 00-dmt-ratelimit.conf 里）----------
+    # 单 IP 最多同时挂 20 个请求。
+    limit_conn dmt_conn 20;
+    # 全站总速率兜底。burst=600 是给"全班同时刷新"留的缓冲。
+    limit_req zone=dmt_global burst=600 nodelay;
+
+    # ---------- 静态资源：由 Nginx 直接读磁盘，完全不经过 Python ----------
+    # 首页引用了 16 个资源共约 3 MB，原先全部由 4 线程的 Waitress 发送。
+    # 这一块是抗打能力提升最明显的地方：图片请求从此不占用 Python 线程。
+    location /assets/ {
+        limit_req zone=dmt_general burst=80 nodelay;
+        root /opt/dmt-class-site;
+        # 与 app.py 里 static_file() 的 max-age=3600 保持一致，行为不变。
+        expires 1h;
+        # 被打时日志本身也会拖慢磁盘，静态资源不记访问日志。
+        access_log off;
+    }
+
+    # ---------- 首页：同样直接读磁盘 ----------
+    # app.py 给 index.html 的是 Cache-Control: no-cache，这里保持一致，
+    # 否则你上传新版本后自己和同学会看到旧页面。
+    location = / {
+        limit_req zone=dmt_general burst=40 nodelay;
+        root /opt/dmt-class-site;
+        try_files /index.html =404;
+        add_header Cache-Control "no-cache";
+    }
+
+    location = /index.html {
+        limit_req zone=dmt_general burst=40 nodelay;
+        root /opt/dmt-class-site;
+        add_header Cache-Control "no-cache";
+    }
+
+    # ---------- AI 接口：上游本身要跑 60 秒，超时放宽 ----------
+    # server.py 里 AI_TIMEOUT = 60，用默认的 proxy_read_timeout 30s 会被 Nginx
+    # 提前掐断返回 504。这里单独放到 120s，并用更严的写限流挡住刷接口。
+    location ^~ /api/ai/ {
+        limit_req zone=dmt_write burst=6 nodelay;
+        proxy_read_timeout 120s;
         proxy_pass http://127.0.0.1:8000;
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $remote_addr;
-        proxy_set_header X-Forwarded-Proto https;
-        proxy_read_timeout 30s;
+    }
+
+    # ---------- 登录 / 注册 / 表单：更严格的写限流 ----------
+    location ~ ^/api/(login|logout|register|contact|feedback|invites|test-mail)$ {
+        limit_req zone=dmt_write burst=10 nodelay;
+        proxy_pass http://127.0.0.1:8000;
+    }
+
+    # ---------- 其余请求交给 Python ----------
+    location / {
+        limit_req zone=dmt_general burst=60 nodelay;
+        proxy_pass http://127.0.0.1:8000;
     }
 }

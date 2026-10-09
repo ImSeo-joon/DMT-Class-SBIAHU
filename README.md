@@ -171,8 +171,9 @@ curl -s http://127.0.0.1:8000/ | grep -o og:title
    ```
 
 5. 将 `deploy/dmt-class-site.service.example` 复制为 systemd 服务配置，按实际安装路径确认配置后启用。它让 Waitress 只监听 `127.0.0.1:8000`；Nginx 才能从公网接收网页请求。
-6. 备案获批、域名解析到服务器且 HTTPS 证书已签发后，复制并修改 `deploy/nginx-https.conf.example`，填入真实域名和证书路径。防火墙只开放 SSH 管理端口及网站所需的 80/443，不开放 8000。
-7. 首次在服务器创建线上管理员（会写入生产数据库）：
+6. 备案获批、域名解析到服务器且 HTTPS 证书已签发后，先复制 `deploy/nginx-ratelimit.conf.example` 到 `/etc/nginx/conf.d/00-dmt-ratelimit.conf`（限流 zone 必须写在 http 层），再复制并修改 `deploy/nginx-https.conf.example` 到 `/etc/nginx/conf.d/dmt-class-site.conf`，填入真实域名和证书路径。防火墙只开放 SSH 管理端口及网站所需的 80/443，不开放 8000。
+7. 抗攻击加固（限流、安全组收窄、域名挂 CDN 隐藏源站、被黑洞之后怎么办）见 `deploy/SECURITY-HARDENING.md`。
+8. 首次在服务器创建线上管理员（会写入生产数据库）：
 
    ```bash
    sudo -u dmt-site env DMT_DB_PATH=/var/lib/dmt-class-site/class_site.sqlite3 \

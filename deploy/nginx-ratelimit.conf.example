@@ -1,0 +1,64 @@
+# DMT CLASS 01 —— Nginx 限流与防护（http 层）
+#
+# 安装位置：/etc/nginx/conf.d/00-dmt-ratelimit.conf
+#
+# 为什么单独一个文件：limit_req_zone / limit_conn_zone 只能写在 Nginx 主配置的
+# http { } 块里，不能写在 server { } 里面。而 /etc/nginx/conf.d/*.conf 是被
+# http { } 整体 include 进来的，所以放这里正好。
+# 这个文件里不允许出现 server { }。
+#
+# 生效检查：sudo nginx -t && sudo systemctl reload nginx
+
+# ---------- 分 IP 限流 ----------
+
+# 通用速率：单 IP 30 次/秒。一个同学打开一次首页只会产生十几次请求，30 已经非常宽松。
+limit_req_zone $binary_remote_addr zone=dmt_general:10m rate=30r/s;
+
+# 写操作速率：单 IP 3 次/秒。用于登录、注册、留言、邀请码、测试邮件、AI 接口。
+# 这些接口在 app.py 里本来就有 15 分钟窗口的次数限制（见 limited()），这里是第二道闸。
+limit_req_zone $binary_remote_addr zone=dmt_write:10m rate=3r/s;
+
+# 全站总速率兜底：所有来源合计 300 次/秒。
+# 按 IP 限流挡不住"很多 IP 各刷几下"的分布式攻击，这一条是最后一道闸。
+# 注意：它只是"防后端被彻底打满"的保底，不是 DDoS 防护。真正的大流量必须在 CDN /
+# DDoS 高防 上游被吸掉，否则服务器还是会被阿里云关进黑洞（见 SECURITY-HARDENING.md）。
+limit_req_zone $server_name zone=dmt_global:1m rate=300r/s;
+
+# 单 IP 并发请求上限。Nginx 对 HTTP/2 的每个并发请求单独计数，所以这一条同时
+# 限制了"一个 IP 同时挂多少个请求在服务器上"。
+limit_conn_zone $binary_remote_addr zone=dmt_conn:10m;
+
+# ---------- 被限流时的行为 ----------
+
+# 默认返回 503（浏览器会以为服务器挂了）。改成 429 Too Many Requests，前端才好提示。
+limit_req_status 429;
+limit_conn_status 429;
+
+# 被限流时记进 error.log，方便上线后判断有没有误伤正常同学。
+limit_req_log_level warn;
+
+# 不在响应头和错误页里暴露 Nginx 版本号。
+server_tokens off;
+
+# ---------- 挂了 CDN 之后再来做这一步 ----------
+#
+# 域名走阿里云 CDN 之后，Nginx 看到的 $remote_addr 会变成 CDN 回源节点的 IP，
+# 于是"按 IP 限流"就退了"按 CDN 节点限流"，全班同学会一起被限。
+# 解决办法是先告诉 Nginx "只有这些 IP 是可信代理"，再把真实客户端 IP 取回来。
+#
+# 下面几行默认是注释掉的。等 CDN 接通、并且你从阿里云 CDN 控制台抄到了回源 IP 段
+# （CDN 控制台 → 域名管理 → 你的域名 → 回源配置 → 回源 IP 地址段）之后，再取消注释
+# 并填进去，然后 sudo nginx -t && sudo systemctl reload nginx。
+#
+# 安全提醒：set_real_ip_from 只能填 CDN 的 IP 段。如果图省事写成 0.0.0.0/0，
+# 任何人都能伪造 X-Forwarded-For 头来绕过限流，等于把这里的防护全部关掉。
+#
+# set_real_ip_from  1.2.3.0/24;
+# set_real_ip_from  1.2.4.0/24;
+# real_ip_header    X-Forwarded-For;
+# real_ip_recursive on;
+#
+# 改完必须实测一次（用手机流量打开网站，不要用家里的 Wi-Fi）：
+#   sudo tail -f /var/log/nginx/access.log
+# 看刷出来的是不是手机的公网 IP。如果显示的是 CDN 节点的 IP，说明没配对，
+# 这时候全班会一起被限流，请先把 set_real_ip_from 注释回去。
