@@ -1571,6 +1571,12 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_PUT(self) -> None:
         path = unquote(urlparse(self.path).path)
+        # 阿里云 CDN 不支持 PATCH 方法：PATCH 会在 CDN 边缘被直接拒绝，返回
+        # 400 X-Swift-Error: request parse msg error，请求根本到不了这里。
+        # 所以前端改用 PUT 发这些请求，本方法遇到不认识的路径就转交给 do_PATCH。
+        # 必须在读取请求体之前转交——body() 直接从 rfile 读，读过一次就没了。
+        if path != "/api/schedule" and not re.fullmatch(r"/api/(news|events)/([0-9a-zA-Z_-]+)", path):
+            return self.do_PATCH()
         session, user = self.require_user(CONTENT_ROLES)
         if not user or not self.check_csrf(session):
             return

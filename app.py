@@ -756,7 +756,7 @@ def update(api_path):
         return api_error(400, str(exc))
 
 
-@app.patch("/api/me")
+@app.route("/api/me", methods=["PATCH", "PUT"])
 def update_profile():
     session, user, error = require_user()
     if error:
@@ -773,7 +773,7 @@ def update_profile():
     return jsonify({"display_name": name})
 
 
-@app.patch("/api/messages/<message_id>")
+@app.route("/api/messages/<message_id>", methods=["PATCH", "PUT"])
 def message_handle(message_id):
     session, user, error = require_user(core.CONTENT_ROLES)
     if error:
@@ -792,7 +792,7 @@ def message_handle(message_id):
     return jsonify({"ok": True})
 
 
-@app.patch("/api/feedback/<feedback_id>")
+@app.route("/api/feedback/<feedback_id>", methods=["PATCH", "PUT"])
 def feedback_handle(feedback_id):
     session, user, error = require_user({"admin"})
     if error:
@@ -810,7 +810,7 @@ def feedback_handle(feedback_id):
     return jsonify({"ok": True})
 
 
-@app.patch("/api/site-notice")
+@app.route("/api/site-notice", methods=["PATCH", "PUT"])
 def update_site_notice():
     session, user, error = require_user({"admin"})
     if error:
@@ -825,7 +825,7 @@ def update_site_notice():
     return jsonify({"ok": True, "notice": value})
 
 
-@app.patch("/api/team/<post_id>")
+@app.route("/api/team/<post_id>", methods=["PATCH", "PUT"])
 def team_status(post_id):
     session, user, error = require_user()
     if error:
@@ -847,7 +847,7 @@ def team_status(post_id):
     return jsonify({"ok": True, "status": status})
 
 
-@app.patch("/api/registration")
+@app.route("/api/registration", methods=["PATCH", "PUT"])
 def update_registration_mode():
     session, user, error = require_user({"admin"})
     if error:
@@ -862,7 +862,7 @@ def update_registration_mode():
     return jsonify({"registration_mode": mode})
 
 
-@app.patch("/api/users/<target_id>")
+@app.route("/api/users/<target_id>", methods=["PATCH", "PUT"])
 def update_role(target_id):
     session, user, error = require_user({"admin"})
     if error:
@@ -901,7 +901,7 @@ def update_role(target_id):
                     "role_label": core.ROLE_LABELS[role] if role else None})
 
 
-@app.patch("/api/folders/<folder_id>")
+@app.route("/api/folders/<folder_id>", methods=["PATCH", "PUT"])
 def rename_folder(folder_id):
     session, user, error = require_user(core.CONTENT_ROLES)
     if error:
@@ -920,7 +920,7 @@ def rename_folder(folder_id):
     return jsonify({"id": folder_id, "name": name})
 
 
-@app.patch("/api/resources/<resource_id>")
+@app.route("/api/resources/<resource_id>", methods=["PATCH", "PUT"])
 def move_resource(resource_id):
     session, user, error = require_user(core.CONTENT_ROLES)
     if error:
