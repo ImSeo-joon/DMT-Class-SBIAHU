@@ -2102,8 +2102,8 @@ async function refreshEventHistory(){
       <a href="#course-calc">
         <div class="cr-label mono">MODULE 02 / APPLIED CALCULUS</div>
         <h3>Applied Calculus<span class="cr-alt">应用微积分课程要点</span></h3>
-        <p>本课程的课程要点同样按课时组织：第一课只收录 9 月 29 日课堂中的极限内容，后续课时依次补充。</p>
-        <span class="cr-en">Course essentials for introductory calculus; Lesson 1 keeps only the limits material from the 29 September session.</span>
+        <p>本课程的课程要点同样按课时组织：第一课收录 9 月 29 日课堂中的极限引入，第二课收录 10 月 9 日的邻域、单侧极限与无穷极限，后续课时依次补充。</p>
+        <span class="cr-en">Course essentials for introductory calculus: Lesson 1 covers the limits introduction of 29 September, Lesson 2 the neighbourhoods, one-sided and infinite limits of 9 October.</span>
         <span class="cr-go">进入课程 / Open course →</span>
       </a>
       <a href="#course-cn">
@@ -2458,7 +2458,7 @@ mov  [0x28], eax     ；写回：把结果写进 0x28 号单元</div>
       <div>
         <div class="kicker mono">LESSON INDEX / 课时索引</div>
         <h2>Lessons<span class="cr-alt">课时</span></h2>
-        <p class="small-note">每一课只收录该次课主题相关的内容：第一次课系统讲函数分类、函数变换与复合函数，本课程要点只筛选其中的极限部分，并把与极限无关的函数内容留在原课堂笔记里。</p>
+        <p class="small-note">每一课只收录该次课主题相关的内容：第一次课系统讲函数分类、函数变换与复合函数，本课程要点只筛选其中的极限部分；第二次课讲邻域、单侧极限、极限不存在与无穷极限。两课都只保留极限主线，与极限无关的内容留在原课堂笔记里。</p>
       </div>
     </div>
     <div class="cr-hub">
@@ -2469,11 +2469,18 @@ mov  [0x28], eax     ；写回：把结果写进 0x28 号单元</div>
         <span class="cr-en">The limits material from the 29 September session, plus limit laws, a worked example and a terminology check.</span>
         <span class="cr-go">进入第一课 / Open Lesson 1 →</span>
       </a>
+      <a href="#course-calc-02">
+        <div class="cr-label mono">LESSON 02 / LIMITS, FURTHER</div>
+        <h3>Lesson 2: Neighbourhoods, One-Sided Limits and Infinite Limits<span class="cr-alt">应用微积分课程要点第二课：邻域、单侧极限与无穷极限</span></h3>
+        <p>2026 年 10 月 9 日课堂（07:49–09:36）的严谨化版本：ε-δ 定义与四组交互演示、唯一性与局部性质、单侧极限、运算法则与夹逼定理、海涅判据、无穷极限与阶的估计、两个重要极限的推导、间断点分类、六道提高难度习题，以及对飞书 AI 纪要的学术口径逐条纠错。</p>
+        <span class="cr-en">The 9 October session, made rigorous: the ε-δ definition with four interactive demos, uniqueness and local properties, one-sided limits, limit laws and the squeeze theorem, Heine's criterion, infinite limits and orders of smallness, derivations of the two fundamental limits, classification of discontinuities, six harder problems, and an academic line-by-line check of the Feishu notes.</span>
+        <span class="cr-go">进入第二课 / Open Lesson 2 →</span>
+      </a>
       <div class="cr-hub-soon">
-        <div class="cr-label mono">LESSON 02 / TO BE ADDED</div>
+        <div class="cr-label mono">LESSON 03 / TO BE ADDED</div>
         <h3>Later lessons<span class="cr-alt">后续课时</span></h3>
-        <p>十一之后正式讲极限的严谨定义（ε-δ），随后是极限计算、连续性、导数及其应用。</p>
-        <span class="cr-en">After the holiday: the rigorous ε-δ definition, then limit techniques, continuity and derivatives.</span>
+        <p>严格讲极限的严谨定义（ε-δ）与夹逼原理，再展开 sin x / x 的推导，随后是极限计算、连续性、导数及其应用。</p>
+        <span class="cr-en">Next: the rigorous ε-δ definition and the squeeze theorem, then the derivation of sin x / x, limit techniques, continuity and derivatives.</span>
       </div>
     </div>
   </div>
@@ -2644,6 +2651,700 @@ lim (n → ∞) (1 + 1/n)^n = e</span>
     <p class="cr-note">资料来源：2026 年 9 月 29 日「高等数学函数与极限基础讲解」课堂纪要（09:51-11:25）中与极限相关的部分，经筛选、核对与补充；标注为"补充"的小节属于课程外的整理内容，正式表述以教师讲义与后续课件为准。原课堂中的函数分类、函数变换与复合函数内容不属于极限，未收录在本课。<br>Source: the limits-related parts of the 29 September 2026 lecture notes, filtered, checked and expanded. Sections marked as supplements are additions outside the lecture; the instructor's materials remain authoritative.</p>
   </div>
 </section>
+<style>
+/* 应用微积分第二课：图示与交互演示组件（本块可整段删除，不影响其他模块） */
+.cr-fig{margin:18px 0;padding:16px 16px 12px;border:1px solid var(--line);border-radius:12px;background:#fdfcf9}
+.cr-fig svg,.cr-demo svg{width:100%;height:auto;display:block;max-width:100%;overflow:hidden}
+.cr-numwrap{margin-top:12px;overflow-x:auto}
+.cr-fig figcaption{font-size:11.5px;color:#7c8781;line-height:1.75;margin-top:10px}
+.cr-fig figcaption b{color:#5f6a62}
+.cr-figcap{font-size:11.5px;color:#7c8781;line-height:1.75;margin-top:10px}
+.cr-fig-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:820px){.cr-fig-row{grid-template-columns:1fr}}
+.cr-def{background:#f7f5ef;border-left:3px solid #a51c30;padding:12px 16px;margin:13px 0;border-radius:0 8px 8px 0;font-size:12.5px;line-height:1.9}
+.cr-thm{background:#f3f7f1;border-left:3px solid #5b7d4f;padding:12px 16px;margin:13px 0;border-radius:0 8px 8px 0;font-size:12.5px;line-height:1.9}
+.cr-def .lbl,.cr-thm .lbl{display:block;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#8c2632;margin-bottom:5px;font-weight:700}
+.cr-thm .lbl{color:#456b3a}
+.cr-proof{font-size:12px;line-height:1.85;color:#5f6a62;border-left:2px solid #ded7c9;padding-left:13px;margin:11px 0}
+.cr-proof .lbl{display:block;font-size:10.5px;letter-spacing:.1em;color:#8c2632;font-weight:700;margin-bottom:4px;font-family:'DM Mono',monospace}
+.cr-demo{margin:16px 0;padding:15px 16px;border:1px solid #e2dbcd;border-radius:12px;background:linear-gradient(180deg,#fffdf9,#faf7f1)}
+.cr-demo-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.cr-demo-head b{font-size:12.5px}
+.cr-demo-head span{font-size:10.5px;color:#8b948c;font-family:'DM Mono',monospace;letter-spacing:.08em}
+.cr-ctl{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-top:12px;padding-top:12px;border-top:1px dashed #e2dbcd}
+.cr-ctl label{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#68756e}
+.cr-ctl input[type=range]{width:132px;accent-color:#a51c30}
+.cr-ctl select{font:inherit;font-size:11.5px;padding:5px 8px;border:1px solid var(--line);border-radius:7px;background:#fff}
+.cr-ctl button{font:inherit;font-size:11.5px;padding:6px 12px;border:1px solid var(--line);border-radius:16px;background:#fff;cursor:pointer;transition:.18s}
+.cr-ctl button:hover{border-color:#c6a15a}
+.cr-ctl button.on{background:#a51c30;border-color:#a51c30;color:#fff}
+.cr-readout{font-family:'DM Mono',monospace;font-size:11.5px;color:#3f4a43;background:#fff;border:1px solid #e2dbcd;border-radius:8px;padding:9px 12px;margin-top:12px;line-height:1.9}
+.cr-readout .ok{color:#2f6b31;font-weight:700}
+.cr-readout .no{color:#a51c30;font-weight:700}
+.cr-num{width:100%;border-collapse:collapse;margin-top:12px;font-family:'DM Mono',monospace;font-size:11px}
+.cr-num th,.cr-num td{border:1px solid #e5dfd2;padding:6px 8px;text-align:right}
+.cr-num th{background:#f4f0e7;color:#5f6a62;font-weight:600;text-align:center}
+.cr-num td.k{text-align:center;color:#8b948c}
+.cr-ex{margin:14px 0;padding:14px 16px;border:1px solid #e2dbcd;border-radius:11px;background:#fff}
+.cr-ex .q{font-size:12.5px;line-height:1.9}
+.cr-ex .a{font-size:12px;line-height:1.85;color:#5f6a62;margin-top:9px;padding-top:9px;border-top:1px dashed #e6dfd1}
+.cr-ex .tagx{display:inline-block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;color:#8c2632;border:1px solid #e0cfd2;border-radius:5px;padding:2px 7px;margin-bottom:8px}
+.cr-eq{display:block;font-family:'DM Mono',monospace;font-size:12px;line-height:2;background:#fff;border:1px dashed #e2dbcd;border-radius:8px;padding:9px 13px;margin:10px 0;overflow-x:auto;white-space:nowrap}
+</style>
+<section class="page" data-view="course-calc-02" data-sections="Twelve sections: from intuition to ε-δ · uniqueness and local properties · one-sided limits · limit laws, order and squeeze · the sequential criterion · infinite limits and orders of smallness · the two fundamental limits · continuity and classification of discontinuities · numerical experiments · harder worked problems and exercises · terminology check against the Feishu notes · sources<br>包含：从直观到 ε-δ · 唯一性与局部性质 · 单侧极限 · 运算法则与夹逼 · 序列刻画 · 无穷极限与阶 · 两个重要极限 · 连续性与间断点分类 · 数值实验 · 提高难度例题与练习 · 学术口径的术语核对 · 资料来源（含 4 组交互演示与 9 幅图示）">
+  <div class="wrap page-intro">
+    <div class="kicker mono">LESSON 02 / LIMITS, RIGOROUS</div><div class="fr-mot">Leçon 2 · Limites, version rigoureuse</div>
+    <h1>Lesson 2: The ε-δ Framework, One-Sided Limits and Infinite Limits<span class="cr-sub">应用微积分课程要点第二课：极限的严格定义、单侧极限与无穷极限</span></h1>
+    <p>2026 年 10 月 9 日课堂（07:49–09:36）主线 + 严谨化拓展 / The session of 9 October 2026, with a rigorous extension</p>
+  </div>
+  <div class="wrap section">
+    <div class="cr-subnav cr-nav-course" data-active="course-calc"></div>
+    <div class="section-head">
+      <div>
+        <div class="kicker mono">LESSON CONTENT / 本课内容</div>
+        <h2>Limits: Rigorous Foundations, One-Sided and Infinite Limits<span class="cr-alt">极限：严格基础、单侧极限与无穷极限</span></h2>
+      </div>
+      <span class="tag mono">2026.10.09 · CN / EN</span>
+    </div>
+
+    <div class="cr-grid">
+      <div class="cr-card"><div class="cr-label mono">COURSE</div><strong>Applied Calculus</strong><span class="cr-alt">应用微积分</span><p>极限单元第二课。课堂主线是直观与分类，本页在此基础上补齐 ε-δ 定义、定理与证明，使其达到教材第二章的严谨程度。<span class="cr-en">The second lesson of the limits unit: the lecture's intuitive line, completed with the ε-δ definition, theorems and proofs.</span></p></div>
+      <div class="cr-card"><div class="cr-label mono">SESSION</div><strong>9 Oct 2026, 07:49-09:36</strong><span class="cr-alt">2026 年 10 月 9 日 上午</span><p>课堂明确把严格定义留在后续课程；本页的"严谨化"小节属于拓展，与课堂原文逐条区分标注。<span class="cr-en">The lecture postponed the rigorous definition; the rigorous sections here are flagged extensions.</span></p></div>
+      <div class="cr-card"><div class="cr-label mono">DEFINITION</div><strong>∀ε&gt;0 ∃δ&gt;0 : 0&lt;|x-a|&lt;δ ⟹ |f(x)-L|&lt;ε</strong><span class="cr-alt">极限的 ε-δ 定义</span><p>极限的全部性质都能从这一个量词结构推出。本页给出可拖动的双滑块演示，现场检验 δ 是否合格。<span class="cr-en">Every property follows from this quantifier structure; a draggable demo tests whether δ is admissible.</span></p></div>
+      <div class="cr-card"><div class="cr-label mono">EQUIVALENCE</div><strong>Two-sided = both one-sided</strong><span class="cr-alt">双侧等价于两侧</span><p>定理：lim f = L ⟺ lim⁻ f = lim⁺ f = L。方向性是证明的关键，区间端点只有单侧极限。<span class="cr-en">The equivalence is a theorem with a two-directional proof.</span></p></div>
+      <div class="cr-card"><div class="cr-label mono">FAILURE</div><strong>Heine's criterion</strong><span class="cr-alt">海涅判据</span><p>极限存在 ⟺ 任意趋于 a 的序列的像都收敛到同一值。这是否定极限存在最锋利的工具，sin(1/x) 是其标准反例。<span class="cr-en">The sharpest tool for disproving limits; sin(1/x) is its standard victim.</span></p></div>
+      <div class="cr-card"><div class="cr-label mono">ORDER</div><strong>Infinitesimals and orders</strong><span class="cr-alt">无穷小与阶的估计</span><p>用 o、O、~ 记号刻画逼近速度，把课堂的"等价无穷小速查"升级为可推导、可比较阶的技术。<span class="cr-en">Little-o, big-O and equivalence describe the speed of approach, replacing a memory table with derivable estimates.</span></p></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>From intuition to rigour: the ε-δ definition<span class="cr-alt">从直观到严格：极限的 ε-δ 定义</span></h3>
+      <p>课堂用"x 充分接近 a 时 f(x) 充分接近 L"刻画极限，这在应用上够用，却无法支撑证明——"充分"是程度副词，不是数学对象。要使它成为可以运算、可以推理的定义，必须把两个"充分"分别量化：把"f(x) 接近 L 到什么程度"交给任意给定的 ε，把"x 要离 a 多近"换成存在性的 δ。</p>
+      <p class="cr-en">The lecture's phrasing — "f(x) gets close to L when x gets close to a" — is fine for applications but cannot support proof, because "close" is a degree adverb rather than a mathematical object. Making it rigorous means quantifying both: an arbitrary ε for the tolerance on the values, and an existentially quantified δ for the required proximity of x.</p>
+      <div class="cr-def"><span class="lbl">DEFINITION 2.1（ε-δ）</span>设函数 f 在 a 的某个去心邻域 <span class="mono">0 &lt; |x - a| &lt; r</span> 内有定义，L ∈ ℝ。若对任意 ε &gt; 0，都存在 δ &gt; 0，使得当 <span class="mono">0 &lt; |x - a| &lt; δ</span> 时恒有 <span class="mono">|f(x) - L| &lt; ε</span>，则称 x 趋于 a 时 f(x) 的极限为 L，记作 lim (x → a) f(x) = L。<span class="cr-en">Let f be defined on a punctured neighbourhood of a. If for every ε &gt; 0 there is δ &gt; 0 such that 0 &lt; |x - a| &lt; δ always implies |f(x) − L| &lt; ε, then the limit of f at a is L.</span></div>
+      <p>三个细节决定了这个定义的全部技术含量。第一，<b>ε 任意、δ 依赖 ε</b>：改变的是"容许误差"，回应的是"需要多近"，因此 δ 一般是 ε 的函数，写作 δ(ε)。第二，<b>条件是蕴含式</b>：只要没有任何 x 落在去心 δ 邻域里，命题自动为真，所以定义不关心 f 在 a 点本身的行为。第三，<b>邻域是去心的</b>：这正是课堂反复强调的"极限与 f(a) 无关"在定义层面的来源，而不是一条需要另外记住的经验结论。</p>
+      <p class="cr-en">Three details carry all the technical weight. ε is arbitrary while δ depends on it, so δ is generally a function δ(ε); the condition is an implication, hence vacuously true when no x lies in the punctured δ-neighbourhood, so f(a) is irrelevant; and the neighbourhood is punctured, which is the definition-level reason behind the lecture's "the limit does not depend on f(a)" rather than a separate fact to memorise.</p>
+
+      <figure class="cr-fig">
+        <svg viewBox="0 0 520 150" role="img" aria-label="δ 邻域与去心 δ 邻域">
+          <line x1="26" y1="92" x2="498" y2="92" stroke="#25334f" stroke-width="1.3"/>
+          <polygon points="498,92 490,88 490,96" fill="#25334f"/>
+          <rect x="196" y="64" width="128" height="46" fill="#a51c30" opacity=".08"/>
+          <line x1="196" y1="58" x2="196" y2="100" stroke="#a51c30" stroke-width="1" stroke-dasharray="4 3"/>
+          <line x1="324" y1="58" x2="324" y2="100" stroke="#a51c30" stroke-width="1" stroke-dasharray="4 3"/>
+          <circle cx="260" cy="92" r="5.5" fill="#fdfcf9" stroke="#a51c30" stroke-width="2.2"/>
+          <text x="260" y="120" text-anchor="middle" font-size="12" font-family="Georgia,serif" font-style="italic" fill="#25334f">a</text>
+          <text x="196" y="120" text-anchor="middle" font-size="12" font-family="Georgia,serif" fill="#a51c30">a−δ</text>
+          <text x="324" y="120" text-anchor="middle" font-size="12" font-family="Georgia,serif" fill="#a51c30">a+δ</text>
+          <line x1="196" y1="76" x2="254" y2="76" stroke="#a51c30" stroke-width="1"/>
+          <line x1="266" y1="76" x2="324" y2="76" stroke="#a51c30" stroke-width="1"/>
+          <text x="260" y="46" text-anchor="middle" font-size="11" font-family="'DM Mono',monospace" fill="#8b948c">0 &lt; |x − a| &lt; δ</text>
+          <text x="430" y="120" font-size="11" font-family="'DM Mono',monospace" fill="#8b948c">ℝ</text>
+        </svg>
+        <figcaption>点 a 的 δ 邻域是开区间 (a−δ, a+δ)；极限使用的去心邻域把中心挖掉（空心圆），因此 a 点取什么值不进入定义。<b>Fig. 1</b> — The punctured neighbourhood is the working domain of every limit statement.</figcaption>
+      </figure>
+
+      <p>把定义当作一份"证明合约"，证明 lim f(x) = L 的固定流程就是：任取 ε &gt; 0，从 |f(x) − L| &lt; ε 出发<b>反解</b>出 0 &lt; |x − a| &lt; δ 的形式，取 δ 为该解的界。下面这个演示把这个流程做成了可以操作的模型：函数取 f(x) = 3x − 1，a = 2，此时 L = 5，反解给出 δ(ε) = ε / 3。</p>
+      <p class="cr-en">Read the definition as a proof contract: given ε &gt; 0, solve the inequality |f(x) − L| &lt; ε backwards for 0 &lt; |x − a| &lt; δ and take δ to be that bound. The demo below turns the procedure into a manipulable model for f(x) = 3x − 1, a = 2, L = 5, where the algebra gives δ(ε) = ε/3.</p>
+
+      <div class="cr-demo" id="demo-eps">
+        <div class="cr-demo-head"><b>交互演示 A · ε-δ 判定器 / Interactive A · the ε-δ tester</b><span>f(x) = 3x − 1 · a = 2 · L = 5</span></div>
+<svg viewBox="0 0 526 300" role="img" aria-label="ε-δ 判定的交互图示">
+          <rect x="60" y="30" width="460" height="240" fill="none" stroke="#e3ded3"/>
+          <line x1="60" y1="270" x2="520" y2="270" stroke="#25334f" stroke-width="1.2"/>
+          <line x1="60" y1="270" x2="60" y2="30" stroke="#25334f" stroke-width="1.2"/>
+          <text x="512" y="286" font-size="11" font-family="'DM Mono',monospace" fill="#8b948c">x</text>
+          <text x="36" y="40" font-size="11" font-family="'DM Mono',monospace" fill="#8b948c">y</text>
+          <rect id="epsBand" x="60" y="160" width="460" height="20" fill="#5b7d4f" opacity=".16"/>
+          <line id="epsTop" x1="60" y1="160" x2="520" y2="160" stroke="#5b7d4f" stroke-width="1" stroke-dasharray="5 3"/>
+          <line id="epsBot" x1="60" y1="180" x2="520" y2="180" stroke="#5b7d4f" stroke-width="1" stroke-dasharray="5 3"/>
+          <text id="epsTopLab" x="66" y="155" font-size="10.5" font-family="'DM Mono',monospace" fill="#456b3a">L+ε</text>
+          <text id="epsBotLab" x="66" y="195" font-size="10.5" font-family="'DM Mono',monospace" fill="#456b3a">L−ε</text>
+          <rect id="deltaWin" x="275" y="30" width="30" height="240" fill="#a51c30" opacity=".10"/>
+          <line id="deltaL" x1="275" y1="30" x2="275" y2="270" stroke="#a51c30" stroke-width="1" stroke-dasharray="4 3"/>
+          <line id="deltaR" x1="305" y1="30" x2="305" y2="270" stroke="#a51c30" stroke-width="1" stroke-dasharray="4 3"/>
+          <line x1="106" y1="266" x2="520" y2="50" stroke="#25334f" stroke-width="1.8"/>
+          <line x1="60" y1="170" x2="520" y2="170" stroke="#c9c2b4" stroke-width="1"/>
+          <circle cx="290" cy="170" r="4.5" fill="#a51c30"/>
+          <text x="290" y="288" text-anchor="middle" font-size="11" font-family="Georgia,serif" font-style="italic" fill="#a51c30">a</text>
+          <text x="52" y="174" text-anchor="end" font-size="11" font-family="Georgia,serif" font-style="italic" fill="#456b3a">L</text>
+          <line x1="290" y1="270" x2="290" y2="276" stroke="#a51c30" stroke-width="1"/>
+        </svg>
+        <div class="cr-ctl">
+          <label>ε = <input id="epsRange" type="range" min="0.15" max="1.5" step="0.05" value="0.9"><span id="epsVal" class="mono">0.90</span></label>
+          <label>δ = <input id="delRange" type="range" min="0.05" max="1.0" step="0.01" value="0.20"><span id="delVal" class="mono">0.20</span></label>
+        </div>
+        <div class="cr-readout" id="epsOut"></div>
+        <p class="cr-figcap">绿色横带是 ε 容许带，红色竖带是所选的 δ 窗口。拖动滑块观察：当 δ 超过 ε/3 时，竖带内的曲线会冲出绿带，判定为不合格。<b>Fig. 2</b> — ε sets the tolerance band; a δ is admissible exactly when the curve stays inside it.</p>
+      </div>
+
+      <div class="cr-ex"><span class="tagx">EXAMPLE 2.1</span><div class="q">用定义证明 lim (x → 2) (3x − 1) = 5。</div>
+        <div class="a"><b>证明：</b>任取 ε &gt; 0。由 |3x − 1 − 5| = 3|x − 2| 知，|3x − 1 − 5| &lt; ε 等价于 |x − 2| &lt; ε/3。取 δ = ε/3 &gt; 0，则当 0 &lt; |x − 2| &lt; δ 时，|3x − 1 − 5| = 3|x − 2| &lt; 3δ = ε。由定义 2.1，lim (x → 2)(3x − 1) = 5。<br><span class="cr-en">Take δ = ε/3; then 0 &lt; |x − 2| &lt; δ forces 3|x − 2| &lt; ε, which is the definition.</span></div>
+      </div>
+      <p class="small-note">技术提醒：本例中 δ 只依赖 ε，与 x 无关。当 f 非线性时（例如 f(x) = x²），反解出的界会依赖 x，标准做法是先<b>限制 |x − a| ≤ 1</b> 得到局部上界，再取 δ = min(1, ε/M)——这是 ε-δ 证明里最常用的一次技巧。</p>
+      <p class="cr-en">Technical note: a δ independent of x is the goal. For nonlinear f the algebraic bound depends on x, so the standard move is to first impose |x − a| ≤ 1, obtain a local bound M, and then take δ = min(1, ε/M).</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>Uniqueness and local properties<span class="cr-alt">唯一性与局部性质</span></h3>
+      <p>定义一旦严格，就能立刻产出结论——而且这些结论在课堂的直观版本里只能"显然"，无法证明。下面三条是本课所有后续运算的地基，全部只用到定义 2.1。</p>
+      <p class="cr-en">Once the definition is rigorous, conclusions follow immediately — and these are exactly the statements that must remain "obvious" in an intuitive treatment. All three need nothing beyond Definition 2.1.</p>
+      <div class="cr-thm"><span class="lbl">THEOREM 2.2（唯一性）</span>若 lim (x → a) f(x) = L 且 lim (x → a) f(x) = M，则 L = M。极限存在则唯一。<span class="cr-en">If both L and M are limits, then L = M.</span></div>
+      <div class="cr-proof"><span class="lbl">PROOF</span>设 L ≠ M，取 ε = |L − M| / 2 &gt; 0。由定义存在 δ₁，使 0 &lt; |x − a| &lt; δ₁ 时 |f(x) − L| &lt; ε；又存在 δ₂，使 0 &lt; |x − a| &lt; δ₂ 时 |f(x) − M| &lt; ε。取 δ = min(δ₁, δ₂) &gt; 0。因为 a 的去心邻域非空，取定其中一个 x，由三角不等式 |L − M| ≤ |L − f(x)| + |f(x) − M| &lt; ε + ε = |L − M|，得到 |L − M| &lt; |L − M|，矛盾。故 L = M。■<br><span class="cr-en">Assume L ≠ M, take ε = |L − M|/2, and use the triangle inequality on a common punctured neighbourhood to reach |L − M| &lt; |L − M|, a contradiction.</span></div>
+      <p class="small-note">注意证明里"去心邻域非空"这一步：它把蕴含式的空洞为真排除掉了。这正是为什么定义要求 f 在 a 的去心邻域内有定义。</p>
+      <div class="cr-thm"><span class="lbl">THEOREM 2.3（局部有界性）</span>若 lim (x → a) f(x) = L，则存在 δ &gt; 0 与 M &gt; 0，使得 0 &lt; |x − a| &lt; δ 时 |f(x)| ≤ M。即极限存在蕴含<b>局部有界</b>。<span class="cr-en">Existence of a finite limit implies local boundedness.</span></div>
+      <div class="cr-proof"><span class="lbl">PROOF</span>取 ε = 1，存在 δ &gt; 0 使 0 &lt; |x − a| &lt; δ 时 |f(x) − L| &lt; 1。于是 |f(x)| ≤ |f(x) − L| + |L| &lt; 1 + |L|。取 M = 1 + |L| 即得。■<br><span class="cr-en">Choose ε = 1 and add |L| to the bound.</span></div>
+      <p class="small-note">由此可得一条重要的<b>否定式判据</b>：若 f 在 a 的任意去心邻域内都无界，则 lim (x → a) f(x) 不存在（有限极限意义下）。例如 1/x 在 x → 0 时无界，因此不存在有限极限——这与"极限为 ∞"是两件事。</p>
+      <div class="cr-thm"><span class="lbl">THEOREM 2.4（保号性）</span>若 lim (x → a) f(x) = L 且 L &gt; 0，则存在 δ &gt; 0，使 0 &lt; |x − a| &lt; δ 时 f(x) &gt; L / 2 &gt; 0。对 L &lt; 0 同理。<span class="cr-en">A positive limit forces f to stay positive nearby.</span></div>
+      <div class="cr-proof"><span class="lbl">PROOF</span>取 ε = L / 2 &gt; 0，存在 δ &gt; 0 使 |f(x) − L| &lt; L / 2，即 −L/2 &lt; f(x) − L &lt; L/2，故 f(x) &gt; L − L/2 = L/2 &gt; 0。■<br><span class="cr-en">Use ε = L/2 and unpack the absolute-value inequality.</span></div>
+      <p class="small-note">保号性的逆命题不成立：f(x) = x² 在 0 附近处处为正，但极限为 0，不是正数。它只在"严格符号"与"极限符号"之间存在单向传递，这也解释了后面夹逼定理为什么要求非严格不等式 ≤。</p>
+      <p class="cr-en">The converse fails: f(x) = x² is positive nearby yet has limit 0. Signs pass from limits to functions but not back — which is why the squeeze theorem is stated with non-strict inequalities.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>One-sided limits, axiomatised<span class="cr-alt">单侧极限：定义、等价刻画与存在性定理</span></h3>
+      <p>课堂上用 Heaviside 阶跃函数与开区间端点说明"必须引入单侧极限"，这是动机层面的说明。要在证明中使用，单侧极限需要自己的 ε-δ 定义，而且两侧定义中的邻域必须被截掉一半。</p>
+      <p class="cr-en">The lecture motivates one-sided limits with the Heaviside function and interval endpoints. To be usable in proofs they need their own ε-δ definitions — and the neighbourhood in each is cut in half.</p>
+      <div class="cr-def"><span class="lbl">DEFINITION 2.5（单侧极限）</span>若对任意 ε &gt; 0，存在 δ &gt; 0，使当 <span class="mono">a − δ &lt; x &lt; a</span> 时 |f(x) − L| &lt; ε，则称 f 在 a 处的<b>左极限</b>为 L，记 lim (x → a⁻) f(x) = L；把区间换成 <span class="mono">a &lt; x &lt; a + δ</span> 即得<b>右极限</b> lim (x → a⁺) f(x) = L。<span class="cr-en">Left and right limits replace the punctured neighbourhood by (a − δ, a) and (a, a + δ) respectively.</span></div>
+      <div class="cr-thm"><span class="lbl">THEOREM 2.6（双侧 ⟺ 两侧）</span>lim (x → a) f(x) = L 当且仅当 lim (x → a⁻) f(x) = lim (x → a⁺) f(x) = L。<span class="cr-en">The two-sided limit exists and equals L exactly when both one-sided limits exist and equal L.</span></div>
+      <div class="cr-proof"><span class="lbl">PROOF</span><b>(⟹)</b> 双侧定义中的 δ 对全部 0 &lt; |x − a| &lt; δ 成立，自然对 a − δ &lt; x &lt; a 与 a &lt; x &lt; a + δ 都成立，故两个单侧极限都等于 L。<br><b>(⟸)</b> 设左右极限同为 L。取 ε &gt; 0，由左极限存在 δ₁ &gt; 0 使 a − δ₁ &lt; x &lt; a 时 |f(x) − L| &lt; ε；由右极限存在 δ₂ &gt; 0 使 a &lt; x &lt; a + δ₂ 时 |f(x) − L| &lt; ε。取 δ = min(δ₁, δ₂)。若 0 &lt; |x − a| &lt; δ，则 x 必落在左段或右段之一，两种情况都给出 |f(x) − L| &lt; ε。■<br><span class="cr-en">The forward direction is immediate; the converse takes δ = min(δ₁, δ₂) and splits on whether x lies left or right of a.</span></div>
+      <p class="small-note">这条定理解释了课堂上的两个观察：Heaviside 函数在 0 点左极限 0、右极限 1，两侧不等，所以双侧极限不存在；定义在开区间 (1, 2) 上的函数在端点处只有一侧邻域落在定义域内，另一个单侧极限根本没有定义，因而"双侧等价"这条定理在端点处不可用。</p>
+
+      <div class="cr-demo" id="demo-side">
+        <div class="cr-demo-head"><b>交互演示 C · 单侧逼近器 / Interactive C · one-sided approach</b><span id="sideTitle">Heaviside 阶跃函数</span></div>
+        <svg viewBox="0 0 520 300" role="img" aria-label="单侧极限逼近演示">
+          <line x1="26" y1="200" x2="492" y2="200" stroke="#d8d2c6" stroke-width="1.1"/>
+          <polygon points="492,200 484,196.5 484,203.5" fill="#d8d2c6"/>
+          <text x="478" y="192" font-size="10.5" font-family="'DM Mono',monospace" fill="#8b948c">x</text>
+          <line x1="240" y1="24" x2="240" y2="286" stroke="#c9c2b4" stroke-width="1" stroke-dasharray="4 4"/>
+          <text id="sideLblHi" x="330" y="118" font-size="10.5" font-family="'DM Mono',monospace" fill="#5f6a62"></text>
+          <text id="sideLblLo" x="32" y="222" font-size="10.5" font-family="'DM Mono',monospace" fill="#5f6a62"></text>
+          <path id="sideCurve" d="" fill="none" stroke="#25334f" stroke-width="2"/>
+          <circle id="sideGapL" cx="240" cy="200" r="4.5" fill="#fdfcf9" stroke="#25334f" stroke-width="1.8" opacity="0"/>
+          <circle id="sideGapR" cx="240" cy="130" r="4.5" fill="#fdfcf9" stroke="#25334f" stroke-width="1.8" opacity="0"/>
+          <circle id="sideVal" cx="240" cy="165" r="3.6" fill="#25334f" opacity="0"/>
+          <g id="sideDot" style="transition:transform .28s linear" transform="translate(60,200)">
+            <circle cx="0" cy="0" r="5" fill="#a51c30"/>
+          </g>
+          <text x="240" y="294" text-anchor="middle" font-size="11" font-family="Georgia,serif" font-style="italic" fill="#25334f">a</text>
+        </svg>
+        <div class="cr-ctl">
+          <label>函数 / f<select id="sidePick">
+            <option value="step">Heaviside 阶跃函数</option>
+            <option value="abs">f(x) = |x| / x</option>
+            <option value="inv">f(x) = 1 / x</option>
+          </select></label>
+          <button type="button" id="sideLeft">从左逼近 x → a⁻</button>
+          <button type="button" id="sideRight">从右逼近 x → a⁺</button>
+          <button type="button" id="sideReset">复位</button>
+        </div>
+        <div class="cr-readout" id="sideOut"></div>
+        <p class="cr-figcap">点击按钮后，动点会沿曲线逐级向 a 滑动，每一步把距离减半：a ∓ 1、a ∓ 1/2、…、a ∓ 1/32，读数同步给出当前的 x 与 f(x)。空心圆标出该侧极限的目标值，实心圆标出 f(a)，两者的差别正是本课的核心；|x| / x 与 1/x 在 x = 0 处没有实心圆，因为函数在那里无定义。<b>Fig. 3</b> — 一步一步缩短距离，才能看清左右两侧逼近的是不同的值。</p>
+      </div>
+      <p class="small-note">提高难度（拓展）：课堂上没有提到的一条存在性定理——若 f 在 (a, a + r) 上单调，则右极限 lim (x → a⁺) f(x) 一定存在（可以是有限数，也可以是 ±∞）。证明的骨架是对值域集合使用确界原理：把集合 { f(x) : a &lt; x &lt; a + r } 的讨论按上确界是否存在分成两类，再用单调性把确界翻译回 ε-δ 语言。这条定理说明"单调 + 有界"能自动换来极限存在，是后面讨论数列收敛与反常积分的常用工具。</p>
+      <p class="cr-en">Extension: monotonicity alone forces one-sided limits to exist. The proof uses the supremum principle applied to the set of values on (a, a + r). It is the reason "monotone and bounded" buys convergence, a fact reused later for sequences and improper integrals.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>Limit laws, order and the squeeze theorem<span class="cr-alt">运算法则、序结构与夹逼定理</span></h3>
+      <p>课堂列出了四则运算法则并提醒"前提是极限存在"，但没有证明。下面给出可证明的版本，并补上课堂没有涉及、但使用频率更高的序结构结论。</p>
+      <div class="cr-thm"><span class="lbl">THEOREM 2.7（四则运算）</span>设 lim f = A，lim g = B（同一极限点），则 lim (f ± g) = A ± B，lim (f · g) = A · B，且当 B ≠ 0 时 lim (f / g) = A / B。<span class="cr-en">Limits split over sums, products and quotients, the last requiring a non-zero denominator limit.</span></div>
+      <div class="cr-proof"><span class="lbl">PROOF（乘法）</span>任取 ε &gt; 0。写 f g − A B = (f − A) g + A (g − B)。由定理 2.3，存在 δ₀ &gt; 0 与 M &gt; 0 使 0 &lt; |x − a| &lt; δ₀ 时 |g(x)| ≤ M。取 ε₁ = ε / (2 max(M, 1))，有 δ₁ 使 |f − A| &lt; ε₁；取 ε₂ = ε / (2 max(|A|, 1))，有 δ₂ 使 |g − B| &lt; ε₂。令 δ = min(δ₀, δ₁, δ₂)，则 |f g − A B| ≤ |f − A||g| + |A||g − B| &lt; ε/2 + ε/2 = ε。■<br><span class="cr-en">Insert and subtract A·B, then use local boundedness of g to control each term separately.</span></div>
+      <div class="cr-thm"><span class="lbl">THEOREM 2.8（夹逼定理）</span>若在 a 的某去心邻域内恒有 g(x) ≤ f(x) ≤ h(x)，且 lim g = lim h = L，则 lim f = L。<span class="cr-en">If f is trapped between g and h, and both traps close on L, then f converges to L.</span></div>
+      <div class="cr-proof"><span class="lbl">PROOF</span>任取 ε &gt; 0。由 lim g = L 存在 δ₁ 使 g(x) &gt; L − ε；由 lim h = L 存在 δ₂ 使 h(x) &lt; L + ε。取 δ = min(δ₁, δ₂) 与夹逼条件中成立的那个邻域半径，则 L − ε &lt; g(x) ≤ f(x) ≤ h(x) &lt; L + ε，即 |f(x) − L| &lt; ε。■<br><span class="cr-en">Let both traps close within ε of L; the middle follows.</span></div>
+      <p>夹逼定理最实用的推论是课堂没有点明的一条：<b>有界量乘无穷小仍是无穷小</b>。若 |g(x)| ≤ M 在某去心邻域内成立，且 lim f = 0，则 −M|f(x)| ≤ f(x) g(x) ≤ M|f(x)|，两端都趋于 0，于是 lim f g = 0。</p>
+      <span class="cr-eq">|g(x)| ≤ M,  lim f(x) = 0   ⟹   lim f(x) g(x) = 0</span>
+      <p class="cr-en">The most useful corollary is unstated in the lecture: a bounded factor times an infinitesimal is still an infinitesimal. It is what separates x·sin(1/x) (limit 0) from sin(1/x) (no limit) even though both contain the same wild factor.</p>
+
+      <figure class="cr-fig">
+        <svg id="figSqueeze" viewBox="0 0 520 250" role="img" aria-label="夹逼定理图示：x sin(1/x) 被 ±|x| 夹住">
+          <line x1="30" y1="125" x2="500" y2="125" stroke="#e3ded3" stroke-width="1"/>
+          <line x1="265" y1="18" x2="265" y2="232" stroke="#e3ded3" stroke-width="1"/>
+          <polyline id="sqUp" fill="none" stroke="#5b7d4f" stroke-width="1.4" stroke-dasharray="5 3"/>
+          <polyline id="sqDown" fill="none" stroke="#5b7d4f" stroke-width="1.4" stroke-dasharray="5 3"/>
+          <polyline id="sqMid" fill="none" stroke="#a51c30" stroke-width="1.3"/>
+          <circle id="sqDot" cx="265" cy="125" r="4" fill="#a51c30"/>
+          <text x="52" y="34" font-size="10.5" font-family="'DM Mono',monospace" fill="#456b3a">y = |x|</text>
+          <text x="52" y="222" font-size="10.5" font-family="'DM Mono',monospace" fill="#456b3a">y = −|x|</text>
+          <text x="286" y="112" font-size="10.5" font-family="'DM Mono',monospace" fill="#8c2632">y = x sin(1/x)</text>
+          <text x="265" y="246" text-anchor="middle" font-size="11" font-family="Georgia,serif" font-style="italic" fill="#25334f">0</text>
+        </svg>
+        <figcaption>红色曲线在 −|x| 与 |x| 之间无限次震荡，但两条绿色包络都趋于 0，因此它<b>有</b>极限且极限为 0。红点正在随动画向原点收缩，直观展示"夹住"的过程。<b>Fig. 4</b> — Oscillation is not fatal by itself; being pinched to zero is.</figcaption>
+      </figure>
+      <div class="cr-ex"><span class="tagx">EXAMPLE 2.2</span><div class="q">证明 lim (x → 0) x sin(1/x) = 0。</div>
+        <div class="a"><b>证明：</b>对一切 x ≠ 0 有 |sin(1/x)| ≤ 1，故 0 ≤ |x sin(1/x)| ≤ |x|。由 lim (x → 0) |x| = 0 与夹逼定理得 lim |x sin(1/x)| = 0，从而 lim x sin(1/x) = 0（因为 |u| → 0 ⟺ u → 0）。不需要估计 sin(1/x) 本身，也不需要它收敛。■</div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>The sequential criterion and proving non-existence<span class="cr-alt">序列刻画（海涅定理）与极限不存在的证明</span></h3>
+      <p>课堂提出了"找两条都趋于 a 的序列、若像不同则极限不存在"的方法，称其为"震荡极限的判定逻辑"。它是一个定理的直接应用，定理本身值得单独记住。</p>
+      <div class="cr-thm"><span class="lbl">THEOREM 2.9（Heine，极限的序列刻画）</span>设 f 在 a 的去心邻域内有定义，则 lim (x → a) f(x) = L 当且仅当<b>对任意</b>满足 xₙ → a 且 xₙ ≠ a 的序列，都有 f(xₙ) → L。<span class="cr-en">f has limit L at a iff every sequence approaching a (with xₙ ≠ a) is mapped to a sequence converging to L.</span></div>
+      <div class="cr-proof"><span class="lbl">PROOF</span><b>(⟹)</b> 设 lim f = L。任取 ε &gt; 0，由定义取 δ &gt; 0。因 xₙ → a，存在 N 使 n &gt; N 时 0 &lt; |xₙ − a| &lt; δ，于是 |f(xₙ) − L| &lt; ε，即 f(xₙ) → L。<br><b>(⟸)</b> 用逆否命题。若 lim f ≠ L，则存在 ε₀ &gt; 0，使得对每个 δ = 1/n 都存在 xₙ 满足 0 &lt; |xₙ − a| &lt; 1/n 而 |f(xₙ) − L| ≥ ε₀。这样的序列满足 xₙ → a 且 xₙ ≠ a，但 f(xₙ) 不收敛到 L，与题设矛盾。■<br><span class="cr-en">The forward direction is a direct ε-δ chase; the converse is proved by contraposition, building a bad sequence out of the failure of the definition with δ = 1/n.</span></div>
+      <p class="small-note">把定理<b>反向</b>使用，就得到否定判据：只要找到两条序列 xₙ, yₙ → a 使 f(xₙ) 与 f(yₙ) 收敛到不同的值，或者 f(xₙ) 干脆不收敛，即可断定极限不存在。这比直接否定 ε-δ 定义容易得多，因为构造序列是构造性的工作。</p>
+      <p class="cr-en">Used in reverse, the theorem is a disproving device: two sequences converging to a with images converging to different values settle the matter. Constructing sequences is far easier than negating an ε-δ statement directly.</p>
+
+      <figure class="cr-fig">
+        <svg id="figOsc" viewBox="0 0 520 240" role="img" aria-label="sin(1/x) 在原点附近的震荡">
+          <line x1="28" y1="120" x2="500" y2="120" stroke="#e3ded3" stroke-width="1"/>
+          <line x1="264" y1="16" x2="264" y2="224" stroke="#e3ded3" stroke-width="1"/>
+          <line x1="28" y1="42" x2="500" y2="42" stroke="#c9c2b4" stroke-width="1" stroke-dasharray="4 4"/>
+          <line x1="28" y1="198" x2="500" y2="198" stroke="#c9c2b4" stroke-width="1" stroke-dasharray="4 4"/>
+          <text x="34" y="38" font-size="10.5" font-family="'DM Mono',monospace" fill="#8b948c">y = 1</text>
+          <text x="34" y="212" font-size="10.5" font-family="'DM Mono',monospace" fill="#8b948c">y = −1</text>
+          <polyline id="oscPath" fill="none" stroke="#a51c30" stroke-width="1.2"/>
+          <circle id="oscDot" cx="264" cy="120" r="4" fill="#25334f"/>
+          <text x="264" y="231" text-anchor="middle" font-size="11" font-family="Georgia,serif" font-style="italic" fill="#25334f">0</text>
+        </svg>
+        <figcaption>越接近 0，振荡频率越高：任何邻域内曲线都跑遍 [−1, 1]。取 xₙ = 1/(2nπ + π/2) 得 f(xₙ) → 1，取 yₙ = 1/(2nπ) 得 f(yₙ) → 0，两值不同，故极限不存在。<b>Fig. 5</b> — Two sequences, two different limits, no limit.</figcaption>
+      </figure>
+      <div class="cr-ex"><span class="tagx">EXAMPLE 2.3</span><div class="q">用海涅定理证明 lim (x → 0) sin(1/x) 不存在。</div>
+        <div class="a"><b>证明：</b>取 xₙ = 1/(2nπ + π/2)，则 xₙ → 0 且 xₙ ≠ 0，而 sin(1/xₙ) = sin(2nπ + π/2) = 1 → 1。再取 yₙ = 1/(2nπ)，同样 yₙ → 0，而 sin(1/yₙ) = sin(2nπ) = 0 → 0。同一极限点得到两个不同的极限值，由定理 2.9 的逆否形式，极限不存在。■</div>
+      </div>
+      <p class="small-note">提高难度（拓展）：定理 2.9 的用处不止于否定。它是把"函数极限"与"数列极限"两套理论互译的通道——凡是数列极限里成立的结论（单调有界、柯西准则、施托尔茨定理）都可以借它搬过来。反过来，它也解释了一个初学常见错觉：逐点验证了再多的序列都不足以<b>证明</b>极限存在，因为定义要求"任意"，而任意序列是无限多的对象。</p>
+      <p class="cr-en">Extension: Heine's criterion is a translator between function limits and sequence limits, so every sequence theorem — monotone convergence, Cauchy's criterion, Stolz — becomes available. It also explains a common illusion: checking many sequences can never prove existence, because the definition quantifies over all of them.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>Infinite limits, infinitesimals and orders of smallness<span class="cr-alt">无穷极限、无穷小与阶的估计</span></h3>
+      <p>课堂用"一千万、一个亿都不够大"描述趋于无穷，这是准确的直观，但"无穷极限"与"极限不存在"的关系必须讲清：在实数极限的框架下，lim = ∞ 是<b>一种特殊的极限不存在</b>，它的价值在于记录了失效的方式。它的定义同样可以量化，只是 ε 被换成了任意大的 M。</p>
+      <p class="cr-en">The lecture describes divergence as "ten million is not enough". That intuition is right, but the relation to non-existence must be stated: in the real framework, lim = ∞ is a special kind of non-existent limit that records how it fails. Its definition quantifies over an arbitrary large M instead of an ε.</p>
+      <div class="cr-def"><span class="lbl">DEFINITION 2.10（无穷极限）</span>若对任意 M &gt; 0，存在 δ &gt; 0，使得当 0 &lt; |x − a| &lt; δ 时恒有 f(x) &gt; M，则记 lim (x → a) f(x) = +∞；把 f(x) &gt; M 换成 f(x) &lt; −M 即得 lim (x → a) f(x) = −∞。相应地，双侧无穷极限成立的充要条件是左右两侧的无穷极限<b>同号且都存在</b>。<span class="cr-en">Replace the ε-tolerance by "exceeds any M", and require both one-sided infinite limits to agree in sign.</span></div>
+      <div class="cr-thm"><span class="lbl">THEOREM 2.11（倒数关系与无穷小的有界性）</span>若 lim (x → a) f(x) = ±∞，则 lim (x → a) 1/f(x) = 0；反之若 f(x) → 0 且在某去心邻域内 f(x) ≠ 0，则 1/|f(x)| → +∞。<span class="cr-en">Infinite limits and infinitesimals are reciprocals.</span></div>
+      <div class="cr-proof"><span class="lbl">PROOF（前一半）</span>任取 ε &gt; 0。令 M = 1/ε。由 lim f = +∞ 存在 δ &gt; 0 使 0 &lt; |x − a| &lt; δ 时 f(x) &gt; M = 1/ε，于是 0 &lt; 1/f(x) &lt; ε，即 |1/f(x)| &lt; ε。■<br><span class="cr-en">Set M = 1/ε and invert.</span></div>
+      <figure class="cr-fig">
+        <svg id="figAsym" viewBox="0 0 520 250" role="img" aria-label="1/x 的两支与垂直渐近线">
+          <line x1="30" y1="125" x2="500" y2="125" stroke="#e3ded3" stroke-width="1"/>
+          <line x1="265" y1="16" x2="265" y2="234" stroke="#25334f" stroke-width="1.1" stroke-dasharray="5 4"/>
+          <polyline id="invLeft" fill="none" stroke="#a51c30" stroke-width="1.7"/>
+          <polyline id="invRight" fill="none" stroke="#a51c30" stroke-width="1.7"/>
+          <text x="272" y="232" font-size="10.5" font-family="'DM Mono',monospace" fill="#25334f">x = 0（垂直渐近线）</text>
+          <text x="452" y="90" font-size="10.5" font-family="'DM Mono',monospace" fill="#8c2632">y = 1/x</text>
+          <text x="34" y="118" font-size="10" font-family="'DM Mono',monospace" fill="#8b948c">x → 0⁻ 时 → −∞</text>
+          <text x="300" y="152" font-size="10" font-family="'DM Mono',monospace" fill="#8b948c">x → 0⁺ 时 → +∞</text>
+        </svg>
+        <figcaption>左右两侧分别冲向 −∞ 与 +∞，符号不同，所以只能写作两个单侧无穷极限，双侧极限不存在。凡在 a 处出现无穷极限，直线 x = a 就是垂直渐近线。<b>Fig. 6</b> — Divergence with a change of sign is still non-existence.</figcaption>
+      </figure>
+      <p>把课堂的"等价无穷小速查表"升级为可推导的形式，需要引入阶的记号。设 f, g 在 a 的去心邻域内定义且 g(x) ≠ 0：</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>记号 / Notation</th><th>定义 / Definition</th><th>读法 / Reading</th><th>例 / Example（x → 0）</th></tr></thead>
+        <tbody>
+          <tr><td class="cr-c mono">f = o(g)</td><td class="cr">lim f / g = 0</td><td>f 是比 g 高阶的无穷小<span class="cr-en">f is of higher order</span></td><td class="mono">x² = o(x)</td></tr>
+          <tr><td class="cr-c mono">f = O(g)</td><td class="cr">|f / g| 局部有界</td><td>f 被 g 同阶控制<span class="cr-en">f is bounded by g</span></td><td class="mono">sin x = O(x)</td></tr>
+          <tr><td class="cr-c mono">f ~ g</td><td class="cr">lim f / g = 1</td><td>等价无穷小<span class="cr-en">Equivalent</span></td><td class="mono">tan x ~ x</td></tr>
+        </tbody>
+      </table></div>
+      <p>有了记号，"等价替换只在乘除中成立"这条经验规则就能升级为原因：等价替换等价于把 f 写成 g · (1 + o(1))，乘法与除法中这个因子被整体带过，而加减法中两个 o(1) 的系数是否相互抵消无法预先知道，真正起作用的低阶项可能被抹掉。例如</p>
+      <span class="cr-eq">tan x − sin x = sin x (1/cos x − 1) ~ x · x²/2 = x³/2   （而非 x − x = 0）</span>
+      <p class="cr-en">With the notation, the rule "equivalence works only in products and quotients" acquires a reason: substitution replaces f by g·(1 + o(1)), and in sums the two o(1) factors may cancel, hiding the dominant term.</p>
+      <p class="small-note">提高难度（拓展）：把课堂的两条标准极限展开成幂级数，就得到后面 Taylor 展开的前两项，所有实验题的答案都能由此一次算出：sin x = x − x³/6 + o(x³)，tan x = x + x³/3 + o(x³)，1 − cos x = x²/2 + o(x²)，ln(1 + x) = x − x²/2 + o(x²)，eˣ = 1 + x + x²/2 + o(x²)。这套展开不是新知识，而是本课 ε-δ 语言在"局部多项式逼近"方向上的自然延伸。</p>
+      <p class="cr-en">Extension: expanding the two fundamental limits yields the first Taylor terms (sin x = x − x³/6 + o(x³), and so on), so every exercise below can be answered in one line. This is where the ε-δ language naturally leads next.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>The two fundamental limits, derived<span class="cr-alt">两个重要极限的严格推导</span></h3>
+      <p>课堂把 lim (x → 0) sin x / x = 1 作为"必须记住的事实"，并说明严格推导要等夹逼原理。现在两个工具都齐了，可以补上这个推导——它是整门课第一个真正需要几何直觉的极限，也是"面积夹逼"这一整套技术的原型。</p>
+      <p class="cr-en">The lecture presents lim (x → 0) sin x / x = 1 as a fact to memorise. With the squeeze theorem now available, the derivation can be completed — and it is the prototype of every area-squeezing argument that follows.</p>
+      <figure class="cr-fig">
+        <svg viewBox="-3 0 506 340" role="img" aria-label="单位圆中用面积夹逼 sin x / x">
+          <circle cx="110" cy="200" r="110" fill="none" stroke="#25334f" stroke-width="1.3"/>
+          <line x1="110" y1="200" x2="240" y2="200" stroke="#25334f" stroke-width="1.2"/>
+          <line x1="110" y1="200" x2="110" y2="60" stroke="#25334f" stroke-width="1.2"/>
+          <line x1="110" y1="200" x2="239" y2="200" stroke="#25334f" stroke-width="1"/>
+          <line x1="220" y1="200" x2="220" y2="61" stroke="#c9c2b4" stroke-width="1" stroke-dasharray="4 3"/>
+          <polygon points="110,200 220,200 220,61" fill="#5b7d4f" opacity=".14"/>
+          <path d="M 110 200 L 220 200 A 110 110 0 0 0 178.4 113.8 Z" fill="#a51c30" opacity=".16"/>
+          <line x1="110" y1="200" x2="220" y2="61" stroke="#a51c30" stroke-width="1.6"/>
+          <path d="M 220 200 A 110 110 0 0 0 178.4 113.8" fill="none" stroke="#25334f" stroke-width="1.6"/>
+          <path d="M 158 200 A 48 48 0 0 0 139.8 162.4" fill="none" stroke="#8c2632" stroke-width="1"/>
+          <text x="163" y="196" font-size="12" font-family="Georgia,serif" font-style="italic" fill="#8c2632">x</text>
+          <text x="230" y="196" font-size="11.5" font-family="Georgia,serif" fill="#25334f">A (1, 0)</text>
+          <text x="176" y="108" font-size="11.5" font-family="Georgia,serif" fill="#25334f">B</text>
+          <text x="226" y="56" font-size="11.5" font-family="Georgia,serif" fill="#456b3a">C (1, tan x)</text>
+          <text x="300" y="120" font-size="11" font-family="'DM Mono',monospace" fill="#456b3a">△OAC：面积 = tan x / 2</text>
+          <text x="300" y="146" font-size="11" font-family="'DM Mono',monospace" fill="#8c2632">扇形 OAB：面积 = x / 2</text>
+          <text x="300" y="172" font-size="11" font-family="'DM Mono',monospace" fill="#25334f">△OAB：面积 = sin x / 2</text>
+          <text x="300" y="205" font-size="11" font-family="'DM Mono',monospace" fill="#5f6a62">⟹ sin x &lt; x &lt; tan x</text>
+        </svg>
+        <figcaption>三块区域的嵌套关系（0 &lt; x &lt; π/2）：三角形 △OAB ⊂ 扇形 OAB ⊂ 三角形 △OAC。比较面积即得 sin x &lt; x &lt; tan x，同除以 sin x 并用夹逼定理就得到 sin x / x → 1。<b>Fig. 7</b> — The geometry supplies the two-sided inequality; the squeeze theorem does the rest.</figcaption>
+      </figure>
+      <div class="cr-thm"><span class="lbl">THEOREM 2.12（第一重要极限）</span>lim (x → 0) sin x / x = 1。由等价记号即 sin x ~ x（x → 0）。<span class="cr-en">The first fundamental limit, equivalent to sin x ~ x.</span></div>
+      <div class="cr-proof"><span class="lbl">PROOF</span>先设 0 &lt; x &lt; π/2。由扇形与三角形面积比较得 sin x &lt; x &lt; tan x。除以 sin x &gt; 0 得 1 &lt; x / sin x &lt; 1 / cos x，取倒数得 cos x &lt; sin x / x &lt; 1。因 lim (x → 0⁺) cos x = 1（由 cos 的连续性），由夹逼定理得右极限为 1。又 sin x / x 是偶函数（sin(−x)/(−x) = sin x / x），故左极限同为 1，由定理 2.6 得双侧极限为 1。■<br><span class="cr-en">Compare areas, divide by sin x, take reciprocals, apply the squeeze theorem for the right-hand limit, then use evenness for the left.</span></div>
+      <div class="cr-thm"><span class="lbl">THEOREM 2.13（第二重要极限）</span>数列 aₙ = (1 + 1/n)ⁿ 单调递增且有上界，故收敛；其极限定义为 e，即 lim (n → ∞)(1 + 1/n)ⁿ = e，且 lim (x → 0⁺)(1 + x)^{1/x} = e。<span class="cr-en">The sequence is increasing and bounded above; its limit defines e.</span></div>
+      <div class="cr-proof"><span class="lbl">PROOF（骨架）</span>用二项式展开得 aₙ = Σ_{k=0}^{n} C(n,k) / nᵏ，逐项比较可证 aₙ &lt; a_{n+1}（单调增）；再用 (1 + 1/n)ⁿ &lt; 1 + 1 + 1/2! + … + 1/n! &lt; 3 得它有上界。由单调有界原理，aₙ 收敛，记极限为 e。■<br><span class="cr-en">Binomial expansion gives monotonicity term by term; the same expansion gives 3 as an upper bound; monotone convergence finishes the job.</span></div>
+      <p class="small-note">提高难度（拓展）：定理 2.13 给出 e 的存在性，但完全没有告诉你 e 是多少——这正是"存在性定理"与"计算方法"的分工。实际计算 e 需要用级数 e = Σ 1/k!，而把这两个极限与级数联系起来，正是下一阶段 Taylor 展开的任务。此外，由定理 2.12 可以直接推出 tan x ~ x、arcsin x ~ x、1 − cos x ~ x²/2，推导方式都是"化为 sin x / x 或 sin²(x/2)/(x/2)² 的形式"——这解释了为什么课上的速查表不需要背诵，只需要从一条极限推出。</p>
+      <p class="cr-en">Extension: Theorem 2.13 establishes that e exists without computing it; the series e = Σ 1/k! supplies the value. And every entry of the lecture's equivalence table is a one-line consequence of sin x / x, obtained by rewriting in terms of sin of a half-angle.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>Continuity and the classification of discontinuities<span class="cr-alt">连续性与间断点分类</span></h3>
+      <p>课堂反复强调"极限与 f(a) 无关"，把它翻译成连续性的语言就得到本课与下一章之间的桥：连续性不是新的概念，而是"极限恰好等于函数值"这一巧合。<b>f 在 a 连续 ⟺ lim (x → a) f(x) = f(a)</b>。由此立刻得到连续性的三条判据，缺一不可：f 在 a 有定义、极限存在、两者相等。</p>
+      <p class="cr-en">Translated into continuity, the lecture's emphasis becomes the bridge to the next chapter: f is continuous at a exactly when the limit equals f(a). Three conditions must hold together — defined, limit exists, equal.</p>
+      <div class="cr-thm"><span class="lbl">THEOREM 2.14（连续与单侧）</span>f 在 a 连续 ⟺ f 在 a 既左连续又右连续，即 lim (x → a⁻) f(x) = f(a) = lim (x → a⁺) f(x)。<span class="cr-en">Continuity is equivalent to continuity from both sides.</span></div>
+      <figure class="cr-fig">
+        <svg viewBox="0 0 520 200" role="img" aria-label="四类间断点示意图">
+          <g font-size="10.5" font-family="'DM Mono',monospace" fill="#8b948c">
+            <text x="60" y="192" text-anchor="middle">可去 / removable</text>
+            <text x="190" y="192" text-anchor="middle">跳跃 / jump</text>
+            <text x="320" y="192" text-anchor="middle">无穷 / infinite</text>
+            <text x="450" y="192" text-anchor="middle">震荡 / oscillating</text>
+          </g>
+          <g stroke="#e3ded3" stroke-width="1">
+            <line x1="16" y1="110" x2="106" y2="110"/><line x1="60" y1="20" x2="60" y2="170"/>
+            <line x1="146" y1="110" x2="236" y2="110"/><line x1="190" y1="20" x2="190" y2="170"/>
+            <line x1="276" y1="110" x2="366" y2="110"/><line x1="320" y1="20" x2="320" y2="170"/>
+            <line x1="406" y1="110" x2="500" y2="110"/><line x1="450" y1="20" x2="450" y2="170"/>
+          </g>
+          <path d="M 20 62 L 100 62" stroke="#25334f" stroke-width="1.8" fill="none"/>
+          <circle cx="60" cy="62" r="4" fill="#fdfcf9" stroke="#25334f" stroke-width="1.8"/>
+          <circle cx="60" cy="42" r="3.4" fill="#a51c30"/>
+          <path d="M 150 62 L 186 62 M 194 138 L 232 138" stroke="#25334f" stroke-width="1.8" fill="none"/>
+          <circle cx="190" cy="62" r="4" fill="#fdfcf9" stroke="#25334f" stroke-width="1.8"/>
+          <circle cx="190" cy="138" r="4" fill="#fdfcf9" stroke="#25334f" stroke-width="1.8"/>
+          <path d="M 282 165 Q 314 160 317 40 M 323 40 Q 326 160 358 165" stroke="#25334f" stroke-width="1.8" fill="none"/>
+          <line x1="320" y1="20" x2="320" y2="170" stroke="#a51c30" stroke-width="1" stroke-dasharray="4 3"/>
+          <path id="discOsc" d="" stroke="#25334f" stroke-width="1.6" fill="none"/>
+          <circle cx="450" cy="110" r="3.4" fill="#a51c30"/>
+        </svg>
+        <figcaption>四类失效方式对应的处理策略：可去间断补一个定义即可修复；跳跃间断提示需要分左右讨论；无穷间断对应垂直渐近线；震荡间断说明极限语言本身的边界——这四类合起来穷尽了"极限存在但不等"与"极限不存在"的全部情形。<b>Fig. 8</b> — The four ways a function can fail to be continuous.</figcaption>
+      </figure>
+      <p class="small-note">补充（拓展）：这三个条件还给出一个常用技巧——判断连续性时，先把 f(a) 与 lim f 分别算出来再比较，而不是直接算极限。课堂上 (sin x)/x 与 (x − 1)/(x² − 1) 两个例子都是"极限存在但 f(a) 无定义"，属于可去间断；只要把 a 点的值补成极限值，函数立刻在该点连续。这一步称作<b>连续延拓</b>。</p>
+      <p class="cr-en">Extension: a practical habit — compute f(a) and lim f separately, then compare. Both lecture examples are removable: defining f(a) to be the limit performs the continuous extension.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>Workbench: watching convergence numerically<span class="cr-alt">数值实验台：把"趋近"变成可观察的量</span></h3>
+      <p>ε-δ 讨论的是任意小的量级，人眼无法直接看到。把 x 取成 a 逐级靠近的十进小数，就能把"趋于"变成一张可读的表——这是课堂上取 0.1、0.05、0.001 求瞬时速度时用的同一种方法，只是把它系统化。下表可以切换函数并调节逼近量级，直接观察四个典型函数在 0 附近或 1 附近的表现差异。</p>
+      <p class="cr-en">The ε-δ discussion concerns arbitrarily small scales, which the eye cannot reach. Sampling x at successive decimal orders turns convergence into a readable table — the same device the lecture used for instantaneous velocity at Δt = 0.1, 0.05, 0.001, here made systematic.</p>
+      <div class="cr-demo" id="demo-num">
+        <div class="cr-demo-head"><b>交互演示 B · 数值逼近实验台 / Interactive B · numerical workbench</b><span id="numSpec"></span></div>
+        <div class="cr-ctl" style="margin-top:0;padding-top:0;border-top:0">
+          <label>函数 / f<select id="numPick">
+            <option value="rat">f(x) = (x² − 1) / (x − 1)，a = 1</option>
+            <option value="sinc">f(x) = sin x / x，a = 0</option>
+            <option value="oscs">f(x) = x · sin(1/x)，a = 0</option>
+            <option value="inv">f(x) = 1 / x²，a = 0</option>
+            <option value="wild">f(x) = sin(1/x)，a = 0</option>
+          </select></label>
+          <label>量级 k（x = a ± 10⁻ᵏ）<input id="numK" type="range" min="1" max="10" step="1" value="6"><span id="numKVal" class="mono">6</span></label>
+        </div>
+        <div class="cr-numwrap"><table class="cr-num"><thead><tr><th>k</th><th>x = a − 10⁻ᵏ</th><th>f(x)</th><th>x = a + 10⁻ᵏ</th><th>f(x)</th></tr></thead><tbody id="numBody"></tbody></table></div>
+        <div class="cr-readout" id="numOut"></div>
+        <p class="cr-figcap">这张表能验证数值趋势，但<b>不能代替证明</b>：任意有限多个样本都无法覆盖定义中"任意 ε"。它真正的作用是产生猜想——猜想之后再回到 ε-δ 或海涅定理。<b>Fig. 9</b> — Numerical evidence generates conjectures; only the definition proves them.</p>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Harder problems<span class="cr-alt">提高难度：综合例题与练习</span></h3>
+      <p>以下题目超出课堂范围，但每一道都能只用本课的定理完成——这是检验"是否真的掌握了本课"的标准。建议先自己写完整证明，再对照解答要点。</p>
+      <div class="cr-ex"><span class="tagx">EXERCISE 1 · ε-δ</span><div class="q">用定义证明 lim (x → 1) (x² + 1) = 2。</div>
+        <div class="a"><b>要点：</b>|x² + 1 − 2| = |x − 1||x + 1|。先限制 |x − 1| &lt; 1，则 1 &lt; x &lt; 2，故 |x + 1| &lt; 4。取 δ = min(1, ε/4)，则 |x² − 1| &lt; 4 · ε/4 = ε。关键动作是"先局部界定，再吸收常数"。</div>
+      </div>
+      <div class="cr-ex"><span class="tagx">EXERCISE 2 · 夹逼</span><div class="q">证明 lim (x → 0⁺) x · ⌊1/x⌋ = 1（⌊·⌋ 为取整函数）。</div>
+        <div class="a"><b>要点：</b>由取整不等式 1/x − 1 &lt; ⌊1/x⌋ ≤ 1/x，同乘 x &gt; 0 得 1 − x &lt; x⌊1/x⌋ ≤ 1。两端都趋于 1，由夹逼定理得结论。这题说明"震荡/跳跃"的因子只要被代数不等式压住，极限仍然存在。</div>
+      </div>
+      <div class="cr-ex"><span class="tagx">EXERCISE 3 · 高阶无穷小</span><div class="q">求 lim (x → 0) (tan x − sin x) / x³。</div>
+        <div class="a"><b>要点：</b>tan x − sin x = sin x (1/cos x − 1) = sin x (1 − cos x)/cos x。代入等价关系 sin x ~ x、1 − cos x ~ x²/2、cos x → 1，得极限为 1/2。若直接把 tan x 与 sin x 都换成 x，会得到 0/0 之外错误的 0，这正是课堂上强调"加减不能替换"的最短反例。</div>
+      </div>
+      <div class="cr-ex"><span class="tagx">EXERCISE 4 · 单侧与指数</span><div class="q">讨论 f(x) = x / (1 + e^{1/x}) 在 x = 0 处的单侧极限与连续性。</div>
+        <div class="a"><b>要点：</b>当 x → 0⁺ 时 1/x → +∞，故 e^{1/x} → +∞，分母主导，f(x) → 0；当 x → 0⁻ 时 1/x → −∞，e^{1/x} → 0，故 f(x) → x/1 → 0 也成立。两侧极限都为 0，因此极限存在且为 0；但 f 在 0 处无定义，属于可去间断，补充定义 f(0) = 0 即得连续延拓。</div>
+      </div>
+      <div class="cr-ex"><span class="tagx">EXERCISE 5 · 幂指函数</span><div class="q">求 lim (x → 0⁺) xˣ。</div>
+        <div class="a"><b>要点：</b>写成 xˣ = e^{x ln x}。由夹逼：对 0 &lt; x &lt; 1，取 n 使 1/(n+1) ≤ x &lt; 1/n，则 |x ln x| ≤ (ln n)/n → 0，故 x ln x → 0。由 eˣ 的连续性，xˣ → e⁰ = 1。核心是"用夹逼把 x ln x 压到 0"，而不是直接代入。</div>
+      </div>
+      <div class="cr-ex"><span class="tagx">EXERCISE 6 · 序列刻画</span><div class="q">证明 f(x) = sin(1/x) 在 x → 0 时既没有有限极限，也不趋于无穷。</div>
+        <div class="a"><b>要点：</b>有限极限用定理 2.9 的两条序列否定（如例 2.3）。"不趋于无穷"需要另一组证据：取 zₙ = 1/(nπ)，则 f(zₙ) = sin(nπ) = 0，函数值沿该序列恒为 0，不可能超过任意的 M，因此也不满足定义 2.10。两个结论合起来说明这个函数在 0 处属于震荡型间断——它同时否定了极限存在与无穷极限两种可能。</div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Terminology check and corrections to the Feishu notes<span class="cr-alt">术语核对（学术口径）与对飞书纪要的纠错</span></h3>
+      <p class="small-note">本次课的资料来源是同场会议的飞书 AI 纪要。以下按学术口径逐条核对：结论正确的保留，表述不严谨的给出规范说法，并标注它在本课中的对应定理。</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>AI 纪要的说法 / As written</th><th>核对与规范表述 / Correction</th><th>对应定理 / Ref</th></tr></thead>
+        <tbody>
+          <tr><td>"极限为无穷"属于极限存在的一种。<span class="cr-en">Infinite limits exist.</span></td><td>在实数极限框架下，极限为无穷属于<b>极限不存在</b>，只是记录了一种特定的失效方式。只有在扩充实数系 ℝ ∪ {±∞} 中才可以把它记账为"收敛"，两者不可混用。<span class="cr-en">Within ℝ, an infinite limit is a non-existent limit; only in the extended real line is it recorded as convergence.</span></td><td class="mono">2.10 / 2.11</td></tr>
+          <tr><td>无符号标注的无穷默认指正无穷。<span class="cr-en">Unsigned ∞ means +∞.</span></td><td>口语可以，正式书写必须区分 +∞ 与 −∞。双侧极限只有同号时才可写作 ∞，异号时只能写"极限不存在"。<span class="cr-en">Always mark the sign; opposite signs mean no two-sided infinite limit.</span></td><td class="mono">2.10</td></tr>
+          <tr><td>"左右单侧无穷极限类型一致"是趋于无穷的充要条件。<span class="cr-en">Both one-sided infinite limits must agree.</span></td><td>结论正确，但表述应补全量词：要求两侧无穷极限<b>都存在且同号</b>。一侧 +∞、另一侧有限或 −∞ 时，双侧极限都不存在。<span class="cr-en">Requires both to exist and share a sign.</span></td><td class="mono">2.10</td></tr>
+          <tr><td>"震荡极限的判定逻辑"只给做法，未给名字与理由。<span class="cr-en">The oscillation test is unnamed.</span></td><td>它是海涅定理（定理 2.9）的逆否形式。使用时要保证两条序列都满足 xₙ ≠ a，且像序列的极限确实不同——两点都是定义中的条件，不能省。<span class="cr-en">It is the contrapositive of Heine's criterion; both hypotheses matter.</span></td><td class="mono">2.9</td></tr>
+          <tr><td>函数在 a 点无定义不影响极限讨论。<span class="cr-en">Undefined at a is harmless.</span></td><td>正确，而且现在可以说明理由：定义中的条件是蕴含式，且邻域是去心的，所以 f(a) 根本不进入定义。这是"定义使然"，不是经验规律。<span class="cr-en">True by construction of the definition, not by experience.</span></td><td class="mono">2.1</td></tr>
+          <tr><td>把 sin x / x 记作 "(sinx)/x"，未标注定义域。<span class="cr-en">(sinx)/x, no domain.</span></td><td>规范写法为 sin x / x，并注明 x ≠ 0。它在 0 处无定义但极限存在且为 1，是可去间断的标准例子，也是定理 2.12 的结论。<span class="cr-en">Write sin x / x with x ≠ 0; the limit is Theorem 2.12.</span></td><td class="mono">2.12</td></tr>
+          <tr><td>Heaviside 阶跃函数在 0 点的取值未说明。<span class="cr-en">The value at 0 is not specified.</span></td><td>常见约定 H(0) = 1/2 或 1。无论取何值，左极限 0、右极限 1 均不变，故按定理 2.6 双侧极限不存在——这恰好说明"极限与 f(a) 无关"。<span class="cr-en">Whichever value is chosen, the one-sided limits fix the verdict.</span></td><td class="mono">2.6</td></tr>
+          <tr><td>"切线的朴素定义仅适用于圆"。<span class="cr-en">The naive tangent works only for circles.</span></td><td>表述准确。严格地说，割线斜率 (f(x) − f(a))/(x − a) 的极限才是切线斜率，因此导数本身就是一个 ε-δ 对象；本课的定义是后面全部微分学的地基。<span class="cr-en">Accurate: the derivative is itself an ε-δ object.</span></td><td class="mono">2.1</td></tr>
+        </tbody>
+      </table></div>
+      <p><b>课堂学习提示</b>：老师以"扁鹊见蔡桓公"为喻，提醒问题要及时提出；本次课的 PPT 会发到班级群，仅限内部传阅，不要对外传播或上传到公开网络。</p>
+      <p class="cr-en">Study note: ask questions early (the Bian Que parable); the slides are for internal circulation only.</p>
+      <p><b>后续预告</b>：下一阶段正式建立 ε-δ 定义（本页已提前给出并配套演示）、讲解夹逼原理的更多应用，并据此完成 (sin x)/x → 1 的课堂版推导，随后转入极限计算的一般方法、连续性与导数。</p>
+    </div>
+
+    <p class="cr-note">资料来源：2026 年 10 月 9 日「函数极限相关知识点讲解」课堂（07:49–09:36）与同场会议的飞书 AI 纪要（工具自动生成，自带"可能存在不准确之处"的提示）；理论框架与习题体系参照 James Stewart, <i>Calculus: Early Transcendentals</i> (9th ed.) 第 2 章「Limits and Derivatives」，其中 2.2 函数极限、2.3 运算法则、2.4 极限的精确定义、2.5 连续性、2.6 无穷极限为本页拓展部分的对照组。本页正文中的定义、定理与证明属于标准数学内容，由本页重新组织撰写；标注为"拓展"或"提高难度"的部分超出课堂范围，正式表述以教师讲义与后续课件为准。<br>Source: the lecture of 9 October 2026 and the Feishu AI notes for the same session. The rigorous framework and the problem set follow the structure of Chapter 2 of Stewart, <i>Calculus: Early Transcendentals</i> (9th ed.). Definitions, theorems and proofs are standard mathematical content, reorganised here; sections marked as extensions lie beyond the lecture and the instructor's materials remain authoritative.</p>
+  </div>
+</section>
+<script>
+/* 应用微积分第二课：图示与交互演示（整块删除即可关闭本课的全部动态效果） */
+(function(){
+  var root=document.querySelector('[data-view="course-calc-02"]');
+  if(!root){return;}
+  function id(s){return document.getElementById(s);}
+  function attr(el,o){if(!el){return;}for(var k in o){el.setAttribute(k,o[k]);}}
+  function poly(px,py,f,x0,x1,n,minAbs){
+    minAbs=minAbs||0;var s='';
+    for(var i=0;i<=n;i++){
+      var x=x0+(x1-x0)*i/n;
+      if(Math.abs(x)<minAbs){continue;}
+      var y=f(x);
+      if(!isFinite(y)){continue;}
+      s+=px(x).toFixed(2)+','+py(y).toFixed(2)+' ';
+    }
+    return s;
+  }
+  function dpath(px,py,f,x0,x1,n,minAbs){
+    minAbs=minAbs||0;var s='',first=true;
+    for(var i=0;i<=n;i++){
+      var x=x0+(x1-x0)*i/n;
+      if(Math.abs(x)<minAbs){first=true;continue;}
+      var y=f(x);
+      if(!isFinite(y)){first=true;continue;}
+      s+=(first?'M ':'L ')+px(x).toFixed(2)+' '+py(y).toFixed(2)+' ';
+      first=false;
+    }
+    return s;
+  }
+  function num(v){
+    if(!isFinite(v)){return v>0?'+∞':'−∞';}
+    if(v===0){return '0';}
+    var a=Math.abs(v);
+    if(a<1e-4||a>=1e5){return v.toExponential(4);}
+    return String(Math.round(v*1e10)/1e10);
+  }
+
+  /* ---------- Fig. 4 夹逼定理 / squeeze ---------- */
+  (function(){
+    var SX=function(x){return 260+x/0.34*220;};
+    var SY=function(y){return 130-y/0.34*100;};
+    attr(id('sqUp'),{points:poly(SX,SY,function(x){return Math.abs(x);},-0.34,0.34,120)});
+    attr(id('sqDown'),{points:poly(SX,SY,function(x){return -Math.abs(x);},-0.34,0.34,120)});
+    attr(id('sqMid'),{points:poly(SX,SY,function(x){return x*Math.sin(1/x);},-0.34,0.34,2400,1e-5)});
+    window.__sqMap=[SX,SY];
+  })();
+
+  /* ---------- Fig. 5 sin(1/x) 震荡 / oscillation ---------- */
+  (function(){
+    var OX=function(x){return 264+x/0.24*236;};
+    var OY=function(y){return 120-y*78;};
+    attr(id('oscPath'),{points:poly(OX,OY,function(x){return Math.sin(1/x);},-0.24,0.24,7000,3e-4)});
+    window.__oscMap=[OX,OY];
+  })();
+
+  /* ---------- Fig. 6 y = 1/x 与垂直渐近线 / vertical asymptote ---------- */
+  (function(){
+    var AX=function(x){return 265+x*87.5;};
+    var AY=function(y){return 125-y*33.3333;};
+    attr(id('invLeft'),{points:poly(AX,AY,function(x){return 1/x;},-2.4,-0.36,600)});
+    attr(id('invRight'),{points:poly(AX,AY,function(x){return 1/x;},0.36,2.4,600)});
+  })();
+
+  /* ---------- Fig. 8 震荡间断的小图 / oscillating discontinuity ---------- */
+  (function(){
+    var DX=function(x){return 450+x/0.09*44;};
+    var DY=function(y){return 110-y*55;};
+    attr(id('discOsc'),{d:dpath(DX,DY,function(x){return Math.sin(1/x);},-0.09,0.09,4000,2e-4)});
+  })();
+
+  /* ---------- 交互演示 A：ε-δ 判定器 / interactive A ---------- */
+  (function(){
+    var epsR=id('epsRange'),delR=id('delRange');
+    if(!epsR||!delR){return;}
+    var PX=function(x){return 60+x*115;};
+    var PY=function(y){return 270-y*20;};
+    var F=function(x){return 3*x-1;};
+    var A=2,L=5;
+    function draw(){
+      var e=parseFloat(epsR.value),d=parseFloat(delR.value);
+      var yTop=PY(L+e),yBot=PY(L-e);
+      attr(id('epsBand'),{y:yTop,height:Math.max(2,yBot-yTop)});
+      attr(id('epsTop'),{y1:yTop,y2:yTop});
+      attr(id('epsBot'),{y1:yBot,y2:yBot});
+      attr(id('epsTopLab'),{y:yTop-5});
+      attr(id('epsBotLab'),{y:yBot+13});
+      var xL=PX(A-d),xR=PX(A+d);
+      attr(id('deltaWin'),{x:xL,width:Math.max(2,xR-xL),y:30,height:240});
+      attr(id('deltaL'),{x1:xL,x2:xL});
+      attr(id('deltaR'),{x1:xR,x2:xR});
+      id('epsVal').textContent=e.toFixed(2);
+      id('delVal').textContent=d.toFixed(2);
+      var need=e/3;
+      var ok=d<=need+1e-9;
+      /* 检验竖带右端是否仍在绿带内：f(a+d) = L + 3d */
+      var edge=L+3*d;
+      id('epsOut').innerHTML='ε = '+e.toFixed(2)+' 时，反解得 δ 的最大可行值 δ<sub>max</sub> = ε / 3 = <b>'+need.toFixed(3)+
+        '</b>。当前 δ = '+d.toFixed(2)+'，故 <span class="'+(ok?'ok':'no')+'">'+(ok?'δ 合格':'δ 不合格')+
+        '</span>；窗口右端点上 f(a+δ) = '+(edge).toFixed(2)+'，绿带要求它落在 '+(L-e).toFixed(2)+' 与 '+(L+e).toFixed(2)+' 之间。'+
+        '<br>取值检验：取 δ = ε/3 时，0 &lt; |x − 2| &lt; δ ⟹ |3x − 1 − 5| = 3|x − 2| &lt; 3δ = ε。';
+    }
+    epsR.addEventListener('input',draw);
+    delR.addEventListener('input',draw);
+    draw();
+  })();
+
+  /* ---------- 交互演示 B：数值逼近实验台 / interactive B ---------- */
+  (function(){
+    var pick=id('numPick'),kR=id('numK'),body=id('numBody'),out=id('numOut'),spec=id('numSpec');
+    if(!pick||!kR||!body){return;}
+    var T={
+      rat:{a:1,f:function(x){return (x*x-1)/(x-1);},
+        spec:'a = 1 · 理论值 2',
+        note:'x ≠ 1 时 f(x) = x + 1，因此左右两侧都压向 2；f(1) 无定义，但由定义 2.1 这不影响极限。'},
+      sinc:{a:0,f:function(x){return x===0?NaN:Math.sin(x)/x;},
+        spec:'a = 0 · 理论值 1',
+        note:'第一重要极限（定理 2.12）。数值只能给出趋势，证明要靠面积夹逼。'},
+      oscs:{a:0,f:function(x){return x===0?NaN:x*Math.sin(1/x);},
+        spec:'a = 0 · 理论值 0',
+        note:'夹逼定理的样板：x·sin(1/x) 没有固定方向，但被 ±|x| 压到 0，所以极限存在。'},
+      inv:{a:0,f:function(x){return x===0?NaN:1/(x*x);},
+        spec:'a = 0 · 趋于 +∞',
+        note:'按定义 2.10 属于无穷极限，在实数框架下记为极限不存在；x = 0 是垂直渐近线。'},
+      wild:{a:0,f:function(x){return x===0?NaN:Math.sin(1/x);},
+        spec:'a = 0 · 极限不存在',
+        note:'由海涅定理（定理 2.9）否定：取 xₙ = 1/(2nπ + π/2) 得值 1，取 yₙ = 1/(2nπ) 得值 0。'}
+    };
+    function render(){
+      var t=T[pick.value],a=t.a,K=parseInt(kR.value,10),rows='';
+      for(var k=1;k<=K;k++){
+        var h=Math.pow(10,-k);
+        var xl=a-h,xr=a+h;
+        var vl=t.f(xl),vr=t.f(xr);
+        var hi=(k===K)?' style="background:#fdf6f3"':'';
+        rows+='<tr'+hi+'><td class="k">'+k+'</td><td>'+xl.toFixed(Math.min(k,10))+'</td><td>'+num(vl)+
+          '</td><td>'+xr.toFixed(Math.min(k,10))+'</td><td>'+num(vr)+'</td></tr>';
+      }
+      body.innerHTML=rows;
+      spec.textContent=t.spec;
+      id('numKVal').textContent=K;
+      out.innerHTML='<b>'+t.spec+'</b><br>'+t.note+
+        '<br><span class="mono">样本量级 10⁻'+K+'</span>：把 k 继续增大，可以看到数值稳定或继续放大，但有限的样本永远不等于证明。';
+    }
+    pick.addEventListener('change',render);
+    kR.addEventListener('input',render);
+    render();
+  })();
+
+  /* ---------- 交互演示 C：单侧逼近器 / interactive C ---------- */
+  (function(){
+    var pick=id('sidePick'),curve=id('sideCurve'),gL=id('sideGapL'),gR=id('sideGapR'),
+        val=id('sideVal'),dot=id('sideDot'),out=id('sideOut'),title=id('sideTitle'),
+        lblHi=id('sideLblHi'),lblLo=id('sideLblLo');
+    if(!pick||!curve){return;}
+    function PX(x){return 240+150*x;}
+    function PY(y){return 200-70*y;}
+    var MAX=1.3;
+    var CFG={
+      step:{label:'Heaviside 阶跃函数（取 H(0) = 1/2）',
+        f:function(x){return x<0?0:1;},gap:0.0008,hi:'y = 1',lo:'y = 0',hiXY:[330,118],loXY:[32,222],
+        gapL:0,gapR:1,fv:0.5,
+        text:'左极限 = 0、右极限 = 1，两侧不等 ⟹ <span class="no">双侧极限不存在</span>（定理 2.6）。'+
+             'H(0) = 1/2 这个取值完全不进入结论，这正是"极限与 f(a) 无关"最好的例证。'},
+      abs:{label:'f(x) = |x| / x（x = 0 处无定义）',
+        f:function(x){return x<0?-1:1;},gap:0.0008,hi:'y = +1',lo:'y = −1',hiXY:[330,118],loXY:[32,288],
+        gapL:-1,gapR:1,fv:null,
+        text:'左极限 = −1、右极限 = +1，两侧不等 ⟹ <span class="no">双侧极限不存在</span>；'+
+             'f 在 0 处无定义，属于跳跃间断，无法用连续延拓修复。'},
+      inv:{label:'f(x) = 1 / x（x = 0 处无定义）',
+        f:function(x){return 1/x;},gap:0.12,hi:'→ +∞',lo:'→ −∞',hiXY:[404,52],loXY:[32,282],
+        gapL:null,gapR:null,fv:null,
+        text:'左极限 = −∞、右极限 = +∞，两侧都无界但<b>符号相反</b>，因此既没有有限极限，也没有统一的无穷极限（定义 2.10）；'+
+             '直线 x = 0 是垂直渐近线。'}
+    };
+    var cur='step',timer=null;
+    function build(c){
+      var d='';
+      [-1,1].forEach(function(s){
+        var x0=s*MAX,x1=s*c.gap;
+        d+='M '+PX(x0).toFixed(1)+' '+PY(c.f(x0)).toFixed(1)+' ';
+        for(var i=1;i<=200;i++){
+          var x=x0+(x1-x0)*i/200;
+          d+='L '+PX(x).toFixed(1)+' '+PY(c.f(x)).toFixed(1)+' ';
+        }
+      });
+      return d;
+    }
+    function ring(el,v){
+      if(!el){return;}
+      if(v===null){attr(el,{opacity:0});return;}
+      attr(el,{cx:PX(0),cy:PY(v),opacity:1});
+    }
+    function stop(){if(timer){clearInterval(timer);timer=null;}}
+    function apply(name){
+      cur=name;stop();
+      var c=CFG[name];
+      title.textContent=c.label;
+      attr(curve,{d:build(c)});
+      ring(gL,c.gapL);ring(gR,c.gapR);
+      if(c.fv===null){attr(val,{opacity:0});}else{attr(val,{cx:PX(0),cy:PY(c.fv),opacity:1});}
+      lblHi.textContent=c.hi;lblLo.textContent=c.lo;
+      attr(lblHi,{x:c.hiXY[0],y:c.hiXY[1]});
+      attr(lblLo,{x:c.loXY[0],y:c.loXY[1]});
+      var x=-1.2;
+      attr(dot,{transform:'translate('+PX(x)+','+PY(c.f(x))+')'});
+      out.innerHTML=c.text+'　（当前：复位）';
+    }
+    function play(dir){
+      var c=CFG[cur];stop();
+      var k=0,sign=(dir==='left')?-1:1;
+      function one(){
+        if(k>5){stop();return;}
+        var d=Math.pow(2,-k),x=sign*d;
+        attr(dot,{transform:'translate('+PX(x).toFixed(1)+','+PY(c.f(x)).toFixed(1)+')'});
+        out.innerHTML=c.text+'　<span class="mono">当前 x = a '+(dir==='left'?'−':'+')+' 1/'+Math.pow(2,k)+
+          '，f(x) = '+num(c.f(x))+'</span>';
+        k++;
+      }
+      one();
+      timer=setInterval(one,340);
+    }
+    pick.addEventListener('change',function(){apply(pick.value);});
+    id('sideLeft').addEventListener('click',function(){play('left');});
+    id('sideRight').addEventListener('click',function(){play('right');});
+    id('sideReset').addEventListener('click',function(){apply(pick.value);});
+    apply('step');
+  })();
+
+  /* ---------- 动画：夹逼收缩与震荡扫描 / animation loop ---------- */
+  (function(){
+    var sqDot=id('sqDot'),oscDot=id('oscDot');
+    if(!sqDot&&!oscDot){return;}
+    var reduce=false;
+    try{reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){reduce=false;}
+    var T=4600,t0=0;
+    if(reduce){
+      if(sqDot){var m0=window.__sqMap;if(m0){var x0=0.06;attr(sqDot,{cx:m0[0](x0),cy:m0[1](x0*Math.sin(1/x0))});}}
+      if(oscDot){var m1=window.__oscMap;if(m1){var x1=0.12;attr(oscDot,{cx:m1[0](x1),cy:m1[1](Math.sin(1/x1))});}}
+      return;
+    }
+    function frame(now){
+      if(!t0){t0=now;}
+      if(root.classList.contains('active')){
+        var t=now-t0,u=(t%T)/T;
+        var m0=window.__sqMap;
+        if(sqDot&&m0){
+          var x=0.30*(1-u);
+          if(x<2e-3){x=2e-3;}
+          attr(sqDot,{cx:m0[0](x).toFixed(2),cy:m0[1](x*Math.sin(1/x)).toFixed(2)});
+        }
+        var m1=window.__oscMap;
+        if(oscDot&&m1){
+          var dir=(Math.floor(t/(T*2))%2===0)?1:-1;
+          var xs=dir*0.24*(1-u);
+          if(Math.abs(xs)<3e-4){xs=dir*3e-4;}
+          attr(oscDot,{cx:m1[0](xs).toFixed(2),cy:m1[1](Math.sin(1/xs)).toFixed(2)});
+        }
+      }
+      window.requestAnimationFrame(frame);
+    }
+    window.requestAnimationFrame(frame);
+  })();
+})();
+</script>
 <script>
 (function(){
   var links=document.querySelector('.links');
