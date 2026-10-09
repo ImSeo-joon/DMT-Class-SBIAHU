@@ -1,15 +1,19 @@
 # Replace class.example.edu with the exact domain after ICP filing is approved
 # and a TLS certificate has been issued for it.
 #
-# 安装位置：/etc/nginx/conf.d/dmt-class-site.conf
-# 本文件依赖同目录的 00-dmt-ratelimit.conf（先装它，否则 nginx -t 会因为
-# 找不到 dmt_general / dmt_write / dmt_global / dmt_conn 这些 zone 而报错）。
+# 【安装位置】本班站点用的是 Ubuntu 的 sites-available 布局，不是 conf.d：
+#   /etc/nginx/sites-available/dmt-class-site   ← 真正的文件
+#   /etc/nginx/sites-enabled/dmt-class-site     ← 软链接指向上面的文件
+# 限流 zone 那个文件仍然放 /etc/nginx/conf.d/00-dmt-ratelimit.conf。
+# nginx.conf 里 include 的顺序是 conf.d 在前、sites-enabled 在后，所以限流文件
+# 必须先装好，否则 nginx -t 会因为找不到 dmt_general / dmt_write / dmt_global /
+# dmt_conn 这些 zone 而报错。
 #
 # 改完执行：sudo nginx -t && sudo systemctl reload nginx
 server {
     listen 80;
     listen [::]:80;
-    server_name class.example.edu;
+    server_name dmt01sbiahu.com www.dmt01sbiahu.com;
 
     # 证书续签要用到这里，所以 80 端口要保留跳转、不能直接关掉。
     return 301 https://$host$request_uri;
@@ -22,13 +26,20 @@ server {
     # 老版本不支持 http2 on; 这个写法，保持现状即可（只会有一条弃用警告，不影响运行）。
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
-    server_name class.example.edu;
+    server_name dmt01sbiahu.com www.dmt01sbiahu.com;
 
-    ssl_certificate     /etc/letsencrypt/live/class.example.edu/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/class.example.edu/privkey.pem;
+    # 证书由 acme.sh 自动续期，文件在 /etc/ssl/dmt01sbiahu/
+    # （最初是 Certbot 签发在 /etc/letsencrypt/live/dmt01sbiahu.com/）
+    ssl_certificate     /etc/ssl/dmt01sbiahu/fullchain.pem;
+    ssl_certificate_key /etc/ssl/dmt01sbiahu/privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3;
     # Must stay above the app's 25 MB upload cap (server.py MAX_RESOURCE_BYTES / app.py MAX_CONTENT_LENGTH).
     client_max_body_size 26m;
+    # 只放行阿里云 CDN 回源的请求。CDN 回源时会带 ali-cdn-real-ip 头，不带这个头的
+    # 一律 403，这样别人就算查到源站 IP 也进不来。头名是公开的，懂行的人可以伪造，
+    # 所以这是提高门槛，不是绝对防线。
+    # 万一这句导致网站打不开：把这一行删掉（或前面加 #）再 reload 即可。
+    if ($http_ali_cdn_real_ip = "") { return 403; }
 
     # 下面这几条 proxy_* 写在 server 层，会被所有 location 继承，不用重复写。
     # 注意：某个 location 里只要再写一条 proxy_set_header，继承就会整体失效，
