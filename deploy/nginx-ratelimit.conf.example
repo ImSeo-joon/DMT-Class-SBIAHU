@@ -40,25 +40,31 @@ limit_req_log_level warn;
 # 不在响应头和错误页里暴露 Nginx 版本号。
 server_tokens off;
 
-# ---------- 挂了 CDN 之后再来做这一步 ----------
+# ---------- 挂了 CDN 之后必须做这一步：真实客户端 IP 还原 ----------
 #
 # 域名走阿里云 CDN 之后，Nginx 看到的 $remote_addr 会变成 CDN 回源节点的 IP，
-# 于是"按 IP 限流"就退了"按 CDN 节点限流"，全班同学会一起被限。
-# 解决办法是先告诉 Nginx "只有这些 IP 是可信代理"，再把真实客户端 IP 取回来。
+# 于是"按 IP 限流"就退化成"按 CDN 节点限流"，全班同学被当成同一个人。
+# 更严重的是 app.py 里按 IP 限流的留言、发帖、AI 接口（15 分钟 8 次）会被全班共享，
+# 8 次之后所有人都用不了。
 #
-# 下面几行默认是注释掉的。等 CDN 接通、并且你从阿里云 CDN 控制台抄到了回源 IP 段
-# （CDN 控制台 → 域名管理 → 你的域名 → 回源配置 → 回源 IP 地址段）之后，再取消注释
-# 并填进去，然后 sudo nginx -t && sudo systemctl reload nginx。
+# 为什么不按"CDN 回源 IP 段"做白名单：阿里云 CDN 的回源节点 IP（L2）是动态分配的，
+# 人工申请获取回源 IP 段已经停止，接口 DescribeL2VipsByDomain 要求日峰值带宽 ≥ 1Gbps。
+# 官方「源站安全防护替代方案」给的做法是：CDN 回源时会透传 ali-cdn-real-ip 头，
+# 源站直接从这个头取真实客户端 IP。
 #
-# 安全提醒：set_real_ip_from 只能填 CDN 的 IP 段。如果图省事写成 0.0.0.0/0，
-# 任何人都能伪造 X-Forwarded-For 头来绕过限流，等于把这里的防护全部关掉。
+# 本班站点实际生效的三行（写在 /etc/nginx/conf.d/00-dmt-ratelimit.conf 末尾）：
 #
-# set_real_ip_from  1.2.3.0/24;
-# set_real_ip_from  1.2.4.0/24;
-# real_ip_header    X-Forwarded-For;
-# real_ip_recursive on;
+# set_real_ip_from  0.0.0.0/0;
+# set_real_ip_from  ::/0;
+# real_ip_header    ali-cdn-real-ip;
+#
+# 为什么 set_real_ip_from 写 0.0.0.0/0：因为回源 IP 不固定，列不出白名单。
+# 代价是：知道源站 IP 的人可以伪造 ali-cdn-real-ip 头绕过按 IP 的限流。
+# 挡这一层靠的是站点配置里那句：
+#   if ($http_ali_cdn_real_ip = "") { return 403; }
+# 它让不带这个头的直接访问返回 403。头名是公开的，所以这是提高门槛，不是绝对防线。
 #
 # 改完必须实测一次（用手机流量打开网站，不要用家里的 Wi-Fi）：
-#   sudo tail -f /var/log/nginx/access.log
-# 看刷出来的是不是手机的公网 IP。如果显示的是 CDN 节点的 IP，说明没配对，
-# 这时候全班会一起被限流，请先把 set_real_ip_from 注释回去。
+#   sudo tail -5 /var/log/nginx/access.log
+# 看第一列是不是手机的公网 IP（浏览器搜"IP"对照）。如果显示的是 CDN 节点的 IP，
+# 说明没配对，这时候全班会一起被限流，请把这三行注释回去再排查。
