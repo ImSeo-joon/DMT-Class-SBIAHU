@@ -108,7 +108,68 @@ body{background:radial-gradient(ellipse at 12% 8%,#e9e5dc 0,transparent 31rem),v
 .life-photo-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:0 0 14px}
 .life-photo-strip img{display:block;width:100%;height:112px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
 </style>
+<style id="l3-style">
+.l3-demo{margin:14px 0;padding:14px 16px;border:1px solid var(--line,#e3ddd0);border-radius:12px;background:rgba(255,255,255,.55)}
+.l3-demo h4{margin:0 0 4px;font-size:15px}
+.l3-demo .l3-sub{margin:0 0 10px;font-size:12.5px;opacity:.72}
+.l3-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0}
+.l3-ctl{display:flex;align-items:center;gap:8px;font-size:13px}
+.l3-ctl input[type=range]{width:190px}
+.l3-ctl input[type=number],.l3-ctl input[type=text]{width:104px;padding:5px 8px;border:1px solid var(--line,#e3ddd0);border-radius:8px;background:#fff;font:inherit;font-size:13px}
+.l3-btn{padding:5px 12px;border:1px solid var(--gold,#c2a15a);border-radius:999px;background:#fff;cursor:pointer;font:inherit;font-size:12.5px}
+.l3-btn:hover{background:#fff8e8}
+.l3-out{font-family:ui-monospace,Consolas,monospace;font-size:14px;line-height:1.75}
+.l3-out b{color:#8a6a2f}
+.l3-bits{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.l3-bit{width:38px;height:44px;border:1px solid var(--line,#e3ddd0);border-radius:9px;background:#fff;cursor:pointer;font:600 17px/1 ui-monospace,Consolas,monospace;display:flex;align-items:center;justify-content:center}
+.l3-bit.on{background:#2f2a22;color:#fdf8ee;border-color:#2f2a22}
+.l3-bit.sign{box-shadow:inset 0 0 0 2px #c2a15a}
+.l3-idx{display:flex;gap:5px;justify-content:center;font:11px/1 ui-monospace,monospace;opacity:.55}
+.l3-idx span{width:38px;text-align:center}
+.l3-tag{display:inline-block;padding:2px 8px;border-radius:999px;background:#f3ecdd;font:11px/1.6 ui-monospace,monospace}
+.l3-steps{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.l3-step{padding:6px 11px;border:1px dashed var(--line,#e3ddd0);border-radius:10px;font-size:12.5px;background:#fff;cursor:pointer;opacity:.6}
+.l3-step.on{border-style:solid;border-color:#2f2a22;opacity:1;background:#fff8e8}
+.l3-flow{margin:8px 0;font:13px/1.8 ui-monospace,Consolas,monospace}
+.l3-bar{height:10px;border-radius:6px;background:#efe7d7;overflow:hidden;margin:8px 0}
+.l3-bar i{display:block;height:100%;background:linear-gradient(90deg,#c2a15a,#8a6a2f);width:0;transition:width .25s}
+.l3-cell{display:inline-block;min-width:34px;padding:3px 6px;margin:2px;border:1px solid var(--line,#e3ddd0);border-radius:7px;background:#fff;font:12.5px/1.5 ui-monospace,monospace;text-align:center}
+.l3-cell.hi{background:#2f2a22;color:#fdf8ee;border-color:#2f2a22}
+.l3-tiny{font-size:12.5px;opacity:.75}
+</style>
+<style id="l3c-style">
+.l3c-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.l3c-tab{padding:5px 12px;border:1px solid var(--line,#e3ddd0);border-radius:999px;background:#fff;cursor:pointer;font:12.5px/1.6 inherit}
+.l3c-tab.on{background:#2f2a22;color:#fdf8ee;border-color:#2f2a22}
+.l3c-stage{border:1px solid var(--line,#e3ddd0);border-radius:12px;background:#fff;padding:10px;margin:8px 0}
+.l3c-grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.l3c-mini{border:1px solid var(--line,#e3ddd0);border-radius:10px;background:#fffdf7;padding:8px 10px;font-size:12.5px;line-height:1.7}
+.l3c-mini b{font-family:ui-monospace,Consolas,monospace}
+.l3c-val{font:13px/1.8 ui-monospace,Consolas,monospace}
+.l3c-ok{color:#2f6b3a;font-weight:600}
+.l3c-no{color:#a33;font-weight:600}
+</style>
+<style id="q-style">
+.q-host{margin:24px 0 4px;padding:18px 20px;border:1px solid var(--line,#e3ddd0);border-radius:14px;background:linear-gradient(180deg,#fffdf7,#fff)}
+.q-kicker{font:11px/1.6 ui-monospace,monospace;letter-spacing:.14em;opacity:.6}
+.q-head h3{margin:4px 0 6px;font-size:19px}
+.q-sub{margin:0 0 12px;font-size:13px;opacity:.75;line-height:1.7}
+.q-item{padding:12px 0;border-top:1px dashed var(--line,#e3ddd0)}
+.q-item:first-child{border-top:0}
+.q-q{font-size:14.5px;line-height:1.75;margin-bottom:8px}
+.q-num{display:inline-block;min-width:22px;height:22px;border-radius:50%;background:#2f2a22;color:#fdf8ee;font:12px/22px ui-monospace,Consolas,monospace;text-align:center;margin-right:8px}
+.q-opts{display:grid;gap:6px}
+.q-opt{text-align:left;padding:8px 12px;border:1px solid var(--line,#e3ddd0);border-radius:10px;background:#fff;cursor:pointer;font:13.5px/1.65 inherit}
+.q-opt:hover{background:#fff8e8}
+.q-opt.q-right{background:#e8f4ec;border-color:#2f6b3a}
+.q-opt.q-wrong{background:#fbecec;border-color:#a33}
+.q-opt[disabled]{cursor:default}
+.q-why{margin-top:8px;padding:8px 10px;border-left:3px solid var(--gold,#c2a15a);background:#fffaf0;font-size:13px;line-height:1.78}
+.q-score{margin-top:14px;font:12.5px/1.7 ui-monospace,Consolas,monospace;opacity:.85}
+</style>
 </head>
+
+
 <body><div class="notice-bar" id="noticeBar" hidden><div class="wrap notice-in"><span class="notice-tag">通知 / NOTICE</span><span class="notice-text" id="noticeText">正在读取通知…</span><span class="notice-actions"><button type="button" id="noticeEdit" hidden>编辑公告 / Edit</button><button type="button" id="noticeClose" aria-label="关闭通知栏 / Close">×</button></span></div></div>
 <header class="wrap nav"><a class="brand" href="#home" data-page="home"><span class="mark">D1</span><span>DMT CLASS 01 <span style="color:#919b94">| SBIAHU</span></span></a><nav class="links"><a href="#home" data-page="home">班级首页</a><a href="#news" data-page="news">班级新闻</a><a href="#affairs" data-page="affairs">事务中心</a><a href="#schedule" data-page="schedule">周课表</a><a href="#resources" data-page="resources">公共资料</a><a href="#opportunities" data-page="opportunities">竞赛科研</a><a href="#team" data-page="team">组队大厅</a><a href="#tuimian" data-page="tuimian">推免指南</a><a href="#liuxue" data-page="liuxue">留学指南</a><a href="#life" data-page="life">生活专区</a><a href="#contact" data-page="contact">咨询合作</a><a href="#admin" data-page="admin" id="adminNav" style="display:none">编辑后台</a></nav><div class="nav-right"><span class="nav-status"><i class="status-dot"></i> 班级空间 · 在线</span><span class="nav-divider"></span><a class="nav-account" href="#account" data-page="account" id="accountNav">注册 / 登录</a></div><button class="menu" aria-label="菜单" onclick="document.querySelector('.links').classList.toggle('show')">☰</button></header>
 <main id="top"><div class="page active" data-view="home"><section class="wrap hero" id="about"><div><div class="eyebrow mono">ANHUI UNIVERSITY × STONY BROOK</div><h1>DMT<br><span>Class 01</span></h1><p>安徽大学纽约石溪学院 · 数字媒体技术 1 班。一个连接创意、技术与彼此的班级空间。从日常事务到灵感协作，我们一起把想法变成作品。</p><div class="actions"><a class="btn primary" href="#affairs" data-page="affairs">进入事务中心 <span>↗</span></a><a class="btn secondary" href="#contact" data-page="contact">联系班委 <span>↓</span></a></div></div><div class="hero-art"><div class="art-top mono"><span>CLASS SPACE / 2026—2027</span><span>31° 51′ N</span></div><div class="orbit"></div><div class="core">DMT<br>01</div><i class="sat"></i><i class="sat sat2"></i><div class="art-bottom mono"><span>MAKE · SHARE · GROW</span><span>SBIAHU / AU</span></div></div></section>
@@ -2152,12 +2213,13 @@ async function refreshEventHistory(){
         <span class="cr-en">Von Neumann architecture, addresses versus data, the three buses, the instruction cycle, binary and the memory hierarchy — with corrections to the AI meeting notes.</span>
         <span class="cr-go">进入第二课 / Open Lesson 2 →</span>
       </a>
-      <div class="cr-hub-soon">
-        <div class="cr-label mono">LESSON 03 / TO BE ADDED</div>
-        <h3>Later lessons<span class="cr-alt">后续课时</span></h3>
-        <p>后续课时会按同样结构补充：变量与数据类型、控制流、函数与模块化、指针与内存管理、调试方法等。</p>
-        <span class="cr-en">Later lessons will follow the same structure.</span>
-      </div>
+      <a href="#course-app-03">
+        <div class="cr-label mono">LESSON 03 / DATA, ENCODING AND C</div>
+        <h3>Lesson 3: How Data Is Represented — Bits, Codes, Memory and the C Toolchain<span class="cr-alt">数据表示、编码、内存与 C 语言入门</span></h3>
+        <p>2026 年 10 月 10 日课堂（07:44–09:37）：位与字节、2 的幂与存储单位、进制转换与补码、ASCII 与 Unicode、内存分区与变量寻址、编译链接四阶段；含 7 处纠错、9 处拓展与 6 组交互演示。</p>
+        <span class="cr-en">Bits and bytes, powers of two and storage units, base conversion and two's complement, ASCII and Unicode, the memory model, and the four stages of the C toolchain — with seven corrections, nine extensions and six interactive demos.</span>
+        <span class="cr-go">进入第三课 / Open Lesson 3 →</span>
+      </a>
     </div>
   </div>
 </section>
@@ -2288,7 +2350,8 @@ int main(void) {
       </div>
     </div>
 
-    <p class="cr-note">资料来源：2026 年 9 月 29 日“高级语言程序设计课程讲解”开课宣讲纪要，经整理、核对与扩充；价格、日期与免考缓考流程等以教师和学院最新通知为准。后续模块将补充指针与内存、调试方法、常见错误与作业范例。<br>Source: the course orientation session of 29 September 2026, expanded and fact-checked. Fees, dates and exemption procedures follow the latest instructor and college notice. Later modules will cover pointers and memory, debugging, common errors and worked examples.</p>
+        <div class="q-host" data-quiz="course-app-01"></div>
+<p class="cr-note">资料来源：2026 年 9 月 29 日“高级语言程序设计课程讲解”开课宣讲纪要，经整理、核对与扩充；价格、日期与免考缓考流程等以教师和学院最新通知为准。后续模块将补充指针与内存、调试方法、常见错误与作业范例。<br>Source: the course orientation session of 29 September 2026, expanded and fact-checked. Fees, dates and exemption procedures follow the latest instructor and college notice. Later modules will cover pointers and memory, debugging, common errors and worked examples.</p>
   </div>
 </section>
 <section class="page" data-view="course-app-02" data-sections="Von Neumann architecture · the instruction cycle · addresses versus data · the three buses · the program counter and clock ticks · binary, bits and bytes · the memory hierarchy · corrections to the meeting notes · self-check<br>包含：冯·诺依曼结构 · 指令执行流程 · 地址与数据 · 三类总线 · PC 与时钟节拍 · 二进制与位、字节 · 存储层级 · 对会议笔记的纠错 · 学习自检">
@@ -2443,9 +2506,243 @@ mov  [0x28], eax     ；写回：把结果写进 0x28 号单元</div>
       </div>
     </div>
 
-    <p class="cr-note">资料来源：2026 年 10 月 8 日"计算机底层原理与运行机制讲解"课堂（08:16–09:36）与同场会议的飞书 AI 笔记（原笔记由工具自动生成并标注"可能存在不准确之处"）；本页逐条核对、纠错、补充术语与表格后整理，双语对照。下一课进入指针与内存管理。<br>Source: the lecture of 8 October 2026 and the Feishu AI meeting notes for the same session (auto-generated, flagged as possibly inaccurate). This page fact-checks, corrects and expands that material into the bilingual format used by Lesson 1.</p>
+        <div class="q-host" data-quiz="course-app-02"></div>
+<p class="cr-note">资料来源：2026 年 10 月 8 日"计算机底层原理与运行机制讲解"课堂（08:16–09:36）与同场会议的飞书 AI 笔记（原笔记由工具自动生成并标注"可能存在不准确之处"）；本页逐条核对、纠错、补充术语与表格后整理，双语对照。下一课进入指针与内存管理。<br>Source: the lecture of 8 October 2026 and the Feishu AI meeting notes for the same session (auto-generated, flagged as possibly inaccurate). This page fact-checks, corrects and expands that material into the bilingual format used by Lesson 1.</p>
   </div>
 </section>
+
+
+<section class="page" data-view="course-app-03" data-sections="Nine sections: data representation · storage units and powers · bases and two's complement · character encoding · memory and variables · the C toolchain · corrections · terminology · self-check">
+  <div class="wrap page-intro">
+    <div class="kicker mono">LESSON 03 / DATA, ENCODING AND C</div><div class="fr-mot">Leçon 3 · Représentation des données</div>
+    <h1>Lesson 3: How Data Is Represented — Bits, Codes, Memory and the C Toolchain<span class="cr-sub">高级语言程序设计课程要点第三课：数据表示、编码、内存与 C 语言入门</span></h1>
+    <p>2026 年 10 月 10 日课堂（07:44–09:37）整理、纠错与扩充 / Based on the session of 10 October 2026, corrected and extended</p>
+  </div>
+  <div class="wrap section">
+    <div class="cr-subnav cr-nav-course" data-active="course-app"></div>
+    <div class="section-head">
+      <div>
+        <div class="kicker mono">LESSON CONTENT / 本课内容</div>
+        <h2>Data Representation, Encoding and the C Toolchain<span class="cr-alt">数据表示、编码与 C 语言入门</span></h2>
+      </div>
+      <span class="tag mono">2026.10.10 · CN / EN</span>
+    </div>
+
+    <div class="cr-grid">
+      <div class="cr-card"><div class="cr-label mono">THEME</div><strong>From bits to programs</strong><span class="cr-alt">从位到程序</span><p>本课把散点串成一条链：位 → 编码 → 内存 → 程序。写 C 之前先回答"数据在机器里长什么样"。</p></div>
+      <div class="cr-card"><div class="cr-label mono">KEY UNITS</div><strong>bit · byte · word</strong><span class="cr-alt">位 · 字节 · 字长</span><p>1 B = 8 bit；n 位有 2ⁿ 种状态；字长决定指针宽度与一次能处理的数据宽度。</p></div>
+      <div class="cr-card"><div class="cr-label mono">CORE SKILL</div><strong>Base conversion by hand</strong><span class="cr-alt">手算进制转换</span><p>十进制、二进制、十六进制互转；按位权展开；用十六进制"压缩"看二进制。</p></div>
+      <div class="cr-card"><div class="cr-label mono">HARD POINTS</div><strong>Two's complement · float representation</strong><span class="cr-alt">补码 · 浮点表示</span><p>为什么 −128 没有对应的正数；为什么 0.1+0.2 不等于 0.3。</p></div>
+      <div class="cr-card"><div class="cr-label mono">INTERACTIVE</div><strong>Five embedded demos</strong><span class="cr-alt">五组交互演示</span><p>位数滑块、进制转换器、补码开关、字符编码查询、编译流程分步动画。</p></div>
+      <div class="cr-card"><div class="cr-label mono">SOURCE</div><strong>Feishu AI notes, verified</strong><span class="cr-alt">飞书 AI 笔记 · 已逐条核对</span><p>原笔记由会议工具自动生成并声明"可能不准确"，本页做了 7 处更正与 9 处扩充。</p></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Why this lesson matters<span class="cr-alt">这一课为什么重要</span></h3>
+      <p>会议里有一句很到位的话：<strong>"很多软件、很多大模型出来了，但是计算机底层的东西没有变。"</strong> 语法可以查手册，但"一个 int 占几个字节""越界为什么危险""0.1+0.2 为什么不是 0.3"这些问题，只有理解了数据的机器表示才答得上来。后面指针、数组、内存管理之所以难，根子都在这一课。</p>
+      <p class="cr-en">Syntax can be looked up; the behaviour of a program cannot. How many bytes an <code>int</code> occupies, why an out-of-range index is dangerous, and why <code>0.1 + 0.2 != 0.3</code> are all consequences of how data is represented. Pointers and memory management become hard exactly here, so this lesson is the foundation for everything after it.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>1 · Bits, bytes and how many states you get<span class="cr-alt">1 · 位、字节与状态数量</span></h3>
+      <p>位（bit）是最小单位，只能取 0 或 1；字节（byte）固定由 8 位组成，是存储与处理的通用基本单位。n 位能表示 2ⁿ 种不同组合，所以一个字节有 2⁸ = 256 种状态，覆盖从 00000000 到 11111111 的全部组合。</p>
+      <p><strong>难度往上走一层：</strong>为什么偏偏是 8 位？这不是数学结论，而是工程折中——既能容纳 128 个 ASCII 符号（再加一位作校验位），又是可寻址的最小单位。更重要的是"字长"（word size）：它决定一次能并行处理多少位、指针占几字节、进程能寻址多大空间。32 位机器指针 4 字节、最多 4 GiB；64 位机器指针 8 字节。</p>
+      <p class="cr-en">A bit holds 0 or 1; a byte is exactly 8 bits, so it has 2⁸ = 256 states. Eight is an engineering compromise, not a mathematical necessity: it fits the 128 ASCII symbols plus a parity bit, and it is the smallest addressable unit. Word size is the deeper idea — it fixes pointer width, the number of bits processed at once, and the addressable space (4 GiB at 32 bits, far more at 64).</p>
+
+      <div class="l3-demo">
+        <h4>Demo 1 · How many states?<span class="cr-alt">演示一 · 位数决定状态数</span></h4>
+        <p class="l3-sub">拖动滑块改变位数，看 2ⁿ 与无符号取值范围怎么变 / Drag the slider; watch 2ⁿ and the unsigned range.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">位数 n <input type="range" id="l3-bits-range" min="1" max="64" value="8"> <span class="l3-out" id="l3-bits-n">8</span></label>
+        </div>
+        <div class="l3-bar"><i id="l3-bits-bar"></i></div>
+        <div class="l3-out" id="l3-bits-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>2 · Storage units and the powers of two<span class="cr-alt">2 · 存储单位与 2 的幂</span></h3>
+      <p>相邻存储单位的换算倍率是 2¹⁰ = 1024（不是 1000），所以 1 KB = 1024 B、1 MB = 1024 KB。需要熟记 2¹ 到 2¹⁰：2¹⁰ = 1024 是核心基准值。</p>
+      <p><strong>原笔记漏掉的一条，也是"硬盘缩水"的答案：</strong>1024 这套前缀（K、M、G）原本就是二进制含义，但硬盘厂商标容量时用的是十进制——1 TB = 10¹² 字节，而操作系统按 2⁴⁰ = 1 099 511 627 776 字节算一个 TiB，于是 1 TB 的盘在系统里显示约 931 GiB。现在标准写法已经区分开：KiB、MiB、GiB 是 1024 进制，KB、MB、GB 严格说是 1000 进制。</p>
+      <p class="cr-en">Adjacent storage units step by 2¹⁰ = 1024, not 1000. The missing piece in the original notes — and the answer to the "shrinking hard drive" puzzle — is that vendors quote decimal units: a 1 TB drive holds 10¹² bytes, which the operating system reports as about 931 GiB. The standard notation now separates the two: KiB/MiB/GiB are powers of 1024, while KB/MB/GB are strictly 1000.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 2 · Unit converter<span class="cr-alt">演示二 · 单位换算</span></h4>
+        <p class="l3-sub">输入一个数值与单位，看它在两种体系下的结果 / Enter a value and unit to compare both conventions.</p>
+        <div class="l3-row">
+          <label class="l3-ctl"><input type="number" id="l3-unit-val" value="1" step="any"> <select id="l3-unit-sel" class="l3-ctl" style="padding:5px 8px;border:1px solid #e3ddd0;border-radius:8px;background:#fff;font:inherit;font-size:13px">
+            <option value="1024">KB</option><option value="1048576">MB</option><option value="1073741824">GB</option><option value="1099511627776">TB</option>
+            <option value="1000">kB (十进制)</option><option value="1000000">MB (十进制)</option><option value="1000000000000">TB (十进制)</option>
+          </select></label>
+        </div>
+        <div class="l3-out" id="l3-unit-out"></div>
+        <div class="l3-row" style="margin-top:10px"><span class="l3-tiny">2 的幂速查：</span><span class="l3-out" id="l3-pow-table"></span></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>3 · Number bases, and how to read them<span class="cr-alt">3 · 进制体系与读法</span></h3>
+      <p>十进制是人类日常计数体系，二进制是机器的原生表示，十六进制是人机之间的"压缩格式"——4 位二进制恰好等于 1 位十六进制。十六进制以 16 为基数，A–F 对应十进制的 10–15；书写时有三种约定：后缀 <code>H</code>（12AH）、前缀 <code>0x</code>（0x12A）、或下标 (12A)₁₆。</p>
+      <p><strong>为什么十六进制"更方便"：</strong>一个字节正好写两位十六进制（0xFF = 11111111），所以内存地址、颜色值、字节流都用它。反过来，看到一个十六进制数要能立刻反应出它是几位二进制。</p>
+      <p class="cr-en">Decimal is for people, binary is what the machine stores, and hexadecimal is the compact form in between — exactly four binary digits per hex digit. A byte is always two hex digits (0xFF = 11111111), which is why addresses, colours and byte dumps are written in hex.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 3 · Base converter with place-value expansion<span class="cr-alt">演示三 · 进制转换与按位权展开</span></h4>
+        <p class="l3-sub">输入任意整数（0–4294967295），同时看到四种进制与二进制的位权 / Type an integer; see four bases and the binary place values.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">整数 <input type="number" id="l3-base-val" value="210" min="0" max="4294967295" step="1"></label>
+          <button class="l3-btn" id="l3-base-demo-btn">演示按位权展开 / Show expansion</button>
+        </div>
+        <div class="l3-out" id="l3-base-out"></div>
+        <div class="l3-out" id="l3-base-exp" style="margin-top:8px"></div>
+      </div>
+
+      <p><strong>难度往上走一层：小数在二进制里往往不精确。</strong> 整数可以精确表示，但形如 0.1 的十进制小数展开成二进制是无限循环的，任何有限位宽的浮点类型都只能存它的近似值。这就是 <code>0.1 + 0.2 != 0.3</code> 的真正原因——不是语言有 bug，而是二进制表示本身装不下。C 里比较浮点数要用误差范围（如 <code>fabs(a-b) &lt; 1e-9</code>），不能直接用 <code>==</code>。</p>
+      <p class="cr-en">Integers are exact; most decimal fractions are not. 0.1 in binary is an infinitely repeating expansion, so any finite-width floating-point type stores only an approximation — that, and not a language bug, is why 0.1 + 0.2 != 0.3 in C. Compare floating-point values with a tolerance instead of ==.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>4 · Signed numbers and two's complement<span class="cr-alt">4 · 有符号数与补码</span></h3>
+      <p>8 位有符号数的最高位是符号位：0 表示正数，1 表示负数。负数用补码存储，规则是"取反加一"。补码让加法电路同时完成减法：a − b 就写成 a + (−b)，把最高位的进位丢掉即可。</p>
+      <p><strong>两处需要更正原笔记的地方：</strong>第一，原笔记说"计算机底层无减法电路"，更准确的说法是——算术逻辑单元通常用"加补码＋忽略进位"实现减法，而不是完全没有减法能力；第二，补码是<b>非对称</b>的：8 位补码范围是 −128 到 127，<b>−128 没有对应的正数</b>，这一点在写 <code>abs()</code> 或取负时要特别小心（对 −128 取负会溢出）。</p>
+      <p class="cr-en">In an 8-bit signed value the top bit is the sign, and negatives are stored in two's complement ("invert and add one"), which lets one adder circuit perform subtraction: a − b becomes a + (−b) with the carry out of the top bit discarded. Two corrections to the original notes: an ALU does perform subtraction — it does so via two's complement rather than lacking the capability; and two's complement is asymmetric, so the 8-bit range is −128…127 and −128 has no positive counterpart (negating it overflows).</p>
+
+      <div class="l3-demo">
+        <h4>Demo 4 · 8-bit two's complement playground<span class="cr-alt">演示四 · 八位补码试验台</span></h4>
+        <p class="l3-sub">点击每一位翻转；观察无符号值、有符号值（补码）与十六进制如何同步变化 / Click bits to flip them and watch all three readings change.</p>
+        <div class="l3-bits" id="l3-twos-bits"></div>
+        <div class="l3-idx" id="l3-twos-idx"></div>
+        <div class="l3-row">
+          <button class="l3-btn" id="l3-twos-neg">取反加一 / Negate</button>
+          <button class="l3-btn" id="l3-twos-inc">加一 / +1</button>
+          <button class="l3-btn" id="l3-twos-zero">清零 / Zero</button>
+          <button class="l3-btn" id="l3-twos-255">全 1 / All ones</button>
+        </div>
+        <div class="l3-out" id="l3-twos-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>5 · Character encoding: ASCII and Unicode<span class="cr-alt">5 · 字符编码：ASCII 与 Unicode</span></h3>
+      <p>ASCII 是美国标准信息交换码，共 128 个符号，占 7 位二进制，存储时最高位补 0 凑满一个字节。要背熟的对应关系：<code>'A'</code> = 65 = 0x41，<code>'a'</code> = 97 = 0x61，<code>'0'</code> = 48 = 0x30；字母与数字的码值连续递增。控制符里有换行 LF = 10（C 里写作 <code>\n</code>）、退格 BS = 8。</p>
+      <p><strong>两处需要补严的地方：</strong>ASCII 的可打印字符是 0x20–0x7E，0x00–0x1F 与 0x7F 是不可打印的控制符；另外常说的"扩展 ASCII"（0x80–0xFF，如 Latin-1）并不是 ASCII 标准，把它和 ASCII 混为一谈会在处理中文时踩坑。</p>
+      <p>Unicode 给每个符号分配唯一代码点（前缀 U+，如汉字"中"是 U+4E2D），但代码点只是编号，<b>实际怎么存要看编码格式</b>：UTF-8 是最主流的格式，一个符号占 1–4 字节，英文仍是 1 字节，汉字通常 3 字节。UTF-8 的优点是向后兼容 ASCII。</p>
+      <p><strong>字符转数字的经典技巧：</strong><code>'7' - '0'</code> 得到整数 7。成立的前提是数字字符在编码表里连续排列——这个前提在 ASCII/EBCDIC 之间不同，所以严格说是实现依赖的技巧。</p>
+      <p class="cr-en">Standard ASCII is a 7-bit code covering 128 symbols, stored with a leading 0 to fill a byte; printable characters run 0x20–0x7E while 0x00–0x1F and 0x7F are control codes. "Extended ASCII" (0x80–0xFF, e.g. Latin-1) is not part of the standard. Unicode assigns each symbol a code point (U+4E2D for 中), but storage is decided by the encoding: UTF-8 uses 1–4 bytes per symbol, one byte for English letters and typically three for Chinese, and stays backward compatible with ASCII. The idiom <code>'7' - '0'</code> yields 7 only because digit characters are contiguous — a property that is implementation-dependent.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 5 · Character ↔ code point<span class="cr-alt">演示五 · 字符与码值互查</span></h4>
+        <p class="l3-sub">输入一个字符看它的十进制/十六进制/UTF-8 字节，或输入码值反查字符 / Type a character, or a code value, to convert both ways.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">字符 <input type="text" id="l3-chr-in" maxlength="1" value="A"></label>
+          <label class="l3-ctl">或码值 <input type="number" id="l3-code-in" min="0" max="1114111" value="65"></label>
+          <button class="l3-btn" id="l3-chr-btn">换算 / Convert</button>
+        </div>
+        <div class="l3-out" id="l3-chr-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>6 · Memory layout and variables<span class="cr-alt">6 · 内存分区与变量</span></h3>
+      <p>运行中的程序，内存大致分成四块：<b>代码段</b>（机器指令，只读）、<b>数据段</b>（已初始化的全局与静态变量）、<b>BSS</b>（未初始化的全局与静态变量，运行时清零）、<b>堆</b>（程序员用 malloc/free 主动申请与释放）、<b>栈</b>（函数调用时自动增长，存放局部变量、返回地址与寄存器现场）。</p>
+      <p><strong>这里要更正原笔记的划分方式：</strong>把数据区简单分成"全局变量区、堆、栈"不够准确，因为栈并不属于数据区，而且全局变量还要区分已初始化（data）与未初始化（bss）。更关键的是——<b>栈和堆的"增长方向"相反</b>，两者相向生长，中间是尚未使用的空闲区。</p>
+      <p>内存按字节编址：每个字节有唯一地址，像房间门牌号。C 语言采用<b>按名存取</b>——你写变量名，编译器负责翻译成地址；<code>&amp;x</code> 取到的是变量首地址。32 位系统的寻址空间是 2³² 字节 = 4 GiB，64 位系统主流但嵌入式里仍有 32 位。</p>
+      <p><strong>难度往上走：</strong>基础类型的字节数并不是标准固定的。<code>sizeof(char)</code> 恒为 1，但 <code>int</code> 在常见平台上 4 字节、<code>double</code> 8 字节只是"普遍如此"。标准只给出最小值约束，所以跨平台代码要用 <code>sizeof</code>、<code>&lt;stdint.h&gt;</code> 里的 <code>int32_t</code> 这类定宽类型，而不是假设字节数。</p>
+      <p class="cr-en">A running program's memory is usually laid out as text (read-only code), data (initialised globals and statics), bss (zero-initialised globals and statics), heap (explicitly requested with malloc/free) and stack (grown automatically by calls, holding locals, return addresses and saved registers). The original notes folded the stack into the data area, which is not accurate, and the heap and stack in fact grow towards each other. Memory is byte-addressed, and C uses name-based access: you write <code>x</code>, the compiler produces the address, and <code>&amp;x</code> yields the first byte's address. Sizes of the basic types are not fixed by the language — only sizeof(char) is guaranteed to be 1 — so portable code uses sizeof and fixed-width types such as int32_t.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>7 · From source code to a running program<span class="cr-alt">7 · 从源代码到可执行程序</span></h3>
+      <p>C 程序不是一步变成可执行文件的。真实流程是四个阶段：<b>预处理</b>（展开 #include、#define，去掉注释）、<b>编译</b>（把 C 翻译成汇编）、<b>汇编</b>（把汇编翻译成机器码，得到目标文件 .o）、<b>链接</b>（把目标文件与库函数拼成一个可执行文件）。</p>
+      <p><strong>原笔记把这一步说成"编辑器→编译器→链接器"，漏了预处理与汇编。</strong>用 gcc 一行命令编译时，这四步是自动串起来的；但理解它们各自在做什么，才能在报错时判断错误来自哪一层——"undefined reference"是链接期错误，"expected ';'"是编译期错误，而宏展开出错则是预处理阶段的问题。</p>
+      <p>标准程序结构是"头文件 + main 主函数 + 核心语句"。最简单的 Hello World：</p>
+      <div class="cr-code">#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf("Hello, world\n");
+    return 0;
+}</div>
+      <p class="cr-en">A C program does not become an executable in one step: the preprocessor expands includes and macros, the compiler translates C into assembly, the assembler turns that into an object file, and the linker joins object files with libraries. The original notes skipped the first and third stages. Knowing the stages is what lets you tell where an error comes from — "undefined reference" is a link-time error, a missing semicolon is compile-time, and a broken macro fails during preprocessing.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 6 · Four stages of the toolchain<span class="cr-alt">演示六 · 编译链接四阶段</span></h4>
+        <p class="l3-sub">点击每个阶段，看它读什么、写什么、对应的 gcc 命令 / Click a stage to see its input, output and gcc flag.</p>
+        <div class="l3-steps" id="l3-cc-steps"></div>
+        <div class="l3-flow" id="l3-cc-flow"></div>
+        <div class="l3-out" id="l3-cc-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Corrections to the original notes<span class="cr-alt">对原笔记的更正</span></h3>
+      <p class="cr-note" style="margin-top:0">原笔记由会议工具自动生成，本身标注"可能存在不准确之处"。以下 7 处按学术口径更正 / Seven corrections, stated explicitly so nothing is carried forward silently.</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>原笔记说法</th><th>更正</th><th>为什么重要</th></tr></thead>
+        <tbody>
+          <tr><td>计算机底层无减法电路，减法都靠补码加法</td><td>算术逻辑单元（ALU）具备减法功能，通常以"加补码并丢弃进位"实现；不是缺少减法能力</td><td>说法会影响你对 CPU 功能的理解</td></tr>
+          <tr><td>数据区划分为全局变量区、堆、栈</td><td>标准划分是代码段、数据段、BSS、堆、栈；栈不属于数据区，且堆栈相向生长</td><td>后面讲指针与内存管理全靠这张图</td></tr>
+          <tr><td>"编辑器→编译器→链接器"</td><td>四阶段：预处理 → 编译 → 汇编 → 链接</td><td>决定你能判断错误来自哪一层</td></tr>
+          <tr><td>存储单位换算倍率 1024</td><td>1024 进制对应 KiB/MiB/GiB；KB/MB/GB 严格说是 1000 进制</td><td>这是"硬盘容量缩水"的完整解释</td></tr>
+          <tr><td>ASCII 共 128 个符号</td><td>需区分标准 ASCII（7 位 128 符号）与"扩展 ASCII"（Latin-1 等，非标准）</td><td>混淆两者会在中文处理上出错</td></tr>
+          <tr><td>整型占 4 字节、双精度占 8 字节</td><td>标准未固定字节数，仅保证 sizeof(char)=1；跨平台要用 sizeof 或定宽类型</td><td>换平台或换编译器就可能变化</td></tr>
+          <tr><td>补码只讲"取反加一"</td><td>补码是非对称的：8 位范围 −128…127，−128 的相反数溢出</td><td>写取绝对值、取负号时会出现隐蔽 bug</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Extensions to a higher level<span class="cr-alt">向上拓展的九个方向</span></h3>
+      <div class="cr-bullets">
+        <span><b>字长</b>：决定指针宽度与一次并行处理的位数；32 位指针 4 字节、寻址 4 GiB。</span>
+        <span class="cr-en">Word size fixes pointer width and addressable space — 4 bytes and 4 GiB at 32 bits.</span>
+        <span><b>为什么一个字节是 8 位</b>：容纳 128 个 ASCII 符号并可加校验位，工程折中而非数学必然。</span>
+        <span><b>浮点的二进制根源</b>：0.1 在二进制是无限循环小数，所以浮点只存近似值，比较要用误差范围。</span>
+        <span><b>IEEE 754 结构</b>：符号位 + 阶码 + 尾数；float 单精度 32 位、double 双精度 64 位，精度差距来自尾数位数。</span>
+        <span><b>补码范围与溢出</b>：8 位 −128…127；127+1 会溢出成 −128（未定义行为的有符号溢出）。</span>
+        <span><b>字节序</b>：同一个整数在小端机器上低位字节在前，大端相反；跨机器传输数据要考虑它。</span>
+        <span><b>UTF-8 的编码规则</b>：首字节的高位指示总字节数，后续字节以 10 开头；这也是它能自同步的原因。</span>
+        <span><b>内存对齐</b>：结构体成员按对齐要求填充，所以 struct 的 sizeof 常大于成员之和——下一课的伏笔。</span>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Terminology check<span class="cr-alt">术语核对</span></h3>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>中文</th><th>English</th><th>一句话说明</th></tr></thead>
+        <tbody>
+          <tr><td>位 / 字节 / 字长</td><td>bit / byte / word size</td><td>最小单位 / 8 位一字节 / 一次处理的位数</td></tr>
+          <tr><td>补码 / 符号位</td><td>two's complement / sign bit</td><td>负数表示法 / 最高位表正负</td></tr>
+          <tr><td>溢出</td><td>overflow</td><td>结果超出类型可表示范围</td></tr>
+          <tr><td>代码段 / 数据段 / BSS</td><td>text / data / bss</td><td>指令 / 已初始化全局 / 未初始化全局</td></tr>
+          <tr><td>堆 / 栈</td><td>heap / stack</td><td>手动申请 / 调用自动增长</td></tr>
+          <tr><td>按字节编址</td><td>byte-addressable</td><td>每个字节一个地址</td></tr>
+          <tr><td>取地址符</td><td>address-of operator</td><td>&amp;x 得到首地址</td></tr>
+          <tr><td>字节序</td><td>endianness</td><td>多字节数据在内存中的排列顺序</td></tr>
+          <tr><td>预处理 / 编译 / 汇编 / 链接</td><td>preprocess / compile / assemble / link</td><td>工具链四阶段</td></tr>
+          <tr><td>目标文件 / 可执行文件</td><td>object file / executable</td><td>.o 中间产物 / 最终程序</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Self-check<span class="cr-alt">学习自检</span></h3>
+      <div class="cr-checks">
+        <label class="cr-check"><input type="checkbox"><span>能说出 n 位有 2ⁿ 种状态，并解释一个字节为什么是 256 种。<span class="cr-en">State why an n-bit field has 2ⁿ states and a byte has 256.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能在十进制、二进制、十六进制之间互转，并写出按位权展开式。<span class="cr-en">Convert across decimal, binary and hex, and write the place-value expansion.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能写出 −5 的 8 位补码，并说明 −128 为什么没有对应的正数。<span class="cr-en">Write −5 in 8-bit two's complement and explain why −128 has no positive counterpart.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能解释 0.1 + 0.2 != 0.3 的原因，并说出正确的比较写法。<span class="cr-en">Explain floating-point rounding and how to compare correctly.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说出 ASCII 的可打印区间，并区分标准 ASCII 与扩展 ASCII。<span class="cr-en">Name the printable ASCII range and separate standard from extended ASCII.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说出汉字"中"的 Unicode 代码点与 UTF-8 占几个字节。<span class="cr-en">Give the code point of 中 and its UTF-8 length.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能画出内存四段图，并说明堆与栈的增长方向。<span class="cr-en">Sketch the memory layout and the growth directions of heap and stack.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说出工具链四个阶段各自做什么，并判断一个错误属于哪一阶段。<span class="cr-en">Describe the four toolchain stages and place a given error in one of them.</span></span></label>
+      </div>
+    </div>
+
+        <div class="q-host" data-quiz="course-app-03"></div>
+<p class="cr-note">资料来源：2026 年 10 月 10 日"计算机基础与C语言入门讲解"课堂（07:44–09:37）的飞书 AI 笔记（原笔记由工具生成并标注"可能存在不准确之处"）。本页逐条核对后做了 7 处更正与 9 处扩充，双语对照，并加入 6 组可操作的交互演示。下一课进入变量、类型与运算符。<br><span class="cr-en">Source: the Feishu AI notes of the 10 October 2026 session (07:44–09:37), themselves machine-generated and flagged as possibly inaccurate. This page corrects seven points, extends nine, presents everything bilingually, and adds six interactive demos.</span></p>
+  </div>
+</section>
+
 <section class="page" data-view="course-calc">
   <div class="wrap page-intro">
     <div class="kicker mono">MODULE 02 / APPLIED CALCULUS</div><div class="fr-mot">Calcul appliqué</div>
@@ -2458,7 +2755,7 @@ mov  [0x28], eax     ；写回：把结果写进 0x28 号单元</div>
       <div>
         <div class="kicker mono">LESSON INDEX / 课时索引</div>
         <h2>Lessons<span class="cr-alt">课时</span></h2>
-        <p class="small-note">每一课只收录该次课主题相关的内容：第一次课系统讲函数分类、函数变换与复合函数，本课程要点只筛选其中的极限部分；第二次课讲邻域、单侧极限、极限不存在与无穷极限。两课都只保留极限主线，与极限无关的内容留在原课堂笔记里。</p>
+        <p class="small-note">每一课只收录该次课主题相关的内容：第一次课系统讲函数分类、函数变换与复合函数，本课程要点只筛选其中的极限部分；第二次课讲邻域、单侧极限、极限不存在与无穷极限。三课都只保留极限主线，与极限无关的内容留在原课堂笔记里。</p>
       </div>
     </div>
     <div class="cr-hub">
@@ -2476,12 +2773,13 @@ mov  [0x28], eax     ；写回：把结果写进 0x28 号单元</div>
         <span class="cr-en">The 9 October session, made rigorous: the ε-δ definition with four interactive demos, uniqueness and local properties, one-sided limits, limit laws and the squeeze theorem, Heine's criterion, infinite limits and orders of smallness, derivations of the two fundamental limits, classification of discontinuities, six harder problems, and an academic line-by-line check of the Feishu notes.</span>
         <span class="cr-go">进入第二课 / Open Lesson 2 →</span>
       </a>
-      <div class="cr-hub-soon">
-        <div class="cr-label mono">LESSON 03 / TO BE ADDED</div>
-        <h3>Later lessons<span class="cr-alt">后续课时</span></h3>
-        <p>严格讲极限的严谨定义（ε-δ）与夹逼原理，再展开 sin x / x 的推导，随后是极限计算、连续性、导数及其应用。</p>
-        <span class="cr-en">Next: the rigorous ε-δ definition and the squeeze theorem, then the derivation of sin x / x, limit techniques, continuity and derivatives.</span>
-      </div>
+      <a href="#course-calc-03">
+        <div class="cr-label mono">LESSON 03 / COMPUTING LIMITS</div>
+        <h3>Lesson 3: Computing Limits — Algebra, Squeeze Theorem and the ε-δ Definition<span class="cr-alt">极限的计算、夹逼准则与 ε-δ 严格定义</span></h3>
+        <p>2026 年 10 月 10 日课堂（09:40–11:25）：四则运算法则的前提、直接代入法与有理函数、分段点左右极限、保序性、夹逼准则、重要极限 lim(sin x)/x 的单位圆证明、ε-δ 定义与 6×4 种变体；含 8 处纠错、10 处拓展与 6 组交互演示。</p>
+        <span class="cr-en">Preconditions of the algebra of limits, direct substitution, piecewise break points, order preservation, the squeeze theorem, the unit-circle proof of lim (sin x)/x = 1, and the ε-δ definition with its 6 × 4 variants — eight corrections, ten extensions and six interactive demos.</span>
+        <span class="cr-go">进入第三课 / Open Lesson 3 →</span>
+      </a>
     </div>
   </div>
 </section>
@@ -2648,7 +2946,8 @@ lim (n → ∞) (1 + 1/n)^n = e</span>
       <p class="cr-en">Over the holiday, preview the limits material. After the holiday the course gives the rigorous definition of a limit, then moves on to limit techniques, continuity and derivatives.</p>
     </div>
 
-    <p class="cr-note">资料来源：2026 年 9 月 29 日「高等数学函数与极限基础讲解」课堂纪要（09:51-11:25）中与极限相关的部分，经筛选、核对与补充；标注为"补充"的小节属于课程外的整理内容，正式表述以教师讲义与后续课件为准。原课堂中的函数分类、函数变换与复合函数内容不属于极限，未收录在本课。<br>Source: the limits-related parts of the 29 September 2026 lecture notes, filtered, checked and expanded. Sections marked as supplements are additions outside the lecture; the instructor's materials remain authoritative.</p>
+        <div class="q-host" data-quiz="course-calc-01"></div>
+<p class="cr-note">资料来源：2026 年 9 月 29 日「高等数学函数与极限基础讲解」课堂纪要（09:51-11:25）中与极限相关的部分，经筛选、核对与补充；标注为"补充"的小节属于课程外的整理内容，正式表述以教师讲义与后续课件为准。原课堂中的函数分类、函数变换与复合函数内容不属于极限，未收录在本课。<br>Source: the limits-related parts of the 29 September 2026 lecture notes, filtered, checked and expanded. Sections marked as supplements are additions outside the lecture; the instructor's materials remain authoritative.</p>
   </div>
 </section>
 <style>
@@ -3077,7 +3376,8 @@ lim (n → ∞) (1 + 1/n)^n = e</span>
       <p><b>后续预告</b>：下一阶段正式建立 ε-δ 定义（本页已提前给出并配套演示）、讲解夹逼原理的更多应用，并据此完成 (sin x)/x → 1 的课堂版推导，随后转入极限计算的一般方法、连续性与导数。</p>
     </div>
 
-    <p class="cr-note">资料来源：2026 年 10 月 9 日「函数极限相关知识点讲解」课堂（07:49–09:36）与同场会议的飞书 AI 纪要（工具自动生成，自带"可能存在不准确之处"的提示）；理论框架与习题体系参照 James Stewart, <i>Calculus: Early Transcendentals</i> (9th ed.) 第 2 章「Limits and Derivatives」，其中 2.2 函数极限、2.3 运算法则、2.4 极限的精确定义、2.5 连续性、2.6 无穷极限为本页拓展部分的对照组。本页正文中的定义、定理与证明属于标准数学内容，由本页重新组织撰写；标注为"拓展"或"提高难度"的部分超出课堂范围，正式表述以教师讲义与后续课件为准。<br>Source: the lecture of 9 October 2026 and the Feishu AI notes for the same session. The rigorous framework and the problem set follow the structure of Chapter 2 of Stewart, <i>Calculus: Early Transcendentals</i> (9th ed.). Definitions, theorems and proofs are standard mathematical content, reorganised here; sections marked as extensions lie beyond the lecture and the instructor's materials remain authoritative.</p>
+        <div class="q-host" data-quiz="course-calc-02"></div>
+<p class="cr-note">资料来源：2026 年 10 月 9 日「函数极限相关知识点讲解」课堂（07:49–09:36）与同场会议的飞书 AI 纪要（工具自动生成，自带"可能存在不准确之处"的提示）；理论框架与习题体系参照 James Stewart, <i>Calculus: Early Transcendentals</i> (9th ed.) 第 2 章「Limits and Derivatives」，其中 2.2 函数极限、2.3 运算法则、2.4 极限的精确定义、2.5 连续性、2.6 无穷极限为本页拓展部分的对照组。本页正文中的定义、定理与证明属于标准数学内容，由本页重新组织撰写；标注为"拓展"或"提高难度"的部分超出课堂范围，正式表述以教师讲义与后续课件为准。<br>Source: the lecture of 9 October 2026 and the Feishu AI notes for the same session. The rigorous framework and the problem set follow the structure of Chapter 2 of Stewart, <i>Calculus: Early Transcendentals</i> (9th ed.). Definitions, theorems and proofs are standard mathematical content, reorganised here; sections marked as extensions lie beyond the lecture and the instructor's materials remain authoritative.</p>
   </div>
 </section>
 <script>
@@ -3570,6 +3870,259 @@ lim (n → ∞) (1 + 1/n)^n = e</span>
 .cn-meta{font-size:11px;color:#8b948c}
 @media(max-width:760px){.cn-tools{padding:16px}.cn-outline{padding:14px}}
 </style>
+
+<section class="page" data-view="course-calc-03" data-sections="Ten sections: algebra of limits · direct substitution · piecewise functions · limits versus value · order preservation · squeeze theorem · the sin x / x limit · ε-δ definition · corrections · terminology and self-check">
+  <div class="wrap page-intro">
+    <div class="kicker mono">LESSON 03 / COMPUTING LIMITS</div><div class="fr-mot">Leçon 3 · Calcul des limites</div>
+    <h1>Lesson 3: Computing Limits — Algebra, Squeeze Theorem and the ε-δ Definition<span class="cr-sub">应用微积分课程要点第三课：极限的计算、夹逼准则与 ε-δ 严格定义</span></h1>
+    <p>2026 年 10 月 10 日课堂（09:40–11:25）整理、纠错与扩充 / Based on the session of 10 October 2026, corrected and extended</p>
+  </div>
+  <div class="wrap section">
+    <div class="cr-subnav cr-nav-course" data-active="course-calc"></div>
+    <div class="section-head">
+      <div>
+        <div class="kicker mono">LESSON CONTENT / 本课内容</div>
+        <h2>Limit Laws, Techniques and the Rigorous Definition<span class="cr-alt">极限运算法则、计算技巧与严格定义</span></h2>
+      </div>
+      <span class="tag mono">2026.10.10 · CN / EN</span>
+    </div>
+
+    <div class="cr-grid">
+      <div class="cr-card"><div class="cr-label mono">THEME</div><strong>From intuition to rigour</strong><span class="cr-alt">从直觉到严格</span><p>第二课建立了 ε-δ 的直观，本课把它变成可以计算、可以判断、可以证明的工具。</p></div>
+      <div class="cr-card"><div class="cr-label mono">TOOLS</div><strong>Limit laws · substitution · squeeze</strong><span class="cr-alt">四则运算 · 直接代入 · 夹逼</span><p>三条主力工具，各有严格的前提条件，用错前提是这一课最常见的失分点。</p></div>
+      <div class="cr-card"><div class="cr-label mono">KEY RESULT</div><strong>lim (sin x)/x = 1 as x→0</strong><span class="cr-alt">重要极限</span><p>用单位圆面积比较法配合夹逼准则证明，是整门课的枢纽结论。</p></div>
+      <div class="cr-card"><div class="cr-label mono">HARD POINTS</div><strong>Strict inequalities do not survive limits</strong><span class="cr-alt">严格不等式不能过极限</span><p>f(x) &lt; g(x) 推不出 lim f &lt; lim g；夹逼准则的前提只在去心邻域内成立。</p></div>
+      <div class="cr-card"><div class="cr-label mono">INTERACTIVE</div><strong>Six embedded demos</strong><span class="cr-alt">六组交互演示</span><p>前提反例、约分可视化、分段点左右极限、夹逼、单位圆面积、给 ε 找 δ。</p></div>
+      <div class="cr-card"><div class="cr-label mono">SOURCE</div><strong>Feishu AI notes, verified</strong><span class="cr-alt">飞书 AI 笔记 · 已逐条核对</span><p>原笔记自动生成并声明"可能不准确"，本页做了 8 处更正与 10 处扩充。</p></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>1 · The algebra of limits and its preconditions<span class="cr-alt">1 · 极限四则运算法则及其前提</span></h3>
+      <p>若 <b>lim f(x)</b> 与 <b>lim g(x)</b> 在同一极限过程下都存在，则和、差、积、商的极限分别等于极限的和、差、积、商（商的法则额外要求分母的极限不为 0）。三条前提必须同时满足：</p>
+      <div class="cr-bullets">
+        <span><b>同一过程</b>：参与运算的函数必须对应完全一致的极限过程，x→a、x→a⁺、x→a⁻ 不可混用。</span>
+        <span><b>极限存在</b>：每个函数的极限都必须存在，否则不能直接套用。</span>
+        <span><b>有限个</b>：法则可推广到任意<b>有限</b>个函数，不能用于无限个函数之和。</span>
+      </div>
+      <p class="cr-en">If lim f and lim g both exist under the same limit process, the limit of a sum, difference, product or quotient equals the corresponding combination of the limits — the quotient rule additionally requires a non-zero denominator limit. Three preconditions must hold together: the same limit process, existence of each limit, and a finite number of terms.</p>
+      <p><strong>原笔记漏掉的一条前提，也是最容易出错的地方：</strong>商的法则要求<b>分母的极限不为 0</b>。若分母极限为 0、分子极限也为 0，得到的是 0/0 不定式，四则运算法则在这里<b>失效</b>，必须改用约分、等价无穷小或夹逼等其它手段。</p>
+      <p class="cr-en">The rule the original notes omitted is the one that bites most often: the quotient rule requires the denominator's limit to be non-zero. When both numerator and denominator tend to zero you have the 0/0 form, the algebra of limits does not apply, and you must fall back on factoring, equivalent infinitesimals or the squeeze theorem.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 1 · When the preconditions fail<span class="cr-alt">演示一 · 前提不成立时会怎样</span></h4>
+        <p class="l3-sub">选择一个反例，看四则运算法则在哪一步失效 / Pick a counter-example to see exactly where the rule breaks.</p>
+        <div class="l3c-tabs" id="l3c-law-tabs"></div>
+        <div class="l3c-stage" id="l3c-law-stage"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>2 · Direct substitution and rational functions<span class="cr-alt">2 · 直接代入法与有理函数</span></h3>
+      <p>多项式函数在全体实数上连续，有理函数在其定义域内连续，因此在定义域内的点求极限，直接代入即可。</p>
+      <p><strong>定义需要更正：</strong>原笔记说"有理函数是多项式函数经过有限次加减乘除运算得到的函数"，这个表述不准确。标准定义是——<b>有理函数是两个多项式之商 P(x)/Q(x)（Q 不恒为 0）</b>；多项式只是 Q(x)=1 这一特例。这个区别在你判断"哪些点不在定义域"时很关键：定义域由 Q(x)≠0 决定。</p>
+      <p class="cr-en">The definition needs a correction: a rational function is the quotient of two polynomials, P(x)/Q(x) with Q not identically zero, and a polynomial is merely the special case Q(x) = 1. This matters because the domain is exactly where Q(x) ≠ 0.</p>
+      <p>经典例子：求 (x²−1)/(x−1) 在 x→1 时的极限。x=1 不在定义域内，不能直接代入，但可以约去公因子：</p>
+      <div class="cr-formula">(x²−1)/(x−1) = (x−1)(x+1)/(x−1) = x+1 &nbsp;(x≠1) &nbsp;⟹&nbsp; 极限 = 2</div>
+      <p class="cr-note" style="margin-top:0">这一步之所以合法，靠的是"极限与函数在该点是否有定义无关"：约分前后的两个函数在 x=1 的<b>去心邻域</b>内完全相同，所以极限相同。</p>
+
+      <div class="l3-demo">
+        <h4>Demo 2 · Cancelling a common factor<span class="cr-alt">演示二 · 约分与"打洞"</span></h4>
+        <p class="l3-sub">左右拖动滑块靠近 x=1，观察原式与约分后式子的取值差异 / Slide towards x = 1 and compare the two formulas.</p>
+        <div class="l3-row"><label class="l3-ctl">x = <input type="range" id="l3c-hole-x" min="-2" max="4" step="0.01" value="0.5"> <span class="l3-out" id="l3c-hole-xv">0.50</span></label></div>
+        <div class="l3c-grid2">
+          <div class="l3c-mini">原式 (x²−1)/(x−1)：<br><span class="l3c-val" id="l3c-hole-f">—</span></div>
+          <div class="l3c-mini">约分后 x+1：<br><span class="l3c-val" id="l3c-hole-g">—</span></div>
+        </div>
+        <div class="l3-out" id="l3c-hole-note" style="margin-top:8px"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>3 · Piecewise functions at the break point<span class="cr-alt">3 · 分段函数在分段点</span></h3>
+      <p>分段函数在<b>非分段点</b>的极限，用该点所在区间的表达式直接代入即可；在<b>分段点</b>必须分别算出左极限与右极限，再对比判断：两者相等则极限存在且等于该值；不相等、或任意一侧不存在，则该点极限不存在。</p>
+      <p>课堂例子：x&gt;1 时 f(x)=x²+5，x≤1 时 f(x)=3x−7。求 x→1 的极限：左极限用 3x−7 得到 <b>−4</b>，右极限用 x²+5 得到 <b>6</b>，两者不等，所以该点极限不存在。（原笔记这里算得正确，我复核过。）</p>
+      <p class="cr-en">At a non-break point of a piecewise function, substitute the relevant expression; at a break point, compute the one-sided limits separately and compare. In the worked example, x²+5 for x &gt; 1 and 3x−7 for x ≤ 1 give a left limit of −4 and a right limit of 6, so the two-sided limit does not exist. The original notes had this right.</p>
+      <p><strong>需要补严的一点：</strong>原笔记只说了"左右极限不相等"，完整判据还要包含"某一侧极限不存在（例如发散到无穷）"的情形——这种时候整体极限同样不存在，但理由不同。</p>
+
+      <div class="l3-demo">
+        <h4>Demo 3 · One-sided limits at a break point<span class="cr-alt">演示三 · 分段点左右极限判断器</span></h4>
+        <p class="l3-sub">拖动 a 与左右两侧常数，实时看两侧极限与整体判定 / Adjust a and the two branch constants to see the verdict change.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">a = <input type="range" id="l3c-pw-a" min="-3" max="3" step="0.5" value="1"> <span class="l3-out" id="l3c-pw-av">1</span></label>
+          <label class="l3-ctl">左支 / left 3x−7 → <input type="number" id="l3c-pw-lc" value="-7" step="1" style="width:80px"></label>
+          <label class="l3-ctl">右支 / right x²+c → <input type="number" id="l3c-pw-rc" value="5" step="1" style="width:80px"></label>
+        </div>
+        <div class="l3c-stage" id="l3c-pw-stage"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>4 · A limit ignores the value at the point<span class="cr-alt">4 · 极限与函数在该点的取值无关</span></h3>
+      <p>函数在 x→a 时的极限只反映"自变量趋近 a 时函数值的变化趋势"，与 f(a) 是否存在、等于多少完全无关。由此得到一条极有用的规则：<b>若两个函数在 a 的某个去心邻域内完全相等，则它们在该点的极限相同</b>——这正是约分、通分、变量代换这些操作的合法性来源。</p>
+      <p class="cr-en">The limit of f as x → a reflects only the trend as x approaches a; it is independent of whether f(a) exists and of its value. Hence the rule that two functions equal on a punctured neighbourhood of a have the same limit there — the justification for cancelling, combining fractions and substituting variables.</p>
+      <p><strong>顺带澄清一个常见误解：</strong>"去心邻域内相等"要求的是<b>整段邻域</b>上相等，而不是"在 a 点附近看着差不多"。仅在某点相等、或在若干孤立点上相等都不够。</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>5 · Order preservation<span class="cr-alt">5 · 保序性</span></h3>
+      <p>若在 a 的某去心邻域内恒有 f(x) ≤ g(x)，且两者在 x→a 时极限都存在，则 lim f(x) ≤ lim g(x)。</p>
+      <p><strong>难度往上走一层——这是本课最值得记住的陷阱：</strong>前提里的"≤"<b>不能加强为"&lt;"</b>。即便 f(x) &lt; g(x) 处处严格成立，极限仍可能相等。反例：f(x)=0，g(x)=|x| 在 x≠0 时恒有 f &lt; g，但两者在 x→0 时极限都是 0。原因很直观：极限描述的是"趋于"的过程，严格的大小关系在取极限这一步会被"磨平"。</p>
+      <p class="cr-en">If f(x) ≤ g(x) on a punctured neighbourhood of a and both limits exist, then lim f ≤ lim g. The subtle point — and the trap worth memorising — is that the hypothesis cannot be strengthened to a strict inequality: take f(x) = 0 and g(x) = |x|; then f &lt; g for every x ≠ 0, yet both limits at 0 equal 0. A strict comparison does not survive the passage to the limit.</p>
+      <p>与保序性配套使用的是<b>保号性</b>：若 lim f(x) = L &gt; 0，则在 a 的某去心邻域内 f(x) &gt; 0（把 0 换成任何小于 L 的数同样成立）。两者常被合起来用于证明和估计。</p>
+      <p class="cr-en">Companion result: sign preservation — if lim f(x) = L &gt; 0, then f(x) &gt; 0 on some punctured neighbourhood of a, and the same holds with 0 replaced by any number below L.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>6 · The squeeze theorem<span class="cr-alt">6 · 夹逼准则</span></h3>
+      <p>若在 a 的某去心邻域内恒有 f(x) ≤ g(x) ≤ h(x)，且 x→a 时 f 与 h 的极限都等于同一个数 L，则中间的 g 在 x→a 时的极限也等于 L。</p>
+      <p><strong>两点补充：</strong>第一，前提必须写在<b>去心邻域</b>上，不能只在一列点上成立；第二，"两侧极限相等"是充分条件——只要能找到<b>任何</b>一对满足条件的上下界即可，不必是最优界。这一点在估计时非常实用：常常故意用一个更宽松但更好算的界。</p>
+      <p class="cr-en">Two remarks. The hypotheses must hold on a punctured neighbourhood, not merely at a sequence of points; and equal outer limits are sufficient — you only need some pair of bounds, not the tightest ones, which is what makes the theorem so useful for estimation.</p>
+      <p>课堂上用夹逼处理了有界函数乘无穷小：x→0 时 x²sin(1/x) 的极限。因为 |sin(1/x)| ≤ 1，所以 −x² ≤ x²sin(1/x) ≤ x²，两侧极限都是 0，故极限为 0。</p>
+      <p class="cr-en">The standard application: since |sin(1/x)| ≤ 1, we have −x² ≤ x²sin(1/x) ≤ x², and both outer functions tend to 0, forcing the middle one to 0 as well.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 4 · Squeezing x² sin(1/x)<span class="cr-alt">演示四 · 夹逼 x²sin(1/x)</span></h4>
+        <p class="l3-sub">拖动 x 趋近 0，看上下界 ±x² 如何把函数"夹"到 0 / Shrink x towards 0 and watch ±x² pinch the function to zero.</p>
+        <div class="l3-row"><label class="l3-ctl">x = <input type="range" id="l3c-sq-x" min="0.01" max="1" step="0.005" value="0.6"> <span class="l3-out" id="l3c-sq-xv">0.600</span></label></div>
+        <div class="l3c-stage" id="l3c-sq-stage"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>7 · The fundamental limit lim (sin x)/x = 1<span class="cr-alt">7 · 重要极限 lim (sin x)/x = 1</span></h3>
+      <p>证明工具是单位圆面积比较法。在 x∈(0, π/2) 内比较三块面积：三角形 OAB、扇形 OAB、三角形 OAT，得到</p>
+      <div class="cr-formula">sin x &lt; x &lt; tan x &nbsp;(0 &lt; x &lt; π/2)</div>
+      <p>各式除以 sin x 后得 1 &lt; x/sin x &lt; 1/cos x，即 cos x &lt; sin x / x &lt; 1。当 x→0⁺ 时两侧都趋于 1，由夹逼准则得到右极限为 1；再用 sin x / x 是偶函数把结论推广到 x→0⁻，于是双侧极限都是 1。</p>
+      <p><strong>原笔记省略了两个必要前提，这里补上（这也是最常见的失分点）：</strong>第一，sin x &lt; x &lt; tan x 只在 <b>0 &lt; x &lt; π/2</b> 上成立，超出这个范围（比如取负角）不等式会反过来；第二，除以 sin x 时默认 sin x &gt; 0，这正是把范围限制在 (0, π/2) 的原因。第二课的"换元"要点在这里再次出现——只有这样才谈得上用 cos x &lt; sin x/x &lt; 1 去夹。</p>
+      <p class="cr-en">The proof compares three areas in the unit circle: the triangle OAB, the sector OAB and the triangle OAT, giving sin x &lt; x &lt; tan x for 0 &lt; x &lt; π/2. Dividing by sin x yields cos x &lt; sin x / x &lt; 1; both bounds tend to 1, so the right-hand limit is 1, and evenness of sin x / x extends it to two-sided. Two hypotheses that the original notes left implicit: the inequality holds only on 0 &lt; x &lt; π/2, and dividing by sin x presumes sin x &gt; 0 — which is exactly why the argument is confined to that interval.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 5 · Unit-circle area comparison<span class="cr-alt">演示五 · 单位圆面积比较</span></h4>
+        <p class="l3-sub">拖动角度 x，比较 sin x、弧长 x 与 tan x 三者的大小 / Drag the angle and compare sin x, the arc x and tan x.</p>
+        <div class="l3-row"><label class="l3-ctl">x = <input type="range" id="l3c-uc-x" min="0.05" max="1.5" step="0.01" value="0.8"> <span class="l3-out" id="l3c-uc-xv">0.80 rad</span></label></div>
+        <div class="l3c-grid2">
+          <div class="l3c-stage" id="l3c-uc-svg"></div>
+          <div class="l3c-mini" id="l3c-uc-out"></div>
+        </div>
+      </div>
+
+      <p><strong>重要极限的拓展计算。</strong>把待求式子整理成 sin u / u 的形式即可套用，前提是 u→0：</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>待求极限 / Limit</th><th>变形 / Rewrite</th><th>结果 / Result</th></tr></thead>
+        <tbody>
+          <tr><td>x→0: sin 2x / sin 3x</td><td>(sin 2x / 2x)·(3x / sin 3x)·(2/3)</td><td>2/3</td></tr>
+          <tr><td>x→0: tan 3x / x</td><td>(sin 3x / 3x)·(1/cos 3x)·3</td><td>3</td></tr>
+          <tr><td>x→0: (1 − cos x) / x²</td><td>2 sin²(x/2) / x² = ½·(sin(x/2)/(x/2))²</td><td>1/2</td></tr>
+          <tr><td>x→0: arcsin x / x</td><td>令 y = arcsin x，则 x = sin y，原式 = y / sin y</td><td>1</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>换元的代价（上难度）：</strong>变量代换必须同时匹配极限过程。令 y = arcsin x 时，x→0 会自动带来 y→0，这一步才成立；若原式是 x→1，直接换成 y 就错了。<b>另一个常见误区</b>是等价无穷小替换在加减法里乱用：sin x − x 不能把 sin x 直接替换成 x（那会得到 0，而真实结果是更高阶的小量）。替换一般只在乘除结构中安全。</p>
+      <p class="cr-en">Substitution must respect the limit process: setting y = arcsin x is legitimate here only because x → 0 forces y → 0. A second trap is using equivalent infinitesimals inside sums and differences — replacing sin x by x in sin x − x destroys the leading term. Replace only within products and quotients.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 6 · Finding δ for a given ε<span class="cr-alt">演示六 · 给 ε 找 δ</span></h4>
+        <p class="l3-sub">以 f(x)=2x−1、x→3、L=5 为例：拖动 ε，看 δ=ε/2 对应的邻域如何自动收缩 / Vary ε and watch the δ-neighbourhood shrink automatically.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">ε = <input type="range" id="l3c-ep-eps" min="0.1" max="3" step="0.05" value="1.2"> <span class="l3-out" id="l3c-ep-epsv">1.20</span></label>
+          <button class="l3-btn" id="l3c-ep-auto">δ = ε/2（自动）</button>
+        </div>
+        <div class="l3c-stage" id="l3c-ep-svg"></div>
+        <div class="l3-out" id="l3c-ep-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>8 · The ε–δ definition and its 6 × 4 variants<span class="cr-alt">8 · ε-δ 定义与 6×4 种变体</span></h3>
+      <p>严格定义：对任意给定的 ε &gt; 0，都存在 δ &gt; 0，使得当 0 &lt; |x − a| &lt; δ 时恒有 |f(x) − L| &lt; ε，则称 x→a 时 f(x) 的极限为 L。其中 <b>0 &lt; |x − a|</b> 表示取去心邻域，a 点本身的取值与定义无关；δ 依赖于 ε，只要存在一个即可，不必是最优的。</p>
+      <p class="cr-en">Rigorous definition: for every ε &gt; 0 there is δ &gt; 0 such that 0 &lt; |x − a| &lt; δ implies |f(x) − L| &lt; ε. The condition 0 &lt; |x − a| marks a punctured neighbourhood, so the value at a is irrelevant; δ depends on ε and any admissible δ will do.</p>
+      <p><strong>两处需要澄清的说法：</strong>原笔记说"函数极限存在的充要条件是左右极限都存在且相等"——这条对<b>有限点、有限极限</b>成立；当极限是无穷时，左右"极限"不再是实数，需要另用无穷的语言表述。另外，"自变量有 6 种极限过程、函数值有 4 种结果"应当相乘理解为 <b>6 × 4 = 24 种定义变体</b>，而不是两组互不相干的分类；而且每种变体里用来刻画自变量靠近程度的量并不都叫 δ——x→∞ 时用的是 X。</p>
+      <p class="cr-en">Two clarifications. "The limit exists iff both one-sided limits exist and agree" holds for a finite point and a finite limit; when the limit is infinite the one-sided limits are not real numbers and a different formulation is needed. And the "six limit processes × four kinds of limit value" should be read as 6 × 4 = 24 definition variants, not two independent lists; moreover the quantity controlling how close x gets is not always called δ — for x → ∞ one uses X.</p>
+
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th class="cr-c">自变量过程 / process</th><th>写法 / notation</th><th>关键量 / controlling quantity</th><th>典型表述 / typical phrasing</th></tr></thead>
+        <tbody>
+          <tr><td class="cr-c">x→a</td><td>0 &lt; |x − a| &lt; δ</td><td>δ</td><td>|f(x) − L| &lt; ε</td></tr>
+          <tr><td class="cr-c">x→a⁺ / a⁻</td><td>0 &lt; x − a &lt; δ　/　0 &lt; a − x &lt; δ</td><td>δ</td><td>同上，仅单侧</td></tr>
+          <tr><td class="cr-c">x→∞</td><td>|x| &gt; X</td><td><b>X</b></td><td>|f(x) − L| &lt; ε</td></tr>
+          <tr><td class="cr-c">x→+∞ / −∞</td><td>x &gt; X　/　x &lt; −X</td><td>X</td><td>同上</td></tr>
+          <tr><td class="cr-c">f(x)→∞</td><td>0 &lt; |x − a| &lt; δ</td><td>δ</td><td>f(x) &gt; M（对任意 M&gt;0）</td></tr>
+        </tbody>
+      </table></div>
+      <p class="cr-note" style="margin-top:0">证明模板（四步）：① 写出目标 |f(x) − L|；② 利用已知关系把它放大成只含 |x − a| 的式子；③ 令放大后的式子 &lt; ε，解出 |x − a| &lt; 某个量；④ 取 δ = 那个量，收尾说明"当 0&lt;|x−a|&lt;δ 时，原式 &lt; ε 成立"。课堂上的 f(x)=2x−1 正是这个模板的最短例子：|2x−1−5| = 2|x−3| &lt; ε ⟺ |x−3| &lt; ε/2，取 δ = ε/2。</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>Corrections to the original notes<span class="cr-alt">对原笔记的更正</span></h3>
+      <p class="cr-note" style="margin-top:0">原笔记由会议工具自动生成并声明"可能不准确"。以下 8 处按学术口径更正 / Eight corrections, stated explicitly.</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>原笔记说法</th><th>更正</th><th>为什么重要</th></tr></thead>
+        <tbody>
+          <tr><td>"有理函数是多项式函数经过有限次加减乘除得到的函数"</td><td>有理函数是两个多项式之商 P(x)/Q(x)，Q 不恒为 0；多项式只是 Q=1 的特例</td><td>直接决定定义域由 Q(x)≠0 给出</td></tr>
+          <tr><td>四则运算法则只列了"同一过程、极限存在、有限个"</td><td>商的法则还要加一条：<b>分母极限不为 0</b></td><td>漏掉它会在 0/0 处误用法则</td></tr>
+          <tr><td>"左右极限不相等则极限不存在"</td><td>完整判据还要包含"某一侧极限不存在（如发散）"</td><td>两类失败的原因不同，写法也不同</td></tr>
+          <tr><td>保序性只说了 f(x) ≤ g(x) ⟹ lim f ≤ lim g</td><td>要强调前提里的"≤"<b>不能加强为"&lt;"</b></td><td>严格不等式在取极限后会消失（f=0, g=|x|）</td></tr>
+          <tr><td>sin x &lt; x &lt; tan x 直接用于推导</td><td>仅在 0 &lt; x &lt; π/2 成立；除以 sin x 需要 sin x &gt; 0</td><td>省略前提会让证明出现逻辑漏洞</td></tr>
+          <tr><td>夹逼准则的前提未限定范围</td><td>不等式必须在<b>去心邻域</b>上恒成立，不能只在若干点成立</td><td>只在一列点上成立时结论可能不真</td></tr>
+          <tr><td>"极限存在的充要条件是左右极限都存在且相等"</td><td>该表述适用于有限点、有限极限；无穷极限需另作表述</td><td>避免在无穷情形套用实数语言</td></tr>
+          <tr><td>"自变量 6 种、函数值 4 种"并列陈述</td><td>应相乘理解为 6×4=24 种变体；x→∞ 时用 X 而非 δ</td><td>这是定义层面的关键差别</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Extensions to a higher level<span class="cr-alt">向上拓展的十个方向</span></h3>
+      <div class="cr-bullets">
+        <span><b>保号性</b>：lim f = L &gt; 0 ⟹ 局部 f &gt; 0（0 可换成任何小于 L 的数）。</span>
+        <span><b>严格不等式陷阱</b>：f &lt; g 推不出 lim f &lt; lim g，只能推出 ≤。</span>
+        <span><b>等价无穷小替换的边界</b>：只在乘除结构里安全，加减法里替换会丢掉主导项。</span>
+        <span><b>换元的合法性</b>：复合函数极限要求内层自变量确实趋于对应值，否则结论不成立。</span>
+        <span><b>Heine 归结原则</b>：x→a 的极限存在 ⟺ 对任意趋于 a 的数列，函数值数列都趋于同一数。</span>
+        <span><b>局部有界性</b>：极限存在 ⟹ 在该点某去心邻域内有界（这是"局部"性质的典型代表）。</span>
+        <span><b>6×4 定义表</b>：把自变量过程与函数值结果两两组合，得到 24 种严格定义。</span>
+        <span><b>ε-δ 证明模板</b>：目标式 → 放大 → 解出界 → 取 δ，四步固定套路。</span>
+        <span><b>单位圆证明的严谨化</b>：比较的是面积而不是长度，这正是 sin x &lt; x &lt; tan x 的来源。</span>
+        <span><b>夹逼用于数列</b>：同一思想可处理数列极限（如 n 项和的估计）。</span>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Terminology check<span class="cr-alt">术语核对</span></h3>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>中文</th><th>English</th><th>一句话说明</th></tr></thead>
+        <tbody>
+          <tr><td>四则运算法则</td><td>algebra of limits</td><td>和差积商各自对应极限的运算</td></tr>
+          <tr><td>直接代入法</td><td>direct substitution</td><td>连续点处直接代值</td></tr>
+          <tr><td>有理函数</td><td>rational function</td><td>两个多项式之商</td></tr>
+          <tr><td>分段函数 / 分段点</td><td>piecewise function / break point</td><td>分段点必须查左右极限</td></tr>
+          <tr><td>去心邻域</td><td>punctured neighbourhood</td><td>0 &lt; |x − a| &lt; δ</td></tr>
+          <tr><td>保序性 / 保号性</td><td>order preservation / sign preservation</td><td>大小与符号在局部得以保持</td></tr>
+          <tr><td>夹逼准则</td><td>squeeze theorem</td><td>被夹住的函数同极限</td></tr>
+          <tr><td>重要极限</td><td>fundamental limit</td><td>lim (sin x)/x = 1</td></tr>
+          <tr><td>等价无穷小</td><td>equivalent infinitesimals</td><td>比值趋于 1 的小量</td></tr>
+          <tr><td>ε-δ 定义</td><td>epsilon-delta definition</td><td>极限的严格量化表述</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Self-check<span class="cr-alt">学习自检</span></h3>
+      <div class="cr-checks">
+        <label class="cr-check"><input type="checkbox"><span>能说出四则运算法则的三条前提，并补上商的法则额外要求。<span class="cr-en">State the three preconditions and the extra requirement for quotients.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能用约分求出 (x²−1)/(x−1) 在 x→1 的极限，并说明这一步为什么合法。<span class="cr-en">Compute the limit by cancelling and justify the cancellation.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能判断分段函数在分段点的极限是否存在，并写出两侧极限。<span class="cr-en">Decide whether a piecewise limit exists at the break point.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能举出反例说明 f(x) &lt; g(x) 推不出 lim f &lt; lim g。<span class="cr-en">Give a counter-example showing strict inequalities do not survive limits.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能用单位圆面积比较法写出 sin x &lt; x &lt; tan x 并说明成立范围。<span class="cr-en">Derive the inequality from areas and state where it holds.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能计算 sin 2x / sin 3x、tan 3x / x、(1−cos x)/x²、arcsin x / x 四个极限。<span class="cr-en">Evaluate the four standard variations of the fundamental limit.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说出 ε-δ 定义里 0 &lt; |x − a| 的作用，并说明 δ 为什么依赖 ε。<span class="cr-en">Explain the punctured condition and the dependence of δ on ε.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能用四步模板证明 lim(2x−1)=5（x→3），并说出 δ 的取法。<span class="cr-en">Prove the limit with the four-step template and exhibit δ.</span></span></label>
+      </div>
+    </div>
+
+        <div class="q-host" data-quiz="course-calc-03"></div>
+<p class="cr-note">资料来源：2026 年 10 月 10 日"函数极限相关知识点讲解"课堂（09:40–11:25）的飞书 AI 笔记与智能章节（原笔记由工具生成并标注"可能存在不准确之处"）。本页逐条核对后做了 8 处更正与 10 处扩充，双语对照，并加入 6 组可操作的交互演示。课堂提到本阶段还剩 3 次课，之后由外方顾问接续——因此这一课是后面前导内容的地基。<br><span class="cr-en">Source: the Feishu AI notes and smart chapters of the 10 October 2026 session (09:40–11:25), machine-generated and flagged as possibly inaccurate. This page corrects eight points, extends ten, is fully bilingual, and adds six interactive demos. Three sessions remain in this stage before a partner instructor takes over, which makes this material the foundation for what follows.</span></p>
+  </div>
+</section>
+
 <section class="page" data-view="course-cn">
   <div class="wrap page-intro">
     <div class="kicker mono">MODULE 03 / CHINESE LANGUAGE AND LITERATURE</div><div class="fr-mot">Langue et littérature chinoises</div>
@@ -4615,4 +5168,569 @@ img{filter:saturate(1.14) contrast(1.05) brightness(1.02)}
 .rename-box input:focus{outline:none;border-color:#c6a15a}
 @media(max-width:760px){.rename-box{width:100%}.rename-box input{flex:1;width:auto}}
 </style>
+
+<script id="l3-script">
+(function(){
+  const $ = function(id){ return document.getElementById(id); };
+  const big = function(n){ return n.toLocaleString('en-US'); };
+
+  /* ---------- Demo 1: bit width ---------- */
+  (function(){
+    const r = $('l3-bits-range'); if (!r) return;
+    const out = $('l3-bits-out'), nn = $('l3-bits-n'), bar = $('l3-bits-bar');
+    function upd(){
+      const n = parseInt(r.value, 10);
+      const states = 1n << BigInt(n);
+      const max = states - 1n;
+      nn.textContent = String(n);
+      bar.style.width = Math.max(2, Math.round(n / 64 * 100)) + '%';
+      let extra = '';
+      if (n === 8) extra = '<br>一个字节：256 种状态，覆盖 00000000–11111111 / One byte: 256 states, 00000000–11111111.';
+      if (n === 16) extra = '<br>典型 <code>unsigned short</code>：65536 种状态 / A common 16-bit unsigned type.';
+      if (n === 32) extra = '<br>32 位指针可寻址 2³² 字节 = 4 GiB / A 32-bit pointer addresses 2³² bytes = 4 GiB.';
+      if (n === 64) extra = '<br>64 位指针可寻址的空间远超物理内存 / A 64-bit pointer can address far more than any physical memory.';
+      out.innerHTML = '2<sup>' + n + '</sup> = <b>' + big(states) + '</b> 种状态 / states<br>' +
+        '无符号范围 / unsigned range: 0 … <b>' + big(max) + '</b>' + extra;
+    }
+    r.addEventListener('input', upd); upd();
+  })();
+
+  /* ---------- Demo 2: unit converter ---------- */
+  (function(){
+    const v = $('l3-unit-val'), s = $('l3-unit-sel'), out = $('l3-unit-out'), pt = $('l3-pow-table');
+    if (!v || !s) return;
+    function fmtBytes(b){
+      const units = [['TiB',1099511627776],['GiB',1073741824],['MiB',1048576],['KiB',1024]];
+      for (const u of units) if (b >= u[1] * 0.999) return (b / u[1]).toFixed(4).replace(/\.?0+$/,'') + ' ' + u[0];
+      return big(Math.round(b)) + ' B';
+    }
+    function fmtDec(b){
+      const units = [['TB',1e12],['GB',1e9],['MB',1e6],['kB',1e3]];
+      for (const u of units) if (b >= u[1] * 0.999) return (b / u[1]).toFixed(4).replace(/\.?0+$/,'') + ' ' + u[0];
+      return big(Math.round(b)) + ' B';
+    }
+    function upd(){
+      const val = parseFloat(v.value) || 0;
+      const mult = parseFloat(s.value);
+      const b = val * mult;
+      out.innerHTML = '合计字节 / total bytes: <b>' + big(Math.round(b)) + '</b><br>' +
+        '按 1024 进制 / binary prefixes: <b>' + fmtBytes(b) + '</b><br>' +
+        '按 1000 进制 / decimal prefixes: <b>' + fmtDec(b) + '</b><br>' +
+        '<span class="l3-tiny">例：标称 1 TB 的硬盘 = 10¹² B，系统按 2⁴⁰ 折算后显示约 931 GiB，这就是"容量缩水"的来源。</span>';
+    }
+    v.addEventListener('input', upd); s.addEventListener('change', upd); upd();
+    if (pt){
+      let h = '';
+      for (let i = 1; i <= 10; i++) h += '<span class="l3-cell">2<sup>' + i + '</sup>=' + Math.pow(2, i) + '</span>';
+      pt.innerHTML = h;
+    }
+  })();
+
+  /* ---------- Demo 3: base converter ---------- */
+  (function(){
+    const inp = $('l3-base-val'), out = $('l3-base-out'), exp = $('l3-base-exp'), btn = $('l3-base-demo-btn');
+    if (!inp || !out) return;
+    function upd(showExp){
+      const n = Math.max(0, Math.min(4294967295, parseInt(inp.value || '0', 10) || 0));
+      const bin = n.toString(2), oct = n.toString(8), hex = n.toString(16).toUpperCase();
+      out.innerHTML = '十进制 / decimal: <b>' + big(n) + '</b><br>' +
+        '二进制 / binary: <b>' + bin.replace(/(.{4})(?=.)/g, '$1 ') + '</b>（' + bin.length + ' 位 / bits）<br>' +
+        '八进制 / octal: <b>0' + oct + '</b><br>' +
+        '十六进制 / hex: <b>0x' + hex + '</b>' + (bin.length <= 8 ? '（1 字节）' : bin.length <= 16 ? '（2 字节）' : bin.length <= 32 ? '（4 字节）' : '（8 字节）');
+      if (showExp){
+        const bits = bin.split('').reverse();
+        const terms = bits.map(function(b, i){ return b === '1' ? '2<sup>' + i + '</sup>' : null; }).filter(Boolean);
+        let s = terms.join(' + ');
+        if (!s) s = '0';
+        let hexExp = '';
+        if (hex.length <= 4){
+          hexExp = hex.split('').reverse().map(function(d, i){
+            const dv = parseInt(d, 16); if (!dv) return null;
+            return dv + '×16<sup>' + i + '</sup>';
+          }).filter(Boolean).join(' + ') || '0';
+        }
+        exp.innerHTML = '按位权展开 / place-value expansion:<br>' +
+          '<code>' + big(n) + ' = ' + s + '</code>' +
+          (hexExp ? '<br><code>' + big(n) + ' = ' + hexExp + '</code>' : '') +
+          '<br><span class="l3-tiny">十六进制每一位恰好对应 4 位二进制，所以 0x' + hex + ' 可以两两切开读成 4 位一组。</span>';
+      } else { exp.innerHTML = ''; }
+    }
+    inp.addEventListener('input', function(){ upd(false); });
+    if (btn) btn.addEventListener('click', function(){ upd(true); });
+    upd(false);
+  })();
+
+  /* ---------- Demo 4: two's complement ---------- */
+  (function(){
+    const host = $('l3-twos-bits'); if (!host) return;
+    const idxHost = $('l3-twos-idx'), out = $('l3-twos-out');
+    let bits = [0,0,0,0,0,0,1,0]; /* = 2 */
+    function render(){
+      host.innerHTML = bits.map(function(b, i){
+        return '<button class="l3-bit' + (b ? ' on' : '') + (i === 0 ? ' sign' : '') + '" data-i="' + i + '">' + b + '</button>';
+      }).join('');
+      idxHost.innerHTML = bits.map(function(_, i){ return '<span>' + (7 - i) + '</span>'; }).join('');
+      const bin = bits.join('');
+      const uns = parseInt(bin, 2);
+      const sgn = bits[0] === 1 ? uns - 256 : uns;
+      const hex = uns.toString(16).toUpperCase().padStart(2, '0');
+      out.innerHTML = '二进制 / binary: <b>' + bin + '</b><br>' +
+        '无符号 / unsigned: <b>' + uns + '</b>　|　有符号（补码）/ signed: <b>' + sgn + '</b>　|　十六进制 / hex: <b>0x' + hex + '</b><br>' +
+        '<span class="l3-tiny">最高位（金色框）是符号位。8 位补码范围 −128…127：设成全 1 时无符号是 255、有符号是 −1；设成 10000000 时有符号是 −128，它没有对应的正数。</span>';
+    }
+    host.addEventListener('click', function(e){
+      const t = e.target.closest('.l3-bit'); if (!t) return;
+      const i = parseInt(t.dataset.i, 10); bits[i] = bits[i] ? 0 : 1; render();
+    });
+    const neg = $('l3-twos-neg'), inc = $('l3-twos-inc'), zero = $('l3-twos-zero'), ones = $('l3-twos-ones');
+    if (neg) neg.addEventListener('click', function(){
+      bits = bits.map(function(b){ return b ? 0 : 1; });
+      for (let i = 7; i >= 0; i--){ if (bits[i] === 1){ bits[i] = 0; } else { bits[i] = 1; break; } }
+      render();
+    });
+    if (inc) inc.addEventListener('click', function(){
+      for (let i = 7; i >= 0; i--){ if (bits[i] === 1){ bits[i] = 0; } else { bits[i] = 1; break; } }
+      render();
+    });
+    if (zero) zero.addEventListener('click', function(){ bits = [0,0,0,0,0,0,0,0]; render(); });
+    if (ones) ones.addEventListener('click', function(){ bits = [1,1,1,1,1,1,1,1]; render(); });
+    render();
+  })();
+
+  /* ---------- Demo 5: character codes ---------- */
+  (function(){
+    const ci = $('l3-chr-in'), ki = $('l3-code-in'), btn = $('l3-chr-btn'), out = $('l3-chr-out');
+    if (!out) return;
+    function show(ch, cp){
+      let utf8 = '';
+      try {
+        const enc = new TextEncoder().encode(ch);
+        utf8 = Array.from(enc).map(function(b){ return b.toString(16).toUpperCase().padStart(2, '0'); }).join(' ');
+        if (enc.length > 1) utf8 += '（' + enc.length + ' 字节）';
+      } catch(e) { utf8 = '—'; }
+      out.innerHTML = '字符 / character: <b>' + ch + '</b><br>' +
+        'Unicode 代码点 / code point: <b>U+' + cp.toString(16).toUpperCase() + '</b><br>' +
+        '十进制 / decimal: <b>' + cp + '</b>　|　十六进制 / hex: <b>0x' + cp.toString(16).toUpperCase() + '</b><br>' +
+        '二进制 / binary: <b>' + cp.toString(2) + '</b><br>' +
+        'UTF-8 字节 / bytes: <b>' + utf8 + '</b><br>' +
+        '<span class="l3-tiny">ASCII 范围内（U+0000–U+007F）只占 1 字节；汉字通常在 U+4E00 以上，UTF-8 下占 3 字节。' +
+        (cp >= 48 && cp <= 57 ? '　这条是数字字符：<code>' + ch + ' - 0 = ' + (cp - 48) + '</code>。' : '') + '</span>';
+    }
+    function fromChar(){
+      const ch = (ci.value || '').slice(-1);
+      if (!ch) { out.textContent = '请输入一个字符 / enter a character'; return; }
+      show(ch, ch.codePointAt(0));
+    }
+    function fromCode(){
+      const cp = Math.max(0, Math.min(1114111, parseInt(ki.value || '0', 10) || 0));
+      show(String.fromCodePoint(cp), cp);
+    }
+    if (ci) ci.addEventListener('input', function(){ if (ki) ki.value = ''; fromChar(); });
+    if (ki) ki.addEventListener('input', function(){ fromCode(); });
+    if (btn) btn.addEventListener('click', function(){ if (ki && ki.value) fromCode(); else fromChar(); });
+    fromChar();
+  })();
+
+  /* ---------- Demo 6: toolchain stages ---------- */
+  (function(){
+    const host = $('l3-cc-steps'); if (!host) return;
+    const flow = $('l3-cc-flow'), out = $('l3-cc-out');
+    const stages = [
+      { k: '预处理 / preprocess', cmd: 'gcc -E hello.c -o hello.i', read: 'hello.c（含 #include、#define、注释）', write: 'hello.i（展开后的纯 C 代码）', note: '宏展开、头文件插入、条件编译；出错通常是宏或头文件的问题。' },
+      { k: '编译 / compile', cmd: 'gcc -S hello.i -o hello.s', read: 'hello.i', write: 'hello.s（汇编代码）', note: '语法检查在这一步；"expected ;" 之类的错误属于编译期。' },
+      { k: '汇编 / assemble', cmd: 'gcc -c hello.s -o hello.o', read: 'hello.s', write: 'hello.o（目标文件，机器码但地址未定）', note: '产出可重定位目标文件，函数调用地址留待链接时确定。' },
+      { k: '链接 / link', cmd: 'gcc hello.o -o hello', read: 'hello.o + 标准库（如 libc 中的 printf）', write: 'hello（可执行文件）', note: '"undefined reference" 出现在这一步：某个符号找不到定义。' }
+    ];
+    let cur = 0;
+    function render(){
+      host.innerHTML = stages.map(function(s, i){
+        return '<button class="l3-step' + (i === cur ? ' on' : '') + '" data-i="' + i + '">' + (i + 1) + ' · ' + s.k + '</button>';
+      }).join('');
+      const s = stages[cur];
+      flow.innerHTML = '读入 / input: ' + s.read + '<br>产出 / output: ' + s.write + '<br>命令 / command: <code>' + s.cmd + '</code>';
+      out.innerHTML = s.note;
+    }
+    host.addEventListener('click', function(e){
+      const t = e.target.closest('.l3-step'); if (!t) return;
+      cur = parseInt(t.dataset.i, 10); render();
+    });
+    render();
+  })();
+})();
+</script>
+
+
+<script id="l3c-script">
+(function(){
+  const $ = function(id){ return document.getElementById(id); };
+  const num = function(v, d){ return (Math.abs(v) < 1e-12 ? 0 : v).toFixed(d === undefined ? 3 : d); };
+
+  /* Demo 1: preconditions that fail */
+  (function(){
+    const host = $('l3c-law-tabs'), stage = $('l3c-law-stage');
+    if (!host || !stage) return;
+    const cases = [
+      { k: '左右极限不等', body: '设 f(x)=|x|/x，g(x)=1，考察 x→0 时的 f+g。<br>f 在 0 处的左极限是 −1、右极限是 1，<b>整体极限不存在</b>；g 的极限是 1。<br>两者之和在 0 处的左右极限分别是 0 和 2，同样不存在。<br><span class="l3-tiny">教训：只要有一个函数的极限不存在，法则就不能套用——哪怕它"看起来"有界。</span>' },
+      { k: '分母极限为 0', body: 'lim(x²−1)/(x−1)，x→1。<br>分子、分母的极限都是 0，属于 0/0 型，<b>商的法则失效</b>（前提要求分母极限非零）。<br>正确做法是先约去公因子，得到 x+1，极限为 2。<br><span class="l3-tiny">教训：0/0 不是"不能求"，而是"不能用法则求"。</span>' },
+      { k: '无限个函数相加', body: '把有限条法则用无限次会出事：考虑 n→∞ 时的 (1/n + 1/n + … + 1/n)（共 n 项）。<br>若对每一项单独取极限，每项都是 0，于是"和 → 0"；但真实的和恒等于 1。<br><span class="l3-tiny">教训：法则只对有限个函数成立，项数随 n 变化时不能逐项取极限。</span>' }
+    ];
+    let cur = 0;
+    function render(){
+      host.innerHTML = cases.map(function(c, i){ return '<button class="l3c-tab' + (i === cur ? ' on' : '') + '" data-i="' + i + '">' + c.k + '</button>'; }).join('');
+      stage.innerHTML = cases[cur].body;
+    }
+    host.addEventListener('click', function(e){ const t = e.target.closest('.l3c-tab'); if (!t) return; cur = parseInt(t.dataset.i, 10); render(); });
+    render();
+  })();
+
+  /* Demo 2: cancelling a common factor */
+  (function(){
+    const xs = $('l3c-hole-x'); if (!xs) return;
+    const xv = $('l3c-hole-xv'), f = $('l3c-hole-f'), g = $('l3c-hole-g'), note = $('l3c-hole-note');
+    function upd(){
+      const x = parseFloat(xs.value);
+      xv.textContent = x.toFixed(2);
+      const near = Math.abs(x - 1) < 1e-9;
+      f.innerHTML = near ? '<span class="l3c-no">未定义（分母为 0）</span>' : num((x * x - 1) / (x - 1));
+      g.innerHTML = num(x + 1);
+      const d = near ? 0 : Math.abs((x * x - 1) / (x - 1) - (x + 1));
+      note.innerHTML = near
+        ? 'x = 1 恰好落在"洞"上：原式分母为 0、无定义，而约分后的 x+1 在 x=1 取值为 2。<b>极限只看去心邻域</b>，所以两者在 x→1 的极限相同。'
+        : '当前两式取值' + (d < 1e-9 ? '<span class="l3c-ok">完全相等</span>' : '相差 ' + d.toExponential(1)) + '。把滑块拖到 1 附近（但不停在 1 上），差值会一直等于 0。';
+    }
+    xs.addEventListener('input', upd); upd();
+  })();
+
+  /* Demo 3: piecewise one-sided limits */
+  (function(){
+    const as = $('l3c-pw-a'); if (!as) return;
+    const av = $('l3c-pw-av'), lc = $('l3c-pw-lc'), rc = $('l3c-pw-rc'), stage = $('l3c-pw-stage');
+    function upd(){
+      const a = parseFloat(as.value);
+      const c1 = parseFloat(lc.value || '0'), c2 = parseFloat(rc.value || '0');
+      av.textContent = a.toFixed(1);
+      const left = 3 * a + c1;   /* 左支 3x + c1 */
+      const right = a * a + c2;  /* 右支 x² + c2 */
+      const ok = Math.abs(left - right) < 1e-9;
+      stage.innerHTML =
+        '<div class="l3c-val">f(x) = 3x ' + (c1 >= 0 ? '+ ' + c1 : '− ' + Math.abs(c1)) + '（x ≤ ' + a.toFixed(1) + '）　　f(x) = x² ' + (c2 >= 0 ? '+ ' + c2 : '− ' + Math.abs(c2)) + '（x &gt; ' + a.toFixed(1) + '）</div>' +
+        '<div class="l3c-val" style="margin-top:6px">左极限 / left = 3×' + a.toFixed(1) + ' ' + (c1 >= 0 ? '+ ' + c1 : '− ' + Math.abs(c1)) + ' = <b>' + num(left) + '</b><br>' +
+        '右极限 / right = ' + a.toFixed(1) + '² ' + (c2 >= 0 ? '+ ' + c2 : '− ' + Math.abs(c2)) + ' = <b>' + num(right) + '</b></div>' +
+        '<div class="l3c-val" style="margin-top:6px">判定 / verdict：' + (ok
+          ? '<span class="l3c-ok">左右相等 ⟹ 极限存在，等于 ' + num(left) + '</span>'
+          : '<span class="l3c-no">左右不等 ⟹ 该点极限不存在</span>') + '</div>' +
+        '<div class="l3-tiny">提示：想让左右相等，可以解 3a + c₁ = a² + c₂。例如 a=1、c₁=−7、c₂=5 时左极限 −4、右极限 6，就是课堂上那个不存在的例子。</div>';
+    }
+    [as, lc, rc].forEach(function(el){ el.addEventListener('input', upd); });
+    upd();
+  })();
+
+  /* Demo 4: squeeze */
+  (function(){
+    const xs = $('l3c-sq-x'); if (!xs) return;
+    const xv = $('l3c-sq-xv'), stage = $('l3c-sq-stage');
+    function upd(){
+      const x = parseFloat(xs.value);
+      const v = x * x * Math.sin(1 / x);
+      const b = x * x;
+      xv.textContent = x.toFixed(3);
+      const w = function(t){ return Math.round(Math.abs(t) / 1 * 100); }; /* 1 为参考上限 */
+      stage.innerHTML =
+        '<div class="l3c-val">−x² = <b>' + num(-b) + '</b>　≤　x²sin(1/x) = <b>' + num(v) + '</b>　≤　x² = <b>' + num(b) + '</b></div>' +
+        '<div style="margin-top:8px"><div class="l3-tiny">上界 x²</div><div class="l3-bar"><i style="width:' + Math.min(100, w(b)) + '%"></i></div>' +
+        '<div class="l3-tiny">函数值 |x²sin(1/x)|</div><div class="l3-bar"><i style="width:' + Math.min(100, w(Math.abs(v))) + '%"></i></div></div>' +
+        '<div class="l3-tiny" style="margin-top:8px">把 x 拖到最左边，上下界同时塌缩到 0，函数值被"夹"着一同趋于 0。注意 sin(1/x) 本身在 x→0 时<b>没有极限</b>（无限震荡），但乘上 x² 之后整体被迫趋于 0。</div>';
+    }
+    xs.addEventListener('input', upd); upd();
+  })();
+
+  /* Demo 5: unit circle area comparison */
+  (function(){
+    const xs = $('l3c-uc-x'); if (!xs) return;
+    const xv = $('l3c-uc-xv'), svgHost = $('l3c-uc-svg'), out = $('l3c-uc-out');
+    const S = 52, CX = 120, CY = 155;
+    function P(px, py){ return [CX + S * px, CY - S * py]; }
+    function upd(){
+      const x = parseFloat(xs.value);
+      xv.textContent = x.toFixed(2) + ' rad';
+      const s = Math.sin(x), c = Math.cos(x), t = Math.tan(x);
+      const A = P(1, 0), B = P(c, s), T = P(1, t), Bf = P(c, 0), C = P(0, 0);
+      const arc = 'M ' + A[0] + ' ' + A[1] + ' A ' + S + ' ' + S + ' 0 0 0 ' + B[0] + ' ' + B[1];
+      const part = (v, col) => '<path d="' + arc + '" fill="none" stroke="' + col + '" stroke-width="6" stroke-linecap="round" opacity="0.55"/>' ;
+      svgHost.innerHTML =
+        '<svg viewBox="0 0 300 190" width="100%" height="190" role="img" aria-label="unit circle comparison">' +
+        '<line x1="20" y1="' + CY + '" x2="290" y2="' + CY + '" stroke="#ddd" stroke-width="1"/>' +
+        '<line x1="' + CX + '" y1="10" x2="' + CX + '" y2="185" stroke="#ddd" stroke-width="1"/>' +
+        '<circle cx="' + CX + '" cy="' + CY + '" r="' + S + '" fill="none" stroke="#e3ddd0" stroke-width="1.5"/>' +
+        '<path d="' + arc + '" fill="none" stroke="#c2a15a" stroke-width="4" opacity="0.9"/>' +
+        '<line x1="' + C[0] + '" y1="' + C[1] + '" x2="' + B[0] + '" y2="' + B[1] + '" stroke="#8a6a2f" stroke-width="1.5"/>' +
+        '<line x1="' + B[0] + '" y1="' + B[1] + '" x2="' + Bf[0] + '" y2="' + Bf[1] + '" stroke="#2f6b3a" stroke-width="2.5"/>' +
+        '<line x1="' + A[0] + '" y1="' + A[1] + '" x2="' + T[0] + '" y2="' + T[1] + '" stroke="#a33" stroke-width="2.5"/>' +
+        '<text x="' + (A[0] + 6) + '" y="' + (A[1] + 16) + '" font-size="11" fill="#666">A</text>' +
+        '<text x="' + (B[0] - 14) + '" y="' + (B[1] - 6) + '" font-size="11" fill="#666">B</text>' +
+        '<text x="' + (T[0] + 6) + '" y="' + (T[1] - 4) + '" font-size="11" fill="#666">T</text>' +
+        '<text x="' + (B[0] + 6) + '" y="' + ((B[1] + Bf[1]) / 2) + '" font-size="11" fill="#2f6b3a">sin x</text>' +
+        '<text x="' + (A[0] + 8) + '" y="' + ((A[1] + T[1]) / 2) + '" font-size="11" fill="#a33">tan x</text>' +
+        '</svg>';
+      out.innerHTML =
+        '<b>三块面积 / three areas</b><br>' +
+        '三角形 OAB：½ sin x = <b>' + num(s / 2, 4) + '</b><br>' +
+        '扇形 OAB：½ x = <b>' + num(x / 2, 4) + '</b><br>' +
+        '三角形 OAT：½ tan x = <b>' + num(t / 2, 4) + '</b><br>' +
+        '<div class="l3-tiny" style="margin-top:6px">面积比较给出 ½sin x &lt; ½x &lt; ½tan x，即 <b>sin x &lt; x &lt; tan x</b>（0 &lt; x &lt; π/2）。同除 sin x 得 1 &lt; x/sin x &lt; 1/cos x。</div>' +
+        '<div class="l3-tiny">当前数值：' + num(s, 4) + ' &lt; ' + num(x, 4) + ' &lt; ' + num(t, 4) + '　' + (s < x && x < t ? '<span class="l3c-ok">✓ 不等式成立</span>' : '<span class="l3c-no">✗</span>') + '</div>' +
+        '<div class="l3-tiny">sin x / x = <b>' + num(s / x, 5) + '</b>　cos x = <b>' + num(c, 5) + '</b></div>';
+    }
+    xs.addEventListener('input', upd); upd();
+  })();
+
+  /* Demo 6: epsilon-delta */
+  (function(){
+    const es = $('l3c-ep-eps'); if (!es) return;
+    const ev = $('l3c-ep-epsv'), svgHost = $('l3c-ep-svg'), out = $('l3c-ep-out'), auto = $('l3c-ep-auto');
+    let delta = parseFloat(es.value) / 2;
+    const X0 = 2, X1 = 4, Y0 = 3, Y1 = 7;
+    const px = function(x){ return 30 + (x - X0) / (X1 - X0) * 290; };
+    const py = function(y){ return 180 - (y - Y0) / (Y1 - Y0) * 160; };
+    function draw(){
+      const eps = parseFloat(es.value);
+      const need = eps / 2;
+      const ok = delta <= need + 1e-9;
+      const L = 5, a = 3;
+      const yTop = py(L + eps), yBot = py(L - eps);
+      const xL = px(a - delta), xR = px(a + delta);
+      svgHost.innerHTML =
+        '<svg viewBox="0 0 340 200" width="100%" height="200" role="img" aria-label="epsilon delta">' +
+        '<rect x="30" y="' + yTop + '" width="290" height="' + Math.max(1, yBot - yTop) + '" fill="#c2a15a" opacity="0.18"/>' +
+        '<rect x="' + xL + '" y="15" width="' + Math.max(1, xR - xL) + '" height="170" fill="#2f6b3a" opacity="0.13"/>' +
+        '<line x1="30" y1="' + py(L) + '" x2="320" y2="' + py(L) + '" stroke="#bbb" stroke-dasharray="4 3"/>' +
+        '<line x1="' + px(a) + '" y1="15" x2="' + px(a) + '" y2="185" stroke="#bbb" stroke-dasharray="4 3"/>' +
+        '<line x1="' + px(2) + '" y1="' + py(3) + '" x2="' + px(4) + '" y2="' + py(7) + '" stroke="#2f2a22" stroke-width="2"/>' +
+        '<circle cx="' + px(a) + '" cy="' + py(L) + '" r="4" fill="#fff" stroke="#2f2a22" stroke-width="2"/>' +
+        '<text x="6" y="' + (py(L) + 4) + '" font-size="11" fill="#666">L</text>' +
+        '<text x="' + (px(a) - 4) + '" y="196" font-size="11" fill="#666">a</text>' +
+        '<text x="' + (px(a) - 30) + '" y="13" font-size="11" fill="#2f6b3a">|x−a|&lt;δ</text>' +
+        '<text x="250" y="' + (py(L) - 6) + '" font-size="11" fill="#8a6a2f">|f(x)−L|&lt;ε</text>' +
+        '</svg>';
+      out.innerHTML =
+        'f(x) = 2x − 1，a = 3，L = 5。当前 ε = <b>' + num(eps, 2) + '</b>，理论最小可取 δ = ε/2 = <b>' + num(need, 3) + '</b>，你选的 δ = <b>' + num(delta, 3) + '</b>。<br>' +
+        (ok
+          ? '<span class="l3c-ok">✓ 成立</span>：只要 0 &lt; |x−3| &lt; δ，就有 |(2x−1)−5| &lt; ε。'
+          : '<span class="l3c-no">✗ 不成立</span>：δ 取得太大，绿色区间里出现了跑出黄色带子的点。例如 x = ' + num(3 - delta, 3) + ' 时 |f(x)−5| = ' + num(2 * delta, 3) + ' ≥ ε。') +
+        '<div class="l3-tiny" style="margin-top:6px">δ 并不唯一：比 ε/2 更小的任意 δ 都合格，所以"找到"就够了，不必最小。把 δ 调小再试，判定会变绿。</div>';
+    }
+    es.addEventListener('input', function(){ ev.textContent = num(parseFloat(es.value), 2); delta = parseFloat(es.value) / 2; draw(); });
+    if (auto) auto.addEventListener('click', function(){ delta = parseFloat(es.value) / 2; draw(); });
+    ev.textContent = num(parseFloat(es.value), 2);
+    draw();
+  })();
+})();
+</script>
+
+
+<script id="q-script">
+(function(){
+  var DATA = {
+  'course-app-01': {
+    title: 'Lesson 1 · Course Orientation and the C Toolchain',
+    intro: 'Five questions on how the course is built and how to work inside it. All questions are in English; think first, then click.',
+    items: [
+      { q: 'The course is weighted as Assignments 35%, Quizzes 5%, Midterm 30%, Final 30%. A classmate skips the assignments but plans to "make it up on the final". What is the best description of that plan?',
+        opts: ['It is sound: the final is the largest single component.', 'It is unsound: assignments alone carry more weight than the final, and the two exams together outweigh everything else.', 'It is neutral, because weights are only advisory.', 'It is sound as long as the midterm is high.'],
+        a: 1,
+        why: 'Assignments (35%) exceed the final (30%), and the two exams together are 60%. Skipping the largest component is the single worst allocation of effort.' },
+      { q: 'The course offers no credit for memorising which button to press in an IDE. Why not?',
+        opts: ['Because the IDE may change, so the skill has no value.', 'Because universities are required to avoid practical content.', 'Because the transferable part is the method — decomposing a problem and choosing a representation — not the tool that happens to implement it today.', 'Because the toolchain is not examinable.'],
+        a: 2,
+        why: 'Tools change; the ability to break an unfamiliar problem into computable steps does not. That is the part worth grading.' },
+      { q: 'Wirth\'s formula says "programs = algorithms + data structures". Which question does that formula NOT answer?',
+        opts: ['Which data structure makes this operation cheap?', 'Is this algorithm correct for all inputs?', 'Which compiler flags should I pass to optimise the binary?', 'Does the chosen representation make the algorithm simpler?'],
+        a: 2,
+        why: 'Compiler flags are a toolchain concern. The formula is about the two things a programmer designs: the procedure and the representation.' },
+      { q: 'C is a high-level language, yet it is usually called "low-abstraction". What follows from that?',
+        opts: ['You cannot write large programs in C.', 'You can express high-level logic while still addressing bytes and memory directly, which is why kernels and databases are written in it.', 'C has no data types.', 'C programs are shorter than programs in other languages.'],
+        a: 1,
+        why: 'Low abstraction means little is hidden: the same language that writes loops also lets you reason about addresses and bytes.' },
+      { q: 'The exam is open-book, but only printed material is allowed. What does that change about preparation?',
+        opts: ['It removes the need to prepare, since everything is available.', 'It shifts the work from memorising to organising: you must know where things are and how to use them quickly, because searching an unfamiliar book wastes exam time.', 'It means the exam will only test definitions.', 'It means you should bring as many books as possible.'],
+        a: 1,
+        why: 'Open-book exams move the difficulty from recall to navigation and application. Unprepared access to information is slower than memory.' }
+    ]
+  },
+  'course-app-02': {
+    title: 'Lesson 2 · Computer Organisation and How a Program Runs',
+    intro: 'Five questions on the machine below the language. Answer by reasoning about the model, not by recalling a phrase.',
+    items: [
+      { q: 'A memory cell holds the byte 0x41. When is it treated as an instruction rather than as data?',
+        opts: ['When it is stored in a register.', 'Never — a byte is always data.', 'When the program counter points at it and the fetch stage reads it.', 'When it is larger than 0x40.'],
+        a: 2,
+        why: 'The hardware has no tags. What makes the bits an instruction is the role the control unit gives them at that moment — usually because the PC selected the address.' },
+      { q: 'Why does the instruction cycle need a write-back stage even for something as simple as ADD?',
+        opts: ['Because memory must be updated first.', 'Because the arithmetic result has to be committed to a register file or memory before the next instruction can rely on it.', 'Because the bus needs a clock cycle.', 'It does not; write-back only applies to memory loads.'],
+        a: 1,
+        why: 'Fetch-decode-execute produces a value; write-back is what makes that value visible to later instructions.' },
+      { q: 'A machine has a 32-bit address bus. Ignoring any reserved regions, how much memory can it address?',
+        opts: ['4 MB', '4 GB', '2 GB', 'It depends on the word size, not the address bus.'],
+        a: 1,
+        why: '2^32 distinct addresses, one byte each, is 4 GiB. This is why 32-bit systems hit a hard ceiling around 4 GB.' },
+      { q: 'Registers are faster than cache, and cache is faster than main memory. Why keep a cache at all?',
+        opts: ['Because registers are too small to hold a working set and main memory is too slow to keep the pipeline busy.', 'Because cache is cheaper per byte than registers.', 'Because caches are required by the von Neumann model.', 'Because cache stores instructions only.'],
+        a: 0,
+        why: 'The hierarchy exists for the capacity/speed trade-off: a small fast level close to the core plus a large slow level further away.' },
+      { q: 'During fetch the PC is normally incremented. How can a jump still change the flow of control?',
+        opts: ['It cannot; jumps are resolved before fetch.', 'The execute stage overwrites the PC with the target address, discarding the incremented value.', 'The jump instruction is stored in the PC.', 'The PC is incremented only after a jump.'],
+        a: 1,
+        why: 'Incrementing the PC is the default "next instruction" behaviour; branches and calls work by writing a different value into it.' }
+    ]
+  },
+  'course-app-03': {
+    title: 'Lesson 3 · How Data Is Represented',
+    intro: 'Five questions on bits, bases, encoding and memory. Two of them are the classic traps of this topic.',
+    items: [
+      { q: 'How many distinct states can 12 bits represent?',
+        opts: ['144', '2048', '4096', '4096 only if signed'],
+        a: 2,
+        why: '2^12 = 4096. Width alone fixes the number of states; signedness only changes how you interpret them.' },
+      { q: 'In 8-bit two\'s complement, what is (−128) + (−1)?',
+        opts: ['−129, represented exactly', '127, because the result overflows the representable range', '0', 'It is undefined and the CPU traps'],
+        a: 1,
+        why: '−128 is 10000000 and −1 is 11111111; the sum is 101111111, and after discarding the carry the 8-bit result is 01111111 = 127. Two\'s complement is asymmetric, so the negative side has no positive counterpart for −128.' },
+      { q: 'Why is 0.1 not stored exactly in a float or double?',
+        opts: ['Because the decimal point is not stored.', 'Because 0.1 in binary is an infinitely repeating fraction, so any finite-width representation keeps only an approximation.', 'Because floats use two\'s complement.', 'Because compilers round decimal literals to integers.'],
+        a: 1,
+        why: 'The binary expansion of 0.1 never terminates, so the stored value is the nearest representable neighbour. That is the real reason 0.1 + 0.2 != 0.3.' },
+      { q: 'In C, \'9\' - \'0\' evaluates to 9. What does that depend on?',
+        opts: ['Nothing; it is guaranteed by the C standard for every character set.', 'On digit characters being contiguous in the execution character set, which is true for ASCII but is not a universal law.', 'On the compiler optimising the subtraction.', 'On \'0\' being stored as zero.'],
+        a: 1,
+        why: 'The idiom relies on contiguity of \'0\'..\'9\'. In ASCII they are contiguous; the standard does not mandate it for every possible character set, so it is a portable-in-practice idiom, not a language guarantee.' },
+      { q: 'A struct has one char and one int. Why is sizeof(struct) often larger than 1 + 4?',
+        opts: ['Because the compiler stores a copy of each field.', 'Because members are aligned to their natural boundaries and padding bytes are inserted, so the layout must be padded to satisfy alignment.', 'Because sizeof always rounds to 8.', 'Because the char is promoted to int at runtime.'],
+        a: 1,
+        why: 'Alignment forces padding. Ordering members from largest to smallest often (not always) reduces the padding, which is why layout order is a real design decision.' }
+    ]
+  },
+  'course-calc-01': {
+    title: 'Lesson 1 · The Idea of Limits',
+    intro: 'Five questions on what a limit asserts — and what it deliberately ignores.',
+    items: [
+      { q: 'A function is undefined at x = 2, but its values approach 5 as x approaches 2 from either side. What is the limit?',
+        opts: ['It does not exist, because f(2) is undefined.', 'It is 5.', 'It is undefined until f(2) is defined.', 'It depends on the value assigned to f(2).'],
+        a: 1,
+        why: 'A limit describes the trend on a punctured neighbourhood. Whether the function is defined at the point, and what value it takes there, is irrelevant.' },
+      { q: 'As x → 0, the values of 1/x² grow without bound. How should this be described?',
+        opts: ['The limit is +∞ and therefore the limit exists as a number.', 'The limit does not exist as a real number; saying the limit is +∞ is shorthand for unbounded growth.', 'The limit is 0 because the values are positive.', 'The limit is undefined only from the left.'],
+        a: 1,
+        why: 'Infinity is not a real number. "The limit is +∞" is a compact way of describing behaviour, not the assertion that a real limit exists.' },
+      { q: 'Why is "the limit equals the value of the function there" not a usable definition of a limit?',
+        opts: ['Because it is circular and it fails precisely where limits are most useful — where the function has a hole or a jump.', 'Because the value may be negative.', 'Because limits are only defined at zero.', 'Because the function may be continuous.'],
+        a: 0,
+        why: 'That property is continuity, which many interesting functions lack at the point of interest. The limit must be definable without reference to the value.' },
+      { q: 'If the left-hand limit is 3 and the right-hand limit is 5 at the same point, what can you conclude about the two-sided limit?',
+        opts: ['It equals 4, the average.', 'It exists but is unknown.', 'It does not exist, because the two one-sided limits disagree.', 'It equals 3, since the left limit is computed first.'],
+        a: 2,
+        why: 'For a two-sided limit to exist the one-sided limits must exist and be equal. Averages play no part.' },
+      { q: 'A table of function values suggests the limit is 2. What is the danger in concluding that from the table alone?',
+        opts: ['Tables are always wrong.', 'A finite sample can be misleading: the function might oscillate or jump between the sampled points, so a table is evidence, not proof.', 'The limit could be 2 only from one side.', 'Nothing — a table is the definition of a limit.'],
+        a: 1,
+        why: 'Sampling shows behaviour near the sample points only. Proofs need the ε-δ structure, which quantifies over all x in a neighbourhood.' }
+    ]
+  },
+  'course-calc-02': {
+    title: 'Lesson 2 · Neighbourhoods, One-Sided Limits and ε-δ',
+    intro: 'Five questions on the rigorous definition. Each one targets a specific part of the statement.',
+    items: [
+      { q: 'In the ε-δ definition, why is the condition 0 < |x − a| rather than |x − a| < δ?',
+        opts: ['Because x = a would otherwise be forced to satisfy |f(x) − L| < ε, and the value at a is irrelevant to the limit.', 'Because distances cannot be zero.', 'Because it weakens the statement for convenience.', 'Because ε must be smaller than δ.'],
+        a: 0,
+        why: 'Excluding x = a gives a punctured neighbourhood, so the definition never refers to f(a). That is exactly what makes limits independent of the value at the point.' },
+      { q: 'If a particular δ works for a given ε, which other values of δ also work?',
+        opts: ['Only δ exactly equal to that value.', 'Any smaller positive δ, so a valid δ is never unique.', 'Only larger values.', 'Only multiples of ε.'],
+        a: 1,
+        why: 'A smaller punctured neighbourhood is contained in a larger one, so the implication remains true. This is why "find one δ" is enough.' },
+      { q: 'Can a function have a limit at a point where it is not continuous?',
+        opts: ['No; limits and continuity coincide.', 'Yes — a removable discontinuity or a jump at a point where the two-sided limit exists is exactly such a case.', 'Only if the function is bounded.', 'Only at x = 0.'],
+        a: 1,
+        why: 'Continuity requires the limit to exist and to equal the value. The limit can exist while the value differs or is missing.' },
+      { q: 'The Heine (sequential) criterion says the limit exists iff every sequence xₙ → a produces f(xₙ) → L. What does it give you in practice?',
+        opts: ['A way to prove a limit exists by testing one convenient sequence.', 'A way to disprove existence cheaply: exhibit two sequences converging to a whose image sequences converge to different values.', 'A method for computing derivatives.', 'A proof that all functions are continuous.'],
+        a: 1,
+        why: 'To prove existence you must handle all sequences, but to refute it two sequences with different limits are enough — which is why it is a favourite disproof tool.' },
+      { q: 'A function grows without bound as x → a. How does that differ from a jump discontinuity?',
+        opts: ['They are the same phenomenon described differently.', 'In the unbounded case the one-sided limits are not real numbers at all, whereas in a jump both one-sided limits exist but disagree.', 'A jump discontinuity has no one-sided limits.', 'Unbounded growth means the limit is 0.'],
+        a: 1,
+        why: 'Both fail to have a two-sided limit, but for different reasons; the vocabulary (infinite limit versus jump) tracks which failure occurs.' }
+    ]
+  },
+  'course-calc-03': {
+    title: 'Lesson 3 · Computing Limits, Squeeze Theorem and ε-δ',
+    intro: 'Five questions on the tools and their preconditions. Several options are plausible — pick the one that is actually true.',
+    items: [
+      { q: 'Evaluate lim (sin 2x)/(sin 3x) as x → 0.',
+        opts: ['0', '1', '2/3', '3/2'],
+        a: 2,
+        why: 'Write it as (sin 2x / 2x)·(3x / sin 3x)·(2/3). The first two factors tend to 1 each, leaving 2/3.' },
+      { q: 'Why can the quotient rule for limits not be applied directly to (x² − 1)/(x − 1) at x = 1?',
+        opts: ['Because the numerator is a polynomial.', 'Because the limit of the denominator is 0, which violates a precondition of the rule; the expression is a 0/0 form.', 'Because the function is not continuous anywhere.', 'Because the rule only applies as x → ∞.'],
+        a: 1,
+        why: 'The quotient rule needs a non-zero denominator limit. Here both limits are 0, so you must first cancel the common factor (or use another technique).' },
+      { q: 'For every x ≠ 0 we have 0 ≤ |x|, and 0 < |x| strictly. Yet both functions tend to 0 at the origin. What does this show?',
+        opts: ['That order preservation is false.', 'That a strict inequality in the hypothesis cannot be carried over to the limits — the conclusion is only ≤.', 'That limits must be equal whenever functions are ordered.', 'That the squeeze theorem fails here.'],
+        a: 1,
+        why: 'The passage to the limit flattens strict inequalities. f(x) < g(x) on a punctured neighbourhood yields lim f ≤ lim g, and equality is possible.' },
+      { q: 'For f(x) = 2x − 1 at a = 3 with L = 5, which δ certifies the limit for ε = 0.1?',
+        opts: ['δ = 0.2 works; δ = 0.05 also works, and in fact any δ ≤ 0.05 does.', 'Only δ = 0.05 works.', 'δ = 0.1 works because δ may equal ε.', 'No δ works for such a small ε.'],
+        a: 0,
+        why: '|2x − 6| = 2|x − 3| < 0.1 requires |x − 3| < 0.05, so δ = 0.05 is valid, and any smaller positive δ is valid too. δ = 0.2 would fail.' },
+      { q: 'Which substitution is NOT justified?',
+        opts: ['Setting y = arcsin x when x → 0 to evaluate arcsin x / x.', 'Replacing sin x by x inside (sin x)/x as x → 0.', 'Replacing sin x by x inside sin x − x as x → 0.', 'Replacing 1 − cos x by x²/2 in (1 − cos x)/x² as x → 0.'],
+        a: 2,
+        why: 'In a difference the leading terms cancel, so replacing sin x by x destroys the term that actually decides the limit. Equivalent-infinitesimal replacements are safe in products and quotients.' }
+    ]
+  }
+  };
+
+  var hosts = document.querySelectorAll('.q-host');
+  if (!hosts.length) return;
+
+  Array.prototype.forEach.call(hosts, function(host){
+    var id = host.getAttribute('data-quiz');
+    var d = DATA[id];
+    if (!d) { host.style.display = 'none'; return; }
+    var total = d.items.length, answered = 0, correct = 0;
+    var h = '<div class="q-head"><div class="q-kicker">ENGLISH PRACTICE / 纯英文答题</div><h3>' + d.title + '</h3><p class="q-sub">' + d.intro + '</p></div><div class="q-list">';
+    d.items.forEach(function(it, qi){
+      h += '<div class="q-item" data-q="' + qi + '"><div class="q-q"><span class="q-num">' + (qi + 1) + '</span>' + it.q + '</div><div class="q-opts">';
+      it.opts.forEach(function(o, oi){
+        h += '<button class="q-opt" data-o="' + oi + '">' + String.fromCharCode(65 + oi) + '. ' + o + '</button>';
+      });
+      h += '</div><div class="q-why" hidden></div></div>';
+    });
+    h += '</div><div class="q-score">Answered 0 / ' + total + ' · Correct 0</div>';
+    host.innerHTML = h;
+    var scoreEl = host.querySelector('.q-score');
+    host.addEventListener('click', function(e){
+      var btn = e.target.closest ? e.target.closest('.q-opt') : null;
+      if (!btn || btn.disabled) return;
+      var item = btn.closest('.q-item');
+      var qi = parseInt(item.getAttribute('data-q'), 10);
+      var oi = parseInt(btn.getAttribute('data-o'), 10);
+      var it = d.items[qi];
+      answered++;
+      var opts = item.querySelectorAll('.q-opt');
+      Array.prototype.forEach.call(opts, function(b, bi){
+        if (bi === it.a) b.classList.add('q-right');
+        else if (bi === oi) b.classList.add('q-wrong');
+        b.disabled = true;
+      });
+      if (oi === it.a) correct++;
+      var why = item.querySelector('.q-why');
+      why.hidden = false;
+      why.innerHTML = '<b>' + (oi === it.a ? 'Correct.' : 'Not quite.') + '</b> ' + it.why;
+      scoreEl.textContent = 'Answered ' + answered + ' / ' + total + ' · Correct ' + correct +
+        (answered === total ? (correct === total ? ' — perfect, move on.' : ' — review the ones you missed before the next session.') : '');
+    });
+  });
+})();
+</script>
+
 </body></html>
