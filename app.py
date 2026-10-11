@@ -152,6 +152,13 @@ def security_headers(response):
     response.headers.setdefault("X-Frame-Options", "DENY")
     response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
     response.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+    # 动态接口一律显式声明"不缓存"。
+    # 原因：app.py 里只有登录响应设了 Cache-Control，其余 JSON 响应都没有缓存头。
+    # 挂在阿里云 CDN 后面时，没有缓存头的响应会套用 CDN 的默认缓存规则，
+    # 于是"请先登录"这类 401 响应会被缓存下来发给所有人——看起来就是所有人突然掉线。
+    # 即使 CDN 的规则配错了，这一句也能兜住。
+    if request.path.startswith("/api/"):
+        response.headers["Cache-Control"] = "no-store"
     return response
 
 
