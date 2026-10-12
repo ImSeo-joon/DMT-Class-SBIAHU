@@ -3,7 +3,7 @@
   "short_name": "DMT Class 01",
   "description": "安徽大学纽约石溪学院 · 数字媒体技术 1 班（DMT Class 01）班级网站：班级新闻、周课表、公共资料、课程要点与组队大厅。",
   "lang": "zh-CN",
-  "start_url": "/?source=pwa",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
@@ -48,5 +48,7 @@
       "name": "周课表",
       "url": "/#schedule"
     }
-  ]
+  ],
+  "id": "/",
+  "prefer_related_applications": false
 }
