@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parent
 # 让 Flask 用正确的 MIME 类型提供 PWA 清单文件，否则浏览器可能拒收 manifest。
 mimetypes.add_type("application/manifest+json", ".webmanifest")
 # 允许直接暴露的根目录静态文件（PWA 需要 service worker 与 manifest 位于站点根路径）。
-ROOT_PUBLIC_FILES = {"index.html", "sw.js", "manifest.webmanifest", "icon-512.png", "icon-maskable-512.png"}
+ROOT_PUBLIC_FILES = {"index.html", "sw.js", "manifest.webmanifest", "icon-192.png", "icon-180.png", "icon-512.png", "icon-maskable-512.png", "favicon.ico"}
 COOKIE = core.COOKIE
 SESSION_DAYS = core.SESSION_DAYS
 RATE_LIMIT: dict[str, list[float]] = {}
