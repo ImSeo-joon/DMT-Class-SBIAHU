@@ -1,8 +1,13 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f6f5f0"><title>DMT Class 01 | SBIAHU</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6f5f0">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DMT Class 01">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="mobile-web-app-capable" content="yes"><title>DMT Class 01 | SBIAHU</title>
 <meta name="description" content="安徽大学纽约石溪学院 · 数字媒体技术 1 班（DMT Class 01）班级网站：班级新闻、周课表、公共资料、推免指南与组队大厅。">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="DMT Class 01">
@@ -166,6 +171,106 @@ body{background:radial-gradient(ellipse at 12% 8%,#e9e5dc 0,transparent 31rem),v
 .q-opt[disabled]{cursor:default}
 .q-why{margin-top:8px;padding:8px 10px;border-left:3px solid var(--gold,#c2a15a);background:#fffaf0;font-size:13px;line-height:1.78}
 .q-score{margin-top:14px;font:12.5px/1.7 ui-monospace,Consolas,monospace;opacity:.85}
+</style>
+<style id="m-app">
+/* ================= 移动端 / App 布局层 =================
+   这一层放在最后，用 !important 覆盖前面已有的样式，
+   只针对窄屏生效，桌面端完全不受影响。
+   目标：① 单列卡片、铺满屏幕 ② 触摸目标 ≥44px
+        ③ 输入框 16px（防 iOS 聚焦缩放）④ 表格横向滚动不撑破
+        ⑤ 贴顶毛玻璃顶栏 + 底部标签栏 + 安全区适配
+*/
+@media (max-width: 820px) {
+  :root { --app-tabbar-h: 58px; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-size: 16px;
+    padding-bottom: calc(var(--app-tabbar-h) + env(safe-area-inset-bottom, 0px) + 10px) !important;
+  }
+  .wrap { padding-left: 16px !important; padding-right: 16px !important; }
+
+  header.nav {
+    position: sticky !important; top: 0; z-index: 50;
+    height: 56px !important;
+    padding-top: env(safe-area-inset-top, 0px);
+    background: rgba(246,245,240,.92);
+    -webkit-backdrop-filter: saturate(150%) blur(12px);
+    backdrop-filter: saturate(150%) blur(12px);
+  }
+  header.nav .brand { font-size: 14px; }
+
+  .page-intro { padding: 22px 0 14px !important; }
+  .page-intro h1 { font-size: 30px !important; line-height: 1.28 !important; }
+  .section { padding-top: 22px !important; padding-bottom: 22px !important; }
+  .section h2 { font-size: 22px !important; }
+
+  .cards, .page-cards, .cr-grid, .cr-hub, .split, .hero { grid-template-columns: 1fr !important; }
+  .cr-card, .card { min-height: 0 !important; padding: 14px 15px !important; }
+
+  .cr-tablewrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; border-radius: 12px; }
+  .cr-table { font-size: 13px !important; }
+  .cr-table th, .cr-table td { padding: 8px 10px !important; }
+
+  .cr-check { min-height: 44px !important; align-items: center; }
+  .q-opt, .l3-btn, .l3-step, .l3c-tab { min-height: 44px !important; }
+  button, .menu { min-height: 40px; }
+
+  input, select, textarea, button { font-size: 16px !important; }
+  input[type="text"], input[type="number"], input[type="email"], input[type="password"], input[type="search"], select, textarea { width: 100% !important; }
+  .l3-ctl, .l3-row { flex-wrap: wrap !important; }
+  .l3-ctl input[type="range"] { width: 100% !important; }
+
+  .l3-demo, .q-host { padding: 14px !important; border-radius: 14px !important; }
+  .q-q { font-size: 15px !important; }
+  .q-opt { font-size: 14.5px !important; padding: 11px 13px !important; }
+
+  img, svg, iframe { max-width: 100%; }
+  .cr-code, pre { overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 12.5px; }
+  .notice-in { flex-wrap: wrap; gap: 6px; }
+}
+
+/* ================= 底部标签栏 ================= */
+.app-tabbar { display: none; }
+@media (max-width: 820px) {
+  .app-tabbar {
+    display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 80;
+    height: calc(58px + env(safe-area-inset-bottom, 0px));
+    padding: 0 4px env(safe-area-inset-bottom, 0px);
+    background: rgba(255,253,247,.95);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
+    backdrop-filter: saturate(160%) blur(14px);
+    border-top: 1px solid rgba(0,0,0,.08);
+  }
+  .app-tabbar a {
+    flex: 1 1 0; min-height: 0 !important;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+    font-size: 11px; color: #6b6558; text-decoration: none; padding: 5px 0;
+  }
+  .app-tabbar .ico { font-size: 18px; line-height: 1.1; }
+  .app-tabbar a[aria-current="page"] { color: #2f2a22; font-weight: 600; }
+}
+
+/* ================= “添加到主屏幕”提示 ================= */
+.install-hint {
+  position: fixed; left: 12px; right: 12px;
+  bottom: calc(66px + env(safe-area-inset-bottom, 0px));
+  z-index: 90; display: none; gap: 10px; align-items: flex-start;
+  padding: 12px 14px; border-radius: 14px;
+  background: #2f2a22; color: #fdf8ee; font-size: 13px; line-height: 1.72;
+  box-shadow: 0 12px 32px rgba(0,0,0,.28);
+}
+@media (max-width: 820px) { .install-hint.is-open { display: flex; } }
+.install-hint button {
+  flex: 0 0 auto; min-height: 0 !important; padding: 5px 11px; border-radius: 999px;
+  border: 1px solid rgba(253,248,238,.45); background: none; color: inherit; font-size: 12px;
+}
+
+/* ================= 已安装（独立窗口）模式 ================= */
+@media (display-mode: standalone) {
+  .install-hint { display: none !important; }
+  .app-tabbar { display: flex; }
+  header.nav { height: 54px !important; }
+}
 </style>
 </head>
 
@@ -5730,6 +5835,64 @@ img{filter:saturate(1.14) contrast(1.05) brightness(1.02)}
         (answered === total ? (correct === total ? ' — perfect, move on.' : ' — review the ones you missed before the next session.') : '');
     });
   });
+})();
+</script>
+
+
+<nav class="app-tabbar" id="appTabbar" aria-label="主要导航 / Primary navigation">
+  <a href="#home" data-tab="home"><span class="ico">&#127968;</span>首页</a>
+  <a href="#news" data-tab="news"><span class="ico">&#128240;</span>新闻</a>
+  <a href="#schedule" data-tab="schedule"><span class="ico">&#128197;</span>课表</a>
+  <a href="#course" data-tab="course"><span class="ico">&#128218;</span>课程</a>
+  <a href="#account" data-tab="account"><span class="ico">&#128100;</span>我的</a>
+</nav>
+<div class="install-hint" id="installHint" role="status">
+  <span>想在断网或网站不稳定时也能看课程要点？把本页<b>添加到主屏幕</b>，之后即使服务器出问题也能离线阅读。<br><span style="opacity:.75">Add to home screen to keep reading offline.</span></span>
+  <button type="button" id="installHintClose">知道了</button>
+</div>
+<script id="pwa-script">
+(function () {
+  /* ---- 1. 注册 service worker（离线层） ---- */
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function () {
+        /* 注册失败不影响网站正常使用 */
+      });
+    });
+  }
+
+  /* ---- 2. 底部标签栏高亮 ---- */
+  var bar = document.getElementById('appTabbar');
+  if (bar) {
+    var sync = function () {
+      var h = (location.hash || '#home').replace(/^#/, '').split('/')[0];
+      var key = h;
+      if (h.indexOf('course') === 0) key = 'course';
+      if (h.indexOf('life') === 0) key = 'home';
+      Array.prototype.forEach.call(bar.querySelectorAll('a'), function (a) {
+        if (a.getAttribute('data-tab') === key) a.setAttribute('aria-current', 'page');
+        else a.removeAttribute('aria-current');
+      });
+    };
+    window.addEventListener('hashchange', sync);
+    sync();
+  }
+
+  /* ---- 3. 添加到主屏幕提示（只在窄屏、未安装、未关闭过时出现） ---- */
+  var hint = document.getElementById('installHint');
+  var KEY = 'dmt-install-hint-dismissed';
+  var isStandalone = false;
+  try { isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; } catch (e) {}
+  try {
+    if (hint && !isStandalone && !localStorage.getItem(KEY) && window.matchMedia('(max-width: 820px)').matches) {
+      setTimeout(function () { hint.classList.add('is-open'); }, 7000);
+    }
+    var close = document.getElementById('installHintClose');
+    if (close) close.addEventListener('click', function () {
+      hint.classList.remove('is-open');
+      try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    });
+  } catch (e) {}
 })();
 </script>
 

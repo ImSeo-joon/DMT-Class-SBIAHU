@@ -23,6 +23,10 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 import server as core
 
 ROOT = Path(__file__).resolve().parent
+# 让 Flask 用正确的 MIME 类型提供 PWA 清单文件，否则浏览器可能拒收 manifest。
+mimetypes.add_type("application/manifest+json", ".webmanifest")
+# 允许直接暴露的根目录静态文件（PWA 需要 service worker 与 manifest 位于站点根路径）。
+ROOT_PUBLIC_FILES = {"index.html", "sw.js", "manifest.webmanifest", "icon-512.png", "icon-maskable-512.png"}
 COOKIE = core.COOKIE
 SESSION_DAYS = core.SESSION_DAYS
 RATE_LIMIT: dict[str, list[float]] = {}
@@ -1041,10 +1045,14 @@ def static_file(asset_path=""):
     rel = "index.html" if not asset_path else unquote(asset_path)
     target = (ROOT / rel).resolve()
     is_public_asset = rel.startswith("assets/")
-    if (rel != "index.html" and not is_public_asset) or ROOT not in target.parents or "var" in target.parts or not target.is_file():
+    if (rel not in ROOT_PUBLIC_FILES and not is_public_asset) or ROOT not in target.parents or "var" in target.parts or not target.is_file():
         return api_error(404, "找不到页面")
     response = make_response(send_from_directory(ROOT, rel))
-    response.headers["Cache-Control"] = "no-cache" if rel == "index.html" else "public, max-age=3600"
+    # sw.js 必须 no-cache：否则浏览器会一直用旧的 service worker，更新永远到不了用户手里。
+    if rel in ("index.html", "sw.js"):
+        response.headers["Cache-Control"] = "no-cache"
+    else:
+        response.headers["Cache-Control"] = "public, max-age=3600"
     return response
 
 

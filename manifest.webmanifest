@@ -1,0 +1,52 @@
+{
+  "name": "DMT Class 01 | SBIAHU 班级网站",
+  "short_name": "DMT Class 01",
+  "description": "安徽大学纽约石溪学院 · 数字媒体技术 1 班（DMT Class 01）班级网站：班级新闻、周课表、公共资料、课程要点与组队大厅。",
+  "lang": "zh-CN",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f6f5f0",
+  "theme_color": "#414a86",
+  "icons": [
+    {
+      "src": "/assets/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "课程要点",
+      "url": "/#course"
+    },
+    {
+      "name": "班级新闻",
+      "url": "/#news"
+    },
+    {
+      "name": "周课表",
+      "url": "/#schedule"
+    }
+  ]
+}
