@@ -264,9 +264,7 @@ def download_resource(resource_id):
 
 @app.get("/api/schedule")
 def schedule():
-    _, viewer = get_session()
-    if not core.is_member(viewer):
-        return api_error(403, core.VISITOR_BLOCKED)
+    # 周课表已对所有人开放（只读），不再要求登录。
     with core.connect() as con:
         row = con.execute("SELECT value FROM site_settings WHERE key='schedule'").fetchone()
     return jsonify(json.loads(row["value"]) if row else {"term_start": "2026-09-07", "lessons": []})

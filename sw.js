@@ -11,7 +11,11 @@
  *
  * 改缓存清单或版本号时，记得把 VERSION 一起改掉，否则激活阶段不会清理旧缓存。
  */
-const VERSION = 'dmt-shell-v1';
+const VERSION = 'dmt-shell-v2';
+const API_CACHE = 'dmt-api-v1';
+/* 只缓存公开只读接口；会员与个人数据（/api/me、消息、反馈等）一律不缓存，
+   避免同一台设备上的下一个使用者看到上一个人的数据。 */
+const API_CACHEABLE = ['/api/news', '/api/events', '/api/schedule', '/api/folders', '/api/team', '/api/config'];
 const SHELL = ["/", "/index.html", "/manifest.webmanifest", "/icon-512.png", "/icon-maskable-512.png", "/assets/favicon.svg", "/assets/favicon-192.png", "/assets/favicon-32.png", "/assets/apple-touch-icon.png", "/assets/paris-chateau.svg", "/assets/paris-garden.svg", "/assets/paris-nature.svg", "/assets/paris-skyline.svg"];
 const NAV_TIMEOUT = 3500;
 const API_TIMEOUT = 3000;
@@ -33,7 +37,7 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
-    await Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k)));
+    await Promise.all(keys.filter((k) => k !== VERSION && k !== API_CACHE).map((k) => caches.delete(k)));
     await self.clients.claim();
   })());
 });
@@ -75,9 +79,29 @@ self.addEventListener('fetch', (event) => {
 
   if (url.pathname.indexOf('/api/') === 0) {
     event.respondWith((async () => {
+      const cacheable = API_CACHEABLE.some(function (p) {
+        return url.pathname === p || url.pathname.indexOf(p + '/') === 0;
+      });
+      const cache = await caches.open(API_CACHE);
       try {
-        return await withTimeout(fetch(req), API_TIMEOUT);
+        const fresh = await withTimeout(fetch(req), API_TIMEOUT);
+        if (fresh && fresh.ok && cacheable) cache.put(req, fresh.clone());
+        return fresh;
       } catch (err) {
+        if (cacheable) {
+          const hit = await cache.match(req, { ignoreSearch: true });
+          if (hit) {
+            const text = await hit.text();
+            return new Response(text, {
+              status: 200,
+              headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Cache-Control': 'no-store',
+                'X-Offline-Cache': '1'
+              }
+            });
+          }
+        }
         return new Response(JSON.stringify({ error: 'offline', offline: true }), {
           status: 503,
           headers: { 'Content-Type': 'application/json; charset=utf-8' }

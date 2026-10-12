@@ -272,6 +272,64 @@ body{background:radial-gradient(ellipse at 12% 8%,#e9e5dc 0,transparent 31rem),v
   header.nav { height: 54px !important; }
 }
 </style>
+<style id="m-polish">
+/* ============ 移动端视觉微调 ============
+   修正三件事：
+   1) 之前那条 button{font-size:16px!important} 把所有按钮都放大了，筛选按钮被撑成大块
+   2) .page-intro 的 padding:54px 0 把左右内边距清零，标题和正文贴到屏幕边缘
+   3) 筛选与课程标签换行成两排，占掉太多竖向空间
+*/
+@media (max-width: 820px) {
+  /* 1) 按钮不再强制放大；输入框仍保持 16px 防 iOS 聚焦缩放 */
+  button { min-height: 0 !important; font-size: inherit !important; }
+  .menu { min-height: 40px; }
+  input, select, textarea { font-size: 16px !important; }
+
+  /* 2) 所有页面容器都保证左右留白 */
+  .wrap, .page-intro, .section, .section-head {
+    padding-left: 16px !important; padding-right: 16px !important;
+  }
+  .section { padding-top: 22px !important; padding-bottom: 22px !important; }
+
+  /* 3) 标题收敛，副标题单独成行 */
+  .page-intro { padding-top: 26px !important; padding-bottom: 14px !important; }
+  .page-intro h1 { font-size: 27px !important; line-height: 1.26 !important; letter-spacing: -.02em !important; }
+  .page-intro h1 .cr-sub { display: block; margin-top: 6px; font-size: 15px !important; letter-spacing: 0; }
+  .page-intro p { font-size: 13px !important; line-height: 1.78; }
+  .fr-mot { font-size: 13px !important; }
+
+  /* 4) 区块标题与筛选：竖排，筛选变一行横向滚动 */
+  .section-head { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+  .section-head h2 { font-size: 21px !important; }
+  .filters {
+    flex-wrap: nowrap !important; justify-content: flex-start !important;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    width: 100%; margin: 0 -16px; padding: 2px 16px 6px;
+    scrollbar-width: none;
+  }
+  .filters::-webkit-scrollbar { display: none; }
+  .filter {
+    flex: 0 0 auto; font-size: 13px !important; padding: 8px 15px !important;
+    border-radius: 999px !important; min-height: 36px !important; white-space: nowrap;
+  }
+  .filter.active { background: var(--ink); color: #fff; }
+
+  /* 5) 课程要点标签条：一行横向滚动 */
+  .cr-subnav {
+    flex-wrap: nowrap !important; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    margin: 0 -16px 20px !important; padding: 2px 16px 6px;
+    scrollbar-width: none;
+  }
+  .cr-subnav::-webkit-scrollbar { display: none; }
+  .cr-subnav a { flex: 0 0 auto; font-size: 13px !important; padding: 8px 14px !important; white-space: nowrap; }
+
+  /* 6) 卡片与列表留白 */
+  .cards { gap: 14px !important; }
+  .card { min-height: 0 !important; padding: 17px !important; }
+  .card h3 { font-size: 19px !important; line-height: 1.35 !important; }
+  .card p { font-size: 13.5px !important; line-height: 1.75; }
+}
+</style>
 </head>
 
 
@@ -1099,9 +1157,9 @@ const editorRoles=['admin','officer','counselor'];
 const roleNames={admin:'管理员',officer:'班委',counselor:'导员',member:'班级成员'};
 function htmlSafe(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function showMessage(id,message,ok=false){const el=document.getElementById(id);el.textContent=message;el.className=ok?'message-ok':'message-error'}
-async function api(path,options={}){const method=(options.method||'GET').toUpperCase();const headers={...(options.headers||{})};if(options.body!==undefined)headers['Content-Type']='application/json';if(!['GET','HEAD'].includes(method)&&csrfToken)headers['X-CSRF-Token']=csrfToken;const res=await fetch(path,{...options,method,headers,credentials:'same-origin'});let data={};try{data=await res.json()}catch{}if(!res.ok)throw new Error(data.error||`请求失败 (${res.status})`);return data}
+async function api(path,options={}){const method=(options.method||'GET').toUpperCase();const headers={...(options.headers||{})};if(options.body!==undefined)headers['Content-Type']='application/json';if(!['GET','HEAD'].includes(method)&&csrfToken)headers['X-CSRF-Token']=csrfToken;const res=await fetch(path,{...options,method,headers,credentials:'same-origin'});if(res.headers.get('X-Offline-Cache')&&!window.__dmtOfflineNoted){window.__dmtOfflineNoted=true;const nb=document.getElementById('offlineNote');if(nb)nb.classList.add('is-open')}let data={};try{data=await res.json()}catch{}if(!res.ok)throw new Error(data.error||`请求失败 (${res.status})`);return data}
 function renderProfile(){const auth=document.getElementById('authPanel'),profile=document.getElementById('profilePanel'),nav=document.getElementById('accountNav'),admin=document.getElementById('adminNav');nav.textContent=currentUser?'个人中心 / Account':'注册 / 登录';admin.style.display=currentUser&&editorRoles.includes(currentUser.role)?'':'none';auth.hidden=!!currentUser;profile.hidden=!currentUser;if(!currentUser)return;document.getElementById('profileName').textContent=`你好，${currentUser.display_name}`;document.getElementById('profileRole').textContent=(currentUser.account_type==='visitor')?'访客 / Visitor':(currentUser.role_label||roleNames[currentUser.role]);document.getElementById('profileMeta').textContent=`${currentUser.email} · 注册于 ${String(currentUser.created_at||'').slice(0,10)}`;document.querySelector('#profileForm [name="display_name"]').value=currentUser.display_name;document.getElementById('permissionInfo').textContent=editorRoles.includes(currentUser.role)?'你可以编辑班级新闻、活动和课表。账号角色管理仅管理员可用。':'当前为只读成员权限；可浏览班级信息，编辑功能由管理员授予。'}
-async function refreshAccount(){try{const data=await api('/api/me');currentUser=data.user;csrfToken=data.csrf_token||'';document.getElementById('accountMessage').textContent='';renderProfile()}catch{currentUser=null;csrfToken='';renderProfile();showMessage('accountMessage','账号服务尚未启动。请在网站服务器上运行 server.py 后再注册或登录。')}}
+async function refreshAccount(){try{const data=await api('/api/me');currentUser=data.user;csrfToken=data.csrf_token||'';document.getElementById('accountMessage').textContent='';renderProfile()}catch(err){currentUser=null;csrfToken='';renderProfile();const offline=(typeof navigator!=='undefined'&&navigator.onLine===false)||(err&&err.message==='offline');showMessage('accountMessage',offline?'当前处于离线状态：课程要点仍可正常浏览，但注册、登录、留言等需要联网的功能暂时不可用。恢复网络后刷新即可。':'暂时连不上服务器，请稍后刷新重试。已缓存的课程要点仍可正常浏览。')}}
 function formDataObject(form){const data=Object.fromEntries(new FormData(form).entries());for(const k of Object.keys(data))if(form.elements[k]?.type==='checkbox')data[k]=form.elements[k].checked;return data}
 function refreshMemberData(){try{refreshResources()}catch(e){}try{loadServerSchedule()}catch(e){}try{refreshAdmin()}catch(e){}}
 document.getElementById('loginForm').addEventListener('submit',async e=>{e.preventDefault();try{const data=await api('/api/login',{method:'POST',body:JSON.stringify(formDataObject(e.target))});currentUser=data.user;csrfToken=data.csrf_token;renderProfile();refreshMemberData();showMessage('accountMessage','登录成功。',true)}catch(err){showMessage('accountMessage',err.message)}});
@@ -1995,7 +2053,7 @@ async function noticeEdit(){
 </script>
 <script>
 /* ===== 访客身份 / Visitor account：注册身份选择 + 板块门禁 ===== */
-const VISITOR_BLOCKED_VIEWS=['affairs','schedule','resources','tuimian','liuxue'];
+const VISITOR_BLOCKED_VIEWS=['resources','tuimian','liuxue'];
 function isVisitorAccount(){return !!(currentUser&&currentUser.account_type==='visitor')}
 function isNonMemberAccount(){return !(currentUser&&currentUser.account_type==='member')}
 function applyAccountTypeUI(){
@@ -2033,23 +2091,14 @@ function applyVisitorGates(){
       Array.prototype.forEach.call(sec.children,el=>{if(el!==gate)el.hidden=false});
     }
   });
-  // 首页课程速览与周课表同一权限
+  // 首页课程速览与周课表：已对所有人开放（只读）
   const weekList=document.getElementById('homeLessons');
   if(weekList){
-    let hint=document.getElementById('homeWeekGate');
-    if(!hint){
-      hint=document.createElement('p');
-      hint.id='homeWeekGate';
-      hint.className='small-note';
-      weekList.parentNode.insertBefore(hint,weekList.nextSibling);
-    }
-    hint.innerHTML=currentUser
-      ? '课程速览与周课表仅对班级成员展示，需要完整权限请联系班委获取邀请码后重新注册。'
-      : '课程速览与周课表仅对班级成员展示，<a class="text-link" href="#account" data-page="account">登录 / 注册 →</a>';
-    hint.hidden=!blocked;
-    weekList.hidden=blocked;
-    const weekTitle=document.getElementById('homeWeekTitle');if(weekTitle)weekTitle.hidden=blocked;
-    const weekBadge=document.getElementById('homeWeekBadge');if(weekBadge)weekBadge.hidden=blocked;
+    const hint=document.getElementById('homeWeekGate');
+    if(hint)hint.hidden=true;
+    weekList.hidden=false;
+    const weekTitle=document.getElementById('homeWeekTitle');if(weekTitle)weekTitle.hidden=false;
+    const weekBadge=document.getElementById('homeWeekBadge');if(weekBadge)weekBadge.hidden=false;
   }
   document.querySelectorAll('[data-ac-tab]').forEach(b=>{
     const t=b.dataset.acTab;
@@ -5896,4 +5945,21 @@ img{filter:saturate(1.14) contrast(1.05) brightness(1.02)}
 })();
 </script>
 
+<style id="offline-note-style">
+.offline-note{position:fixed;left:12px;right:12px;top:calc(62px + env(safe-area-inset-top,0px));z-index:95;display:none;gap:10px;align-items:flex-start;padding:11px 13px;border-radius:12px;background:#3a2f22;color:#fdf8ee;font-size:12.5px;line-height:1.72;box-shadow:0 12px 30px rgba(0,0,0,.3)}
+.offline-note.is-open{display:flex}
+.offline-note button{flex:0 0 auto;padding:4px 10px;border-radius:999px;border:1px solid rgba(253,248,238,.4);background:none;color:inherit;font-size:12px;min-height:0!important}
+</style>
+<div class="offline-note" id="offlineNote" role="status">
+  <span><b>离线显示</b>：以下内容来自上次保存的副本，可能不是最新。课程要点可以正常浏览；注册、登录、留言需要联网。</span>
+  <button type="button" id="offlineNoteClose">知道了</button>
+</div>
+<script id="offline-note-script">
+(function(){
+  var n=document.getElementById('offlineNote'),c=document.getElementById('offlineNoteClose');
+  if(c&&n)c.addEventListener('click',function(){n.classList.remove('is-open')});
+  if(n&&typeof navigator!=='undefined'&&navigator.onLine===false)n.classList.add('is-open');
+  window.addEventListener('online',function(){if(n)n.classList.remove('is-open')});
+})();
+</script>
 </body></html>
