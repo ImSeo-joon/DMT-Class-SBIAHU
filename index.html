@@ -2375,6 +2375,13 @@ async function refreshEventHistory(){
         <span class="cr-en">Bits and bytes, powers of two and storage units, base conversion and two's complement, ASCII and Unicode, the memory model, and the four stages of the C toolchain — with seven corrections, nine extensions and six interactive demos.</span>
         <span class="cr-go">进入第三课 / Open Lesson 3 →</span>
       </a>
+      <a href="#course-app-04">
+        <div class="cr-label mono">LESSON 04 / PROGRAMMING BASICS</div>
+        <h3>Lesson 4: Programs, Languages and the Rules of C<span class="cr-alt">程序、语言与 C 的规范</span></h3>
+        <p>2026 年 10 月 13 日课堂（07:57–09:36）：程序与软件之别、三代语言谱系、编译型与解释型（含"中间代码"更正）、算法选择与运算量、C 程序构成与格式控制、圆周长实操与精度；含 6 处纠错、8 处拓展与 5 组交互演示。</p>
+        <span class="cr-en">Program versus software, the three language generations, compiled versus interpreted (with a correction), algorithm choice and operation counts, the structure of a C program, printf format control, and the circumference exercise — six corrections, eight extensions and five interactive demos.</span>
+        <span class="cr-go">进入第四课 / Open Lesson 4 →</span>
+      </a>
     </div>
   </div>
 </section>
@@ -2898,6 +2905,245 @@ int main(void) {
   </div>
 </section>
 
+<section class="page" data-view="course-app-04" data-sections="Eight sections: program versus software · the language generations · compiled versus interpreted · algorithms and efficiency · structure of a C program · printf format control · the circle program · corrections · terminology and self-check">
+  <div class="wrap page-intro">
+    <div class="kicker mono">LESSON 04 / PROGRAMMING BASICS</div><div class="fr-mot">Leçon 4 · Bases de la programmation</div>
+    <h1>Lesson 4: Programs, Languages and the Rules of C<span class="cr-sub">高级语言程序设计课程要点第四课：程序、语言与 C 的规范</span></h1>
+    <p>2026 年 10 月 13 日课堂（07:57–09:36）整理、纠错与扩充 / Based on the session of 13 October 2026, corrected and extended</p>
+  </div>
+  <div class="wrap section">
+    <div class="cr-subnav cr-nav-course" data-active="course-app"></div>
+    <div class="section-head">
+      <div>
+        <div class="kicker mono">LESSON CONTENT / 本课内容</div>
+        <h2>Programs, Languages and C Rules<span class="cr-alt">程序、语言与 C 语言规范</span></h2>
+      </div>
+      <span class="tag mono">2026.10.13 · CN / EN</span>
+    </div>
+
+    <div class="cr-grid">
+      <div class="cr-card"><div class="cr-label mono">THEME</div><strong>From data to programs</strong><span class="cr-alt">从数据到程序</span><p>第三课讲"数据长什么样"，这一课讲"程序是什么、用什么语言写、写完怎么变成能跑的东西"。</p></div>
+      <div class="cr-card"><div class="cr-label mono">KEY DISTINCTION</div><strong>Program ≠ software</strong><span class="cr-alt">程序 ≠ 软件</span><p>程序是指令加数据；软件还要加上文档与规范。少了文档，软件就无法维护。</p></div>
+      <div class="cr-card"><div class="cr-label mono">HARD POINT</div><strong>Compiled vs interpreted</strong><span class="cr-alt">编译型 vs 解释型</span><p>C 是编译型：先整体翻译成机器码再运行。<b>源码可移植，二进制不可移植</b>。</p></div>
+      <div class="cr-card"><div class="cr-label mono">MOST VALUABLE</div><strong>Choosing the algorithm</strong><span class="cr-alt">算法选择</span><p>同一个需求可以有多种正确算法，运算次数差几十倍。需求分析与算法选择才是技术含量最高的环节。</p></div>
+      <div class="cr-card"><div class="cr-label mono">INTERACTIVE</div><strong>Five embedded demos</strong><span class="cr-alt">五组交互演示</span><p>软件组成、编译与解释流程、三种求和算法对比、printf 格式符试验台、错误分期诊断器。</p></div>
+      <div class="cr-card"><div class="cr-label mono">SOURCE</div><strong>Feishu AI notes, verified</strong><span class="cr-alt">飞书 AI 笔记 · 已逐条核对</span><p>原笔记自动生成并声明"可能不准确"，本页做了 6 处更正与 8 处扩充。</p></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>1 · Program, software, and why documents matter<span class="cr-alt">1 · 程序、软件，以及文档为什么重要</span></h3>
+      <p><b>程序</b>是"操作计算机以产生特定结果的指令与数据的集合"。但课堂上特意提醒：教材里"软件 = 程序"的定义<b>并不完整</b>——从工程实践看，完整的软件还包含<b>文档</b>与<b>相关规范</b>。</p>
+      <p><strong>为什么文档不是可有可无的：</strong>它是后续修改与功能迭代的唯一依据。课堂上用"个人档案"作类比——档案跟着你走过升学、求职、考编全流程；软件也一样，没有文档，接手的人（包括半年后的你自己）就只能靠猜。</p>
+      <p class="cr-en">A program is a set of instructions plus data. Software, however, is more: program + data + documentation + specifications. Documentation is the only basis for later modification — the lecturer's analogy was a personal file that follows you through school, job hunting and civil-service exams.</p>
+      <p><strong>再看另外两个概念：</strong><code>.exe</code> 可执行文件是编译后能直接运行的程序，<b>不是源代码</b>；源代码才是用 C、Python 等语言写的、尚未编译的原始文件。<b>要修改程序就必须拿到源代码</b>——没有源码时修改极其困难，这也是"开源"这件事的价值所在。</p>
+
+      <div class="l3-demo">
+        <h4>Demo 1 · What exactly is software?<span class="cr-alt">演示一 · 软件到底由什么组成</span></h4>
+        <p class="l3-sub">切换"教材定义"与"工程定义"，看两者差在哪里 / Toggle the textbook and engineering definitions.</p>
+        <div class="l3c-tabs" id="l4-ps-tabs"></div>
+        <div class="l3c-stage" id="l4-ps-stage"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>2 · Three generations of programming languages<span class="cr-alt">2 · 编程语言的三代谱系</span></h3>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>世代</th><th>形态</th><th>机器能否直接执行</th><th>人的感受</th></tr></thead>
+        <tbody>
+          <tr><td>机器语言</td><td>纯二进制指令</td><td><b>能</b></td><td>几乎无法阅读和修改</td></tr>
+          <tr><td>汇编语言</td><td>用符号表示指令（如 MOV、ADD）</td><td>不能，需汇编程序翻译</td><td>比机器码好读，但仍繁琐</td></tr>
+          <tr><td>高级语言</td><td>C、C++、Java、Python…</td><td>不能，需编译或解释</td><td>贴近人的思维</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>"低级/高级"没有绝对分界，只有相对位置。</strong>C 属于高级语言，但在高级语言里<b>偏"低"</b>：它能直接操作内存与硬件地址（第三课的指针与地址在这里接上），所以操作系统内核、数据库、编译器这类"贴着硬件"的系统软件常用它写。课堂上还提到 C 诞生于 20 世纪 70 年代的贝尔实验室，最初就是为了写 UNIX 操作系统。</p>
+      <p class="cr-en">Low-level versus high-level is relative, not absolute. C is high-level but sits low within that group: it can address memory and hardware directly, which is why kernels, databases and compilers are written in it. It was created at Bell Labs in the 1970s, originally to write UNIX.</p>
+      <p><strong>结构化 vs 面向对象（拓展）：</strong>C、Pascal 是<b>结构化语言</b>——程序由顺序、条件、循环三种基本结构按过程组织，数据与运算相互分离；C++、Java、Python 属于<b>面向对象语言</b>，把数据和操作数据的方法封装进"类"与"对象"，两者绑成一个整体。理解这个差别，才能理解为什么 C 里写数据结构和 C++ 里写类完全不是同一种体验。</p>
+      <p class="cr-en">C and Pascal are structured: sequence, selection and iteration, with data and the operations on it kept separate. C++, Java and Python are object-oriented: state and the functions that act on it are packaged together into classes and objects.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>3 · Compiled or interpreted — and what "intermediate code" really means<span class="cr-alt">3 · 编译型与解释型：也说说"中间代码"到底是什么</span></h3>
+      <p>把高级语言变成机器能执行的东西，有两条路线：</p>
+      <div class="cr-bullets">
+        <span><b>解释型</b>：逐行翻译并立即执行——课堂上类比为"现场同声传译"。改一行就能立刻跑，但每次运行都要重新翻译。</span>
+        <span><b>编译型</b>：先把整个程序翻译成可执行文件，再运行——类比为"把整本书一次翻完"。翻译慢，但运行快，而且编译一次可以运行很多次。</span>
+      </div>
+      <p class="cr-en">Interpreted languages translate line by line at run time — simultaneous interpretation. Compiled languages translate the whole program once into an executable — translating a book. C is compiled.</p>
+      <p><strong>原笔记这里有一处需要更正：</strong>笔记说"编译是先生成中间代码再运行，设置中间代码是为保障跨机器运行的一致性"。这个说法把两件事混在了一起：</p>
+      <ul class="cr-bullets">
+        <li>C 的编译流程里确实会产生"中间产物"，但那是<b>目标文件（.o）</b>，不是"运行用的中间代码"——机器码最终还是落到具体平台上的。</li>
+        <li>"中间代码"这个词通常指编译器内部的<b>中间表示（IR）</b>，或 Java／C# 那种<b>字节码</b>。C 程序运行时<b>不依赖</b>任何中间代码，它跑的就是本机机器码。</li>
+        <li><b>跨平台靠的不是中间代码，而是分别编译</b>：同一份 <code>hello.c</code>，在 Windows 上要重新编译成 <code>hello.exe</code>，在 Linux 上要重新编译成 ELF 可执行文件。<b>源代码可移植，编译出来的二进制不可移植</b>——这是理解"C 的可移植性"的关键。</li>
+      </ul>
+      <p class="cr-en">A correction: C's build does produce an intermediate artefact — the object file (.o) — but that is not "intermediate code the program runs on". The term usually means the compiler's internal intermediate representation, or bytecode as in Java. A C program runs as native machine code; portability comes from recompiling the source for each platform, not from an intermediate layer. Source is portable, binaries are not.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 2 · Compiled vs interpreted<span class="cr-alt">演示二 · 编译与解释的执行流程</span></h4>
+        <p class="l3-sub">点每一步，看两种路线各自在什么时候做翻译 / Step through both pipelines.</p>
+        <div class="l3c-tabs" id="l4-ci-tabs"></div>
+        <div class="l3-steps" id="l4-ci-steps"></div>
+        <div class="l3-flow" id="l4-ci-flow"></div>
+        <div class="l3-out" id="l4-ci-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>4 · One problem, three algorithms<span class="cr-alt">4 · 同一个问题，三种算法</span></h3>
+      <p>课堂上用"求 1 到 100 的和"说明了这件事：需求只有一个，但算法可以有好几种，而且它们的<b>运算量差距巨大</b>。</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>算法</th><th>思路</th><th>n = 100 时的加法次数</th><th>通用性</th></tr></thead>
+        <tbody>
+          <tr><td>逐项累加</td><td>从 1 加到 n，循环累加</td><td>99 次</td><td><b>最强</b>，任意数据都能用</td></tr>
+          <tr><td>首尾配对</td><td>1+100、2+99…每对都是 101</td><td>50 次（配成 50 对）</td><td>需要数据有规律</td></tr>
+          <tr><td>等差数列公式</td><td>n(1+n)/2，直接算</td><td><b>0 次</b>（一次乘法一次除法）</td><td>最弱，只适用于等差数列</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>结论不是"公式法最好"，而是"要看场景"。</strong>公式法写法最简单、执行最快，但它只适用于有规律的数据；如果数据是没有规律的（比如一串随机成绩求和），就只能用最"笨"的循环算法。课堂上老师的原话很值得记住：<b>"真正有技术含量的代码是在前面——你要分析需求，你要选算法，这是技术含量最高的。"</b> 编码只是把已经想清楚的东西写下来，所以最容易被人替代。</p>
+      <p class="cr-en">The lesson is not "formulas win" but "it depends". The closed form is fastest and shortest but only works for regular data; irregular data forces the loop. Demand analysis and algorithm choice carry the engineering value — coding is the transcription of a decision already made, and is therefore the easiest part to replace.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 3 · Count the operations<span class="cr-alt">演示三 · 数一数运算次数</span></h4>
+        <p class="l3-sub">拖动 n，看三种算法各自要做多少次加法 / Drag n and compare the operation counts.</p>
+        <div class="l3-row"><label class="l3-ctl">n = <input type="range" id="l4-al-n" min="10" max="100000" step="10" value="1000"> <span class="l3-out" id="l4-al-nv">1000</span></label></div>
+        <div class="l3c-stage" id="l4-al-stage"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>5 · How a C program is put together<span class="cr-alt">5 · 一个 C 程序由什么构成</span></h3>
+      <p>C 程序由<b>多个可以互相调用的函数</b>组成，支持模块化开发。函数分两类：开发者自己写的<b>自定义函数</b>，和语言自带的<b>标准库函数</b>。</p>
+      <p><strong>标准库的头文件数量：</strong>课堂上说"C 标准库共 15 个头文件"——这个数字对应的是 <b>C89/C90</b>（assert、ctype、errno、float、limits、locale、math、setjmp、signal、stdarg、stddef、stdio、stdlib、string、time）。需要补一句：<b>C99 之后又新增了</b> <code>stdbool.h</code>、<code>stdint.h</code>、<code>complex.h</code> 等，各编译器还有自己的扩展头文件。所以"15 个"是那一版标准的数量，不是"C 只有 15 个"。常用的输入输出、字符判断、数学运算、字符串处理这几类，定义都在教材附录 C。</p>
+      <p class="cr-en">The standard library has 15 headers in C89/C90; C99 added more (stdbool.h, stdint.h, complex.h …) and compilers add their own extensions. So "15" is a snapshot of one standard, not the whole story.</p>
+      <p><strong>注释：</strong><code>/* … */</code> 是多行注释，<code>//</code> 是单行注释。原笔记说"注释会被编译系统过滤"——更准确的说法是<b>在预处理阶段就被删掉</b>，根本不会进入编译。另外 <code>//</code> 这种写法是 <b>C99 才正式纳入标准</b>的（C89 里它不合法），这一点考试里偶尔会被问到。</p>
+      <p class="cr-en">Comments are removed during preprocessing, before compilation proper. The // form only became standard in C99.</p>
+      <p><strong>函数的构成：</strong>定义一个函数要明确三件事——<b>返回值类型</b>、<b>函数名</b>、<b>参数类型</b>。课堂用"加工机器"和"食堂窗口打饭"来类比：送入原料（参数），产出成品（返回值）。这就是所谓 <b>IPO 逻辑</b>——输入（Input）、处理（Process）、输出（Output）。写程序前先想清楚这三步，比急着敲代码有效得多。</p>
+      <p><strong>代码规范（老师特别强调）：</strong>变量声明与业务代码之间空行分隔；<b>一行只写一条语句</b>；合理使用空行提升可读性。这些空行不占磁盘空间，却直接决定别人（和几个月后的你）能不能读懂。另外课堂提到一个能显著提速的小技巧：用 <kbd>Home</kbd> / <kbd>End</kbd> 键在行首行尾之间跳转。</p>
+      <p class="cr-en">Standard practice the lecturer insisted on: blank lines between declarations and logic, one statement per line. Blank lines cost no disk space and decide whether the code can be read later. Home/End jump to the start and end of a line.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>6 · printf and format control<span class="cr-alt">6 · printf 与格式控制</span></h3>
+      <p><code>printf</code> 用格式符决定"值怎么被打印出来"。同一份数据，换个格式符，输出的样子完全不同：</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th class="cr-c">格式符</th><th>作用</th><th>以 3.14159 为例</th></tr></thead>
+        <tbody>
+          <tr><td class="cr-c">%f</td><td>默认 6 位小数</td><td>3.141590</td></tr>
+          <tr><td class="cr-c">%.2f</td><td>保留 2 位小数</td><td>3.14</td></tr>
+          <tr><td class="cr-c">%6.2f</td><td>宽度 6、保留 2 位，右对齐补空格</td><td>␣␣3.14</td></tr>
+          <tr><td class="cr-c">%-6.2f</td><td>宽度 6、保留 2 位，左对齐</td><td>3.14␣␣</td></tr>
+          <tr><td class="cr-c">%d</td><td>整数</td><td>（3.14159 用 %d 打印是错误用法）</td></tr>
+          <tr><td class="cr-c">\n</td><td>换行转义字符，位置直接决定排版</td><td>—</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>顺带更正两处笔误：</strong>原笔记把 <code>float</code> 写成了 <b>"load"</b>（语音转写的错），把 <code>printf</code> 的返回值写成了"<b>整形</b>"——正确写法是 <b>整型 int</b>。printf 返回的是实际打印的字符个数，这一点在课堂的"函数原型"部分提到过。</p>
+      <p class="cr-en">Two typos to fix: float was written as "load" (a speech-to-text slip), and printf's return type was written as "整形" instead of 整型 int. printf returns the number of characters printed.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 4 · printf format playground<span class="cr-alt">演示四 · 格式符试验台</span></h4>
+        <p class="l3-sub">输入一个数，选择格式符，看实际输出会长什么样（␣ 代表空格）/ Type a number and pick a specifier.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">数值 <input type="number" id="l4-pf-v" value="12.5664" step="any"></label>
+          <label class="l3-ctl">格式符
+            <select id="l4-pf-f" style="padding:5px 8px;border:1px solid #e3ddd0;border-radius:8px;background:#fff;font:inherit;font-size:13px">
+              <option>%f</option><option selected>%.2f</option><option>%6.2f</option><option>%-6.2f</option><option>%.6f</option><option>%.0f</option><option>%e</option><option>%g</option>
+            </select>
+          </label>
+        </div>
+        <div class="l3-out" id="l4-pf-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>7 · The worked example: circumference, and a precision detail<span class="cr-alt">7 · 课堂实操：圆周长，以及一处精度细节</span></h3>
+      <p>课堂带领写的程序是<b>求半径为 2.0 的圆周长</b>，遵循 IPO：输入半径 → 用 2πr 计算 → 输出结果。课后练习是把公式换成 πr² 求圆面积。</p>
+      <div class="cr-code">#include &lt;stdio.h&gt;
+
+int main(void) {
+    float r = 2.0f;          /* 输入：半径 */
+    float c = 2 * 3.1416f * r;   /* 处理：2πr */
+    printf("circumference = %f\n", c);   /* 输出 */
+    return 0;
+}</div>
+      <p><strong>注意一个细节（原笔记自相矛盾的地方）：</strong>笔记一处说用 <code>%.2f</code> 保留两位小数，另一处又说运行结果是 <code>12.566400</code>（六位小数）——这两句不可能同时成立。</p>
+      <p>而且 <code>12.5664</code> 这个数值本身说明程序里取的 π 是 <b>3.1416</b>（2×3.1416×2 = 12.5664）；如果用更精确的 π，结果应该是 <b>12.566370…</b>。这不是错误，而是教学取舍：入门阶段取四位小数的 π 够用，但要知道<b>精度是可控的</b>——真实工程里应当使用 <code>math.h</code> 里的常量或更高精度的字面量，而不是把 3.1416 当真理。</p>
+      <p class="cr-en">A contradiction in the notes: one line says %.2f, another reports 12.566400 (six decimals) — both cannot be true. And the value itself reveals π was taken as 3.1416 (2 × 3.1416 × 2); with a more precise π you would get 12.566370…. Nothing wrong for a first lesson, but precision is a choice, not a fact.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 5 · Which stage does this error belong to?<span class="cr-alt">演示五 · 这个错误属于哪一阶段</span></h4>
+        <p class="l3-sub">点错误信息，判断它出现在预处理、编译、链接还是运行阶段 / Click an error message to place it in the right stage.</p>
+        <div class="l3-row" id="l4-eg-btns"></div>
+        <div class="l3c-stage" id="l4-eg-stage"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Corrections to the original notes<span class="cr-alt">对原笔记的更正</span></h3>
+      <p class="cr-note" style="margin-top:0">原笔记由会议工具自动生成并声明"可能不准确"。以下 6 处按学术与工程口径更正 / Six corrections, stated explicitly.</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>原笔记说法</th><th>更正</th><th>为什么重要</th></tr></thead>
+        <tbody>
+          <tr><td>"load 是单精度浮点类型"</td><td>应为 <b>float</b>（语音转写错误）</td><td>关键字写错，代码直接编译不过</td></tr>
+          <tr><td>"printf 的返回值是整形"</td><td>应为 <b>整型 int</b>（错别字）；它返回实际打印的字符数</td><td>函数原型是查手册的第一站</td></tr>
+          <tr><td>"DLL 均是编译后可直接运行的程序"</td><td>DLL 是<b>动态链接库</b>，不能独立运行，要被宿主程序加载调用</td><td>概念混淆会影响对程序结构的理解</td></tr>
+          <tr><td>"编译先生成中间代码再运行，中间代码保障跨机器一致性"</td><td>C 运行的是本机机器码，<b>不依赖中间代码</b>；编译产物是目标文件(.o)；跨平台靠<b>分别编译</b></td><td>决定你对"可移植性"的理解是否正确</td></tr>
+          <tr><td>"C 标准库共 15 个头文件"</td><td>那是 <b>C89/C90</b> 的数量；C99 之后新增了 stdbool.h、stdint.h、complex.h 等</td><td>"15"是某一版标准的快照，不是上限</td></tr>
+          <tr><td>圆周长"用 %.2f"却"输出 12.566400"</td><td>两句矛盾：位数由格式符决定；且该数值对应 π 取 3.1416，不是更精确的 π</td><td>精度是可控的选择，不是事实</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Extensions to a higher level<span class="cr-alt">向上拓展的八个方向</span></h3>
+      <div class="cr-bullets">
+        <span><b>类型与 sizeof</b>：char 1 字节、int 通常 4、float 4、double 8——延续第三课，用 sizeof 验证而不是背。</span>
+        <span><b>命名常量</b>：用 <code>const float PI = 3.14159265f;</code> 或 <code>#define PI 3.14159265</code> 替代魔法数字，改一处即全局生效。</span>
+        <span><b>三类错误</b>：编译期（语法）、链接期（找不到符号）、运行期（逻辑或越界）——分别对应工具链的不同阶段。</span>
+        <span><b>运算量与复杂度</b>：循环求和是 O(n)，公式法是 O(1)；n 越大差距越明显，这就是"选算法"的量化依据。</span>
+        <span><b>可移植性的准确含义</b>：源码可移植、二进制不可移植；换平台要重新编译。</span>
+        <span><b>标识符规范</b>：字母或下划线开头、区分大小写、不能是关键字；起名要能读出用途。</span>
+        <span><b>常见新手错误</b>：漏分号、用中文标点（；）、括号不配对、变量未初始化就使用。</span>
+        <span><b>构建的意义</b>：编译一次可以运行多次——这正是编译型语言在工程上的优势，也是 make / IDE 构建按钮存在的原因。</span>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Terminology check<span class="cr-alt">术语核对</span></h3>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>中文</th><th>English</th><th>一句话说明</th></tr></thead>
+        <tbody>
+          <tr><td>程序 / 软件</td><td>program / software</td><td>程序=指令+数据；软件还要加文档与规范</td></tr>
+          <tr><td>源代码</td><td>source code</td><td>未编译的原始文件，修改程序的前提</td></tr>
+          <tr><td>目标文件 / 可执行文件</td><td>object file / executable</td><td>中间产物 / 最终能直接运行的文件</td></tr>
+          <tr><td>机器语言 / 汇编语言</td><td>machine code / assembly</td><td>二进制指令 / 符号化指令</td></tr>
+          <tr><td>编译器 / 链接器 / 解释器</td><td>compiler / linker / interpreter</td><td>翻译 / 拼装 / 边翻边跑</td></tr>
+          <tr><td>头文件 / 标准库</td><td>header file / standard library</td><td>#include 进来的接口声明 / 语言自带函数集合</td></tr>
+          <tr><td>函数原型</td><td>function prototype</td><td>返回值类型 + 函数名 + 参数类型</td></tr>
+          <tr><td>格式符</td><td>format specifier</td><td>printf 里决定"怎么打印"的部分</td></tr>
+          <tr><td>算法 / 伪代码</td><td>algorithm / pseudocode</td><td>解题步骤 / 用自然语言描述步骤</td></tr>
+          <tr><td>输入-处理-输出</td><td>IPO (input-process-output)</td><td>写程序前先把这三步想清楚</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Self-check<span class="cr-alt">学习自检</span></h3>
+      <div class="cr-checks">
+        <label class="cr-check"><input type="checkbox"><span>能说清"程序"与"软件"的区别，并解释文档为什么不可省。<span class="cr-en">Distinguish program from software and justify documentation.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能按机器语言、汇编语言、高级语言排出三代谱系，并说出 C 在其中的位置。<span class="cr-en">Order the three language generations and place C.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说清编译型与解释型的区别，并纠正"中间代码保障跨平台"这个说法。<span class="cr-en">Contrast compiled and interpreted, and correct the "intermediate code" claim.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能用 1..100 求和说明三种算法各自的运算次数与适用场景。<span class="cr-en">Compare three summation algorithms by operation count and applicability.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说出定义一个函数的三个必要信息，并画出 IPO 三步。<span class="cr-en">List the three parts of a function definition and the IPO steps.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能正确使用 %f、%.2f、%6.2f、%-6.2f 与 \n 控制输出。<span class="cr-en">Use the common printf specifiers correctly.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能写出圆周长程序，并说明 π 取 3.1416 与取更精确值的差别。<span class="cr-en">Write the circumference program and discuss π precision.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>拿到一条错误信息，能判断它属于编译期、链接期还是运行期。<span class="cr-en">Place an error message in the right stage.</span></span></label>
+      </div>
+    </div>
+
+        <div class="q-host" data-quiz="course-app-04"></div>
+<p class="cr-note">资料来源：2026 年 10 月 13 日"C语言程序设计基础讲解与实操"课堂（07:57–09:36）的飞书 AI 笔记与智能章节（原笔记由工具生成并标注"可能存在不准确之处"）。本页逐条核对后做了 6 处更正与 8 处扩充，双语对照，并加入 5 组可操作的交互演示。课堂布置的课后任务（补做未运行完的程序、安装编程环境、编写圆面积程序、浏览教材附录 C）建议照做——尤其"把课上没跑完的程序自己跑一遍"，那是把知识变成手感的最短路径。<br><span class="cr-en">Source: the Feishu AI notes and smart chapters of the 13 October 2026 session (07:57–09:36), machine-generated and flagged as possibly inaccurate. This page corrects six points, extends eight, is bilingual, and adds five interactive demos. The homework set in class is worth doing, especially running the unfinished program yourself.</span></p>
+  </div>
+</section>
+
 <section class="page" data-view="course-calc">
   <div class="wrap page-intro">
     <div class="kicker mono">MODULE 02 / APPLIED CALCULUS</div><div class="fr-mot">Calcul appliqué</div>
@@ -2934,6 +3180,13 @@ int main(void) {
         <p>2026 年 10 月 10 日课堂（09:40–11:25）：四则运算法则的前提、直接代入法与有理函数、分段点左右极限、保序性、夹逼准则、重要极限 lim(sin x)/x 的单位圆证明、ε-δ 定义与 6×4 种变体；含 8 处纠错、10 处拓展与 6 组交互演示。</p>
         <span class="cr-en">Preconditions of the algebra of limits, direct substitution, piecewise break points, order preservation, the squeeze theorem, the unit-circle proof of lim (sin x)/x = 1, and the ε-δ definition with its 6 × 4 variants — eight corrections, ten extensions and six interactive demos.</span>
         <span class="cr-go">进入第三课 / Open Lesson 3 →</span>
+      </a>
+      <a href="#course-calc-04">
+        <div class="cr-label mono">LESSON 04 / CONTINUITY</div>
+        <h3>Lesson 4: Continuity — Real Numbers, Three Conditions and Discontinuities<span class="cr-alt">实数系与函数的连续性</span></h3>
+        <p>2026 年 10 月 13 日课堂（10:14–11:25）：实数完备性与距离、点连续三要件、全邻域与去心邻域的差别、间断点四类分类、区间连续与端点单侧连续、初等函数连续性；含 6 处纠错、8 处拓展与 5 组交互演示。</p>
+        <span class="cr-en">Completeness and distance, the three conditions for continuity, punctured versus full neighbourhoods, the four kinds of discontinuity, continuity on intervals, and the continuity of elementary functions — six corrections, eight extensions and five interactive demos.</span>
+        <span class="cr-go">进入第四课 / Open Lesson 4 →</span>
       </a>
     </div>
   </div>
@@ -4275,6 +4528,215 @@ lim (n → ∞) (1 + 1/n)^n = e</span>
 
         <div class="q-host" data-quiz="course-calc-03"></div>
 <p class="cr-note">资料来源：2026 年 10 月 10 日"函数极限相关知识点讲解"课堂（09:40–11:25）的飞书 AI 笔记与智能章节（原笔记由工具生成并标注"可能存在不准确之处"）。本页逐条核对后做了 8 处更正与 10 处扩充，双语对照，并加入 6 组可操作的交互演示。课堂提到本阶段还剩 3 次课，之后由外方顾问接续——因此这一课是后面前导内容的地基。<br><span class="cr-en">Source: the Feishu AI notes and smart chapters of the 10 October 2026 session (09:40–11:25), machine-generated and flagged as possibly inaccurate. This page corrects eight points, extends ten, is fully bilingual, and adds six interactive demos. Three sessions remain in this stage before a partner instructor takes over, which makes this material the foundation for what follows.</span></p>
+  </div>
+</section>
+
+<section class="page" data-view="course-calc-04" data-sections="Eight sections: real numbers and completeness · the three conditions for continuity · neighbourhoods · classifying discontinuities · one-sided continuity on intervals · continuity of elementary functions · corrections · terminology and self-check">
+  <div class="wrap page-intro">
+    <div class="kicker mono">LESSON 04 / CONTINUITY</div><div class="fr-mot">Leçon 4 · Continuité</div>
+    <h1>Lesson 4: Continuity — Real Numbers, the Three Conditions and Classifying Discontinuities<span class="cr-sub">应用微积分课程要点第四课：实数系与函数的连续性</span></h1>
+    <p>2026 年 10 月 13 日课堂（10:14–11:25）整理、纠错与扩充 / Based on the session of 13 October 2026, corrected and extended</p>
+  </div>
+  <div class="wrap section">
+    <div class="cr-subnav cr-nav-course" data-active="course-calc"></div>
+    <div class="section-head">
+      <div>
+        <div class="kicker mono">LESSON CONTENT / 本课内容</div>
+        <h2>Real Numbers and Continuity<span class="cr-alt">实数系与函数连续性</span></h2>
+      </div>
+      <span class="tag mono">2026.10.13 · CN / EN</span>
+    </div>
+
+    <div class="cr-grid">
+      <div class="cr-card"><div class="cr-label mono">THEME</div><strong>Why continuity needs the real numbers</strong><span class="cr-alt">为什么连续要先讲实数</span><p>极限要在实数系里才"封闭"：有理数轴上到处是洞，数列明明有趋近方向，却可能找不到终点。</p></div>
+      <div class="cr-card"><div class="cr-label mono">KEY DEFINITION</div><strong>Three conditions at a point</strong><span class="cr-alt">点连续的三要件</span><p>有定义 → 极限存在 → 极限值等于该点函数值。缺一个就间断。</p></div>
+      <div class="cr-card"><div class="cr-label mono">HARD POINT</div><strong>Full neighbourhood vs punctured</strong><span class="cr-alt">全邻域 vs 去心邻域</span><p>连续要求该点<b>本身</b>有定义，极限只要求它<b>周围</b>有定义——这是两个概念最容易混的地方。</p></div>
+      <div class="cr-card"><div class="cr-label mono">CLASSIFICATION</div><strong>Four kinds of discontinuity</strong><span class="cr-alt">间断点的四类</span><p>可去、跳跃、无穷，以及原笔记漏掉的<b>振荡间断点</b>。</p></div>
+      <div class="cr-card"><div class="cr-label mono">INTERACTIVE</div><strong>Five embedded demos</strong><span class="cr-alt">五组交互演示</span><p>三要素判定器、全邻域与去心邻域对照、间断点分类器、闭区间端点、√2 的有理逼近。</p></div>
+      <div class="cr-card"><div class="cr-label mono">SOURCE</div><strong>Feishu AI notes, verified</strong><span class="cr-alt">飞书 AI 笔记 · 已逐条核对</span><p>原笔记自动生成并声明"可能不准确"，本页做了 6 处更正与 8 处扩充。</p></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>1 · Real numbers: completeness and distance<span class="cr-alt">1 · 实数系：完备性与距离</span></h3>
+      <p>有理数与无理数都是无穷集合，但<b>无穷与无穷不一样</b>：区间 (0,1) 里的实数比有理数"多得多"。课堂上的原话是——"你的视野只局限在有理数范围里，你看不到无理数，就像晚上看星星，你只看到那几个亮的，后面还有浩瀚宇宙里无穷多的星星。"</p>
+      <p class="cr-en">The rationals and the irrationals are both infinite, but not all infinities are equal: there are far more reals than rationals in (0,1). As the lecturer put it, inside the rationals you only see the few bright stars — the vast majority of the sky is invisible.</p>
+      <p><strong>原笔记需要补严的一点：</strong>"实数采用公理化体系完成定义，解决了第一次数学危机"这个说法要拆开看。第一次数学危机指的是<b>发现 √2 不能写成两个整数之比</b>（公元前 5 世纪）；而实数系的<b>严格构造</b>（戴德金分割、康托尔基本列）要到 19 世纪才完成。两者相隔两千多年，不是同一件事。</p>
+      <p class="cr-en">A precision the notes blurred: the first crisis of mathematics was the discovery that √2 is not a ratio of integers (5th century BC); the rigorous construction of the real numbers — Dedekind cuts, Cantor's sequences — came only in the 19th century. Two thousand years apart.</p>
+      <p><strong>完备性是实数最关键的性质：</strong>实数轴上没有"空洞"。这带来的直接后果是——<b>极限运算在实数系内封闭</b>：只要数列看起来在往某处趋近，那个终点一定还在实数系里。有理数做不到这一点：把 √2 逐位写出来的数列 1, 1.4, 1.41, 1.414… 每一项都是有理数，趋近方向也很明确，但它在有理数里<b>没有终点</b>。</p>
+      <p class="cr-en">Completeness is the property that matters: the real line has no holes, so limits stay inside the system. Every term of 1, 1.4, 1.41, 1.414… is rational and the trend is obvious, yet within the rationals that sequence has no destination. The reals supply it.</p>
+      <p>实数还天然带有<b>距离</b>的概念——两点之间可以度量远近。这件事在一般集合里是"奢侈"的，而高等数学的整套极限框架正是搭在"距离"之上：没有距离，就无从谈起"充分靠近"。</p>
+
+      <div class="l3-demo">
+        <h4>Demo 1 · A sequence with no rational destination<span class="cr-alt">演示一 · 有理数里没有终点的数列</span></h4>
+        <p class="l3-sub">逐位逼近 √2：每一步的误差都在缩小，但在有理数轴上永远停不到终点 / Watch successive decimal truncations of √2.</p>
+        <div class="l3-row"><label class="l3-ctl">取到第几位小数 <input type="range" id="l4-sq-d" min="0" max="12" step="1" value="3"> <span class="l3-out" id="l4-sq-dv">3</span></label></div>
+        <div class="l3c-stage" id="l4-sq-stage"></div>
+        <div class="l3-out" id="l4-sq-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>2 · The three conditions for continuity<span class="cr-alt">2 · 点连续的三个条件</span></h3>
+      <p>函数 f 在点 a <b>连续</b>，当且仅当以下三条同时成立：</p>
+      <div class="cr-bullets">
+        <span><b>① 有定义</b>：f(a) 存在（a 在定义域内）。</span>
+        <span><b>② 极限存在</b>：lim<sub>x→a</sub> f(x) 存在（左右极限存在且相等）。</span>
+        <span><b>③ 二者相等</b>：lim<sub>x→a</sub> f(x) = f(a)。</span>
+      </div>
+      <p class="cr-en">f is continuous at a iff (1) f(a) exists, (2) the two-sided limit exists, and (3) they are equal. Fail any one and the point is a discontinuity.</p>
+      <p><strong>与极限的关键差别（本课最容易被忽略的一点）：</strong>讨论<b>极限</b>只需要 a 的<b>去心邻域</b>有定义（a 点本身可以没有定义）；讨论<b>连续</b>则要求 a 的<b>整个邻域</b>都有定义，而且 a 点自己必须有定义。这正是"极限存在但函数不连续"这种情形能够存在的原因。</p>
+      <p class="cr-en">The difference that decides everything: a limit needs only a punctured neighbourhood, while continuity needs a full neighbourhood and a defined value at the point. That is exactly why a limit can exist while the function is discontinuous there.</p>
+      <p><strong>几何意义：</strong>自变量在 a 附近做微小变动时，函数值只发生微小变化——所以在这点附近，曲线可以近似地用一条水平线段 y = f(a) 替代。这就是"图像没有断开"的精确含义。</p>
+
+      <div class="l3-demo">
+        <h4>Demo 2 · Three conditions checker<span class="cr-alt">演示二 · 三要件判定器</span></h4>
+        <p class="l3-sub">切换四个典型函数，逐条看三要件是否满足 / Switch between four functions and watch each condition pass or fail.</p>
+        <div class="l3c-tabs" id="l4-c3-tabs"></div>
+        <div class="l3c-stage" id="l4-c3-stage"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>3 · Two kinds of neighbourhood<span class="cr-alt">3 · 两种邻域：连续与极限的分水岭</span></h3>
+      <p>同一个点 a 附近，其实有两种"看世界"的方式：</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>讨论对象</th><th>要求的邻域</th><th>a 点本身</th><th>典型后果</th></tr></thead>
+        <tbody>
+          <tr><td>极限 lim<sub>x→a</sub> f(x)</td><td><b>去心邻域</b> 0 &lt; |x−a| &lt; δ</td><td>可以没有定义</td><td>极限可以存在而函数不连续</td></tr>
+          <tr><td>连续（在 a 点）</td><td><b>整个邻域</b> |x−a| &lt; δ <b>且</b> a 在定义域内</td><td>必须有定义，且值要等于极限</td><td>三要件缺一不可</td></tr>
+        </tbody>
+      </table></div>
+      <p class="cr-en">A limit only needs a punctured neighbourhood — the point a itself may be undefined. Continuity needs the whole neighbourhood plus a defined value at a equal to the limit. Every "limit exists but the function is discontinuous" example lives in that gap.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 3 · Punctured vs full neighbourhood<span class="cr-alt">演示三 · 去心邻域与全邻域</span></h4>
+        <p class="l3-sub">切换两种邻域，看"a 点是否在讨论范围内" / Toggle the two neighbourhoods and watch whether a itself is included.</p>
+        <div class="l3c-tabs" id="l4-nb-tabs"></div>
+        <div class="l3c-stage" id="l4-nb-stage"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>4 · Classifying discontinuities — there are four, not three<span class="cr-alt">4 · 间断点的分类：是四类，不是三类</span></h3>
+      <p>函数在 a 点不连续，就称 a 是<b>间断点</b>。判定的顺序很固定：先看极限存不存在，再看它等不等于函数值。</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th class="cr-c">类型</th><th>极限情况</th><th>能否通过改一个点补救</th><th>例子</th></tr></thead>
+        <tbody>
+          <tr><td class="cr-c">可去间断点</td><td>极限存在，但 f(a) 无定义或 f(a) ≠ 极限</td><td><b>能</b>：重新定义 f(a) 即可</td><td>(x²−1)/(x−1) 在 x=1</td></tr>
+          <tr><td class="cr-c">跳跃间断点</td><td>左右极限都存在但<b>不相等</b></td><td>不能</td><td>分段函数在分段点</td></tr>
+          <tr><td class="cr-c">无穷间断点</td><td>至少一侧极限趋于无穷</td><td>不能</td><td>1/x 在 x=0</td></tr>
+          <tr><td class="cr-c">振荡间断点</td><td>两侧极限都<b>不存在</b>，且不是无穷</td><td>不能</td><td>sin(1/x) 在 x=0</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>原笔记漏了第四类——振荡间断点。</strong> 它和无穷间断点的区别在于：sin(1/x) 在 x→0 时既不趋于任何常数，也不趋于无穷，而是在 −1 与 1 之间无限次振荡。这类间断点既不可去、也不属于跳跃或无穷，必须单列一类。完整的分类是：<b>可去、跳跃、无穷、振荡</b>。</p>
+      <p class="cr-en">The notes listed three kinds and missed the fourth: an oscillating discontinuity, where neither one-sided limit exists and neither is infinite — sin(1/x) at 0 swings forever between −1 and 1. The complete classification is removable, jump, infinite and oscillating.</p>
+      <p><strong>另一处需要区分的细节：</strong>"函数值不存在"（条件 ① 失败）和"极限不存在"（条件 ② 失败）是两种不同的病因。诊断时先问"极限在不在"，再问"值等不等"——这个顺序能一次分清四类，而原笔记把两者混在一起表述了。</p>
+
+      <div class="l3-demo">
+        <h4>Demo 4 · Discontinuity classifier<span class="cr-alt">演示四 · 间断点分类器</span></h4>
+        <p class="l3-sub">拖动左右极限、切换"该点是否有定义"，看判定结果如何变化 / Drag the one-sided limits and toggle the value at a.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">左极限 <input type="range" id="l4-dc-l" min="-3" max="3" step="0.5" value="-1"> <span class="l3-out" id="l4-dc-lv">-1</span></label>
+          <label class="l3-ctl">右极限 <input type="range" id="l4-dc-r" min="-3" max="3" step="0.5" value="1"> <span class="l3-out" id="l4-dc-rv">1</span></label>
+        </div>
+        <div class="l3-row">
+          <label class="l3-ctl"><input type="checkbox" id="l4-dc-inf"> 某一侧趋于无穷</label>
+          <label class="l3-ctl"><input type="checkbox" id="l4-dc-osc"> 两侧都振荡（极限不存在）</label>
+          <label class="l3-ctl"><input type="checkbox" id="l4-dc-def" checked> a 点有定义且等于极限</label>
+        </div>
+        <div class="l3c-stage" id="l4-dc-stage"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>5 · Continuity on an interval<span class="cr-alt">5 · 区间上的连续性</span></h3>
+      <p><b>开区间 (a,b) 上连续</b>：函数在该区间的<b>每一个内点</b>都连续即可。</p>
+      <p><b>闭区间 [a,b] 上连续</b>：需要在"开区间内每点连续"的基础上，再加上<b>左端点右连续、右端点左连续</b>。原因是端点的外侧没有定义，根本无法讨论"整个邻域"，所以只能用单侧极限来判定。</p>
+      <p class="cr-en">On an open interval every interior point must be continuous. On a closed interval you additionally require right-continuity at the left endpoint and left-continuity at the right endpoint — outside an endpoint there is no neighbourhood to speak of, so only one-sided limits make sense.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 5 · Endpoints and one-sided continuity<span class="cr-alt">演示五 · 端点与单侧连续</span></h4>
+        <p class="l3-sub">选择区间类型，看两个端点各自需要哪种单侧连续 / Pick an interval type to see what each endpoint requires.</p>
+        <div class="l3c-tabs" id="l4-iv-tabs"></div>
+        <div class="l3c-stage" id="l4-iv-stage"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>6 · Which functions are continuous, and why substitution works<span class="cr-alt">6 · 哪些函数连续，以及代入法为什么成立</span></h3>
+      <p><b>四则运算保持连续：</b>若 f、g 都在 a 点连续，则 f±g、f·g 在 a 点连续，f/g 在 g(a) ≠ 0 时也在 a 点连续。这条结论可以直接由极限的四则运算法则推出来——这也解释了"连续点处求极限可以直接代入"的原理：<b>代入法不是技巧，而是连续性的定义</b>。</p>
+      <p class="cr-en">Sums, differences, products and (where the denominator is non-zero) quotients of functions continuous at a are continuous at a. This follows from the algebra of limits — and it explains why direct substitution works: substitution <b>is</b> the definition of continuity, not a trick.</p>
+      <p><strong>拓展一层（原笔记未提的更一般结论）：</strong>不仅有理函数在其定义域内连续，<b>一切初等函数在其定义区间内都是连续的</b>——多项式、有理函数、幂函数、指数函数、对数函数、三角函数、反三角函数，以及它们的复合。所以求这类函数的极限时，先看极限点是否落在定义区间内，是就直接代入。</p>
+      <p class="cr-en">A more general fact the notes omitted: every elementary function is continuous on its interval of definition — polynomials, rational functions, powers, exponentials, logarithms, trigonometric and inverse trigonometric functions, and compositions of them. So for such a function, check first whether the limit point lies inside the interval of definition; if it does, substitute.</p>
+      <p><strong>再往上走一层（下次课的伏笔）：</strong>闭区间上的连续函数有三条很硬的结论——<b>有界性定理</b>（必有界）、<b>最值定理</b>（一定取到最大值和最小值）、<b>介值定理</b>（能取到介于两端函数值之间的任何数，零点定理是它的特例）。这三条是后续中值定理与积分理论的支柱。另外提醒一句：<b>连续不一定可导</b>，例如 |x| 在 0 处连续但左右导数不相等。</p>
+      <p class="cr-en">Three results that carry the rest of the course: on a closed interval a continuous function is bounded, attains its maximum and minimum, and takes every value between its endpoint values (the intermediate value theorem, with the zero theorem as a special case). Also note: continuity does not imply differentiability — |x| is continuous at 0 but has no derivative there.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>Corrections to the original notes<span class="cr-alt">对原笔记的更正</span></h3>
+      <p class="cr-note" style="margin-top:0">原笔记由会议工具自动生成并声明"可能不准确"。以下 6 处按学术口径更正 / Six corrections, stated explicitly.</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>原笔记说法</th><th>更正</th><th>为什么重要</th></tr></thead>
+        <tbody>
+          <tr><td>"实数采用公理化体系定义，解决了第一次数学危机"</td><td>第一次数学危机是发现 √2 不是有理数（公元前 5 世纪）；实数系的严格构造是 19 世纪的事，两者相隔两千年</td><td>时间线混在一起会误解数学史</td></tr>
+          <tr><td>间断点分三类：可去、跳跃、无穷</td><td>还有第四类<b>振荡间断点</b>（sin(1/x) 在 0 处）</td><td>分类不全，遇到振荡情形就无从归类</td></tr>
+          <tr><td>把"无定义"和"极限不存在"混在一起表述</td><td>这是两种不同的失败：前者是条件 ① 失败，后者是条件 ② 失败</td><td>决定诊断顺序，也决定分类结果</td></tr>
+          <tr><td>"所有有理函数在其定义域内连续"</td><td>更一般：<b>一切初等函数在其定义区间内连续</b>，含复合</td><td>代入法的适用范围比原笔记说的大得多</td></tr>
+          <tr><td>未提及闭区间连续函数的性质</td><td>补：有界性定理、最值定理、介值定理（含零点定理）</td><td>这是后续中值定理与积分的基础</td></tr>
+          <tr><td>用"图像无间断"作为连续的说明</td><td>那只是<b>朴素认知</b>；严格判定必须回到三要件</td><td>有些函数图像难以想象，不能凭画图判断</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Extensions to a higher level<span class="cr-alt">向上拓展的八个方向</span></h3>
+      <div class="cr-bullets">
+        <span><b>可数与不可数</b>：有理数可数、实数不可数——"无穷与无穷不一样"的严格说法。</span>
+        <span><b>完备性的两种刻画</b>：戴德金分割与柯西列等价，两者都保证实数轴没有空洞。</span>
+        <span><b>确界原理</b>：非空有上界的实数集必有上确界——完备性的另一种表达。</span>
+        <span><b>振荡间断点的典型例子</b>：sin(1/x) 在 0 处无极限也不趋于无穷。</span>
+        <span><b>复合函数的连续性</b>：连续∘连续仍连续（下次课内容）。</span>
+        <span><b>闭区间三定理</b>：有界性、最值、介值/零点。</span>
+        <span><b>一致连续</b>：δ 不依赖具体点；闭区间上连续 ⟹ 一致连续（伏笔）。</span>
+        <span><b>连续与可导</b>：连续是可导的必要条件而非充分条件，|x| 在 0 处是反例。</span>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Terminology check<span class="cr-alt">术语核对</span></h3>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>中文</th><th>English</th><th>一句话说明</th></tr></thead>
+        <tbody>
+          <tr><td>完备性</td><td>completeness</td><td>实数轴没有空洞，极限运算封闭</td></tr>
+          <tr><td>去心邻域 / 全邻域</td><td>punctured / full neighbourhood</td><td>极限只要求前者，连续要求后者</td></tr>
+          <tr><td>点连续</td><td>continuity at a point</td><td>有定义 + 极限存在 + 二者相等</td></tr>
+          <tr><td>左连续 / 右连续</td><td>left- / right-continuous</td><td>端点处只能谈单侧连续</td></tr>
+          <tr><td>可去间断点</td><td>removable discontinuity</td><td>改一个点的定义即可补救</td></tr>
+          <tr><td>跳跃间断点</td><td>jump discontinuity</td><td>左右极限存在但不相等</td></tr>
+          <tr><td>无穷间断点</td><td>infinite discontinuity</td><td>至少一侧趋于无穷</td></tr>
+          <tr><td>振荡间断点</td><td>oscillating discontinuity</td><td>极限不存在且不为无穷</td></tr>
+          <tr><td>初等函数</td><td>elementary function</td><td>在其定义区间内连续</td></tr>
+          <tr><td>介值定理</td><td>intermediate value theorem</td><td>闭区间连续函数取遍中间值</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Self-check<span class="cr-alt">学习自检</span></h3>
+      <div class="cr-checks">
+        <label class="cr-check"><input type="checkbox"><span>能解释为什么有理数"不够用"，并说出完备性的含义。<span class="cr-en">Explain why the rationals are insufficient and what completeness buys.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能完整写出点连续的三要件，并说明每一件失败会发生什么。<span class="cr-en">State the three conditions and what each failure produces.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说清"去心邻域"与"全邻域"的差别，以及它为什么决定连续与极限的差别。<span class="cr-en">Contrast punctured and full neighbourhoods and why it matters.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能判断四类间断点，并给每类举一个例子。<span class="cr-en">Classify all four kinds of discontinuity with an example each.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说出闭区间连续与开区间连续的要求差在哪里。<span class="cr-en">State how continuity on a closed interval differs from an open one.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能用"连续性"解释代入法为什么合法。<span class="cr-en">Justify direct substitution by continuity.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说出闭区间连续函数的三条结论。<span class="cr-en">Name the three theorems for continuous functions on a closed interval.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能举出一个连续但不可导的例子。<span class="cr-en">Give an example of a continuous but non-differentiable function.</span></span></label>
+      </div>
+    </div>
+
+        <div class="q-host" data-quiz="course-calc-04"></div>
+<p class="cr-note">资料来源：2026 年 10 月 13 日"高等数学函数连续相关内容讲解"课堂（10:14–11:25）的飞书 AI 笔记与智能章节（原笔记由工具生成并标注"可能存在不准确之处"）。本页逐条核对后做了 6 处更正与 8 处扩充，双语对照，并加入 5 组可操作的交互演示。课堂最后未讲完复合函数性质，本页把它列在拓展方向里，留待下一课。<br><span class="cr-en">Source: the Feishu AI notes and smart chapters of the 13 October 2026 session (10:14–11:25), machine-generated and flagged as possibly inaccurate. This page corrects six points, extends eight, is fully bilingual, and adds five interactive demos. Composition of continuous functions was left unfinished in class and is listed here as an extension for the next lesson.</span></p>
   </div>
 </section>
 
@@ -5686,6 +6148,58 @@ img{filter:saturate(1.14) contrast(1.05) brightness(1.02)}
 <script id="q-script">
 (function(){
   var DATA = {
+  'course-app-04': {
+    title: 'Lesson 4 · Programs, Languages and the Rules of C',
+    intro: 'Five questions on what software really is, how C becomes an executable, and why the algorithm matters more than the typing.',
+    items: [
+      { q: 'A textbook defines software as "programs and instructions". From an engineering standpoint, what is missing?',
+        opts: ['Nothing — the definition is complete.', 'Data, documentation and specifications, without which the software cannot be maintained.', 'The programming language used.', 'The hardware it runs on.'],
+        a: 1,
+        why: 'A program plus data runs; a software product also needs documents and standards so later changes are possible. Documentation is the only basis for modification.' },
+      { q: 'Which of these is NOT source code?',
+        opts: ['hello.c', 'hello.h', 'hello.exe', 'hello.py'],
+        a: 2,
+        why: '.exe is machine code produced by compiling and linking — you cannot edit it back into a program. Changing a program requires the source.' },
+      { q: 'A compiled language translates the whole program once, while an interpreted language translates as it runs. What does compiling buy you?',
+        opts: ['Guaranteed cross-platform binaries.', 'Fast execution and the ability to distribute without the compiler — paid for by recompiling after every change.', 'Smaller source files.', 'Automatic debugging.'],
+        a: 1,
+        why: 'The translation cost is paid once. The trade-off: any edit requires a rebuild, and binaries are platform-specific. Source is portable, compiled output is not.' },
+      { q: 'For summing 1 to n, the closed form n(n+1)/2 needs no additions at all. Why would anyone still write the loop?',
+        opts: ['Because loops are faster.', 'Because the formula only works for arithmetic progressions — irregular data forces a general algorithm.', 'Because compilers optimise loops better.', 'Because the formula is wrong for large n.'],
+        a: 1,
+        why: 'Fastest is not the same as applicable. The loop is the general tool; the formula is a special case. Choosing between them is where the engineering value sits.' },
+      { q: 'Which error appears at link time rather than compile time?',
+        opts: ["expected ';' before 'return'", "undefined reference to 'printf'", 'variable never used', 'missing closing brace'],
+        a: 1,
+        why: 'Syntax errors stop the compiler; an unresolved symbol means the syntax was fine but the linker could not assemble a complete program. Knowing the stage halves debugging time.' }
+    ]
+  },
+  'course-calc-04': {
+    title: 'Lesson 4 · Real Numbers and Continuity',
+    intro: 'Five questions on why continuity needs the real numbers, and how to classify what can go wrong at a point.',
+    items: [
+      { q: 'What exactly does the completeness of the real numbers guarantee?',
+        opts: ['That every sequence converges.', 'That the limit operation stays inside the system — a trend with a destination always has a real destination.', 'That all numbers are rational.', 'That distances can be measured.'],
+        a: 1,
+        why: 'The rationals have holes: 1, 1.4, 1.41, 1.414… has an obvious trend but no rational destination. Completeness supplies it and makes limits closed.' },
+      { q: 'Which three conditions must hold for f to be continuous at a?',
+        opts: ['f(a) exists; the two-sided limit exists; and they are equal.', 'The left and right limits exist.', 'f is bounded near a and increasing.', 'f is differentiable at a.'],
+        a: 0,
+        why: 'All three together. Failing the first gives a hole; failing the second or the equality gives one of the discontinuity types.' },
+      { q: 'The lecture notes listed removable, jump and infinite discontinuities. Which type is missing?',
+        opts: ['Semi-removable', 'Oscillating — for example sin(1/x) at 0, where neither one-sided limit exists and neither is infinite.', 'Periodic', 'Mixed'],
+        a: 1,
+        why: 'Continuity classification has four categories. An oscillating discontinuity fits none of the other three, which is why the fourth must be listed.' },
+      { q: 'Why does continuity require a full neighbourhood while a limit only requires a punctured one?',
+        opts: ['It is a matter of convention.', 'Because continuity compares the limit with the value AT the point, so the point itself must be in the domain and defined.', 'Because limits are easier to compute.', 'Because continuity is defined only on intervals.'],
+        a: 1,
+        why: 'The definition of continuity contains the term f(a). If a is excluded there is nothing to compare the limit with — this is exactly why a limit can exist where the function is discontinuous.' },
+      { q: 'Which statement about continuity on the closed interval [a, b] is correct?',
+        opts: ['Continuity at the interior points is enough.', 'It also requires right-continuity at a and left-continuity at b, because outside an endpoint there is no neighbourhood.', 'It requires differentiability at both endpoints.', 'It requires boundedness at the endpoints only.'],
+        a: 1,
+        why: 'Endpoints have no two-sided neighbourhood, so only one-sided limits are available. That is why the closed-interval definition adds two extra conditions.' }
+    ]
+  },
   'course-app-01': {
     title: 'Lesson 1 · Course Orientation and the C Toolchain',
     intro: 'Five questions on how the course is built and how to work inside it. All questions are in English; think first, then click.',
@@ -5963,4 +6477,298 @@ img{filter:saturate(1.14) contrast(1.05) brightness(1.02)}
   window.addEventListener('online',function(){if(n)n.classList.remove('is-open')});
 })();
 </script>
+
+<script id="l4-calc-script">
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var num = function(v, d){ d = (d === undefined ? 3 : d); var x = Math.abs(v) < 1e-12 ? 0 : v; return x.toFixed(d); };
+
+  /* Demo 1：√2 的逐位逼近 */
+  (function(){
+    var r = $('l4-sq-d'); if (!r) return;
+    var dv = $('l4-sq-dv'), stage = $('l4-sq-stage'), out = $('l4-sq-out');
+    var DIGITS = '41421356237309504880168872420969807856967187537694';
+    var ROOT2 = Math.SQRT2;
+    function upd(){
+      var d = parseInt(r.value, 10);
+      dv.textContent = d;
+      var s = '1' + (d > 0 ? '.' + DIGITS.slice(0, d) : '');
+      var val = parseFloat(s);
+      var err = ROOT2 - val;
+      // 数轴示意：0 到 2，标出 val 与真实 √2
+      var px = function(x){ return 30 + (x / 2) * 300; };
+      stage.innerHTML =
+        '<svg viewBox="0 0 360 70" width="100%" height="70" role="img" aria-label="sqrt2 approximation">' +
+        '<line x1="30" y1="44" x2="345" y2="44" stroke="#ccc" stroke-width="1"/>' +
+        '<g stroke="#ddd" stroke-width="1">' +
+          '<line x1="' + px(0) + '" y1="38" x2="' + px(0) + '" y2="50"/>' +
+          '<line x1="' + px(1) + '" y1="38" x2="' + px(1) + '" y2="50"/>' +
+          '<line x1="' + px(2) + '" y1="38" x2="' + px(2) + '" y2="50"/>' +
+        '</g>' +
+        '<text x="' + px(0) + '" y="64" font-size="11" fill="#888" text-anchor="middle">0</text>' +
+        '<text x="' + px(1) + '" y="64" font-size="11" fill="#888" text-anchor="middle">1</text>' +
+        '<text x="' + px(2) + '" y="64" font-size="11" fill="#888" text-anchor="middle">2</text>' +
+        '<circle cx="' + px(ROOT2) + '" cy="44" r="5" fill="none" stroke="#a51c30" stroke-width="2"/>' +
+        '<circle cx="' + px(val) + '" cy="44" r="4" fill="#2f2a22"/>' +
+        '<text x="' + (px(ROOT2) - 6) + '" y="24" font-size="11" fill="#a51c30">√2</text>' +
+        '<text x="' + (px(val) - 30) + '" y="14" font-size="11" fill="#2f2a22">第 ' + d + ' 位截断</text>' +
+        '</svg>';
+      out.innerHTML =
+        '第 ' + d + ' 位截断 / truncation: <b>' + s + '</b>　（<span class="l3-tiny">每一项都是有理数</span>）<br>' +
+        '与 √2 的误差 / error: <b>' + (err > 0 ? err.toExponential(3) : '0') + '</b><br>' +
+        '<span class="l3-tiny">把滑块往右拖：误差单调变小，说明数列确实在趋近某个数。但那个终点 √2 = ' + ROOT2.toFixed(12) + '… 是<b>无限不循环小数</b>，不属于有理数——这就是"有理数不封闭"的具体表现，也正是需要实数系的原因。</span>';
+    }
+    r.addEventListener('input', upd); upd();
+  })();
+
+  /* Demo 2：三要件判定器 */
+  (function(){
+    var host = $('l4-c3-tabs'), stage = $('l4-c3-stage'); if (!host || !stage) return;
+    var cases = [
+      { k: '连续（多项式）', ok: [1,1,1], body: 'f(x) = x² 在 a = 2。<br>① f(2) = 4 有定义　② 极限存在 = 4　③ 二者相等。<br><span class="l3c-ok">三要件全满足 ⟹ 连续。</span>' },
+      { k: '可去间断', ok: [0,1,1], body: 'f(x) = (x²−1)/(x−1) 在 a = 1。<br>① f(1) <b>无定义</b>（分母为 0）　② 极限存在 = 2　③ 值不存在，谈不上相等。<br><span class="l3-no">条件 ① 失败 ⟹ 间断。</span> 但极限存在，所以是<b>可去</b>间断——补上 f(1) = 2 就连续了。' },
+      { k: '跳跃间断', ok: [1,0,0], body: '分段函数在 a = 1：左支给出左极限 −4，右支给出右极限 6。<br>① f(1) 有定义　② 左右极限不等 ⟹ <b>极限不存在</b>　③ 无从相等。<br><span class="l3-no">条件 ② 失败 ⟹ 间断。</span> 两侧极限各自存在但不相等 ⟹ <b>跳跃</b>间断。' },
+      { k: '无穷间断', ok: [0,0,0], body: 'f(x) = 1/x 在 a = 0。<br>① f(0) 无定义　② 右侧趋于 +∞、左侧趋于 −∞，都不是有限数 ⟹ 极限不存在　③ 无从相等。<br><span class="l3-no">条件 ①② 都失败 ⟹ 间断。</span> 至少一侧趋于无穷 ⟹ <b>无穷</b>间断。' },
+      { k: '振荡间断', ok: [0,0,0], body: 'f(x) = sin(1/x) 在 a = 0。<br>① f(0) 无定义　② x→0 时函数值在 −1 与 1 之间无限次振荡，既不趋于常数也不趋于无穷　③ 无从相等。<br><span class="l3-no">极限不存在且不为无穷 ⟹ <b>振荡</b>间断</span>（原笔记漏掉的第四类）。' }
+    ];
+    var cur = 0;
+    function chip(label, pass){
+      return '<span class="l3-cell" style="' + (pass ? 'background:#e8f4ec;border-color:#2f6b3a' : 'background:#fbecec;border-color:#a33') + '">' + label + (pass ? ' ✓' : ' ✗') + '</span>';
+    }
+    function render(){
+      host.innerHTML = cases.map(function(c, i){ return '<button class="l3c-tab' + (i === cur ? ' on' : '') + '" data-i="' + i + '">' + c.k + '</button>'; }).join('');
+      var c = cases[cur];
+      stage.innerHTML = '<div style="margin-bottom:8px">' +
+        chip('① 有定义', c.ok[0]) + chip('② 极限存在', c.ok[1]) + chip('③ 值 = 极限', c.ok[2]) +
+        '</div>' + c.body;
+    }
+    host.addEventListener('click', function(e){ var t = e.target.closest('.l3c-tab'); if (!t) return; cur = parseInt(t.dataset.i, 10); render(); });
+    render();
+  })();
+
+  /* Demo 3：去心邻域 vs 全邻域 */
+  (function(){
+    var host = $('l4-nb-tabs'), stage = $('l4-nb-stage'); if (!host || !stage) return;
+    var modes = [
+      { k: '去心邻域（极限）', punctured: true, text: '讨论 <b>lim f(x)</b> 时看的是 a 周围一圈，但<b>把 a 本身挖掉</b>——所以 a 点有没有定义、等于多少，都不影响极限。图中空心圆就表示"挖掉"。' },
+      { k: '全邻域（连续）', punctured: false, text: '讨论 <b>连续性</b> 时必须把 a 本身包含进来：既要求 a 周围有定义，也要求 a 点自己有定义，而且值要正好落在极限上。实心圆表示"包含"。' }
+    ];
+    var cur = 0;
+    function render(){
+      host.innerHTML = modes.map(function(m, i){ return '<button class="l3c-tab' + (i === cur ? ' on' : '') + '" data-i="' + i + '">' + m.k + '</button>'; }).join('');
+      var m = modes[cur];
+      var cx = 180, r = 90;
+      var dot = m.punctured
+        ? '<circle cx="' + cx + '" cy="50" r="7" fill="#fff" stroke="#a51c30" stroke-width="3"/>'
+        : '<circle cx="' + cx + '" cy="50" r="7" fill="#2f2a22"/>';
+      stage.innerHTML =
+        '<svg viewBox="0 0 360 96" width="100%" height="96" role="img" aria-label="neighbourhood">' +
+        '<line x1="20" y1="50" x2="340" y2="50" stroke="#ccc" stroke-width="1"/>' +
+        (m.punctured
+          ? '<line x1="' + (cx - r) + '" y1="50" x2="' + (cx - 8) + '" y2="50" stroke="#c2a15a" stroke-width="6"/>' +
+            '<line x1="' + (cx + 8) + '" y1="50" x2="' + (cx + r) + '" y2="50" stroke="#c2a15a" stroke-width="6"/>'
+          : '<line x1="' + (cx - r) + '" y1="50" x2="' + (cx + r) + '" y2="50" stroke="#c2a15a" stroke-width="6"/>') +
+        dot +
+        '<text x="' + cx + '" y="82" font-size="11" fill="#555" text-anchor="middle">a</text>' +
+        '<text x="' + (cx - r) + '" y="34" font-size="10" fill="#8a6a2f" text-anchor="middle">a−δ</text>' +
+        '<text x="' + (cx + r) + '" y="34" font-size="10" fill="#8a6a2f" text-anchor="middle">a+δ</text>' +
+        '</svg>' +
+        '<div style="margin-top:6px">' + m.text + '</div>';
+    }
+    host.addEventListener('click', function(e){ var t = e.target.closest('.l3c-tab'); if (!t) return; cur = parseInt(t.dataset.i, 10); render(); });
+    render();
+  })();
+
+  /* Demo 4：间断点分类器 */
+  (function(){
+    var l = $('l4-dc-l'); if (!l) return;
+    var r = $('l4-dc-r'), inf = $('l4-dc-inf'), osc = $('l4-dc-osc'), def = $('l4-dc-def');
+    var lv = $('l4-dc-lv'), rv = $('l4-dc-rv'), stage = $('l4-dc-stage');
+    function upd(){
+      var L = parseFloat(l.value), R = parseFloat(r.value);
+      lv.textContent = L; rv.textContent = R;
+      var verdict, why;
+      if (inf.checked){
+        verdict = '无穷间断点 / infinite'; why = '至少一侧趋于无穷 ⟹ 极限不存在且不是振荡。';
+      } else if (osc.checked){
+        verdict = '振荡间断点 / oscillating'; why = '两侧极限都不存在，且不趋于无穷 ⟹ 第四类。';
+      } else if (Math.abs(L - R) > 1e-9){
+        verdict = '跳跃间断点 / jump'; why = '左右极限都存在但不相等 ⟹ 极限不存在。';
+      } else if (!def.checked){
+        verdict = '可去间断点 / removable'; why = '极限存在（= ' + L + '），但 a 点无定义或定义值不等于它 ⟹ 改一个点即可补救。';
+      } else {
+        verdict = '连续 / continuous'; why = '极限存在，且 a 点的值正好等于极限 ⟹ 三要件全满足。';
+      }
+      var okc = verdict.indexOf('连续') === 0;
+      stage.innerHTML =
+        '<div class="l3c-val">左极限 = <b>' + L + '</b>　右极限 = <b>' + R + '</b>　' +
+        (Math.abs(L - R) < 1e-9 ? '两者相等 ⟹ <b>极限 = ' + L + '</b>' : '两者不等 ⟹ <b>极限不存在</b>') + '</div>' +
+        '<div class="l3c-val" style="margin-top:6px">判定 / verdict：<span class="' + (okc ? 'l3c-ok' : 'l3-no') + '">' + verdict + '</span></div>' +
+        '<div class="l3-tiny" style="margin-top:6px">' + why + '</div>';
+    }
+    [l, r, inf, osc, def].forEach(function(el){ el.addEventListener('input', upd); el.addEventListener('change', upd); });
+    upd();
+  })();
+
+  /* Demo 5：区间类型与端点要求 */
+  (function(){
+    var host = $('l4-iv-tabs'), stage = $('l4-iv-stage'); if (!host || !stage) return;
+    var types = [
+      { k: '(a, b) 开区间', need: '每个内点连续即可；端点不讨论。', a: '不要求', b: '不要求' },
+      { k: '[a, b] 闭区间', need: '内点连续 + 左端点右连续 + 右端点左连续。', a: '右连续 f(a⁺)=f(a)', b: '左连续 f(b⁻)=f(b)' },
+      { k: '[a, b) 半开', need: '内点连续 + 左端点右连续；右端点不讨论。', a: '右连续 f(a⁺)=f(a)', b: '不要求' },
+      { k: '(a, b] 半开', need: '内点连续 + 右端点左连续；左端点不讨论。', a: '不要求', b: '左连续 f(b⁻)=f(b)' }
+    ];
+    var cur = 0;
+    function render(){
+      host.innerHTML = types.map(function(t, i){ return '<button class="l3c-tab' + (i === cur ? ' on' : '') + '" data-i="' + i + '">' + t.k + '</button>'; }).join('');
+      var t = types[cur];
+      stage.innerHTML = '<div class="l3c-val">' + t.need + '</div>' +
+        '<div class="l3-mini" style="margin-top:8px">左端点 a：<b>' + t.a + '</b><br>右端点 b：<b>' + t.b + '</b></div>' +
+        '<div class="l3-tiny" style="margin-top:6px">端点外侧没有定义，"整个邻域"根本无从谈起，所以端点只能谈单侧连续——这正是闭区间连续要多加一条的原因。</div>';
+    }
+    host.addEventListener('click', function(e){ var t = e.target.closest('.l3c-tab'); if (!t) return; cur = parseInt(t.dataset.i, 10); render(); });
+    render();
+  })();
+})();
+</script>
+
+
+<script id="l4-app-script">
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var esc = function(s){ return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
+
+  /* Demo 1：程序的组成 */
+  (function(){
+    var host = $('l4-ps-tabs'), stage = $('l4-ps-stage'); if (!host || !stage) return;
+    var views = [
+      { k: '教材定义', body: '<div class="l3c-mini"><b>软件 = 程序</b><br><span class="l3-tiny">教材的经典定义：软件是程序与指令的集合。</span></div><div class="l3-tiny" style="margin-top:8px">这个定义在"能跑就行"的小程序阶段够用，但一旦要交付、要维护，就明显不够了——接手的人看不懂当初为什么这么写。</div>' },
+      { k: '工程定义', body: '<div class="l3c-mini"><b>软件 = 程序 + 数据 + 文档 + 规范</b><br><span class="l3-tiny">课堂上补充的完整定义。</span></div><div class="l3-tiny" style="margin-top:8px">多出来的三样都不是"附属品"：<br>· <b>数据</b>决定程序处理什么；<br>· <b>文档</b>是后续修改与迭代的唯一依据（课上用"个人档案"类比）；<br>· <b>规范</b>让多人协作时风格一致。</div>' },
+      { k: '三者关系', body: '<div class="l3c-mini"><b>源代码 → 编译链接 → 可执行文件</b><br><span class="l3-tiny">.c / .h 是源代码；.o 是目标文件；.exe 是最终可执行文件；DLL 是被加载的库，不能独立运行。</span></div><div class="l3-tiny" style="margin-top:8px">要修改程序，必须拿到<b>源代码</b>。只给一个 .exe，等于只给了一本书的印刷成品而没有原稿——这也是开源之所以重要的原因。</div>' }
+    ];
+    var cur = 0;
+    function render(){
+      host.innerHTML = views.map(function(v, i){ return '<button class="l3c-tab' + (i === cur ? ' on' : '') + '" data-i="' + i + '">' + v.k + '</button>'; }).join('');
+      stage.innerHTML = views[cur].body;
+    }
+    host.addEventListener('click', function(e){ var t = e.target.closest('.l3c-tab'); if (!t) return; cur = parseInt(t.dataset.i, 10); render(); });
+    render();
+  })();
+
+  /* Demo 2：编译型 vs 解释型 */
+  (function(){
+    var host = $('l4-ci-tabs'), steps = $('l4-ci-steps'), flow = $('l4-ci-flow'), out = $('l4-ci-out');
+    if (!host || !flow) return;
+    var modes = [
+      { k: '编译型（C）', steps: [
+        { s: '源代码 hello.c', t: '你写的文本。' },
+        { s: '编译：翻译成机器码', t: '整本书一次翻完——编译器把全部代码翻译成目标平台的指令。' },
+        { s: '链接：拼上库函数', t: '把 printf 等库函数的目标代码接进来，产出 hello.exe。' },
+        { s: '运行：直接执行机器码', t: '运行时不再需要编译器，机器码被 CPU 直接执行。' },
+        { s: '改一行 → 必须重新编译', t: '这是编译型的代价；换来的是运行快、可脱离开发环境。' }
+      ]},
+      { k: '解释型（Python）', steps: [
+        { s: '源代码 hello.py', t: '同样是文本。' },
+        { s: '启动解释器', t: '解释器本身是一个程序（同声传译员就位）。' },
+        { s: '逐行翻译并立即执行', t: '读到一行翻译一行、执行一行，不生成独立的可执行文件。' },
+        { s: '改一行 → 直接再跑', t: '不需要重新"编译"整个程序。' },
+        { s: '代价：每行都在翻译', t: '把翻译的开销分摊到了每一次运行上。' }
+      ]}
+    ];
+    var cur = 0, step = 0;
+    function render(){
+      host.innerHTML = modes.map(function(m, i){ return '<button class="l3c-tab' + (i === cur ? ' on' : '') + '" data-i="' + i + '">' + m.k + '</button>'; }).join('');
+      var m = modes[cur];
+      if (step >= m.steps.length) step = m.steps.length - 1;
+      steps.innerHTML = m.steps.map(function(x, i){ return '<button class="l3-step' + (i === step ? ' on' : '') + '" data-s="' + i + '">' + (i + 1) + ' · ' + x.s + '</button>'; }).join('');
+      flow.innerHTML = '<b>' + m.steps[step].s + '</b><br>' + m.steps[step].t;
+      if (out) out.innerHTML = '<span class="l3-tiny">对比要点：编译型把翻译成本<b>一次性付清</b>，运行最快、可脱离源代码分发；解释型把翻译成本<b>平摊到每次运行</b>，改起来方便、跨平台更容易。C 属于前者，所以同一份源码在不同系统上要各自编译一次——<b>源码可移植，编译出来的二进制不可移植</b>。</span>';
+    }
+    host.addEventListener('click', function(e){ var t = e.target.closest('.l3c-tab'); if (!t) return; cur = parseInt(t.dataset.i, 10); step = 0; render(); });
+    if (steps) steps.addEventListener('click', function(e){ var t = e.target.closest('.l3-step'); if (!t) return; step = parseInt(t.dataset.s, 10); render(); });
+    render();
+  })();
+
+  /* Demo 3：三种求和算法的运算次数 */
+  (function(){
+    var r = $('l4-al-n'); if (!r) return;
+    var nv = $('l4-al-nv'), stage = $('l4-al-stage');
+    var fmt = function(x){ return x.toLocaleString('en-US'); };
+    function upd(){
+      var n = parseInt(r.value, 10);
+      nv.textContent = fmt(n);
+      var loop = n - 1;                              // 逐项累加
+      var pair = Math.floor(n / 2);                  // 首尾配对
+      var bar = function(v, max, color){
+        var pct = max > 0 ? Math.round(v / max * 100) : 0;
+        return '<div class="l3-bar" style="margin:4px 0"><i style="width:' + Math.max(pct, v > 0 ? 2 : 0) + '%;background:' + color + '"></i></div>';
+      };
+      stage.innerHTML =
+        '<div class="l3c-val">逐项累加 / loop：加法 <b>' + fmt(loop) + '</b> 次　→ 复杂度 O(n)</div>' + bar(loop, loop, 'linear-gradient(90deg,#c2a15a,#8a6a2f)') +
+        '<div class="l3c-val">首尾配对 / pairing：加法 <b>' + fmt(pair) + '</b> 次　→ 仍是 O(n)，但常数小一半</div>' + bar(pair, loop, 'linear-gradient(90deg,#7fa88a,#2f6b3a)') +
+        '<div class="l3c-val">等差数列公式 / formula：加法 <b>0</b> 次（一次乘法、一次除法）　→ O(1)</div>' + bar(0, loop, '#2f6b3a') +
+        '<div class="l3-tiny" style="margin-top:8px">n 越大，差距越离谱：n = 10 时看不出区别，n = 100000 时循环法要做近十万次加法，公式法还是那两次运算。<b>但公式法只适用于等差数列</b>——数据没规律时，只能老老实实循环。<br>这就是课上那句话的含义：<b>需求分析和算法选择才是技术含量最高的环节</b>。</div>';
+    }
+    r.addEventListener('input', upd); upd();
+  })();
+
+  /* Demo 4：printf 格式符试验台 */
+  (function(){
+    var v = $('l4-pf-v'), f = $('l4-pf-f'), out = $('l4-pf-out'); if (!v || !f || !out) return;
+    function format(val, spec){
+      var m = /^%(-?)(\d*)(?:\.(\d+))?([feg])$/.exec(spec);
+      if (!m) return String(val);
+      var left = m[1] === '-', width = parseInt(m[2] || '0', 10), prec = m[3] !== undefined ? parseInt(m[3], 10) : null, kind = m[4];
+      var s;
+      if (kind === 'f') s = val.toFixed(prec === null ? 6 : prec);
+      else if (kind === 'e') s = val.toExponential(prec === null ? 6 : prec).replace('e', 'e+').replace('e+-', 'e-').replace('e++', 'e+');
+      else { s = String(parseFloat(val.toPrecision(prec === null ? 6 : prec))); }
+      if (width > s.length){
+        var pad = ' '.repeat(width - s.length);
+        s = left ? s + pad : pad + s;
+      }
+      return s;
+    }
+    function upd(){
+      var val = parseFloat(v.value);
+      if (isNaN(val)) { out.textContent = '请输入一个数值'; return; }
+      var spec = f.value;
+      var s = format(val, spec);
+      var shown = s.replace(/ /g, '␣');
+      out.innerHTML =
+        'printf("' + spec + '\\n", x);　→　<b>' + esc(shown) + '</b><br>' +
+        '<span class="l3-tiny">宽度字段（%6.2f 里的 6）决定<b>最小宽度</b>，不足则补空格；加 <code>-</code> 表示左对齐。<code>\\n</code> 放在格式串的什么位置，直接决定排版换到哪一行。<br>' +
+        '用 <code>%d</code> 打印浮点数属于格式符与类型不匹配的错误用法，输出会是未定义的一串数字——这也是"类型要匹配"的一个具体体现。</span>';
+    }
+    v.addEventListener('input', upd); f.addEventListener('change', upd); upd();
+  })();
+
+  /* Demo 5：错误分期诊断 */
+  (function(){
+    var host = $('l4-eg-btns'), stage = $('l4-eg-stage'); if (!host || !stage) return;
+    var items = [
+      { k: "error: expected ';' before 'return'", stage: '编译期 / compile', why: '语法不合法——编译器在翻译阶段就发现了，程序根本没生成。' },
+      { k: "fatal error: stdio.h: No such file", stage: '预处理期 / preprocess', why: '头文件找不到。#include 是在预处理阶段展开的，这一步就失败了。' },
+      { k: "undefined reference to 'printf'", stage: '链接期 / link', why: '语法没错，但链接器拼不出完整程序——找不到 printf 的定义（比如忘了用 -lm 或库路径不对）。' },
+      { k: "warning: implicit declaration of function 'sqrt'", stage: '编译期 / compile（警告）', why: '没包含 math.h 就用了 sqrt。C99 起这是警告甚至错误——它意味着编译器无法检查参数类型。' },
+      { k: "程序能编译能链接，但输出总是 0", stage: '运行期 / runtime', why: '语法和链接都没问题，是<b>逻辑错误</b>——常见原因是变量声明后没初始化就直接参与计算。' },
+      { k: "Segmentation fault (段错误)", stage: '运行期 / runtime', why: '访问了不属于自己的内存（数组越界、空指针解引用等）。编译器和链接器都查不出来。' }
+    ];
+    var cur = 0;
+    function render(){
+      host.innerHTML = items.map(function(x, i){ return '<button class="l3-btn" data-i="' + i + '" style="' + (i === cur ? 'background:#2f2a22;color:#fdf8ee' : '') + '">' + (i + 1) + '</button>'; }).join('') +
+        '<span class="l3-tiny" style="margin-left:8px">点编号切换错误信息</span>';
+      var x = items[cur];
+      stage.innerHTML = '<div class="l3c-val" style="font-family:ui-monospace,Consolas,monospace">' + esc(x.k) + '</div>' +
+        '<div class="l3c-val" style="margin-top:8px">出现阶段：<b>' + x.stage + '</b></div>' +
+        '<div class="l3-tiny" style="margin-top:6px">' + x.why + '</div>' +
+        '<div class="l3-tiny" style="margin-top:8px">诊断顺序建议：先看<b>语法</b>（编译期）→ 再看<b>符号</b>（链接期）→ 最后看<b>逻辑与内存</b>（运行期）。按这个顺序排查，能少走很多弯路。</div>';
+    }
+    host.addEventListener('click', function(e){ var t = e.target.closest('.l3-btn'); if (!t) return; cur = parseInt(t.dataset.i, 10); render(); });
+    render();
+  })();
+})();
+</script>
+
 </body></html>
