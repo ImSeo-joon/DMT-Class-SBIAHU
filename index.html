@@ -2380,6 +2380,13 @@ async function refreshEventHistory(){
         <span class="cr-en">Program versus software, the three language generations, compiled versus interpreted (with a correction), algorithm choice and operation counts, the structure of a C program, printf format control, and the circumference exercise — six corrections, eight extensions and five interactive demos.</span>
         <span class="cr-go">进入第四课 / Open Lesson 4 →</span>
       </a>
+      <a href="#course-app-05">
+        <div class="cr-label mono">LESSON 05 / IDENTIFIERS AND TYPES</div>
+        <h3>Lesson 5: Identifiers, Functions, and the Family of Data Types<span class="cr-alt">标识符、函数与数据类型的家族</span></h3>
+        <p>2026 年 10 月 15 日课堂（07:49–09:35）：三类标识符与命名规则、main 的真实身份、函数头与函数体、printf 与预处理命令、转义序列与光标位置、整数族与符号位、字符型与 ASCII；含 10 处纠错、8 处拓展、6 组交互演示，附一套纯英文思维题。</p>
+        <span class="cr-en">The three classes of identifiers and the naming rules, what main really is, function headers and bodies, printf and preprocessing, escape sequences, the integer family and the sign bit, characters and ASCII — nine corrections, eight extensions, six interactive demos and an English-only problem set.</span>
+        <span class="cr-go">进入第五课 / Open Lesson 5 →</span>
+      </a>
     </div>
   </div>
 </section>
@@ -3139,6 +3146,314 @@ int main(void) {
 
         <div class="q-host" data-quiz="course-app-04"></div>
 <p class="cr-note">资料来源：2026 年 10 月 13 日"C语言程序设计基础讲解与实操"课堂（07:57–09:36）的飞书 AI 笔记与智能章节（原笔记由工具生成并标注"可能存在不准确之处"）。本页逐条核对后做了 6 处更正与 8 处扩充，双语对照，并加入 5 组可操作的交互演示。课堂布置的课后任务（补做未运行完的程序、安装编程环境、编写圆面积程序、浏览教材附录 C）建议照做——尤其"把课上没跑完的程序自己跑一遍"，那是把知识变成手感的最短路径。<br><span class="cr-en">Source: the Feishu AI notes and smart chapters of the 13 October 2026 session (07:57–09:36), machine-generated and flagged as possibly inaccurate. This page corrects six points, extends eight, is bilingual, and adds five interactive demos. The homework set in class is worth doing, especially running the unfinished program yourself.</span></p>
+  </div>
+</section>
+
+<section class="page" data-view="course-app-05" data-sections="Thirteen sections: how to learn programming · the three classes of identifiers · naming rules · what main really is · function headers and bodies · printf and preprocessing · escape sequences and the cursor · data types and literal values · the integer family and the sign bit · characters and ASCII · corrections to the notes · extensions · terminology and self-check">
+  <div class="wrap page-intro">
+    <div class="kicker mono">LESSON 05 / IDENTIFIERS AND TYPES</div><div class="fr-mot">Leçon 5 · Identificateurs et types</div>
+    <h1>Lesson 5: Identifiers, Functions, and the Family of Data Types<span class="cr-sub">高级语言程序设计课程要点第五课：标识符、函数与数据类型的家族</span></h1>
+    <p>2026 年 10 月 15 日课堂（07:49–09:35）整理、纠错与扩充 / Based on the session of 15 October 2026, corrected and extended</p>
+  </div>
+  <div class="wrap section">
+    <div class="cr-subnav cr-nav-course" data-active="course-app"></div>
+    <div class="section-head">
+      <div>
+        <div class="kicker mono">LESSON CONTENT / 本课内容</div>
+        <h2>Names, Functions and Types<span class="cr-alt">名字、函数与类型</span></h2>
+      </div>
+      <span class="tag mono">2026.10.15 · CN / EN</span>
+    </div>
+
+    <div class="cr-grid">
+      <div class="cr-card"><div class="cr-label mono">THEME</div><strong>From "it runs" to "it reads"</strong><span class="cr-alt">从"能跑"到"能读"</span><p>第四课讲一个程序怎么变成可执行文件；这一课钻进程序内部：东西叫什么名字、装什么数据、名字和数据各自受什么规则约束。</p></div>
+      <div class="cr-card"><div class="cr-label mono">THREE CLASSES</div><strong>Keywords · library names · your names</strong><span class="cr-alt">保留字 · 库名字 · 你的名字</span><p>C 里的名字分三类，权限完全不同：保留字碰不得，库名字能覆盖但会失去原功能，自定义名字才是你的地盘。</p></div>
+      <div class="cr-card"><div class="cr-label mono">MAIN</div><strong>Not a keyword, not a library name</strong><span class="cr-alt">main 既不是保留字，也不是库标识符</span><p>课堂说"main 是预定义标识符"——严格讲不成立。它的特殊地位来自标准对程序入口的规定，而不是它属于某一类名字。</p></div>
+      <div class="cr-card"><div class="cr-label mono">HARD POINT</div><strong>Integer division truncates toward zero</strong><span class="cr-alt">整除向零截断</span><p>-7 / 2 在 C99 之后是 -3 而不是 -4，余数取被除数的符号。<b>舍入方向是标准规定的，不是实现自由。</b></p></div>
+      <div class="cr-card"><div class="cr-label mono">INTERACTIVE</div><strong>Six embedded demos</strong><span class="cr-alt">六组交互演示</span><p>标识符分类器、函数调用与返回地址、printf 与转义试验台、整数范围与符号位、整除截断、ASCII 位翻转。</p></div>
+      <div class="cr-card"><div class="cr-label mono">SOURCE</div><strong>Feishu AI notes, verified</strong><span class="cr-alt">飞书 AI 笔记 · 已逐条核对</span><p>原笔记由工具自动生成并标注"可能存在不准确之处"。本页做了 10 处更正与 8 处扩充，附一套纯英文思维题。</p></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>1 · How to actually learn programming<span class="cr-alt">1 · 编程到底怎么学</span></h3>
+      <p>这次课是从学习方法讲起的，而且讲得很直接：<b>多读书、多写代码、多上机</b>。三条里最容易被跳过的是第三条——"看懂了"和"写出来了"是两件事，编译器不会因为你懂了就放你过。</p>
+      <p><strong>为什么一定要动手：</strong>程序员的直觉来自报错。你只有亲手把 <code>;</code> 漏掉、把中文分号 <code>；</code> 敲进去、把变量名写成 <code>2ndValue</code>，才会真正记住这些规则长什么样。课堂反复提"圆面积"这个练习，用意就在这里：它短到你十分钟就能写完，又完整包含输入、计算、输出三步。</p>
+      <p class="cr-en">The lecturer opened with method, not syntax: read more, write more, run more. The third is the one people skip. Understanding and compiling are different events — a programmer's instinct comes from error messages, and the circle-area exercise is short enough to finish in ten minutes yet contains all three IPO steps.</p>
+      <p><strong>课后三项任务（不强制提交，但建议照做）：</strong>教材 2.1 节的选择题与简答题（判断标识符是否合法）；自己写一段程序把指定内容输出到屏幕；把课堂那段用 <code>/* */</code> 写的注释改写成 <code>//</code> 逐行注释。</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>2 · Identifiers: three classes, three levels of permission<span class="cr-alt">2 · 标识符：三类名字，三种权限</span></h3>
+      <p><b>标识符</b>就是程序里给变量、函数、常量起的名字。课堂用"人名、域名"作类比：汇编语言里你只能直接面对内存地址（第 3 课讲过的 0x7ffd… 那种），高级语言让你起名字，由系统维护"名字 → 地址"的映射，人不用再记地址。</p>
+      <p><strong>关键在这个映射表不是平的，而是分三层的：</strong></p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>类别</th><th>例子</th><th>能不能自己用</th><th>为什么</th></tr></thead>
+        <tbody>
+          <tr><td><b>保留字</b>（关键字 / keywords）</td><td><code>int</code> <code>return</code> <code>if</code> <code>while</code> <code>sizeof</code></td><td><b>绝对不能</b></td><td>它们已被语言语法占用，编译器见到就按语法解释，不可能再当名字</td></tr>
+          <tr><td><b>标准库标识符</b>（library names）</td><td><code>printf</code> <code>scanf</code> <code>malloc</code> <code>NULL</code> <code>size_t</code></td><td>语法上可以，但<b>强烈不建议</b></td><td>它们只是声明在头文件里的普通名字，你能覆盖；但覆盖之后原有功能就没了，而且换编译器或换标准库时行为会漂移</td></tr>
+          <tr><td><b>自定义标识符</b>（user identifiers）</td><td><code>total_count</code> <code>radius</code> <code>main</code></td><td>这才是你的地盘</td><td>由你命名、你维护，唯一的要求是符合命名规则且不与上面两类冲突</td></tr>
+        </tbody>
+      </table></div>
+      <p class="cr-en">Identifiers are the names given to variables, functions and constants. The mapping from name to address is maintained for you — but it is layered. Keywords are claimed by the grammar; library names are ordinary declared names that you may shadow at the cost of losing them; user identifiers are the only ones genuinely yours.</p>
+      <p><strong>命名规则（硬性）：</strong>只能用<b>英文字母、数字、下划线</b>；<b>首字符必须是字母或下划线</b>，不能是数字；<b>大小写敏感</b>，<code>Total</code> 和 <code>total</code> 是两个不同的名字。</p>
+      <p><strong>命名惯例（软性，但影响可读性）：</strong>名字要<b>具备描述性</b>——课堂上那句原话值得记住："你见到这个符号就能知道它大致的意思"。宏常量习惯全大写（<code>MAX_SIZE</code>），与普通变量区分开。</p>
+      <p class="cr-en">Hard rules: letters, digits and underscores only; the first character must be a letter or an underscore; identifiers are case-sensitive. Soft rules: names should be descriptive, and macro constants are conventionally written in capitals.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 1 · Identifier classifier<span class="cr-alt">演示一 · 标识符分类器</span></h4>
+        <p class="l3-sub">输入一个名字，立刻看它属于哪一类、合不合法、为什么 / Type a name and see its class and verdict.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">名字 <input type="text" id="l5-id-in" value="total_count" spellcheck="false" autocomplete="off"></label>
+          <span class="l3-tiny">试试：<code>int</code> · <code>printf</code> · <code>_tmp</code> · <code>2ndValue</code> · <code>Item</code> · <code>my-var</code> · <code>total count</code></span>
+        </div>
+        <div class="l3c-stage" id="l5-id-stage"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>3 · What main really is<span class="cr-alt">3 · main 到底是什么</span></h3>
+      <p>课堂上的说法是"<b>main 是 C 语言的预定义标识符，但不是保留字</b>"。前半句需要更正——而且更正之后，你对 C 的理解会更准。</p>
+      <p class="cr-en">The lecture called main "a predefined identifier that is not a keyword". The second half is right; the first half is not, and correcting it sharpens the picture.</p>
+      <ul class="cr-bullets">
+        <li><b>"预定义标识符"在 C 标准里是一个专有名词</b>，指的是 <code>__FILE__</code>、<code>__LINE__</code>、<code>__DATE__</code>、<code>__TIME__</code>、<code>__func__</code>、<code>__STDC__</code> 这些由编译器自动设定的名字（C11 §6.10.8）。<b><code>main</code> 不在这个名单里。</b></li>
+        <li>main 也不是库函数，标准库头文件里没有它的声明。</li>
+        <li>main 的真正身份是：<b>标准规定的程序入口函数名</b>（C11 §5.1.2.2.1）。程序启动时，运行环境按这个名字去调用它，所以它必须叫 main，不能改名。</li>
+        <li>因此下面的推论就顺理成章了：<b>一个程序里有且只有一个 main</b>（否则链接器不知道调哪个）；<code>Main</code>、<code>MAIN</code> 都是普通函数名，能编译，但不会被当作入口。</li>
+        <li>严格地说，"程序从 main 的第一条语句开始执行"也有前提：在 main 被调用之前，运行环境已经完成了静态存储期对象的初始化等工作。对入门阶段可以先记住结论，但别把它当成"第一件事就是 main"。</li>
+      </ul>
+      <p class="cr-en">main is neither a keyword nor a predefined identifier in the standard's sense; it is the entry-point function name the standard requires. That single fact explains why there can be exactly one, why Main is legal but useless as an entry point, and why "execution starts at main" is a simplification — static initialisation happens first.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 2 · Call, remember the way back, return<span class="cr-alt">演示二 · 调用、记住回来的路、返回</span></h4>
+        <p class="l3-sub">课堂说"调用时会记录当前地址，执行完自动回到原位置"。点下一步看这句话在做什么 / Step through a call and watch the return address.</p>
+        <div class="l3-row">
+          <button class="l3-btn" id="l5-fn-next">执行下一步 / Next step</button>
+          <button class="l3-btn" id="l5-fn-reset">重来 / Reset</button>
+        </div>
+        <div class="l3c-stage" id="l5-fn-stage"></div>
+        <div class="l3-out" id="l5-fn-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>4 · Functions: a header, a body, and one rule about semicolons<span class="cr-alt">4 · 函数：一个头、一个体，以及一条分号规则</span></h3>
+      <p>函数分成<b>函数头</b>和<b>函数体</b>两部分，这是本课最实用的一张骨架图：</p>
+      <div class="cr-code">int add(int a, int b)      /* 函数头：返回值类型 int · 函数名 add · 参数列表 (int a, int b) */
+{
+    int sum = a + b;       /* 函数体：一条一条以分号结尾的可执行语句 */
+    return sum;
+}</div>
+      <p><strong>函数头由三样东西构成：返回值类型、函数名、参数列表。</strong>课堂用"食堂窗口打饭"和"绞肉机"作类比：把原料（参数）递进去，产出成品（返回值）。参数的个数、类型和顺序决定了这个"窗口"接受什么；返回值类型决定了它递回来什么。写函数之前先想清楚这三件事，比敲代码重要。</p>
+      <p><strong>函数体是一串语句，默认从上到下顺序执行。</strong>每条可执行语句末尾必须是一个<b>英文分号</b>——中文分号 <code>；</code> 是初学者最高频的错误之一，因为屏幕上几乎看不出区别。另外，函数头后面<b>不能</b>加分号：写成 <code>int add(int a, int b);</code> 就成了"函数声明"而不是定义。</p>
+      <p class="cr-en">A function has a header (return type, name, parameter list) and a body (statements, each ending in a semicolon). Think of it as a machine: parameters in, return value out. Note the trap — a semicolon straight after the header turns a definition into a mere declaration.</p>
+      <p><strong>调用过程（配合演示二看）：</strong>执行到函数调用时，系统先把"下一条指令的位置"（返回地址）记录下来，再跳到被调函数去执行；被调函数返回时，按记录的地址回到原处继续。这就是为什么函数可以嵌套调用而不会"忘了自己在哪"。</p>
+      <p class="cr-en">On a call the system records the return address, transfers control, and comes back to the recorded position when the callee returns. That is what lets calls nest without losing the thread.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>5 · printf, arguments, and commands that start with #<span class="cr-alt">5 · printf、参数，以及以 # 开头的命令</span></h3>
+      <p>课堂把 <code>printf</code> 讲成一台"绞肉机"：把原料（带双引号的格式化数据等参数）从进料口送进去，加工之后从"标准输出设备"（通常是显示器）出来。这个类比抓住了两件事——<b>printf 是函数</b>，所以它有参数；<b>它的作用是把东西送到标准输出</b>，而不是把结果算出来。</p>
+      <p class="cr-en">printf is a function, therefore it takes arguments; and its job is to send text to the standard output device, not to compute anything. The lecture's mincer analogy captures both points.</p>
+      <p><strong>预处理命令：</strong>以井号 <code>#</code> 开头，例如 <code>#include &lt;stdio.h&gt;</code> 和 <code>#define PI 3.14159</code>。课堂说"它不属于 C 语言本身的组成部分"——这个说法来自教材，需要补一句才准确：</p>
+      <ul class="cr-bullets">
+        <li>预处理<b>确实是 C 标准的一部分</b>（C11 §6.10 专门规定它），所以说它"不属于 C"容易引起误解。</li>
+        <li>更准确的说法是：<b>预处理发生在编译之前，它的语法与 C 语言本身不同</b>。#define 做的是<b>纯文本替换</b>，编译器看到的已经是替换后的代码。</li>
+        <li>由此推出一个必须记住的后果：<code>#define</code> 定义的"常量"<b>没有类型、没有作用域、不参与类型检查</b>。真正常量应该优先用 <code>const float PI = 3.14159f;</code>。</li>
+      </ul>
+      <p class="cr-en">Preprocessing is part of the C standard, but it runs before compilation and uses its own syntax. #define performs pure textual substitution, so a macro "constant" has no type, no scope and no type checking — prefer const for real constants.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 3 · printf playground<span class="cr-alt">演示三 · printf 试验台</span></h4>
+        <p class="l3-sub">选一个数值和格式符，或点一条转义写法，看真实输出（␣ 表示空格，↓ 表示光标最后停在哪一行）/ See the real output and where the cursor ends up.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">数值 <input type="number" id="l5-pf-v" value="12.5664" step="any"></label>
+          <label class="l3-ctl">格式符
+            <select id="l5-pf-f">
+              <option>%f</option><option selected>%.2f</option><option>%6.2f</option><option>%-6.2f</option><option>%.0f</option><option>%e</option><option>%g</option><option>%d</option>
+            </select>
+          </label>
+        </div>
+        <div class="l3c-stage" id="l5-pf-stage"></div>
+        <div class="l3-row" id="l5-esc-btns"></div>
+        <div class="l3c-stage" id="l5-esc-stage"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>6 · Escape sequences and where the cursor lands<span class="cr-alt">6 · 转义序列，以及光标最后停在哪</span></h3>
+      <p>反斜杠开头的转义序列用来表达"打不出来"或者"有特殊含义"的字符。<code>\n</code> 是换行，课堂用它讲了一个很值得琢磨的细节：<b>同一个 <code>\n</code>，放在内容前面和后面，输出内容的行数一样，但程序结束时光标停的位置不同。</b></p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>写法</th><th>屏幕上发生什么</th><th>光标最后停在哪</th></tr></thead>
+        <tbody>
+          <tr><td><code>printf("Hello\n");</code></td><td>先输出 Hello，再换行</td><td>第 2 行行首（多出一个空行）</td></tr>
+          <tr><td><code>printf("\nHello");</code></td><td>先换行，再输出 Hello</td><td>Hello 末尾，同一行</td></tr>
+          <tr><td><code>printf("Hello\nWorld\n");</code></td><td>两行内容</td><td>第 3 行行首</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>为什么这件事重要：</strong>因为终端里的"光标位置"就是程序的可见状态。写交互式程序时，多一个空行、少一个换行，输出的排版立刻就不一样。这不是美学问题，而是输出格式的一部分。</p>
+      <p><strong>常用转义序列（拓展）：</strong><code>\n</code> 换行 · <code>\t</code> 制表（对齐表格常用） · <code>\\</code> 输出一个反斜杠 · <code>\"</code> 输出双引号 · <code>\0</code> 空字符（字符串结束标志，第 6 课会用到） · <code>\r</code> 回车（回到行首）。</p>
+      <p class="cr-en">An escape sequence writes characters that cannot be typed directly. The lecture's point is worth keeping: the same \n before or after the text produces the same number of lines but leaves the cursor in a different place — and the cursor position is part of the program's visible output.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>7 · Data types and literal values<span class="cr-alt">7 · 数据类型与字面值</span></h3>
+      <p>课堂给的定义很准：<b>数据类型是一类数据的名称，本质是"一个值的集合"加上"可以作用在这些值上的操作集合"</b>。这句话的每一半都有用：值的集合决定了它能表示什么（<code>int</code> 装不下 10.5），操作的集合决定了它能做什么（整数能取余 <code>%</code>，浮点数不能）。</p>
+      <p class="cr-en">A data type is a name for a class of data: a set of values plus the set of operations defined on them. The first half decides what can be stored; the second decides what can be done.</p>
+      <p><strong>分类：</strong>C 的内建基本类型先分两大类——<b>整数类型</b>（<code>char</code>、<code>short</code>、<code>int</code>、<code>long</code> 及各自的 <code>unsigned</code> 版本）和<b>浮点类型</b>（<code>float</code>、<code>double</code>、<code>long double</code>）。字符型属于整数家族，这一点第 9 节会展开。</p>
+      <p><strong>字面值（literal）：</strong>直接写在代码里、值确定的东西。<code>2 * 3.1416 * r</code> 里的 <code>2</code> 和 <code>3.1416</code> 就是字面值；而 <code>r</code> 是变量，不是字面值。字面值也带类型：<code>2</code> 是 int，<code>2.0</code> 是 double，<code>2.0f</code> 是 float，<code>2L</code> 是 long——这个区别在第 8 节的整除陷阱里会立刻显出威力。</p>
+      <p class="cr-en">A literal is a value written directly in the source. Literals have types too: 2 is an int, 2.0 a double, 2.0f a float, 2L a long — which matters immediately in the next section.</p>
+      <p class="cr-note" style="margin-top:6px">一处更正：课堂把 <b>Bool 类型</b>列为 C 的数据类型。C 语言本身<b>没有内建的布尔类型</b>；C99 起要靠 <code>#include &lt;stdbool.h&gt;</code> 得到 <code>bool</code>（本质是宏），直到 <b>C23</b> 才把 <code>bool</code> 变成真正的关键字。</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>8 · The integer family, the sign bit, and truncation<span class="cr-alt">8 · 整数家族、符号位与截断</span></h3>
+      <p>整数不是一个类型，而是一族类型。它们之间的差别只有三件事：<b>占几个字节</b>、<b>有没有符号位</b>、<b>范围有多大</b>。</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>类型</th><th>典型字节数</th><th>典型范围</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td><code>short</code></td><td>2</td><td>−32768 … 32767</td><td>短整型</td></tr>
+          <tr><td><code>int</code></td><td>4</td><td>−2147483648 … 2147483647</td><td>最常用；但"4 字节"是平台事实，不是语言保证</td></tr>
+          <tr><td><code>long</code></td><td>4 或 8</td><td>随平台变化</td><td>Windows 上 4，Linux 64 位上 8——同一份代码行为不同</td></tr>
+          <tr><td><code>unsigned int</code></td><td>4</td><td>0 … 4294967295</td><td>所有位都用来表示数值，没有符号位</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>符号位：</strong>带符号整数的最高位是符号位，剩下 n−1 位表示数值；无符号整数没有符号位，n 位全用于数值。由此得到范围公式（n 为位数）：</p>
+      <div class="cr-formula">带符号： −2^(n−1)  …  2^(n−1) − 1
+无符号：      0  …  2^n − 1</div>
+      <p><strong>这里要更正原笔记的一句话：</strong>"无符号数的表示范围上限是带符号数的 2 倍"——<b>能表示的数值个数</b>确实是精确的 2 倍（2^n 对 2^(n−1)），但<b>上限之比不是恰好 2</b>：16 位时是 65535 / 32767 ≈ 2.00003，位数越大越接近 2 但并不等于 2。说"个数是 2 倍"永远正确，说"上限是 2 倍"只在近似意义上成立。</p>
+      <p class="cr-en">Unsigned types hold exactly twice as many distinct values as their signed counterparts, but the maxima are not in a 2:1 ratio: 2^n − 1 versus 2^(n−1) − 1. Say "twice as many values", not "twice the maximum".</p>
+      <p><strong>整除与截断（最容易踩的坑）：</strong>两个整数相除，结果仍是整数，小数部分被丢掉。而且这个"丢掉"有确定方向——<b>向零截断</b>（C99 起由标准明确规定）：</p>
+      <div class="cr-formula">7 / 2 = 3      7 % 2 = 1
+-7 / 2 = -3    -7 % 2 = -1      /* 向零截断，不是 -4 */
+7.0 / 2 = 3.5                    /* 有一边是浮点，就走浮点除法 */</div>
+      <p>还有一条相关的陷阱：<code>1 / 2</code> 的结果是 <b>0</b> 而不是 0.5。想让除法得到小数，必须保证至少一边是浮点类型，例如写成 <code>1.0 / 2</code> 或 <code>(float)a / b</code>。这就是为什么第 7 节要强调字面值也带类型。</p>
+      <p class="cr-en">Integer division truncates toward zero — the direction is specified by the standard, not left to the implementation. And 1/2 evaluates to 0: to get a fractional result at least one operand must be floating-point.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 4 · Ranges and the sign bit<span class="cr-alt">演示四 · 范围与符号位</span></h4>
+        <p class="l3-sub">选位数和符号性，看范围的公式怎么来的，以及"个数 2 倍"和"上限 2 倍"的差别 / See where the range formulas come from.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">位数 n = <input type="range" id="l5-it-n" min="4" max="64" step="4" value="16"> <span class="l3-out" id="l5-it-nv">16</span></label>
+          <label class="l3-ctl">类型 <select id="l5-it-t"><option value="s" selected>有符号 signed</option><option value="u">无符号 unsigned</option></select></label>
+        </div>
+        <div class="l3c-stage" id="l5-it-stage"></div>
+        <div class="l3-out" id="l5-it-out"></div>
+      </div>
+
+      <div class="l3-demo">
+        <h4>Demo 5 · Integer division, truncation and the remainder<span class="cr-alt">演示五 · 整除、截断与余数</span></h4>
+        <p class="l3-sub">改两个操作数，看整除结果、余数，以及浮点除法的对照 / Compare integer and floating-point division.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">a = <input type="number" id="l5-dv-a" value="-7" step="1" style="width:88px"></label>
+          <label class="l3-ctl">b = <input type="number" id="l5-dv-b" value="2" step="1" style="width:88px"></label>
+          <span class="l3-tiny">试试 <code>b = 0</code>（除零是未定义行为）</span>
+        </div>
+        <div class="l3-out" id="l5-dv-out"></div>
+        <div class="l3c-stage" id="l5-dv-stage"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>9 · Characters, ASCII, and why a character is a number<span class="cr-alt">9 · 字符、ASCII，以及字符为什么是数字</span></h3>
+      <p><b>单引号包一个字符，双引号包一串字符</b>——<code>'A'</code> 是字符，<code>"A"</code> 是字符串。它们在 C 里是<b>不同的类型</b>，不能混用：<code>'A'</code> 占 1 字节，<code>"A"</code> 实际占 2 字节（多出来的那个是字符串结束标志 <code>'\0'</code>，第 6 课细讲）。</p>
+      <p class="cr-en">'A' is a character; "A" is a string. They are different types and are not interchangeable: a char takes one byte, while "A" occupies two — the second is the terminating '\0'.</p>
+      <p><strong>字符在内存里存的是编码值。</strong>标准 ASCII 用 7 位表示 0–127：大写字母 A–Z 是 65–90，小写 a–z 是 97–122，数字 0–9 是 48–57。<b>同一个字母的大小写相差 32</b>——这不是凑巧，而是 32 = 2⁵，二进制里只差第 5 位（从 0 开始数）。所以</p>
+      <div class="cr-formula">'a' - 'A' = 97 - 65 = 32          /* 只翻转了一个二进制位 */
+'7' - '0' = 55 - 48 = 7           /* 字符数字 → 数值，这个转换天天在用 */</div>
+      <p><strong>纠错两处：</strong>其一，原笔记说"ASCII 实际为 7 位，字节最高位补 0"——标准 ASCII 确实只定义 0–127，但在真实系统里，第 8 位历史上被用作<b>奇偶校验位</b>，如今 128–255 又被各种扩展编码（ISO-8859、Windows 代码页）占用，<b>不能一概说"最高位一定是 0"</b>。其二，笔记把字符型说成"属于整数类型"——更精确的说法是：<b>char 是整型家族（integer types）的一员</b>，可以参与算术运算，但 C 标准里 <code>char</code>、<code>signed char</code>、<code>unsigned char</code> 是<b>三种不同的类型</b>，别把它们当同一个。</p>
+      <p class="cr-en">Standard ASCII defines 0–127, but the eighth bit is not always zero in practice: it was historically a parity bit and bytes 128–255 are used by extended encodings. And char, signed char and unsigned char are three distinct types, though all belong to the integer family.</p>
+      <p><strong>一个可移植性要点（拓展）：</strong>C 标准<b>保证</b>数字字符 0–9 的编码是连续的，所以 <code>'7' - '0' == 7</code> 在任何符合标准的实现上都成立；但它<b>不保证</b>字母连续，所以 <code>'a' - 'A' == 32</code> 只是在 ASCII 及其兼容编码（包括 UTF-8）下成立。EBCDIC 机器上就不成立——想写真正可移植的大小写转换，应当用 <code>toupper()</code> / <code>tolower()</code>。</p>
+      <p class="cr-en">The standard guarantees the ten digits are contiguous, so '7' - '0' == 7 is portable. It does not guarantee anything about letters: 'a' - 'A' == 32 holds on ASCII-compatible systems (including UTF-8) but fails on EBCDIC. Use toupper/tolower for portable case conversion.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 6 · ASCII: flip one bit, change the case<span class="cr-alt">演示六 · ASCII：翻转一位，改变大小写</span></h4>
+        <p class="l3-sub">输入一个字符，看它的十进制、十六进制与 7 位二进制；点"切换大小写"看是哪一位在变 / Type a character and watch bit 5 flip.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">字符 <input type="text" id="l5-as-ch" maxlength="1" value="A" spellcheck="false" autocomplete="off" style="width:64px;text-align:center"></label>
+          <button class="l3-btn" id="l5-as-case">切换大小写 / Toggle case</button>
+          <button class="l3-btn" id="l5-as-next">下一个字母 / Next letter</button>
+        </div>
+        <div class="l3-bits" id="l5-as-bits"></div>
+        <div class="l3-idx" id="l5-as-idx"></div>
+        <div class="l3-out" id="l5-as-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Corrections to the original notes<span class="cr-alt">对原笔记的更正（10 处）</span></h3>
+      <p class="cr-note" style="margin-top:0">原笔记由会议工具自动生成并声明"可能不准确"。以下 10 处按 C 标准（C11）与工程口径更正 / Ten corrections, stated against the standard.</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>原笔记说法</th><th>更正</th><th>为什么重要</th></tr></thead>
+        <tbody>
+          <tr><td>"F 函数接收带双引号的格式化数据…"</td><td>应为 <b>printf</b>（语音转写把 printf 听成了"F 函数"）</td><td>函数名写错，代码直接编译不过</td></tr>
+          <tr><td>"main 是 C 语言的预定义标识符，但不是保留字"</td><td>后半句对，前半句错。标准里的<b>预定义标识符</b>指 <code>__FILE__</code>、<code>__LINE__</code>、<code>__func__</code> 等（C11 §6.10.8）；main 是<b>标准规定的程序入口函数名</b>（§5.1.2.2.1）</td><td>分类错了会导致"main 可以重定义/可以改名"这类误判</td></tr>
+          <tr><td>"预处理命令不属于 C 语言本身的组成部分"</td><td>预处理<b>是 C 标准的一部分</b>（C11 §6.10）；准确说法是"发生在编译之前，语法与 C 不同"</td><td>影响你对 <code>#define</code> 到底做了什么的理解</td></tr>
+          <tr><td>"介绍两种 C++ 注释形式"</td><td><code>//</code> 与 <code>/* */</code> 都是 <b>C 的注释形式</b>；<code>//</code> 自 <b>C99</b> 起纳入 C 标准，不是 C++ 专有</td><td>考试会问"哪种注释在 C89 里非法"</td></tr>
+          <tr><td>把 <b>Bool 类型</b>列为 C 的数据类型</td><td>C 语言本身没有内建布尔类型；C99 起需要 <code>&lt;stdbool.h&gt;</code>，<b>C23</b> 才把 <code>bool</code> 变成关键字</td><td>直接写 <code>bool b = true;</code> 在老标准下编译不过</td></tr>
+          <tr><td>"int 类型占 4 字节"</td><td>标准只保证 <code>sizeof(short) ≤ sizeof(int) ≤ sizeof(long)</code> 且 int 至少 16 位；4 字节是<b>常见平台的事实</b>，不是语言保证</td><td>写跨平台代码时不能假设 int 是 4 字节</td></tr>
+          <tr><td>"无符号数的表示范围上限是带符号数的 2 倍"</td><td>严格说：可表示的<b>数值个数</b>是 2 倍；<b>上限之比不是恰好 2</b>（65535 对 32767）</td><td>写边界检查时差 1 就会出错</td></tr>
+          <tr><td>"整数之间做除法仅保留整数商部分"</td><td>补充方向：<b>向零截断</b>（C99 §6.5.5）。<code>-7 / 2 = -3</code>，不是 −4；余数取被除数的符号</td><td>"舍入方向"是标准规定的，与数学上的向下取整不同</td></tr>
+          <tr><td>"ASCII 实际为 7 位，字节最高位补 0"</td><td>标准 ASCII 只定义 0–127；但第 8 位历史上是奇偶校验位，如今 128–255 被扩展编码占用，不能一概说最高位为 0</td><td>处理非 ASCII 文本时这个假设会直接崩掉</td></tr>
+          <tr><td>"单写斜杠会被识别为未定义的转义，易引发异常"</td><td>C 标准要求对未定义的转义序列<b>给出诊断</b>（编译器警告或报错），这是<b>编译期</b>的问题，不是运行时"异常"</td><td>"异常"是别的语言的说法，C 里没有这个概念</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Extensions to a higher level<span class="cr-alt">向上拓展的八个方向</span></h3>
+      <div class="cr-bullets">
+        <span><b>用 sizeof 代替背数字</b>：<code>printf("%zu", sizeof(int));</code> 永远比记住"4 字节"可靠。同理 <code>sizeof(char) == 1</code> 是标准保证的，其余都不是。</span>
+        <span><b>有符号溢出是未定义行为</b>：<code>INT_MAX + 1</code> 在标准层面是 UB，编译器可以做任何事（包括"优化掉"你的判断）。无符号溢出则是<b>模 2ⁿ 绕回</b>，有明确定义。</span>
+        <span><b>整型提升与隐式转换</b>：<code>int + float</code> 会把 int 提升成 float；<code>unsigned + int</code> 会把 int 转成 unsigned——一个负数可能因此变成巨大正数，这是 C 里最经典的隐蔽 bug。</span>
+        <span><b>char 有三种</b>：<code>char</code>、<code>signed char</code>、<code>unsigned char</code> 是三个不同类型；<code>char</code> 是否有符号由实现决定，所以存放 0–255 的字节数据要用 <code>unsigned char</code>。</span>
+        <span><b>宏的括号陷阱</b>：<code>#define SQ(x) x*x</code>，写 <code>SQ(1+2)</code> 会展开成 <code>1+2*1+2 = 5</code> 而不是 9。带参数的宏必须给参数和整体都加括号，或干脆用 <code>static inline</code> 函数。</span>
+        <span><b>格式符与参数必须匹配</b>：用 <code>%d</code> 打印 <code>double</code> 是未定义行为，编译器通常只给个警告就放你过去，运行时才炸。</span>
+        <span><b>作用域与生命周期</b>：函数内声明的变量只在函数内可见（局部）；函数外的是全局；加 <code>static</code> 的局部变量只初始化一次、函数返回后仍然存在——这是后面"函数状态"的基础。</span>
+        <span><b>从 ASCII 到 Unicode</b>：ASCII 只有 128 个码位，中文根本放不下；Unicode 是字符集，UTF-8 是它的变长编码（1–4 字节），而 ASCII 正好是 UTF-8 的前 128 个码位——所以纯英文的 C 程序在 UTF-8 世界里不需要任何改动。</span>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Terminology check<span class="cr-alt">术语核对</span></h3>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>中文</th><th>English</th><th>一句话说明</th></tr></thead>
+        <tbody>
+          <tr><td>标识符</td><td>identifier</td><td>给变量、函数、常量起的名字</td></tr>
+          <tr><td>保留字 / 关键字</td><td>reserved word / keyword</td><td>被语法占用，不能用作自定义名字</td></tr>
+          <tr><td>标准库标识符</td><td>library identifier</td><td>声明在头文件里的名字，可覆盖但不该覆盖</td></tr>
+          <tr><td>预处理命令</td><td>preprocessing directive</td><td>以 # 开头，编译之前处理，做文本替换</td></tr>
+          <tr><td>函数头 / 函数体</td><td>function header / body</td><td>返回值类型+函数名+参数列表 / 语句序列</td></tr>
+          <tr><td>形参 / 实参</td><td>parameter / argument</td><td>定义里写的 / 调用时传进去的</td></tr>
+          <tr><td>返回地址</td><td>return address</td><td>调用前记下的"回来的位置"</td></tr>
+          <tr><td>转义序列</td><td>escape sequence</td><td>反斜杠开头的特殊字符写法，如 \n \t \\</td></tr>
+          <tr><td>字面值</td><td>literal</td><td>直接写在代码里、值确定的常量</td></tr>
+          <tr><td>数据类型</td><td>data type</td><td>值的集合 + 可作用的操作集合</td></tr>
+          <tr><td>有符号 / 无符号</td><td>signed / unsigned</td><td>最高位是否为符号位</td></tr>
+          <tr><td>整除 / 截断</td><td>integer division / truncation</td><td>丢掉小数部分，向零取整</td></tr>
+          <tr><td>字符集 / 编码</td><td>character set / encoding</td><td>字符与数字的对应表 / 把这些数字存成字节的规则</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Self-check<span class="cr-alt">学习自检</span></h3>
+      <div class="cr-checks">
+        <label class="cr-check"><input type="checkbox"><span>能说出标识符的三类划分，并解释为什么覆盖库函数名"语法上可以但不该做"。<span class="cr-en">Name the three classes and explain why shadowing printf is legal but unwise.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能背出命名规则的四条硬性要求，并判断 <code>2nd</code>、<code>my-var</code>、<code>_tmp</code>、<code>Int</code> 是否合法。<span class="cr-en">Apply the four hard naming rules to concrete names.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说明 main 为什么既不是保留字也不是"预定义标识符"，以及为什么它唯一。<span class="cr-en">Explain main's real status and its uniqueness.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能画出函数头与函数体，并说出返回值类型、函数名、参数列表三者的作用。<span class="cr-en">Draw a function header and body and explain its three parts.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能解释"调用时记录返回地址"是什么意思，以及为什么函数头后面不能加分号。<span class="cr-en">Explain the return address and the stray-semicolon trap.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说清预处理命令在编译的哪一步发生，以及 #define 与 const 的本质差别。<span class="cr-en">Place preprocessing in the pipeline and contrast #define with const.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能预测 <code>\n</code> 放在内容前后时光标分别停在哪里。<span class="cr-en">Predict where the cursor lands for leading and trailing \n.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能写出 n 位有符号与无符号的范围公式，并算出 16 位、32 位的具体值。<span class="cr-en">Write the range formulas and evaluate them for 16 and 32 bits.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能算对 <code>-7 / 2</code> 与 <code>-7 % 2</code>，并说明为什么 <code>1 / 2</code> 是 0。<span class="cr-en">Compute negative integer division and explain 1/2 == 0.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说清字符与字符串的区别，并用 <code>'a' - 'A'</code> 与 <code>'7' - '0'</code> 各举一个用途。<span class="cr-en">Distinguish char from string and use two code-point identities.</span></span></label>
+      </div>
+    </div>
+
+    <div class="q-host" data-quiz="course-app-05"></div>
+
+    <p class="cr-note">资料来源：2026 年 10 月 15 日"C语言基础语法与数据类型讲解"课堂（07:49–09:35）的飞书 AI 笔记与智能章节（原笔记由工具自动生成并标注"可能存在不准确之处"）。本页逐条核对后做了 <b>10 处更正</b>与 <b>8 处扩充</b>，双语对照，并加入 6 组可操作的交互演示与一套纯英文思维题。课堂布置的三项练习（教材 2.1 节判断标识符、编写屏幕输出程序、把跨行注释改写成逐行注释）建议照做——前两项练的是规则，第三项练的是习惯。<br><span class="cr-en">Source: the Feishu AI notes and smart chapters of the 15 October 2026 session (07:49–09:35), machine-generated and flagged as possibly inaccurate. This page corrects ten points, extends eight, is bilingual, and adds six interactive demos plus an English-only problem set. The three exercises set in class are worth doing: the first two drill the rules, the third drills the habit.</span></p>
   </div>
 </section>
 
@@ -6146,6 +6461,52 @@ img{filter:saturate(1.14) contrast(1.05) brightness(1.02)}
 <script id="q-script">
 (function(){
   var DATA = {
+  'course-app-05': {
+    title: 'Lesson 5 · Identifiers, Functions and Data Types',
+    intro: 'Ten questions that ask you to reason about names, calls and types rather than recall them. All questions are in English; think first, then click.',
+    items: [
+      { q: 'The lecture called main a "predefined identifier". The C standard reserves that term for names the compiler sets up itself. Which statement is correct?',
+        opts: ['main is a keyword, so it cannot be redefined.', 'main is neither a keyword nor a predefined identifier: it is the entry-point function name the standard requires, which is why it must be spelled exactly and appear exactly once.', 'main is a library function declared in stdio.h.', 'main is a macro expanded by the preprocessor.'],
+        a: 1,
+        why: 'Keywords are a closed list; predefined identifiers are __FILE__, __LINE__, __func__ and friends. As an identifier main is ordinary — it is special only because the standard says execution begins by calling it.' },
+      { q: 'A project has two files, each defining int main(void). The compiler reports no syntax error, yet the build fails. Why?',
+        opts: ['A C program may contain only one main, so the duplicate definition collides at link time.', 'Because main must be declared static.', 'Because the preprocessor removes the second definition.', 'Because two source files cannot be compiled together.'],
+        a: 0,
+        why: 'Each file compiles fine on its own. The symbol main is then defined twice and the linker refuses to pick one. The single-main rule is enforced by the linker, not the parser — which is exactly why the error message looks nothing like a syntax error.' },
+      { q: 'Which of these is a legal identifier, and why do the others fail?',
+        opts: ['2ndValue — legal, because digits may appear anywhere.', 'item_count — legal: it starts with a letter and contains only letters, digits and underscores; item-count is parsed as subtraction, and 2items starts with a digit.', 'item count — legal, because the space is ignored.', 'int — legal, because case is irrelevant.'],
+        a: 1,
+        why: 'The first character must be a letter or an underscore; later characters may add digits. Hyphens and spaces are not identifier characters at all, and int is a keyword.' },
+      { q: 'A student writes int Int = 3; and it compiles without complaint. What does that prove?',
+        opts: ['That C is case-insensitive and the keyword is being reused.', 'That identifiers are case-sensitive, so Int is an ordinary name distinct from the keyword int — legal, but a poor choice because it reads like a mistake.', 'That the compiler silently renames it.', 'Nothing: the code is actually illegal.'],
+        a: 1,
+        why: 'If C were case-insensitive this line would be a syntax error. Case sensitivity is what makes Int legal; readability is what makes it a bad idea.' },
+      { q: 'After #define DOUBLE(x) x * 2, what does DOUBLE(3 + 1) evaluate to, and why?',
+        opts: ['8, because arguments are evaluated before substitution.', '5, because a macro parameter is substituted as raw text, giving 3 + 1 * 2.', '8, because the preprocessor adds the parentheses for you.', 'The program does not compile.'],
+        a: 1,
+        why: 'Macros are pure text substitution and know nothing about precedence. Parenthesise both the parameters and the whole body, or use a static inline function instead.' },
+      { q: 'In C99 and later, what are -7 / 2 and -7 % 2?',
+        opts: ['-3 and -1', '-4 and 1', '-3 and 1', '-4 and -1'],
+        a: 0,
+        why: 'Division truncates toward zero and the remainder takes the sign of the dividend: -7 = 2 × (-3) + (-1). The direction of rounding is specified by the standard, not chosen by the compiler.' },
+      { q: 'float half = 1 / 2; What ends up in half, and what is the fix?',
+        opts: ['0.5 — no fix needed.', '0.0 — both operands are ints, so the division is done in integer arithmetic before the assignment; write 1.0 / 2 or cast one operand.', 'A compile error, because the types do not match.', '0.5 on some compilers and 0.0 on others.'],
+        a: 1,
+        why: 'The types of the operands decide the arithmetic, not the type of the destination. This follows directly from literals having types, and it is the most common beginner bug in C.' },
+      { q: 'For n bits, why is it wrong to say the unsigned maximum is twice the signed maximum?',
+        opts: ['Because unsigned numbers lose precision.', 'Because the count of representable values is exactly doubled (2^n versus 2^(n-1)), while the maxima are 2^n − 1 and 2^(n-1) − 1 — at 16 bits that is 65535 versus 32767.', 'Because signed types cannot store zero.', 'Because the standard defines the ratio as exactly 2.'],
+        a: 1,
+        why: 'Say "twice as many values", never "twice the maximum". Boundary checks written from the wrong statement are off by one, which is where real bugs start.' },
+      { q: '"7" minus "0" evaluates to 7 and is guaranteed by the standard; "a" minus "A" evaluates to 32 but is not. What is the reason for the difference?',
+        opts: ['Because letters are stored differently from digits.', 'Because the standard requires the ten digit characters to be contiguous, but says nothing about the ordering or spacing of letters.', 'Because the digit zero is treated as a special case.', 'Because char is a signed type.'],
+        a: 1,
+        why: 'Only the digits are guaranteed contiguous. ASCII-compatible systems, including UTF-8, also make letters contiguous with a gap of 32, but EBCDIC does not — so portable case conversion uses toupper and tolower.' },
+      { q: 'A one-byte char holds a value from 0 to 255 read from a binary file. Which declaration is correct, and why?',
+        opts: ['char c; — it is one byte, so it always fits.', 'unsigned char c; — plain char may be signed, in which case values above 127 would be read as negative numbers.', 'signed char c; — signed types always hold more.', 'short c; — because 255 does not fit in one byte.'],
+        a: 1,
+        why: 'The standard leaves it implementation-defined whether plain char is signed. For raw byte data that must span 0–255, unsigned char is the portable choice.' }
+    ]
+  },
   'course-app-04': {
     title: 'Lesson 4 · Programs, Languages and the Rules of C',
     intro: 'Five questions on what software really is, how C becomes an executable, and why the algorithm matters more than the typing.',
@@ -6764,6 +7125,262 @@ img{filter:saturate(1.14) contrast(1.05) brightness(1.02)}
         '<div class="l3-tiny" style="margin-top:8px">诊断顺序建议：先看<b>语法</b>（编译期）→ 再看<b>符号</b>（链接期）→ 最后看<b>逻辑与内存</b>（运行期）。按这个顺序排查，能少走很多弯路。</div>';
     }
     host.addEventListener('click', function(e){ var t = e.target.closest('.l3-btn'); if (!t) return; cur = parseInt(t.dataset.i, 10); render(); });
+    render();
+  })();
+})();
+</script>
+
+<script id="l5-app-script">
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s).replace(/[&<>]/g, function(c){ return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' })[c]; }); }
+
+  /* Demo 1 · 标识符分类器 */
+  (function(){
+    var input = $('l5-id-in'), stage = $('l5-id-stage');
+    if (!input || !stage) return;
+    var KEYWORDS = 'auto break case char const continue default do double else enum extern float for goto if inline int long register restrict return short signed sizeof static struct switch typedef union unsigned void volatile while _Bool _Complex _Imaginary _Alignas _Atomic _Generic _Noreturn _Static_assert _Thread_local'.split(' ');
+    var LIB = 'printf scanf puts putchar getchar fopen fclose malloc calloc realloc free strlen strcpy strcmp strcat memcpy memset stdout stdin stderr NULL size_t FILE EOF bool true false sqrt pow fabs abs isalpha isdigit toupper tolower'.split(' ');
+    function classify(name){
+      if (!name) return { cls: '（空）', ok: null, why: '输入一个名字试试。' };
+      if (KEYWORDS.indexOf(name) >= 0) return { cls: '保留字 / keyword', ok: false, why: '它是语言语法的一部分。编译器见到它就按语法解释，绝不可能再把它当作名字——所以不能用作自定义标识符。' };
+      if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(name)) {
+        var why = '不符合命名规则的硬性要求：';
+        if (/^[0-9]/.test(name)) why += '首字符是数字（首字符必须是英文字母或下划线）。';
+        if (/[^A-Za-z0-9_]/.test(name)) why += '含有字母、数字、下划线以外的字符（空格、连字符、中文标点都不允许）。';
+        return { cls: '非法标识符', ok: false, why: why };
+      }
+      if (LIB.indexOf(name) >= 0) return { cls: '标准库标识符 / library name', ok: null, why: '语法上合法，但它是标准库已经定义的名字。你确实可以覆盖它，代价是原有功能消失，而且换编译器或换标准库时行为会漂移。不要这么做。' };
+      if (/^__/.test(name) || /^_[A-Z]/.test(name)) return { cls: '自定义标识符（踩到保留区）', ok: null, why: '语法合法，但"下划线加大写字母"或"双下划线"开头的名字是标准留给实现（编译器和标准库）使用的，自己用可能与之冲突。规则上应当避开。' };
+      return { cls: '自定义标识符 / user identifier', ok: true, why: '符合全部命名规则，也没有占用保留字或库名字，是安全的选择。名字越能读出用途，后期越好维护。' };
+    }
+    function render(){
+      var name = input.value.trim(), r = classify(name);
+      var mark = r.ok === true ? '<span class="l3c-ok">合法 ✓</span>' : (r.ok === false ? '<span class="l3c-no">不合法 ✗</span>' : '<span style="color:#a15c00;font-weight:600">合法但需谨慎 △</span>');
+      var extra = '';
+      if (name) {
+        var lower = name.toLowerCase();
+        extra = '<div class="l3-tiny" style="margin-top:8px">长度 ' + name.length + ' 个字符 · 大小写敏感：<code>' + esc(name) + '</code> 与 <code>' + esc(lower) + '</code> ' + (lower === name ? '目前是同一个写法' : '是两个不同的标识符') + '</div>';
+      }
+      stage.innerHTML = '<div class="l3c-val">输入：<code>' + (name ? esc(name) : '（空）') + '</code></div>' +
+        '<div class="l3c-val" style="margin-top:6px">类别：<b>' + r.cls + '</b>　' + mark + '</div>' +
+        '<div class="l3-tiny" style="margin-top:6px">' + r.why + '</div>' + extra;
+    }
+    input.addEventListener('input', render);
+    render();
+  })();
+
+  /* Demo 2 · 函数调用与返回地址 */
+  (function(){
+    var next = $('l5-fn-next'), reset = $('l5-fn-reset'), stage = $('l5-fn-stage'), out = $('l5-fn-out');
+    if (!next || !stage) return;
+    var ADDR = '0x08041A2C';
+    var steps = [
+      { t: '① 顺序执行到调用语句', d: '程序计数器停在第 12 行，<code>int c = add(3, 7);</code> 还没执行完。', stack: [], hl: 0 },
+      { t: '② 记录返回地址', d: '把"下一条要执行的指令"的地址压入调用栈。这就是课堂说的"记录当前地址"——它保证函数回来时知道该往哪走。', stack: [ADDR], hl: 0 },
+      { t: '③ 传递参数并跳转', d: '参数 3 与 7 送进 add，控制权交给 add 的函数体，开始执行 <code>int sum = a + b;</code>。', stack: [ADDR], hl: 1 },
+      { t: '④ 算出返回值', d: 'sum 得到 10，作为返回值准备交回。函数体执行完毕，准备返回。', stack: [ADDR], hl: 1 },
+      { t: '⑤ 按返回地址回到原处', d: '弹出 ' + ADDR + '，控制权回到 main 的第 12 行，c 被赋值为 10，继续往下执行 printf。', stack: [], hl: 0 }
+    ];
+    var i = 0;
+    function render(){
+      var s = steps[i];
+      function ln(txt, indent, on){ return '<div' + (indent ? ' style="padding-left:20px"' : '') + '>' + (on ? '<b>' + txt + '</b>' : txt) + '</div>'; }
+      stage.innerHTML = '<div class="l3-flow">' +
+        ln('int main(void) {', false, false) +
+        ln('int c = add(3, 7);   /* 第 12 行 */', true, i === 0 || i === 4) +
+        ln('printf("%d", c);', true, false) +
+        ln('}', false, false) +
+        ln('int add(int a, int b) {', false, i === 2 || i === 3) +
+        ln('int sum = a + b;', true, i === 2) +
+        ln('return sum;', true, i === 3) +
+        ln('}', false, false) +
+        '</div>' +
+        '<div class="l3-tiny" style="margin-top:8px">调用栈（栈顶在右）</div>' +
+        '<div class="l3-bits" style="justify-content:flex-start">' +
+        (s.stack.length ? s.stack.map(function(a){ return '<span class="l3-cell hi">返回地址 ' + a + '</span>'; }).join('') : '<span class="l3-cell">（空）</span>') +
+        '</div>';
+      out.innerHTML = '<b>' + s.t + '</b><br>' + s.d;
+    }
+    next.addEventListener('click', function(){ i = Math.min(i + 1, steps.length - 1); render(); });
+    reset.addEventListener('click', function(){ i = 0; render(); });
+    render();
+  })();
+
+  /* Demo 3 · printf 格式符 + 转义序列 */
+  (function(){
+    var v = $('l5-pf-v'), f = $('l5-pf-f'), stage = $('l5-pf-stage');
+    var btnHost = $('l5-esc-btns'), escStage = $('l5-esc-stage');
+    if (!v || !f || !stage) return;
+    function fmt(x, spec){
+      var n = parseFloat(x);
+      if (isNaN(n)) return '（数值无效）';
+      if (spec === '%d') return '未定义行为：类型不匹配！先取整再打印 → ' + Math.trunc(n);
+      if (spec === '%e') return n.toExponential(6);
+      if (spec === '%g') return String(Number(n.toPrecision(6)));
+      var m = /^%(-?)(\d*)(?:\.(\d+))?f$/.exec(spec);
+      if (!m) return '（不支持的格式符）';
+      var left = m[1] === '-', width = m[2] ? parseInt(m[2], 10) : 0, dec = m[3] !== undefined ? parseInt(m[3], 10) : 6;
+      var s = n.toFixed(dec);
+      if (width > s.length) s = left ? (s + new Array(width - s.length + 1).join(' ')) : (new Array(width - s.length + 1).join(' ') + s);
+      return s.replace(/ /g, '␣');
+    }
+    function renderFmt(){
+      stage.innerHTML = '<div class="l3c-val">printf("<b>' + esc(f.value) + '</b>\\n", ' + esc(v.value) + ');</div>' +
+        '<div class="l3c-val" style="margin-top:8px">屏幕输出 → <b>' + esc(fmt(v.value, f.value)) + '</b></div>' +
+        '<div class="l3-tiny" style="margin-top:6px">␣ 表示填充的空格。宽度与小数位数都由格式符决定，改格式符不改数据。</div>';
+    }
+    v.addEventListener('input', renderFmt); f.addEventListener('change', renderFmt); renderFmt();
+
+    if (!btnHost || !escStage) return;
+    var ESC = [
+      { label: 'printf("Hello\\nWorld\\n");', lines: ['Hello', 'World', '│'], cursor: '第 3 行行首', note: '结尾的 \\n 让光标停在输出之后的新一行。' },
+      { label: 'printf("Hello\\n");', lines: ['Hello', '│'], cursor: '第 2 行行首', note: '先输出内容再换行，所以屏幕上会多出一个空行的位置。' },
+      { label: 'printf("\\nHello");', lines: ['', 'Hello │'], cursor: '第 2 行 Hello 之后', note: '先换行再输出，光标停在文本末尾——行数一样，落点不同。' },
+      { label: 'printf("Hello\\\\nWorld");', lines: ['Hello\\nWorld │'], cursor: '同一行末尾', note: '\\\\ 输出一个反斜杠，所以 \\n 变成了普通文本，不再换行。' },
+      { label: 'printf("A\\tB\\tC");', lines: ['A       B       C │'], cursor: '同一行末尾', note: '\\t 是制表符，常用来对齐表格列。' },
+      { label: 'printf("Quote: \\"ok\\"");', lines: ['Quote: "ok" │'], cursor: '同一行末尾', note: '\\" 用来在字符串内部输出双引号。' }
+    ];
+    var cur = 0;
+    function renderEsc(){
+      var e = ESC[cur];
+      btnHost.innerHTML = ESC.map(function(x, i){
+        return '<button class="l3-btn" data-i="' + i + '"' + (i === cur ? ' style="background:#2f2a22;color:#fdf8ee"' : '') + '>' + (i + 1) + '</button>';
+      }).join('') + '<span class="l3-tiny" style="margin-left:8px">点编号切换转义写法</span>';
+      escStage.innerHTML = '<div class="l3c-val"><code>' + esc(e.label) + '</code></div>' +
+        '<div style="margin:8px 0 0;padding:10px 12px;border-radius:10px;background:#2f2a22;color:#f8f3e7;font:13px/1.95 ui-monospace,Consolas,monospace">' +
+        e.lines.map(function(L){ return '<div>' + (L === '' ? '&nbsp;' : esc(L)) + '</div>'; }).join('') + '</div>' +
+        '<div class="l3-tiny" style="margin-top:6px">光标最终停在：<b>' + e.cursor + '</b>。' + e.note + '</div>';
+    }
+    btnHost.addEventListener('click', function(e){ var t = e.target.closest('.l3-btn'); if (!t) return; cur = parseInt(t.dataset.i, 10); renderEsc(); });
+    renderEsc();
+  })();
+
+  /* Demo 4 · 范围与符号位 */
+  (function(){
+    var nR = $('l5-it-n'), nV = $('l5-it-nv'), tR = $('l5-it-t'), stage = $('l5-it-stage'), out = $('l5-it-out');
+    if (!nR || !stage) return;
+    function fmtInt(x){
+      if (Math.abs(x) >= 1e15) return x.toExponential(6);
+      return x.toLocaleString('en-US');
+    }
+    function render(){
+      var n = parseInt(nR.value, 10), signed = tR.value === 's';
+      nV.textContent = n;
+      var loS = -Math.pow(2, n - 1), hiS = Math.pow(2, n - 1) - 1;
+      var hiU = Math.pow(2, n) - 1;
+      var countS = Math.pow(2, n - 1), countU = Math.pow(2, n);
+      var cells = '';
+      if (n <= 16) {
+        for (var i = n - 1; i >= 0; i--) {
+          cells += '<span class="l3-cell' + (signed && i === n - 1 ? ' hi' : '') + '">' + (signed && i === n - 1 ? 'S' : 'n') + '</span>';
+        }
+      } else {
+        cells = '<span class="l3-cell' + (signed ? ' hi' : '') + '">' + (signed ? 'S' : 'n') + '</span>' +
+          '<span class="l3-cell">n</span><span class="l3-cell">n</span><span class="l3-cell">n</span>' +
+          '<span class="l3-tiny" style="margin:0 6px">… 共 ' + n + ' 位 …</span>' +
+          '<span class="l3-cell">n</span><span class="l3-cell">n</span><span class="l3-cell">n</span><span class="l3-cell">n</span>';
+      }
+      var ratio = hiU / hiS;
+      stage.innerHTML = '<div class="l3-bits" style="justify-content:flex-start">' + cells + '</div>' +
+        '<div class="l3-tiny" style="margin-top:4px">' + (signed ? '最高位 S 是符号位，剩下 ' + (n - 1) + ' 位表示数值。' : '没有符号位，' + n + ' 位全部用于表示数值。') + '</div>' +
+        '<div class="l3-flow" style="margin-top:10px">' +
+        '<div>有符号： ' + fmtInt(loS) + ' … ' + fmtInt(hiS) + '</div>' +
+        '<div>无符号： 0 … ' + fmtInt(hiU) + '</div>' +
+        '</div>' +
+        '<div class="l3c-grid2" style="margin-top:10px">' +
+        '<div class="l3c-mini">有符号可表示的<b>数值个数</b><br><b>' + fmtInt(countS) + '</b> = 2^' + (n - 1) + '</div>' +
+        '<div class="l3c-mini">无符号可表示的<b>数值个数</b><br><b>' + fmtInt(countU) + '</b> = 2^' + n + '</div>' +
+        '</div>';
+      out.innerHTML = '位数 <b>' + n + '</b>，占 <b>' + Math.ceil(n / 8) + '</b> 字节（按 8 位一字节计）。' +
+        '数值个数之比恰好是 <b>2</b>（2^' + n + ' ÷ 2^' + (n - 1) + '），' +
+        '但上限之比是 <b>' + ratio.toFixed(6) + '</b>——<span class="l3c-no">不是恰好 2</span>。' +
+        '所以"无符号范围是有符号的 2 倍"只在"个数"的意义上成立。';
+    }
+    nR.addEventListener('input', render); tR.addEventListener('change', render); render();
+  })();
+
+  /* Demo 5 · 整除与截断 */
+  (function(){
+    var a = $('l5-dv-a'), b = $('l5-dv-b'), out = $('l5-dv-out'), stage = $('l5-dv-stage');
+    if (!a || !b || !out) return;
+    function render(){
+      var A = parseInt(a.value, 10), B = parseInt(b.value, 10);
+      if (isNaN(A) || isNaN(B)) { out.textContent = '请输入两个整数。'; if (stage) stage.innerHTML = ''; return; }
+      if (B === 0) {
+        out.innerHTML = '<b>除零是未定义行为（UB）</b>：标准没有规定 <code>' + A + ' / 0</code> 的结果，编译器甚至可以假定它不会发生，从而把周围的判断"优化"掉。整数除零通常直接让程序崩溃（SIGFPE），浮点除零则得到 ±inf。';
+        if (stage) stage.innerHTML = '';
+        return;
+      }
+      var q = Math.trunc(A / B), r = A - q * B, exact = A / B, fl = Math.floor(exact);
+      out.innerHTML = '<div class="l3c-val">C 整除　　' + A + ' / ' + B + ' = <b>' + q + '</b>　（向零截断）</div>' +
+        '<div class="l3c-val">C 取余　　' + A + ' % ' + B + ' = <b>' + r + '</b>　（符号跟随被除数）</div>' +
+        '<div class="l3c-val">浮点结果　' + A + '.0 / ' + B + ' = <b>' + exact + '</b>　（含小数）</div>' +
+        '<div class="l3-tiny" style="margin-top:6px">恒等式校验：a = b × q + r → ' + A + ' = ' + B + ' × (' + q + ') + (' + r + ') ✓</div>';
+      if (stage) {
+        stage.innerHTML = '<div class="l3c-grid2">' +
+          '<div class="l3c-mini">数学上的向下取整 floor<br><b>' + fl + '</b><br><span class="l3-tiny">把 −3.5 变成 −4</span></div>' +
+          '<div class="l3c-mini">C 的向零截断 trunc<br><b>' + q + '</b><br><span class="l3-tiny">把 −3.5 变成 −3</span></div>' +
+          '</div>' +
+          '<div class="l3-tiny" style="margin-top:8px">' + (A < 0 ? '负数时两者结果不同——这正是原笔记漏掉的那句话。' : '正数时两者结果相同，所以这个坑通常在做负数运算或写通用代码时才暴露出来。') + '</div>';
+      }
+    }
+    a.addEventListener('input', render); b.addEventListener('input', render);
+    a.addEventListener('change', render); b.addEventListener('change', render);
+    render();
+  })();
+
+  /* Demo 6 · ASCII 位翻转 */
+  (function(){
+    var ch = $('l5-as-ch'), caseBtn = $('l5-as-case'), nextBtn = $('l5-as-next'),
+        bitsEl = $('l5-as-bits'), idxEl = $('l5-as-idx'), out = $('l5-as-out');
+    if (!ch || !bitsEl) return;
+    function cur(){ return (ch.value && ch.value.length) ? ch.value[0] : 'A'; }
+    function render(){
+      var c = cur(), code = c.charCodeAt(0);
+      var isLetter = /[A-Za-z]/.test(c);
+      var bin = (code < 128) ? code.toString(2).padStart(7, '0') : code.toString(2);
+      var html = '', idx = '';
+      for (var i = 0; i < bin.length; i++) {
+        var bitPos = bin.length - 1 - i;
+        var isCaseBit = (bin.length === 7 && bitPos === 5);
+        html += '<span class="l3-bit' + (bin[i] === '1' ? ' on' : '') + (isCaseBit ? ' sign' : '') + '">' + bin[i] + '</span>';
+        idx += '<span>' + bitPos + '</span>';
+      }
+      bitsEl.innerHTML = html;
+      if (idxEl) {
+        idxEl.innerHTML = '';
+        for (var j = 0; j < bin.length; j++) { idxEl.insertAdjacentHTML('beforeend', '<span style="width:38px;text-align:center">位 ' + (bin.length - 1 - j) + '</span>'); }
+      }
+      var info = '<div class="l3c-val">字符 <b>' + esc(c) + '</b>　十进制 <b>' + code + '</b>　十六进制 <b>0x' + code.toString(16).toUpperCase() + '</b>　二进制 <b>' + bin + '</b></div>';
+      if (isLetter) {
+        var upper = c.toUpperCase(), lower = c.toLowerCase();
+        var other = (c === upper) ? lower : upper;
+        info += '<div class="l3c-val" style="margin-top:6px">大小写只差第 5 位（值 32）：<b>' + esc(other) + '</b> = ' + other.charCodeAt(0) + '　差值为 <b>' + Math.abs(upper.charCodeAt(0) - lower.charCodeAt(0)) + '</b></div>' +
+          '<div class="l3-tiny" style="margin-top:6px">这就是 <code>c + 32</code> 能切换大小写的原因（仅在 ASCII 兼容编码下成立；可移植写法是 <code>toupper()</code> / <code>tolower()</code>）。</div>';
+      } else if (/[0-9]/.test(c)) {
+        info += '<div class="l3c-val" style="margin-top:6px">字符数字转数值：<b>' + esc(c) + ' − 0</b> = ' + code + ' − 48 = <b>' + (code - 48) + '</b></div>' +
+          '<div class="l3-tiny" style="margin-top:6px">数字 0–9 的编码连续，这一条是标准<b>保证</b>的，所以 <code>c - ' + "'0'" + '</code> 在任何平台都能用。</div>';
+      } else {
+        info += '<div class="l3-tiny" style="margin-top:6px">换个字母或数字试试，可以看出大小写与 ASCII 编码的关系。</div>';
+      }
+      if (code > 127) info += '<div class="l3-tiny" style="margin-top:6px">注意：这个字符超出标准 ASCII（0–127），属于 Unicode 范围，内存中不止一个字节。</div>';
+      out.innerHTML = info;
+    }
+    ch.addEventListener('input', render);
+    if (caseBtn) caseBtn.addEventListener('click', function(){
+      var c = cur();
+      if (/[A-Za-z]/.test(c)) { ch.value = (c === c.toUpperCase()) ? c.toLowerCase() : c.toUpperCase(); }
+      render();
+    });
+    if (nextBtn) nextBtn.addEventListener('click', function(){
+      var c = cur();
+      var isUpper = c === c.toUpperCase();
+      var code = c.toUpperCase().charCodeAt(0);
+      if (code >= 65 && code < 90) { ch.value = String.fromCharCode(code + 1 + (isUpper ? 0 : 32)); }
+      else { ch.value = isUpper ? 'A' : 'a'; }
+      render();
+    });
     render();
   })();
 })();
