@@ -2387,6 +2387,13 @@ async function refreshEventHistory(){
         <span class="cr-en">The three classes of identifiers and the naming rules, what main really is, function headers and bodies, printf and preprocessing, escape sequences, the integer family and the sign bit, characters and ASCII — nine corrections, eight extensions, six interactive demos and an English-only problem set.</span>
         <span class="cr-go">进入第五课 / Open Lesson 5 →</span>
       </a>
+      <a href="#course-app-06">
+        <div class="cr-label mono">LESSON 06 / FLOATING POINT AND BYTES</div>
+        <h3>Lesson 6: Floating-Point Types, sizeof, and Byte Order<span class="cr-alt">浮点类型、sizeof 与字节序</span></h3>
+        <p>2026 年 10 月 16 日课堂（09:41–11:27）：无符号与有符号的精确关系、转义序列与文件路径、float/double/long double 的字节与有效数字、IEEE 754 位布局、sizeof 的两种用法、小端与大端、字符的算术运算、printf 格式符总结；含 8 处纠错、8 处拓展与 5 组交互演示。</p>
+        <span class="cr-en">The exact relation between unsigned and signed maxima, escape sequences and file paths, the three floating-point types, the IEEE 754 layout, the two forms of sizeof, little versus big endian, character arithmetic and the printf specifiers — eight corrections, eight extensions and five interactive demos.</span>
+        <span class="cr-go">进入第六课 / Open Lesson 6 →</span>
+      </a>
     </div>
   </div>
 </section>
@@ -3457,6 +3464,281 @@ int main(void) {
   </div>
 </section>
 
+<section class="page" data-view="course-app-06" data-sections="Twelve sections: review and homework · the exact unsigned relation · escape sequences and file paths · the three floating-point types · the IEEE 754 layout · sizeof · byte order · arithmetic and characters · printf specifiers · corrections · extensions · terminology and self-check">
+  <div class="wrap page-intro">
+    <div class="kicker mono">LESSON 06 / FLOATING POINT AND BYTES</div><div class="fr-mot">Leçon 6 · Virgule flottante et octets</div>
+    <h1>Lesson 6: Floating-Point Types, sizeof, and Byte Order<span class="cr-sub">高级语言程序设计课程要点第六课：浮点类型、sizeof 与字节序</span></h1>
+    <p>2026 年 10 月 16 日课堂（09:41–11:27）整理、纠错与扩充 / Based on the session of 16 October 2026, corrected and extended</p>
+  </div>
+  <div class="wrap section">
+    <div class="cr-subnav cr-nav-course" data-active="course-app"></div>
+    <div class="section-head">
+      <div>
+        <div class="kicker mono">LESSON CONTENT / 本课内容</div>
+        <h2>Real Numbers in a Binary Machine<span class="cr-alt">二进制机器里的实数</span></h2>
+      </div>
+      <span class="tag mono">2026.10.16 · CN / EN</span>
+    </div>
+
+    <div class="cr-grid">
+      <div class="cr-card"><div class="cr-label mono">THEME</div><strong>Integers are exact, reals are approximated</strong><span class="cr-alt">整数是精确的，实数是近似的</span><p>上一课把整数家族讲完了。这一课进入浮点数：它能把 3.14 装进内存，代价是<b>多数十进制小数根本没有精确的二进制形式</b>。</p></div>
+      <div class="cr-card"><div class="cr-label mono">KEY RELATION</div><strong>U<sub>max</sub> = 2 × S<sub>max</sub> + 1</strong><span class="cr-alt">无符号上限的精确关系</span><p>课堂说"无符号最大值是两倍还多一"，这句话<b>精确成立</b>：16 位时 2×32767+1 = 65535。它比"两倍"更值得记。</p></div>
+      <div class="cr-card"><div class="cr-label mono">HARD POINT</div><strong>0.1 has no exact binary form</strong><span class="cr-alt">0.1 没有精确的二进制表示</span><p>就像 1/3 写不尽十进制小数一样，0.1 在二进制里是无限循环。所以 <code>0.1f + 0.2f != 0.3f</code> 不是 bug。</p></div>
+      <div class="cr-card"><div class="cr-label mono">BYTE ORDER</div><strong>Endianness belongs to the CPU</strong><span class="cr-alt">字节序是处理器的事</span><p>课堂说"PC 端 C 语言默认小端"——方向对，但主体错了：<b>字节序由体系结构决定，C 语言本身不做规定</b>。</p></div>
+      <div class="cr-card"><div class="cr-label mono">INTERACTIVE</div><strong>Five embedded demos</strong><span class="cr-alt">五组交互演示</span><p>精确关系验证器、转义与路径试验台、IEEE 754 位分解器、sizeof 查询台、内存字节序可视化。</p></div>
+      <div class="cr-card"><div class="cr-label mono">SOURCE</div><strong>Feishu AI notes, verified</strong><span class="cr-alt">飞书 AI 笔记 · 已逐条核对</span><p>原笔记由工具自动生成并标注"可能存在不准确之处"。本页做了 8 处更正与 8 处扩充，附一套纯英文思维题。</p></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>1 · Review, and the homework that matters<span class="cr-alt">1 · 回顾，以及那些真正重要的作业</span></h3>
+      <p>这次课前半段是复习与实操，但值得单独记下来的有三件事：</p>
+      <p><strong>第一，标识符规则要能背出来。</strong>自定义标识符必须以<b>字母或下划线开头</b>，整串只能由<b>字母、数字、下划线</b>组成；不能用保留字；库函数名属于标准标识符，能被覆盖但不该覆盖（第 5 课做过分类器）。</p>
+      <p><strong>第二，作业是"数据类型匹配"和"数制转换"。</strong>前者的判断依据是<b>数据的取值范围与是否需要小数</b>：学生成绩可以是整数也可以是小数（看要求），四个成绩求平均必然出现小数，所以用 <code>float</code>；一个月有几天永远是整数，用整型。后者是把科学计数法与普通十进制来回换：<code>6.34E5 = 634000</code>，<code>126 = 1.26 × 10²</code>。</p>
+      <p><strong>第三，老师重复了很多次的一句话：</strong>听懂、理解、能讲给别人听是三个不同的层次。这条放在数学课（第 5 课）和编程课都成立——<b>程序员的"理解"以能不能一次编译通过为检验标准</b>。</p>
+      <p class="cr-en">Three things worth keeping from the review: the identifier rules verbatim; the homework logic — pick a type from the value range and whether fractions are needed (an average of four marks must allow decimals, the days in a month never do); and the lecturer's repeated point that hearing, understanding and explaining are three different levels.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>2 · The exact relation between unsigned and signed<span class="cr-alt">2 · 无符号与有符号的精确关系</span></h3>
+      <p>上一课的纠错表里有一条："无符号数的表示范围上限是带符号数的 2 倍"——我在那里写成"上限之比不是恰好 2"。这次课堂给了一个<b>更精确、也更好记</b>的说法：</p>
+      <div class="cr-formula">U_max = 2 × S_max + 1        （n 位，S_max = 2^(n−1) − 1，U_max = 2^n − 1）
+16 位：2 × 32767 + 1 = 65535   ✓</div>
+      <p><strong>所以"两倍还多一"是严格的恒等式，不是近似。</strong>它和"个数是 2 倍"其实是同一件事的两种写法——只要记住其中一条，另一条可以现场推出来。这个关系在写边界检查时很实用：<code>unsigned</code> 能存下 <code>int</code> 能存的两倍还多一个值。</p>
+      <p class="cr-en">The lecture's phrasing — the unsigned maximum is "twice and one more" — is an exact identity, not an approximation: U_max = 2·S_max + 1. It is the same fact as "twice as many values", written in a form you can use directly in boundary checks.</p>
+      <p><strong>顺带把上一课的表述收紧：</strong>"个数精确 2 倍"和"上限 2 倍还多 1"都对，唯一错的是"上限恰好 2 倍"。</p>
+
+      <div class="l3-demo">
+        <h4>Demo 1 · Verify U<sub>max</sub> = 2·S<sub>max</sub> + 1<span class="cr-alt">演示一 · 验证无符号上限的精确关系</span></h4>
+        <p class="l3-sub">拖动位宽，右栏直接比较"个数之比"与"精确恒等式" / Drag the width and compare the two statements.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">位数 n = <input type="range" id="l6-ur-n" min="4" max="64" step="4" value="16"> <span class="l3-out" id="l6-ur-nv">16</span></label>
+        </div>
+        <div class="l3c-stage" id="l6-ur-stage"></div>
+        <div class="l3-out" id="l6-ur-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>3 · Escape sequences, and the file-path trap<span class="cr-alt">3 · 转义序列，以及文件路径那个坑</span></h3>
+      <p>第 5 课讲过 <code>\n</code> 与光标位置。这次课补齐了常用的几个，并且给了一个<b>非常实际</b>的应用场景：<b>Windows 文件路径必须写双反斜杠</b>。</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th class="cr-c">转义</th><th>含义</th><th>典型用途</th></tr></thead>
+        <tbody>
+          <tr><td class="cr-c mono">\n</td><td>换行</td><td>换行输出</td></tr>
+          <tr><td class="cr-c mono">\t</td><td>制表（Tab）</td><td>列对齐</td></tr>
+          <tr><td class="cr-c mono">\\</td><td>一个反斜杠</td><td><b>Windows 路径</b>：<code>"D:\\code\\c\\hello.c"</code></td></tr>
+          <tr><td class="cr-c mono">\"</td><td>一个双引号</td><td>在字符串内部输出引号</td></tr>
+          <tr><td class="cr-c mono">\'</td><td>一个单引号</td><td>字符常量：<code>'\''</code></td></tr>
+          <tr><td class="cr-c mono">\0</td><td>空字符</td><td>字符串结束标志</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>为什么路径要用双反斜杠：</strong>编译器先做转义处理，再理解字符串。<code>"D:\code\c"</code> 里的 <code>\c</code> 会被当成一个转义序列——而 <code>\c</code> 没有定义。C 标准要求编译器对此<b>给出诊断</b>；即使某个编译器宽容地放过去，得到的路径也已经不是你以为的那个了。写成 <code>"D:\\code\\c"</code>，转义后才是真正的 <code>D:\code\c</code>。</p>
+      <p class="cr-en">Write double backslashes in Windows paths: the compiler processes escapes before it understands the string, so "D:\code\c" contains the undefined escape \c. The standard requires a diagnostic, and even a lenient compiler has already lost the path you meant.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 2 · Escape and path workbench<span class="cr-alt">演示二 · 转义与路径试验台</span></h4>
+        <p class="l3-sub">输入一段路径或文本，看它需要怎么转义、最终输出什么 / Type a path or text and see the escapes it needs.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">原文 <input type="text" id="l6-esc-in" value="D:\code\c" spellcheck="false" style="width:280px"></label>
+        </div>
+        <div class="l3-out" id="l6-esc-out"></div>
+        <div class="l3c-stage" id="l6-esc-stage"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>4 · The three floating-point types<span class="cr-alt">4 · 浮点类型三兄弟</span></h3>
+      <p>浮点数就是计算机里的"实数"。C 提供三个精度档次，差别只有三件事：<b>占几个字节</b>、<b>有几位有效数字</b>、<b>能表示多大</b>。</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>类型</th><th class="cr-c">典型字节</th><th class="cr-c">有效数字（十进制）</th><th>字面值后缀</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">float</td><td class="cr-c">4</td><td class="cr-c">6–7 位</td><td class="mono">3.14f / 3.14F</td><td>单精度，够用但要小心精度</td></tr>
+          <tr><td class="mono">double</td><td class="cr-c">8</td><td class="cr-c">15–16 位</td><td class="mono">3.14（默认）</td><td>最常用，<b>不写后缀就是它</b></td></tr>
+          <tr><td class="mono">long double</td><td class="cr-c">8 / 12 / 16</td><td class="cr-c">18–19 位（视实现）</td><td class="mono">3.14L</td><td>精度最高，但各平台差别最大</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>三处要收紧的地方：</strong>其一，<b>"默认是 double"是标准规定的</b>——写 <code>3.14</code> 得到 double，写 <code>3.14f</code> 才是 float，写 <code>3.14L</code> 是 long double。这条最实用：把 <code>float r = 3.14;</code> 写出来，<b>会先把 double 常量截成 float</b>，多一次转换，某些编译器还会警告。</p>
+      <p>其二，<b>字节数不是语言保证</b>。标准只保证 <code>float ≤ double ≤ long double</code> 的精度顺序。4/8 是 IEEE 754 单/双精度的常见实现。</p>
+      <p>其三，"<b>long double 有效数字 18–19 位</b>"只在 x86 的 80 位扩展精度下成立；在 MSVC 上 <code>long double</code> 就是 <code>double</code>（15–16 位）。<b>所以别把 long double 当成"一定更准"的万能钥匙。</b></p>
+      <p class="cr-en">Three things to tighten: the default literal type really is double (so float r = 3.14 performs a narrowing conversion); the byte counts are conventions, not guarantees; and the 18–19 digit figure for long double holds on x86 80-bit extended precision — on MSVC it is simply double.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>5 · Inside a float: the IEEE 754 layout<span class="cr-alt">5 · 浮点数的内部：IEEE 754 的位布局</span></h3>
+      <p>课堂给出了位分配，这是理解"为什么 0.1 不精确"的入口：</p>
+      <div class="cr-formula">float  (32 位) = 1 位符号 + 8 位指数 + 23 位尾数
+double (64 位) = 1 位符号 + 11 位指数 + 52 位尾数</div>
+      <p><strong>这相当于二进制的科学计数法：</strong>± 1.xxxxx × 2^e。符号位管正负，指数位管大小（存的是"指数 + 偏移量"），尾数位管精度。所以<b>有效数字的位数由尾数位数决定</b>——23 位尾数对应约 7 位十进制（log₁₀2²³ ≈ 6.9），52 位对应约 16 位（log₁₀2⁵² ≈ 15.7）。这就是表格里那两个数字的来源。</p>
+      <p class="cr-en">A float is binary scientific notation: sign, biased exponent, mantissa. The mantissa width sets the precision — 23 bits give about 7 decimal digits and 52 bits about 16, which is where the table's numbers come from.</p>
+      <p><strong>为什么 0.1 存不准：</strong>0.1 的二进制展开是 0.0001100110011…（1100 无限循环）。尾数只有 23 位，写到第 24 位就必须截断，于是存进去的是<b>一个很接近 0.1 但不是 0.1 的数</b>。这不是 C 的缺陷，是所有用二进制定点尾数的语言共同面对的事实——十进制里 1/3 也写不完。</p>
+      <p><strong>由此得到三条实用规则：</strong>不要用 <code>==</code> 比较两个浮点数（改用 <code>fabs(a-b) &lt; 1e-6</code>）；不要用浮点数做金额计算（用整数分或定点数）；<code>0.1f + 0.2f != 0.3f</code> 是正常现象，不是编译器坏了。</p>
+      <p class="cr-en">0.1 has an infinite binary expansion, so the mantissa truncates and the stored value is merely close. Hence: never compare floats with ==, never use them for money, and 0.1f + 0.2f != 0.3f is expected behaviour.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 3 · IEEE 754 bit viewer<span class="cr-alt">演示三 · IEEE 754 位分解器</span></h4>
+        <p class="l3-sub">输入一个数，看它被切成符号、指数、尾数三段；试试 0.1 会发现它存不精确 / Type a number and watch the mantissa truncate.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">数值 <input type="number" id="l6-fp-v" value="0.1" step="any" style="width:120px"></label>
+          <label class="l3-ctl">精度 <select id="l6-fp-t"><option value="32" selected>float（32 位）</option><option value="64">double（64 位）</option></select></label>
+        </div>
+        <div class="l3c-stage" id="l6-fp-stage"></div>
+        <div class="l3-out" id="l6-fp-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>6 · sizeof: an operator, not a function<span class="cr-alt">6 · sizeof：是运算符，不是函数</span></h3>
+      <p>课堂特意强调：<b>sizeof 是 C 语言的保留字</b>（运算符），不是函数库里的函数。它返回指定类型、变量或表达式<b>占用的字节数</b>。两种写法要分清：</p>
+      <div class="cr-formula">sizeof x         /* 作用于变量或表达式：括号可省 */
+sizeof(int)      /* 作用于类型名：括号必须有，否则 sizeof int 是语法错误 */</div>
+      <p><strong>两个容易忽略的点：</strong>其一，sizeof 的结果类型是 <code>size_t</code>，是<b>无符号</b>整型，打印要用 <code>%zu</code>（用 <code>%d</code> 在 64 位平台上是未定义行为）。其二，sizeof 在编译期就求值（变长数组除外），所以 <code>sizeof(x++)</code> 不会真的自增——<b>它不求值表达式</b>。</p>
+      <p class="cr-en">sizeof is a keyword. Parentheses are optional for variables but required for type names. Its result is size_t, so print it with %zu; and it does not evaluate its operand, so sizeof(x++) never increments x.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 4 · sizeof reference table<span class="cr-alt">演示四 · sizeof 参考台</span></h4>
+        <p class="l3-sub">选一个类型，看它在典型平台上的字节数与取值范围，以及该用哪个格式符打印 / Pick a type and read its size, range and format specifier.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">类型 <select id="l6-sz-t">
+            <option value="char" selected>char</option><option value="short">short</option><option value="int">int</option>
+            <option value="long">long（Linux 64 位）</option><option value="float">float</option><option value="double">double</option>
+            <option value="longdouble">long double</option><option value="size_t">size_t</option><option value="ptr">指针</option>
+          </select></label>
+        </div>
+        <div class="l3c-stage" id="l6-sz-stage"></div>
+        <div class="l3-out" id="l6-sz-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>7 · Byte order: little endian and big endian<span class="cr-alt">7 · 字节序：小端与大端</span></h3>
+      <p>同样的 32 位二进制内容，放进内存时"先放哪个字节"是一个约定，这个约定就叫<b>字节序</b>。</p>
+      <div class="cr-bullets">
+        <span><b>小端（little endian）</b>：<b>低</b>位字节放在<b>低</b>地址。x86 / x64 以及绝大多数 ARM 默认如此——课堂说的"PC 端默认小端"指的就是这个。</span>
+        <span><b>大端（big endian）</b>：<b>高</b>位字节放在低地址。网络协议（TCP/IP）统一采用大端，所以叫"网络字节序"。</span>
+      </div>
+      <p><strong>这里要更正课堂表述的主体：</strong>字节序是<b>处理器体系结构</b>的属性，<b>C 语言标准完全不规定字节序</b>。所以不能写"PC 端 C 语言默认小端"，准确说法是"<b>x86/x64 处理器采用小端，因此在这些平台上运行的程序是小端</b>"。某些 ARM 处理器甚至可以运行时切换字节序。</p>
+      <p class="cr-en">Endianness belongs to the processor architecture, not to C. x86/x64 is little endian, which is why PCs are; network protocols standardise on big endian. The C standard is silent on the matter.</p>
+      <p><strong>为什么这件事要紧：</strong>只要数据不离开本机（同一进程、同一平台），字节序对你是透明的。一旦跨越边界——<b>写二进制文件、走网络、和别的语言或别的架构交换数据</b>——就必须约定字节序，否则 0x12345678 会被读成 0x78563412。判定的经典写法是把一个已知整数按字节打印出来看。</p>
+      <p class="cr-en">Endianness matters the moment data crosses a boundary: binary files, networks, or another architecture. Within one process on one platform it is invisible.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 5 · Watch the bytes in memory<span class="cr-alt">演示五 · 看内存里的字节顺序</span></h4>
+        <p class="l3-sub">输入一个整数，看它的四个字节在内存里谁在前；切换字节序看同一份内容如何被解释 / Type an integer and compare the two orderings.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">整数 <input type="number" id="l6-bo-v" value="305419896" step="1" style="width:150px"></label>
+          <span class="l3-tiny">试试 <code>305419896</code> = 0x12345678</span>
+        </div>
+        <div class="l3c-stage" id="l6-bo-stage"></div>
+        <div class="l3-out" id="l6-bo-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>8 · Arithmetic, and why characters can be added<span class="cr-alt">8 · 算术运算，以及字符为什么能相加</span></h3>
+      <p>运算符就是 <code>+ − * / %</code>。其中两条要特别注意：</p>
+      <p><strong>取余 <code>%</code> 只适用于整数</strong>（浮点数要用 <code>fmod()</code>）。而且第 5 课讲过：余数的符号跟随<b>被除数</b>，<code>-7 % 2 = -1</code>。</p>
+      <p><strong>字符型属于整数大类，所以字符可以直接参与运算</strong>——运算时用的是它的 ASCII 码值。这是 C 里很优雅的一件事：</p>
+      <div class="cr-formula">'A' + 1        →  66  →  按 %c 输出就是 'B'
+'Z' - 'A'      →  25      （字母表里的位置差）
+'a' - 'A'      →  32      （大小写之差）
+'7' - '0'      →   7      （字符数字 → 数值）</div>
+      <p>课堂演示的就是 <code>'A' + 1</code>：同一个表达式，用 <code>%d</code> 打印得 66，用 <code>%c</code> 打印得 B。<b>值没变，变的是显示方式。</b>这正好把格式符和类型两条线索接到了一起。</p>
+      <p class="cr-en">A char is an integer, so 'A' + 1 is 66 — print it with %d and you see 66, with %c and you see B. The value never changed; only the display did.</p>
+      <p class="cr-note" style="margin-top:6px">小提醒：代码里的空格只影响排版与可读性，不影响编译结果——但<b>不能插在标识符或运算符中间</b>，那会直接改变词法。</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>9 · printf specifiers, collected<span class="cr-alt">9 · printf 格式符汇总</span></h3>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th class="cr-c">格式符</th><th>含义</th><th>例（值为 65 / 65.5）</th></tr></thead>
+        <tbody>
+          <tr><td class="cr-c mono">%d</td><td>十进制整数</td><td><code>65</code></td></tr>
+          <tr><td class="cr-c mono">%c</td><td>按字符输出（用该整数的 ASCII 码）</td><td><code>A</code></td></tr>
+          <tr><td class="cr-c mono">%f</td><td>浮点数，<b>默认 6 位小数</b></td><td><code>65.500000</code></td></tr>
+          <tr><td class="cr-c mono">%.2f</td><td>保留 2 位小数（四舍五入）</td><td><code>65.50</code></td></tr>
+          <tr><td class="cr-c mono">%e</td><td>科学计数法</td><td><code>6.550000e+01</code></td></tr>
+          <tr><td class="cr-c mono">%zu</td><td>size_t（sizeof 的结果）</td><td><code>4</code></td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>两个必须记住的差别：</strong>其一，<code>printf</code> 里 float 会被自动提升为 double（默认实参提升），所以 <code>%f</code> 同时能打印 float 和 double；但 <code>scanf</code> 不会提升，<b>读 float 必须用 <code>%f</code>、读 double 必须用 <code>%lf</code></b>。其二，格式符与实参类型不匹配是<b>未定义行为</b>——用 <code>%d</code> 打印 double 时编译器通常只给个警告就放你过去，运行时才炸。</p>
+      <p class="cr-en">printf promotes float to double, so %f serves both; scanf does not, so it needs %f for float and %lf for double. A specifier that disagrees with its argument is undefined behaviour — and the compiler often only warns.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>Corrections to the original notes<span class="cr-alt">对原笔记的更正（8 处）</span></h3>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>原笔记说法</th><th>更正</th><th>为什么重要</th></tr></thead>
+        <tbody>
+          <tr><td>"PC 端 C 语言默认采用小端存储"</td><td>字节序由<b>处理器架构</b>决定，<b>C 标准不规定字节序</b>。准确说法：x86/x64 是小端，因此这些平台上运行的程序是小端</td><td>写成"语言默认"会让人以为换编译器就能改变，也会误判跨平台数据交换</td></tr>
+          <tr><td>"float 4 字节、double 8 字节"</td><td>标准只保证<b>精度顺序</b> float ≤ double ≤ long double；4/8 是 IEEE 754 常见实现的字节数</td><td>写跨平台代码时不能把字节数当契约</td></tr>
+          <tr><td>"long double 有效数字 18–19 位，精度更高"</td><td>只在 x86 <b>80 位扩展精度</b>下成立；<b>MSVC 上 long double 就是 double</b>（15–16 位）</td><td>"更准"不是语言保证，关键计算要用 double 或整数</td></tr>
+          <tr><td>"无符号最大值是带符号的两倍多"</td><td>精确表述是 <b>U_max = 2·S_max + 1</b>（16 位：2×32767+1 = 65535），是恒等式而非近似</td><td>写成"两倍多"容易在边界检查时差 1</td></tr>
+          <tr><td>"%f 默认保留 6 位小数，超出部分自动四舍五入"</td><td>正确，但要补一句：四舍五入发生在<b>十进制输出</b>环节；而 float 内部存的是二进制近似值，<code>0.1f + 0.2f != 0.3f</code></td><td>不区分这两层，会误以为"printf 会算错"</td></tr>
+          <tr><td>"sizeof 是保留字，不是函数"</td><td>正确。补充：结果是 <code>size_t</code>（无符号），打印要用 <code>%zu</code>；且 sizeof <b>不求值</b>其操作数</td><td>用 %d 打印 size_t 在 64 位平台上是未定义行为</td></tr>
+          <tr><td>"整数类型包含字符型、短整型、整型、长整型及对应无符号版本"</td><td>C 标准把这些统称 <b>integer types</b>；但要记住 <code>char</code>、<code>signed char</code>、<code>unsigned char</code> 仍是<b>三种不同类型</b></td><td>影响你选择用哪种 char 存放字节数据</td></tr>
+          <tr><td>"转义序列改变原字符的含义"</td><td>更准确：转义序列在<b>词法阶段</b>被识别并替换成对应的字符值；未定义的转义（如 <code>\c</code>）要求编译器<b>给出诊断</b></td><td>解释了为什么路径里的单个 <code>\</code> 会出问题</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Extensions to a higher level<span class="cr-alt">向上拓展的八个方向</span></h3>
+      <div class="cr-bullets">
+        <span><b>指数的偏移量（bias）</b>：float 的 8 位指数字段并不直接存指数，而是存"指数 + 127"。这样全零字节能表示 0 和极小的数，全一表示无穷与 NaN。可以自己算：<code>1.0f</code> 的指数位应该是 127（即 01111111）。</span>
+        <span><b>隐含的前导 1</b>：规格化数的尾数实际有 24 位有效精度——最高位的 1 被省略了。所以 23 位尾数对应约 7 位十进制有效数字。</span>
+        <span><b>浮点数的比较</b>：不要用 <code>==</code>。标准做法是设一个容差 <code>fabs(a - b) &lt; 1e-6</code>；更严谨的做法是用 <code>FLT_EPSILON</code> 做<b>相对</b>比较，因为绝对误差在数值很大时才够用。</span>
+        <span><b>金额不要用浮点</b>：0.1 元存不准，累加几百次就会出现分位误差。用"分"作单位的整数，或定点数。</span>
+        <span><b>整型与浮点型混算</b>：<code>int + float</code> 会把 int 提升为 float；<code>(int)3.9</code> 得到 3（截断，不是四舍五入），<code>(int)-3.9</code> 得到 −3（仍是向零截断）。</span>
+        <span><b>字节序的检测</b>：用一个 <code>int v = 1;</code> 再看 <code>*(char*)&amp;v</code> 是否为 1，就能判断本机是否小端。跨平台交换数据时用 <code>htons</code> / <code>htonl</code> 转成网络字节序。</span>
+        <span><b>类型的选择原则</b>：先问取值范围够不够，再问需不需要小数，最后才问省不省内存。作业里的"成绩用 float、月天数用 int"就是这个顺序。</span>
+        <span><b>为什么 long double 常被忽略</b>：它带来的精度提升有限，却引入最大的平台差异。工程上更常见的选择是"用 double 加上更好的算法"，而不是升级类型。</span>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Terminology check<span class="cr-alt">术语核对</span></h3>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>中文</th><th>English</th><th>一句话说明</th></tr></thead>
+        <tbody>
+          <tr><td>浮点型</td><td>floating-point type</td><td>用二进制科学计数法表示的实数近似</td></tr>
+          <tr><td>单精度 / 双精度</td><td>single / double precision</td><td>32 位 / 64 位；有效数字约 7 位 / 16 位</td></tr>
+          <tr><td>有效数字</td><td>significant digits</td><td>能可靠表示的十进制位数</td></tr>
+          <tr><td>尾数 / 指数 / 符号位</td><td>mantissa / exponent / sign bit</td><td>IEEE 754 的三段结构</td></tr>
+          <tr><td>规格化 / 隐含位</td><td>normalised / implicit bit</td><td>尾数最高位的 1 被省略</td></tr>
+          <tr><td>舍入误差</td><td>rounding error</td><td>无法精确表示时产生的偏差</td></tr>
+          <tr><td>sizeof 运算符</td><td>the sizeof operator</td><td>返回字节数，结果是 size_t</td></tr>
+          <tr><td>字节序</td><td>byte order / endianness</td><td>多字节数据在内存中的排列顺序</td></tr>
+          <tr><td>小端 / 大端</td><td>little endian / big endian</td><td>低位字节在前 / 高位字节在前</td></tr>
+          <tr><td>网络字节序</td><td>network byte order</td><td>TCP/IP 统一用大端</td></tr>
+          <tr><td>转义序列</td><td>escape sequence</td><td>反斜杠加字符，表示特殊字符</td></tr>
+          <tr><td>格式说明符</td><td>format specifier</td><td>%d %c %f 等，决定如何解释实参</td></tr>
+          <tr><td>类型提升</td><td>promotion / conversion</td><td>运算前把小类型转成大类型</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Self-check<span class="cr-alt">学习自检</span></h3>
+      <div class="cr-checks">
+        <label class="cr-check"><input type="checkbox"><span>能写出 U<sub>max</sub> = 2·S<sub>max</sub> + 1，并算出 8 位与 16 位的具体值。<span class="cr-en">State the exact unsigned relation and evaluate it for 8 and 16 bits.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说清 Windows 路径为什么必须写双反斜杠，以及单个反斜杠会触发什么。<span class="cr-en">Explain why Windows paths need doubled backslashes.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能列出 float / double / long double 的字节数、有效数字与字面值后缀。<span class="cr-en">List size, precision and suffix for the three floating types.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能画出 IEEE 754 的三段位布局，并解释 23 位尾数为什么对应约 7 位十进制。<span class="cr-en">Draw the IEEE 754 layout and relate mantissa width to decimal digits.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能解释 0.1 为什么存不准，并说出三条由此推出的实用规则。<span class="cr-en">Explain why 0.1 is inexact and derive three practical rules.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说出 sizeof 的两种用法差别，以及为什么打印它要用 %zu。<span class="cr-en">Contrast the two uses of sizeof and justify %zu.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能解释"字节序属于处理器、不属于 C 语言"，并说出小端大端各自的放置规则。<span class="cr-en">Explain why endianness is architectural and state both orderings.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能算对 <code>'A' + 1</code> 在 %d 与 %c 下分别输出什么，以及三条 code-point 恒等式。<span class="cr-en">Compute 'A' + 1 under both specifiers and three code-point identities.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说出 printf 与 scanf 在 float/double 上的格式符差别。<span class="cr-en">State the printf/scanf specifier difference for floats.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>拿到"成绩平均分""月天数"这类需求，能按取值范围与是否需要小数选出类型。<span class="cr-en">Choose a type from range and fractional needs.</span></span></label>
+      </div>
+    </div>
+
+    <div class="q-host" data-quiz="course-app-06"></div>
+
+    <p class="cr-note">资料来源：2026 年 10 月 16 日"C语言核心知识点讲解与实操练习"课堂（09:41–11:27）的飞书 AI 笔记与智能章节（原笔记由工具自动生成并标注"可能存在不准确之处"）。本页逐条核对后做了 <b>8 处更正</b>与 <b>8 处扩充</b>，双语对照，并加入 5 组可操作的交互演示与一套纯英文思维题。课堂布置的作业（教材数据类型匹配习题、科学计数法与十进制互转、字符 ASCII 运算程序的补做）建议照做——尤其"把没跑完的程序自己跑完"，那是把规则变成手感的最短路径。<br><span class="cr-en">Source: the Feishu AI notes and smart chapters of the 16 October 2026 session (09:41–11:27), machine-generated and flagged as possibly inaccurate. This page corrects eight points, extends eight, is bilingual, and adds five interactive demos plus an English-only problem set. Finish the type-matching and base-conversion exercises, and run the programs you did not finish in class.</span></p>
+  </div>
+</section>
+
 <section class="page" data-view="course-calc">
   <div class="wrap page-intro">
     <div class="kicker mono">MODULE 02 / APPLIED CALCULUS</div><div class="fr-mot">Calcul appliqué</div>
@@ -3500,6 +3782,13 @@ int main(void) {
         <p>2026 年 10 月 13 日课堂（10:14–11:25）：实数完备性与距离、点连续三要件、全邻域与去心邻域的差别、间断点四类分类、区间连续与端点单侧连续、初等函数连续性；含 6 处纠错、8 处拓展与 5 组交互演示。</p>
         <span class="cr-en">Completeness and distance, the three conditions for continuity, punctured versus full neighbourhoods, the four kinds of discontinuity, continuity on intervals, and the continuity of elementary functions — six corrections, eight extensions and five interactive demos.</span>
         <span class="cr-go">进入第四课 / Open Lesson 4 →</span>
+      </a>
+      <a href="#course-calc-05">
+        <div class="cr-label mono">LESSON 05 / CONTINUITY AND CLOSED INTERVALS</div>
+        <h3>Lesson 5: Continuity of Composite Functions and the Four Theorems on Closed Intervals<span class="cr-alt">初等函数与复合函数的连续性、闭区间上的四大定理</span></h3>
+        <p>2026 年 10 月 16 日课堂（07:52–09:35）：连续点为何可以代入、根式函数的 ε-δ 验证、四则运算与区间连续、复合函数的两个传递定理、幂指函数的极限、间断点判定例题、最值/有界/零点/介值四大定理及其前提；含 9 处纠错、9 处拓展与 5 组交互演示。</p>
+        <span class="cr-en">Why continuity licenses substitution, the ε-δ verification for roots, algebra and interval continuity, the two composition theorems, limits of power-exponential functions, worked discontinuity classification, and the four great theorems on closed intervals with their preconditions — nine corrections, nine extensions and five interactive demos.</span>
+        <span class="cr-go">进入第五课 / Open Lesson 5 →</span>
       </a>
     </div>
   </div>
@@ -5053,6 +5342,309 @@ lim (n → ∞) (1 + 1/n)^n = e</span>
   </div>
 </section>
 
+<section class="page" data-view="course-calc-05" data-sections="Thirteen sections: when substitution is legal · the ε-δ check for roots · algebra and interval continuity · the two composition theorems · power-exponential limits · classifying discontinuities in practice · the four theorems on closed intervals · why closed and continuous are both needed · the auxiliary-function trick · corrections · extensions · terminology and self-check">
+  <div class="wrap page-intro">
+    <div class="kicker mono">LESSON 05 / CONTINUITY AND CLOSED INTERVALS</div><div class="fr-mot">Leçon 5 · Continuité et intervalles fermés</div>
+    <h1>Lesson 5: Continuity of Composite Functions and the Four Theorems on Closed Intervals<span class="cr-sub">应用微积分课程要点第五课：初等函数与复合函数的连续性、闭区间上的四大定理</span></h1>
+    <p>2026 年 10 月 16 日课堂（07:52–09:35）整理、纠错与扩充 / Based on the session of 16 October 2026, corrected and extended</p>
+  </div>
+  <div class="wrap section">
+    <div class="cr-subnav cr-nav-course" data-active="course-calc"></div>
+    <div class="section-head">
+      <div>
+        <div class="kicker mono">LESSON CONTENT / 本课内容</div>
+        <h2>Continuity Earns Its Keep<span class="cr-alt">连续性开始还债</span></h2>
+      </div>
+      <span class="tag mono">2026.10.16 · CN / EN</span>
+    </div>
+
+    <div class="cr-grid">
+      <div class="cr-card"><div class="cr-label mono">THEME</div><strong>From definition to toolbox</strong><span class="cr-alt">从定义到工具箱</span><p>第四课定义了连续性、分好了间断点。这一课回答"连续性有什么用"——它把极限运算变成<code>代入</code>，并在闭区间上换来四个定理。</p></div>
+      <div class="cr-card"><div class="cr-label mono">PAYOFF</div><strong>Substitution, but only where defined</strong><span class="cr-alt">可以代入，但要在定义域内</span><p>连续点求极限就是代入函数值——前提是<b>该点属于定义域</b>。<code>(x²−1)/(x−1)</code> 在 1 处不能代入，但极限存在。</p></div>
+      <div class="cr-card"><div class="cr-label mono">THE LEVER</div><strong>Composition passes limits through</strong><span class="cr-alt">复合函数把极限传过去</span><p>外函数在 b 连续时，<code>lim f(g(x)) = f(lim g(x))</code>。<b>内函数只需有极限，不必连续</b>——这是本课最有用的杠杆。</p></div>
+      <div class="cr-card"><div class="cr-label mono">HARD POINT</div><strong>Closed plus continuous, both required</strong><span class="cr-alt">闭区间与连续，缺一不可</span><p>最值、有界、零点、介值四条定理都同时依赖<b>闭区间</b>和<b>连续</b>。随便去掉一个，反例立刻出现。</p></div>
+      <div class="cr-card"><div class="cr-label mono">INTERACTIVE</div><strong>Five embedded demos</strong><span class="cr-alt">五组交互演示</span><p>代入判定器、复合极限试验、幂指函数计算器、间断点判定器、介值定理交互（可拖动水平线看交点）。</p></div>
+      <div class="cr-card"><div class="cr-label mono">SOURCE</div><strong>Feishu AI notes, verified</strong><span class="cr-alt">飞书 AI 笔记 · 已逐条核对</span><p>原笔记由工具自动生成并标注"可能存在不准确之处"。本页做了 9 处更正与 9 处扩充，附一套纯英文思维题。</p></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>1 · What continuity buys you: substitution<span class="cr-alt">1 · 连续性买到了什么：代入权</span></h3>
+      <p>第四课把连续定义成"极限值等于函数值"。这条定义有一个立刻可用的推论：<b>在连续点求极限，可以直接把 x = a 代进去。</b>极限运算和函数求值这两个动作，在连续点上可以交换顺序——这正是"连续性"最日常的用途。</p>
+      <p><strong>但必须记住它的前提：a 要在定义域内。</strong>下面是四类常被混淆的情形，请逐条对照：</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>情形</th><th>例子</th><th class="cr-c">能代入吗</th><th>正确的做法</th></tr></thead>
+        <tbody>
+          <tr><td>连续点，a 在定义域内</td><td class="mono">√x 在 x = 4</td><td class="cr-c"><b>能</b></td><td>直接代入得 2</td></tr>
+          <tr><td>a 处无定义，但极限存在</td><td class="mono">(x²−1)/(x−1) 在 x = 1</td><td class="cr-c"><b>不能</b></td><td>先化简成 x+1，极限为 2（可去间断）</td></tr>
+          <tr><td>a 处无定义，且为无穷</td><td class="mono">1/x 在 x = 0</td><td class="cr-c"><b>不能</b></td><td>讨论单侧无穷极限（无穷间断）</td></tr>
+          <tr><td>a 在定义域边界</td><td class="mono">√x 在 x = 0</td><td class="cr-c">只能单侧</td><td>0 处只有右连续，谈右极限</td></tr>
+        </tbody>
+      </table></div>
+      <p class="cr-en">Continuity at a is exactly the licence to swap "take the limit" with "evaluate". The licence is void when a is not in the domain — which is why the four cases above must be kept apart.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 1 · Substitution checker<span class="cr-alt">演示一 · 代入判定器</span></h4>
+        <p class="l3-sub">选一个函数与一个点，看能不能直接代入、不能的话该怎么做 / Pick a function and a point.</p>
+        <div class="l3-row"><label class="l3-ctl">情形 <select id="l7-sub-k">
+          <option value="0">f(x) = (x² − 1)/(x − 1)，x → 1</option>
+          <option value="1">f(x) = √x，x → 4</option>
+          <option value="2">f(x) = √x，x → 0⁺</option>
+          <option value="3">f(x) = 1/x，x → 0</option>
+          <option value="4">f(x) = ln x，x → 0⁺</option>
+          <option value="5">f(x) = tan x，x → π/2</option>
+        </select></label></div>
+        <div class="l3c-stage" id="l7-sub-stage"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>2 · The ε-δ check for √x<span class="cr-alt">2 · 根式函数的 ε-δ 验证</span></h3>
+      <p>课堂用 √x 演示了"如何证明一个具体函数连续"，这是把 ε-δ 用到实处的第一个例子。工具只有一个：<b>分子有理化</b>。</p>
+      <p class="small-note">设 x₀ &gt; 0，要证 lim (x → x₀) √x = √x₀。任取 ε &gt; 0，把差有理化：</p>
+      <div class="cr-formula">|√x − √x₀| = |x − x₀| / (√x + √x₀) ≤ |x − x₀| / √x₀</div>
+      <p>因为 √x ≥ 0，分母 ≥ √x₀ &gt; 0，所以取 <b>δ = ε·√x₀</b> 即可：当 |x − x₀| &lt; δ 时 |√x − √x₀| &lt; ε。证明完成。关键动作是<b>把"根号之差"变成"自变量之差"再乘一个可控因子</b>——这个套路在后续证明各种函数连续性时会反复出现。</p>
+      <p><strong>为什么 x₀ = 0 要单独说：</strong>上面的不等式用了分母 ≥ √x₀ &gt; 0。当 x₀ = 0 时分母只有 √x，不能这样放缩。而 0 是定义域的<b>左端点</b>，邻域只有右半边，所以 √x 在 0 处<b>只有右连续</b>——这不是缺陷，而是定义域边界的必然结果，也正是第四课引入左右连续的原因。</p>
+      <p class="cr-en">Rationalise the difference, bound the denominator by √x₀, and take δ = ε√x₀. The trick — turn a difference of roots into a difference of the variable times a controlled factor — returns constantly. At x₀ = 0 the bound fails and the domain has only one side, so √x is merely right-continuous there.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>3 · Algebra of continuity, and which functions are continuous<span class="cr-alt">3 · 连续性的四则运算，以及哪些函数连续</span></h3>
+      <p><b>四则运算性质：</b>若 f 与 g 在 a 点都连续，则 f ± g、f · g、常数 · f 在 a 点连续；f / g 在 <b>g(a) ≠ 0</b> 时也在 a 点连续。</p>
+      <p class="small-note">为什么除法要多一个条件：因为 g(a) = 0 时 f/g 在 a 点根本没有定义，谈连续性无从谈起。这条限制和第三课"极限的四则运算要求分母极限不为零"是同一件事。</p>
+      <p><strong>区间连续：</strong>若 f 在区间 I 的<b>每一点</b>都连续，就称 f 是 I 上的连续函数。有理函数就是最典型的例子——它在<b>自己的定义域内</b>处处连续（定义域之外的点和它无关）。</p>
+      <p><strong>四类常见的连续函数（原笔记的清单要补两项）：</strong></p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>类别</th><th>例子</th><th>在哪儿连续</th></tr></thead>
+        <tbody>
+          <tr><td>多项式</td><td class="mono">3x³ − 2x + 1</td><td>整个实数轴</td></tr>
+          <tr><td>有理函数</td><td class="mono">(x+1)/(x−2)</td><td>其定义域内（去掉分母为零的点）</td></tr>
+          <tr><td>三角函数与反三角函数</td><td class="mono">sin x，arctan x</td><td>各自定义域内（tan x 要挖掉 π/2 + kπ）</td></tr>
+          <tr><td>根式函数</td><td class="mono">√x，∛x</td><td>定义域内（偶次根在端点只单侧连续）</td></tr>
+          <tr><td><b>指数与对数函数</b>（原笔记漏了）</td><td class="mono">eˣ，ln x</td><td>各定义域内；ln x 在 x = 0 处只是右极限为 −∞</td></tr>
+        </tbody>
+      </table></div>
+      <p class="cr-en">The lecture listed four families of continuous functions; exponential and logarithmic functions belong on the same list. The standard statement is: all elementary functions are continuous on their domain, and every elementary function is continuous on any interval contained in its domain.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>4 · Composition: the limit travels through<span class="cr-alt">4 · 复合函数：极限可以穿过去</span></h3>
+      <p>这是本课技术上最有价值的一条，课堂讲得很清楚，值得分成两个定理来记：</p>
+      <div class="cr-thm"><span class="lbl">定理 5.1（极限穿入连续函数）</span>设 lim (x → a) g(x) = b，且 f 在 b 点<b>连续</b>，则 lim (x → a) f(g(x)) = f(b) = f( lim (x → a) g(x) )。<b>注意：g 只需要有极限，不需要连续。</b><span class="cr-en">If g has limit b at a and f is continuous at b, the limit passes inside: lim f(g(x)) = f(lim g(x)).</span></div>
+      <div class="cr-thm"><span class="lbl">定理 5.2（复合的连续性）</span>若 g 在 a 点连续且 f 在 g(a) 点连续，则复合函数 f∘g 在 a 点连续。<span class="cr-en">Continuous outside, continuous inside, continuous composition.</span></div>
+      <p><strong>为什么第一条如此好用：</strong>它把"求一个复杂极限"变成"先求内层的极限，再把这个数交给外函数"。例如 lim (x → 0) e^((sin x)/x) —— 内层 (sin x)/x → 1，而 e^u 在 1 处连续，所以整个极限是 e¹ = e。<b>不需要任何新的极限技巧。</b></p>
+      <p><strong>为什么"外函数必须连续"不能省：</strong>课堂特意点了这一条——如果 f 只在 b 处<b>有极限</b>而不连续，结论就不成立。最干净的反例是：</p>
+      <div class="cr-formula">f(u) = 1（当 u = 0），f(u) = 0（当 u ≠ 0）；g(x) = x
+lim (x → 0) g(x) = 0，但 lim (x → 0) f(g(x)) = lim (x → 0) f(x) = 0 ≠ f(0) = 1</div>
+      <p>问题出在：<b>求 lim f(g(x)) 时 x 永远不等于 a，所以 g(x) 永远取不到 b</b>，f 在 b 点的取值就完全不影响结果；而 f(b) 用的正是那个值。要弥合这个缝，只能靠"f 在 b 点连续"——它的定义就是"极限值 = 函数值"。<b>这一句话就是这条定理的全部内容。</b></p>
+      <p class="cr-en">The gap is that x never equals a, so g(x) never reaches b; f(b) therefore cannot influence the composite limit, while the right-hand side uses it. Continuity at b is exactly the statement that closes the gap.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 2 · Does the limit pass through?<span class="cr-alt">演示二 · 极限能不能穿过去</span></h4>
+        <p class="l3-sub">切换外函数连续与否，看两个极限是否仍然相等 / Toggle continuity of the outer function.</p>
+        <div class="l3-row" id="l7-cp-tabs"></div>
+        <div class="l3c-stage" id="l7-cp-stage"></div>
+        <div class="l3-out" id="l7-cp-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>5 · Limits of power-exponential functions<span class="cr-alt">5 · 幂指函数的极限</span></h3>
+      <p>形如 f(x)^g(x) 的函数（底和指数都随 x 变）叫<b>幂指函数</b>。课堂上给出的方法是：<b>取自然对数，把幂变成乘</b>。</p>
+      <div class="cr-formula">f(x)^g(x) = e^( g(x) · ln f(x) )    （要求 f(x) &gt; 0）
+所以 lim f^g = e^( lim [ g · ln f ] )</div>
+      <p><strong>推导链：</strong>对数把指数拉下来成为乘法 → 指数函数 e^u 在任意点连续 → 用定理 5.1 把极限穿进去 → 只要算出指数上那个普通极限即可。整个方法的可靠性完全建立在"e^u 连续"这一条上，这正是第 4 节的价值。</p>
+      <p><strong>它主要用来处理三类未定式：</strong>1^∞、0^0、∞^0。其中 <b>1^∞ 最常见</b>，标准结果是：</p>
+      <div class="cr-formula">若 f(x) → 1 且 g(x) → ∞，令 L = lim g(x)·(f(x) − 1)，则 lim f(x)^g(x) = e^L
+例：(1 + x)^(1/x) → e¹ = e      (1 + 2x)^(1/x) → e²</div>
+      <p class="small-note">第二条公式里用到了等价无穷小 <code>ln(1+t) ~ t</code>（第 2 课的表），它把 <code>ln f = ln(1 + (f−1))</code> 简化成 <code>f − 1</code>。这就是"等价无穷小只在乘除中可用"的一个正当用法。</p>
+      <p class="cr-en">Write f^g as e^(g ln f); since e^u is continuous the limit passes inside, and the problem collapses to an ordinary limit on the exponent. The common case is 1^∞, where L = lim g(f − 1) and the answer is e^L.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 3 · Power-exponential calculator<span class="cr-alt">演示三 · 幂指函数极限计算器</span></h4>
+        <p class="l3-sub">拖动 k，看 lim (1 + kx)^(1/x) 如何得到 e^k / Slide k and watch the exponent do the work.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">k = <input type="range" id="l7-pe-k" min="-3" max="3" step="0.5" value="1"> <span class="l3-out" id="l7-pe-kv">1</span></label>
+        </div>
+        <div class="l3c-stage" id="l7-pe-stage"></div>
+        <div class="l3-out" id="l7-pe-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>6 · Classifying discontinuities, in practice<span class="cr-alt">6 · 动手判定间断点</span></h3>
+      <p>课堂最后用一批例题练"判断间断点类型"。判定流程只有三步，值得固化成习惯：</p>
+      <div class="cr-bullets">
+        <span><b>第一步：找可疑点</b>——函数无定义的点（分母为零、偶次根号为负、对数真数非正、tan 的奇点）。</span>
+        <span><b>第二步：算左右极限</b>——分别求 x → a⁻ 与 x → a⁺ 的极限。</span>
+        <span><b>第三步：对号入座</b>——两侧都有限且相等但 ≠ f(a)（或 f(a) 无定义）是<b>可去</b>；两侧不等但都为有限值是<b>跳跃</b>；至少一侧无穷是<b>无穷</b>；极限不存在且不为无穷是<b>振荡</b>。</span>
+      </div>
+      <p><strong>一处必须更正的地方：</strong>原笔记把间断点归纳为<b>三类</b>（可去、无穷、跳跃），并通过"连续三要素不满足"来推导。这个推理有一个漏洞：<b>三要素的失效方式并不只有三种</b>。<code>sin(1/x)</code> 在 0 处既没有有限极限、也不趋于无穷、左右极限更谈不上"存在但不等"——它属于<b>第四类：振荡间断点</b>。第四课已经按四类讲，这一课应当保持一致。</p>
+      <p class="cr-en">The notes reduce discontinuities to three types by arguing from the three conditions of continuity. That argument has a gap: failing the conditions does not exhaust the possibilities. sin(1/x) at 0 fits none of the three, which is why the fourth type — oscillating — must be listed.</p>
+      <p><strong>课堂例题：</strong><code>tan x</code> 的所有 <b>x = kπ</b> 点。x = 0 处 tan x ~ x，两侧都趋于 0，而 f(0) 无定义 → <b>可去间断</b>；其余 k ≠ 0 的 kπ 点两侧分别冲向 +∞ 与 −∞ → <b>无穷间断</b>。这个例子同时考了等价无穷小、单侧极限与分类，很值得自己重做一遍。</p>
+
+      <div class="l3-demo">
+        <h4>Demo 4 · Discontinuity classifier<span class="cr-alt">演示四 · 间断点判定器</span></h4>
+        <p class="l3-sub">选一个例子，看三步判定怎么走完 / Pick an example and follow the three steps.</p>
+        <div class="l3-row"><label class="l3-ctl">例子 <select id="l7-dc-k">
+          <option value="0">(x² − 1)/(x − 1) 在 x = 1</option>
+          <option value="1">1/(x − 1)² 在 x = 1</option>
+          <option value="2">|x|/x 在 x = 0</option>
+          <option value="3">sin(1/x) 在 x = 0</option>
+          <option value="4">tan x 在 x = 0</option>
+          <option value="5">tan x 在 x = π</option>
+        </select></label></div>
+        <div class="l3c-stage" id="l7-dc-stage"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>7 · The four theorems on a closed interval<span class="cr-alt">7 · 闭区间上的四大定理</span></h3>
+      <p>这是本课的高潮，也是最"深刻"的一段。四条定理有<b>完全相同的两个前提</b>：定义域是<b>闭区间 [a, b]</b>，函数在它上面<b>连续</b>。</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>定理</th><th>结论</th><th>缺了前提会怎样</th></tr></thead>
+        <tbody>
+          <tr><td><b>最值定理</b></td><td>f 在 [a, b] 上必取到最大值 M 与最小值 m</td><td class="mono">y = x 在 (0,1) 上取不到最值；|x|/x 在 [−1,1] 上不连续，也取不到</td></tr>
+          <tr><td><b>有界性定理</b></td><td>f 在 [a, b] 上一定有界</td><td class="mono">1/x 在 (0,1) 上连续但无界</td></tr>
+          <tr><td><b>零点存在定理</b></td><td>若 f(a)·f(b) &lt; 0，则存在 ξ ∈ (a, b) 使 f(ξ) = 0</td><td class="mono">[−1,1] 上令 f(±1) 异号、中间跳变，就没有零点</td></tr>
+          <tr><td><b>介值定理</b></td><td>若 f(a) ≠ f(b)，则介于两者之间的<b>任何</b> μ 都能被取到</td><td>同上；或定义域开区间时端点附近的 μ 取不到</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>它们之间的关系：</strong>最值定理 ⟹ 有界性定理（取到最值自然有界）；介值定理 ⟹ 零点存在定理（取 μ = 0）。反方向也能补：课堂指出零点定理与介值定理在闭区间连续的前提下<b>互相可推</b>——由介值到零点是直接取 μ = 0；由零点到介值则是<b>构造辅助函数</b> F(x) = f(x) − μ，再用零点定理。所以"等价"的说法在<b>该前提下</b>是对的，但要记住零点定理额外要求<b>两端异号</b>，介值定理只要求<b>两端不等</b>。</p>
+      <p class="cr-en">The four theorems share the same two hypotheses. Max-value implies boundedness (attaining extremes gives bounds); IVT implies the zero theorem (take μ = 0). The converse uses the auxiliary function F(x) = f(x) − μ, so the two really are interchangeable on a closed interval — with the caveat that the zero theorem asks for opposite signs while the IVT only asks for unequal values.</p>
+      <p><strong>课堂讲的最值定理证明思路：</strong>先用<b>确界原理</b>（第 4 课的实数完备性！）取出值域的上确界 M，再证明存在 ξ 使 f(ξ) = M。这一步不能省——上确界只是"最小的上界"，未必被取到；正是因为定义域是<b>闭</b>的，才能用<b>区间套或序列紧性</b>把取到 M 的那个点"抓"住。<b>"闭"在这里不是装饰，而是把极限点留在区间内的保证。</b></p>
+      <p class="cr-en">The proof of the extreme-value theorem uses the supremum principle from Lesson 4, then shows the supremum is attained. Closedness is what keeps the limiting point inside the interval — it is not decoration.</p>
+
+      <div class="l3-demo">
+        <h4>Demo 5 · IVT: drag the level line<span class="cr-alt">演示五 · 介值定理：拖动水平线</span></h4>
+        <p class="l3-sub">选一个函数，拖动水平线看交点；再换成开区间或不连续的情形看结论如何失效 / Drag the level line and then break a hypothesis.</p>
+        <div class="l3-row">
+          <label class="l3-ctl">情形 <select id="l7-iv-k">
+            <option value="0" selected>f(x) = x³ − x 在 [−1, 2]（连续·闭区间）</option>
+            <option value="1">f(x) = x 在 (0, 1)（连续·开区间）</option>
+            <option value="2">f(x) = |x|/x 在 [−1, 1]（不连续·闭区间）</option>
+          </select></label>
+          <label class="l3-ctl">水平线 y = μ <input type="range" id="l7-iv-m" min="-1" max="6" step="0.05" value="2"> <span class="l3-out" id="l7-iv-mv">2.00</span></label>
+        </div>
+        <svg id="l7-iv-svg" viewBox="0 0 520 250" role="img" aria-label="介值定理交互图">
+          <line x1="30" y1="205" x2="500" y2="205" stroke="#d8d2c6" stroke-width="1"/>
+          <line x1="150" y1="16" x2="150" y2="230" stroke="#e3ded3" stroke-width="1"/>
+          <polyline id="l7-iv-curve" fill="none" stroke="#25334f" stroke-width="2"/>
+          <line id="l7-iv-line" x1="30" y1="100" x2="500" y2="100" stroke="#5b7d4f" stroke-width="1.4" stroke-dasharray="6 4"/>
+          <g id="l7-iv-dots"></g>
+        </svg>
+        <div class="l3-out" id="l7-iv-out"></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>8 · Why both hypotheses are needed<span class="cr-alt">8 · 为什么两个前提都省不掉</span></h3>
+      <p>课堂用两个反例把这件事钉死了。建议把它们当成"考试里举反例的模板"背下来：</p>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>去掉的前提</th><th>反例</th><th>失效的结论</th></tr></thead>
+        <tbody>
+          <tr><td>闭 → 开</td><td class="mono">y = x 在 (0, 1)</td><td>取不到最大值与最小值（只能无限接近 1 和 0）</td></tr>
+          <tr><td>闭 → 开（无界）</td><td class="mono">y = 1/x 在 (0, 1)</td><td>连续但无界</td></tr>
+          <tr><td>闭 → 半开</td><td class="mono">y = x 在 (0, 1]</td><td>最小值取不到</td></tr>
+          <tr><td>连续 → 不连续</td><td class="mono">f(x) = x（x ≠ 1）；f(1) = 5 在 [0, 2]</td><td>最大值仍是 5（被"跳"出来了），但介值性质失效</td></tr>
+          <tr><td>连续 → 不连续（跳跃）</td><td class="mono">[−1, 1] 上 f(x) = −1（x &lt; 0）、f(x) = 1（x ≥ 0）</td><td>两端异号，却<b>没有零点</b>——零点定理失效</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>深层原因（课堂提到的那句很值得记）：</strong>非闭区间对"取极限"这个运算<b>不封闭</b>。开区间 (0,1) 里的数列 1/2, 1/3, 1/4, … 每一项都在区间内，但它趋于的 0 <b>不在区间里</b>——极限跑掉了。而闭区间 [0,1] 不会：只要点都在里面，它们的极限点也一定还在里面（这叫<b>闭集对极限封闭</b>）。</p>
+      <p>课堂把它类比成"有理数不完备"：本质上是一回事——<b>一个数系或集合能不能容纳自己产生的极限</b>。第 4 课讲实数完备性时用的是同一个问题，这一课换成了区间的语言。</p>
+      <p class="cr-en">The deep reason: an open interval is not closed under taking limits. The sequence 1/2, 1/3, … lives inside (0,1) but its limit 0 does not. A closed interval keeps its limit points, which is exactly what the four theorems need. The lecturer's analogy with the incompleteness of the rationals is the same phenomenon in different clothing.</p>
+    </div>
+
+    <div class="cr-block">
+      <h3>9 · The auxiliary-function trick<span class="cr-alt">9 · 构造辅助函数的套路</span></h3>
+      <p>要证"存在 ξ 使 g(ξ) = c"，标准做法分两步，几乎不需要灵感：</p>
+      <div class="cr-bullets">
+        <span><b>第一步：移项。</b>把等式变成 F(x) = g(x) − c = 0 的形式，把"取值问题"翻译成"零点问题"。</span>
+        <span><b>第二步：验条件。</b>证明 F 在闭区间上连续，再在区间内找两点使 F 异号——<b>不必是端点</b>，课堂上特意强调了这一点。</span>
+      </div>
+      <div class="cr-ex"><span class="tagx">EXAMPLE 5.1</span><div class="q">证明方程 x = cos x 在 (0, π/2) 内有解。</div>
+        <div class="a"><b>证明：</b>令 F(x) = x − cos x，它在 [0, π/2] 上连续（多项式与余弦之差）。计算端点：F(0) = 0 − 1 = −1 &lt; 0，F(π/2) = π/2 − 0 = π/2 &gt; 0。两端异号，由零点存在定理，存在 ξ ∈ (0, π/2) 使 F(ξ) = 0，即 ξ = cos ξ。■</div>
+      </div>
+      <div class="cr-ex"><span class="tagx">EXAMPLE 5.2</span><div class="q">用构造辅助函数的方法证明介值定理（设已知零点存在定理）。</div>
+        <div class="a"><b>证明：</b>设 f 在 [a, b] 连续，μ 介于 f(a) 与 f(b) 之间。令 F(x) = f(x) − μ。F 连续，且 F(a) = f(a) − μ 与 F(b) = f(b) − μ <b>异号</b>（因为 μ 夹在 f(a)、f(b) 之间）。由零点存在定理，存在 ξ ∈ (a, b) 使 F(ξ) = 0，即 f(ξ) = μ。■<br><span class="cr-en">This is exactly the two-step template: shift the equation into a zero-finding problem, then verify the hypotheses.</span></div>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Corrections to the original notes<span class="cr-alt">对原笔记的更正（9 处）</span></h3>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>原笔记说法</th><th>更正</th><th>为什么重要</th></tr></thead>
+        <tbody>
+          <tr><td>"连续三要素不满足时产生三类间断点：可去、无穷、跳跃"</td><td>遗漏了<b>第四类：振荡间断点</b>（如 sin(1/x) 在 0）。三要素的失效方式不能穷尽，第四课已按四类讲</td><td>分类不完整会导致"某个间断点归不了类"的困惑</td></tr>
+          <tr><td>"零点存在定理与介值定理等价"</td><td>在"闭区间 + 连续"的前提下互为推论成立；但零点定理多要求<b>两端异号</b>，介值定理只要求<b>两端不等</b></td><td>写证明时如果端点同号却想用零点定理，就会出错</td></tr>
+          <tr><td>"四类定义域内连续的函数：多项式、有理函数、三角函数及反三角函数、根式函数"</td><td>应补上<b>指数函数与对数函数</b>；标准结论是"基本初等函数在其定义域内连续，初等函数在其定义区间内连续"</td><td>清单不全，遇到 eˣ、ln x 时会犹豫能不能代入</td></tr>
+          <tr><td>"连续函数可直接代入求极限"</td><td>前提是<b>a 属于定义域</b>。(x²−1)/(x−1) 在 1 处不能代入，但极限存在</td><td>这是初学阶段最常见的误用</td></tr>
+          <tr><td>"幂指函数取对数转化为 e^(g·ln f)"</td><td>需补前提 <b>f(x) &gt; 0</b>（对数定义域），并说明它主要用来处理 1^∞、0^0、∞^0 三类未定式</td><td>忘记 f &gt; 0 会得到无意义的结果</td></tr>
+          <tr><td>"复合函数定理：外函数在 b 连续，内函数极限为 b 即可"</td><td>正确，但要补一句：<b>g 需在 a 的去心邻域内有定义</b>，且结论用到的是 f(b) 而非 f 的极限值</td><td>把条件写全，才知道哪里可能出问题</td></tr>
+          <tr><td>笔记提到"反函数连续性"但未给条件</td><td>完整表述：若 f 在区间上<b>连续且严格单调</b>，则其反函数在对应区间上连续</td><td>"严格单调"不能省，否则反函数可能不存在</td></tr>
+          <tr><td>"非闭区间类似有理数不完备"</td><td>这个类比方向对，但准确的核心是：<b>闭区间对取极限封闭</b>（极限点仍在区间内），保证定理中的 ξ 不"跑出去"</td><td>把直觉说法升级为可用的判据</td></tr>
+          <tr><td>"闭区间连续函数的性质十分深刻"但未点明像的形态</td><td>补一句更强的结论：闭区间上连续函数的<b>值域仍是一个闭区间 [m, M]</b>（最值定理 + 介值定理合起来的结果）</td><td>两条定理合起来才完整，也是很多证明的出发点</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Extensions to a higher level<span class="cr-alt">向上拓展的九个方向</span></h3>
+      <div class="cr-bullets">
+        <span><b>一致连续（uniform continuity）</b>：普通连续里的 δ 依赖 ε <b>和点 x₀</b>；一致连续要求同一个 δ 对区间内所有点都管用。这是"闭区间上连续"能推出的更强性质（康托尔定理），也是定积分理论的地基。</span>
+        <span><b>闭区间 = 紧致</b>：在实数轴上，"有界闭集"就是紧集。四大定理本质上都是紧性的推论——这解释了为什么它们的条件如此统一。</span>
+        <span><b>零点定理的构造性用法：二分法</b>。它不只证明存在，还给出算法：不断取中点、保留异号的半区间，每次把区间长度减半。这正是"存在性证明可以变成数值方法"的经典范例。</span>
+        <span><b>不动点定理</b>：若 f: [0,1] → [0,1] 连续，则存在 x 使 f(x) = x。证明只要令 F(x) = f(x) − x，注意 F(0) ≥ 0 ≥ F(1)。这是布劳威尔不动点定理的一维版本，也是很多方程解存在性的起点。</span>
+        <span><b>达布性质</b>：导函数不一定连续，但一定具有介值性——这是"介值定理的类比"在不连续函数上的惊人推广。</span>
+        <span><b>最值定理的两种证明路线</b>：路线一是确界原理 + 区间套；路线二是序列紧性（有界数列必有收敛子列）。两条路都用到第 4 课的完备性，可以对照着看。</span>
+        <span><b>1^∞ 型的完整处理</b>：一般步骤是"先取对数 → 用等价无穷小把 ln f 换成 f−1 → 算出 L → 答案是 e^L"。把它固化成流程，比每次从头推更快。</span>
+        <span><b>连续性在数值计算中的意义</b>：连续性保证"输入的小扰动只引起输出的小扰动"。这是为什么数值方法敢用近似值——但不连续点上这个保证就没有了（符号函数、取整函数都是反例）。</span>
+        <span><b>与第 4 课的呼应</b>：完备性（实数系）→ 紧性（闭区间）→ 连续（函数）→ 四大定理。这四步是本课程前半段的一条主线，值得在笔记本上画成一张图。</span>
+      </div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Terminology check<span class="cr-alt">术语核对</span></h3>
+      <div class="cr-tablewrap"><table class="cr-table">
+        <thead><tr><th>中文</th><th>English</th><th>一句话说明</th></tr></thead>
+        <tbody>
+          <tr><td>区间连续</td><td>continuous on an interval</td><td>区间内每一点都连续</td></tr>
+          <tr><td>复合函数</td><td>composite function</td><td>f(g(x))，先内后外</td></tr>
+          <tr><td>幂指函数</td><td>power-exponential function</td><td>底与指数都随 x 变</td></tr>
+          <tr><td>最值定理</td><td>extreme value theorem</td><td>闭区间连续必取到最大最小值</td></tr>
+          <tr><td>有界性定理</td><td>boundedness theorem</td><td>闭区间连续必有界</td></tr>
+          <tr><td>零点存在定理</td><td>intermediate zero theorem</td><td>两端异号 ⟹ 区间内有零点</td></tr>
+          <tr><td>介值定理</td><td>intermediate value theorem (IVT)</td><td>两端之间的任何值都能取到</td></tr>
+          <tr><td>辅助函数</td><td>auxiliary function</td><td>移项后构造的新函数，用来套零点定理</td></tr>
+          <tr><td>确界原理</td><td>supremum principle</td><td>非空有上界的数集必有上确界</td></tr>
+          <tr><td>对极限封闭</td><td>closed under limits</td><td>点都在集合里，极限点也在</td></tr>
+          <tr><td>一致连续</td><td>uniformly continuous</td><td>同一个 δ 管住全区间（拓展）</td></tr>
+          <tr><td>不动点</td><td>fixed point</td><td>满足 f(x) = x 的点（拓展）</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cr-block">
+      <h3>Self-check<span class="cr-alt">学习自检</span></h3>
+      <div class="cr-checks">
+        <label class="cr-check"><input type="checkbox"><span>能判断四种情形里哪些可以直接代入求极限，并说出前提。<span class="cr-en">Decide when substitution is legal and state the precondition.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能独立完成 √x 的连续性证明，并解释 x₀ = 0 为何要单独处理。<span class="cr-en">Reproduce the √x proof and explain the endpoint case.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能写出连续函数的四则运算性质，并说出除法要多哪个条件。<span class="cr-en">State the algebra of continuity and the extra condition for division.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能默写复合函数的两个定理，并说清为什么外函数必须连续、内函数却不必。<span class="cr-en">Write both composition theorems and justify which hypothesis matters.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能用"取对数 + eˣ 连续"推出幂指函数的极限公式，并算出 (1+3x)^(1/x) → e³。<span class="cr-en">Derive the 1^∞ formula and evaluate a concrete case.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能按"找可疑点 → 算左右极限 → 对号入座"判定间断点类型，包括 tan x 在 kπ 点。<span class="cr-en">Classify discontinuities with the three-step routine, including tan x at kπ.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说出闭区间四大定理的共同前提，并各举一个去掉前提后的反例。<span class="cr-en">State the shared hypotheses and give a counterexample for each.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能用"闭区间对取极限封闭"解释为什么开区间不行。<span class="cr-en">Explain closure under limits as the reason closedness is required.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能写出构造辅助函数证明"存在 ξ 使 f(ξ) = c"的两步套路，并独立完成一道题。<span class="cr-en">Apply the two-step auxiliary-function template unaided.</span></span></label>
+        <label class="cr-check"><input type="checkbox"><span>能说出闭区间连续函数的值域仍是闭区间 [m, M]。<span class="cr-en">State that the image of a closed interval is again [m, M].</span></span></label>
+      </div>
+    </div>
+
+    <div class="q-host" data-quiz="course-calc-05"></div>
+
+    <p class="cr-note">资料来源：2026 年 10 月 16 日"连续函数相关知识点讲解"课堂（07:52–09:35）的飞书 AI 笔记与智能章节（原笔记由工具自动生成并标注"可能存在不准确之处"）。本页逐条核对后做了 <b>9 处更正</b>与 <b>9 处扩充</b>，双语对照，并加入 5 组可操作的交互演示与一套纯英文思维题。课堂布置的课后思考题（间断点判定、有界性判断）建议先自己写完整过程再看解析——老师那句"听懂、理解、能讲给别人听是三个层次"是本课最好的注脚。<br><span class="cr-en">Source: the Feishu AI notes and smart chapters of the 16 October 2026 session (07:52–09:35), machine-generated and flagged as possibly inaccurate. This page corrects nine points, extends nine, is bilingual, and adds five interactive demos plus an English-only problem set. Write the discontinuity and boundedness exercises out in full before reading any solution.</span></p>
+  </div>
+</section>
+
 <section class="page" data-view="course-cn">
   <div class="wrap page-intro">
     <div class="kicker mono">MODULE 03 / CHINESE LANGUAGE AND LITERATURE</div><div class="fr-mot">Langue et littérature chinoises</div>
@@ -6461,6 +7053,94 @@ img{filter:saturate(1.14) contrast(1.05) brightness(1.02)}
 <script id="q-script">
 (function(){
   var DATA = {
+  'course-app-06': {
+    title: 'Lesson 6 · Floating-Point Types, sizeof and Byte Order',
+    intro: 'Nine questions on how a binary machine stores real numbers, sizes and byte order. All questions are in English; reason first, then click.',
+    items: [
+      { q: 'For n bits, which statement about the signed and unsigned maxima is exactly true?',
+        opts: ['The unsigned maximum is exactly twice the signed maximum.', 'U_max = 2 x S_max + 1 — at 16 bits, 2 x 32767 + 1 = 65535.', 'The unsigned maximum is 2^n - 2.', 'The two maxima are equal because they use the same bits.'],
+        a: 1,
+        why: 'It is an identity, not an approximation. "Twice as many values" says the same thing in another form; only "exactly twice the maximum" is wrong.' },
+      { q: '0.1f + 0.2f does not equal 0.3f in C. What is the correct explanation?',
+        opts: ['The compiler optimises the addition incorrectly.', 'None of 0.1, 0.2 and 0.3 has an exact binary representation, so each literal is already a nearby value and the rounding errors need not cancel.', 'float cannot store numbers smaller than 1.', 'They are equal; only printf makes them look different.'],
+        a: 1,
+        why: 'Binary fractions represent 1/2, 1/4, 1/8 exactly but never 1/10. The approximation happens before any arithmetic is performed.' },
+      { q: 'int x = 5; size_t s = sizeof(x++); What are x and s afterwards?',
+        opts: ['x becomes 6 and s is 4.', 'x stays 5 and s is the size in bytes: sizeof does not evaluate its operand.', 'x becomes 6 and s is 1.', 'The program does not compile because of the increment inside sizeof.'],
+        a: 1,
+        why: 'sizeof is an operator that needs the type, not the value, and it is evaluated at compile time. The increment never happens — a classic examination trap.' },
+      { q: 'Which statement about byte order is correct?',
+        opts: ['The C standard requires little endian on PCs.', 'Byte order is a property of the processor architecture; the C standard does not specify it, so x86/x64 is little endian while network protocols standardise on big endian.', 'Big endian stores the low-order byte at the low address.', 'Byte order matters only for floating-point numbers.'],
+        a: 1,
+        why: 'The lecture said "C on a PC defaults to little endian", which points the right way but blames the language. It is the CPU that decides, which is why the same source can behave differently elsewhere.' },
+      { q: 'A program contains the literal "D:\\code\\c" — that is, with single backslashes. What is the compiler obliged to do, and what would the string contain?',
+        opts: ['Nothing special; the string contains the path as written.', 'A backslash-letter combination that is not a defined escape requires a diagnostic; even if a lenient compiler accepts it, the string is not the path that was intended.', 'The compiler silently inserts a second backslash.', 'The program fails only at run time when the path is opened.'],
+        a: 1,
+        why: 'Escapes are processed before the string is understood. Writing the path with doubled backslashes is what makes the escape pass leave the path you meant.' },
+      { q: 'printf("%f", 3.14f) works, but using %f to read a double with scanf is wrong. Why?',
+        opts: ['Because scanf does not perform the default argument promotion that printf does, so a double needs %lf.', 'Because float values cannot be printed.', 'Because printf converts everything to int first.', 'Because scanf requires %f for both types.'],
+        a: 0,
+        why: 'printf promotes float to double, so %f serves both; scanf receives pointers and cannot promote, so it needs %f for float and %lf for double.' },
+      { q: 'char c = \'A\' + 1; What does printf("%d %c", c, c) print?',
+        opts: ['66 B', 'A B', '66 A', '65 A'],
+        a: 0,
+        why: 'The value is 66 either way; the specifier decides how to read that value. This is the cleanest demonstration that char is an integer type.' },
+      { q: 'Four integer marks must be averaged. Which declaration avoids silent data loss, and why?',
+        opts: ['int avg = (a + b + c + d) / 4; — integers keep it exact.', 'float avg = (a + b + c + d) / 4.0f; — the average may be fractional, and at least one operand must be floating-point for the division to be done in floating point.', 'int avg = (a + b + c + d) / 4.0; — assigning a double to an int is exact.', 'It makes no difference; the compiler chooses the better one.'],
+        a: 1,
+        why: 'Integer division truncates, so (a+b+c+d)/4 loses the fraction before any assignment happens. The type of the operands decides the arithmetic, not the type of the destination.' },
+      { q: 'Why is long double not a reliable answer to precision problems?',
+        opts: ['Because it is always slower.', 'Because its size and precision are implementation-defined — on MSVC it is simply double, so the 18–19 digit figure holds only on x86 extended precision.', 'Because it cannot store negative numbers.', 'Because printf cannot print it.'],
+        a: 1,
+        why: 'Precision here is a platform fact, not a language guarantee. The engineering answer is a better algorithm with double, not a wider type.' }
+    ]
+  },
+  'course-calc-05': {
+    title: 'Lesson 5 · Composite Functions and Closed Intervals',
+    intro: 'Ten questions on when a limit may be evaluated by substitution, how limits pass through compositions, and why the four great theorems need both hypotheses. All questions are in English.',
+    items: [
+      { q: 'When is it legitimate to evaluate a limit by substitution?',
+        opts: ['Whenever the expression looks simple enough.', 'Exactly when the function is continuous at that point, which requires the point to lie in the domain.', 'Whenever the two-sided limit exists.', 'Whenever numerator and denominator are both polynomials.'],
+        a: 1,
+        why: 'Substitution is the definition of continuity read backwards. (x^2 - 1)/(x - 1) at x = 1 has a limit but no substitution, because 1 is not in the domain.' },
+      { q: 'The composition theorem states lim f(g(x)) = f(lim g(x)). Which hypothesis is essential, and which is not?',
+        opts: ['Both f and g must be continuous.', 'f must be continuous at the limit of g; g need only have a limit and need not be continuous.', 'g must be continuous and f need only have a limit.', 'Neither function needs to be continuous.'],
+        a: 1,
+        why: 'Only the outer function is being fed a limit value. The inner function merely has to produce one.' },
+      { q: 'Let f(u) = 1 when u = 0 and f(u) = 0 otherwise, and let g(x) = x. Then lim g = 0, yet lim f(g(x)) = 0 while f(0) = 1. Why does the theorem fail here?',
+        opts: ['The limit of g was computed incorrectly.', 'Because x never equals the limit point, g(x) never reaches b, so the value of f at b cannot influence the composite limit — continuity at b is exactly what would bridge that gap.', 'Because f is unbounded near 0.', 'Because g is not continuous either.'],
+        a: 1,
+        why: 'The composite limit only samples f away from b. Only continuity — the statement that the limit and the value agree — lets you replace one by the other.' },
+      { q: 'Writing f^g as e^(g ln f) and then moving the limit inside the exponential uses which results?',
+        opts: ['The squeeze theorem.', 'The continuity of e^u on the whole real line, together with the composition theorem.', 'The monotone convergence theorem.', 'L Hopital rule.'],
+        a: 1,
+        why: 'The whole power-exponential method rests on e^u being continuous, which is exactly why it was worth proving the composition theorem first.' },
+      { q: 'Classify the discontinuity of sin(1/x) at 0.',
+        opts: ['Removable.', 'Infinite.', 'Jump.', 'Oscillating — neither one-sided limit exists and neither is infinite, which is why a three-way classification is incomplete.'],
+        a: 3,
+        why: 'The failure modes of the three conditions of continuity do not exhaust the possibilities. Four types are needed, not three.' },
+      { q: 'Which two hypotheses do the extreme value, boundedness, zero and intermediate value theorems share?',
+        opts: ['Differentiable and bounded.', 'Continuous on a closed interval.', 'Monotone and bounded.', 'Defined at the endpoints only.'],
+        a: 1,
+        why: 'The uniformity of the hypotheses is the clue that they are all consequences of one property: the closed interval is compact.' },
+      { q: 'Which example shows that the zero theorem fails without continuity?',
+        opts: ['y = x on (0,1) — continuous but on an open interval.', 'f = -1 for x < 0 and f = 1 for x >= 0 on [-1,1] — the endpoint values have opposite signs, yet there is no zero.', 'y = 1/x on (0,1) — continuous but unbounded.', 'y = x^2 on [-1,1] — the endpoint values have the same sign.'],
+        a: 1,
+        why: 'This is the canonical counterexample: the sign flip is carried by a jump, not by a crossing, so the graph never meets the axis.' },
+      { q: 'Why does the extreme value theorem need a closed interval rather than an open one?',
+        opts: ['Because open intervals are always unbounded.', 'Because the proof takes a supremum and must show it is attained: the closed interval keeps the limiting point inside — it is closed under limits — while (0,1) loses the limit 0 of the sequence 1/2, 1/3, 1/4, ...', 'Because continuous functions cannot be defined on open intervals.', 'Because the theorem needs differentiability at the endpoints.'],
+        a: 1,
+        why: 'Closedness is not decoration: it is what stops the point that attains the supremum from escaping the interval.' },
+      { q: 'You must prove that some ξ satisfies g(ξ) = c. What is the standard two-step template?',
+        opts: ['Show that g is monotone, then apply the intermediate value theorem.', 'Define F(x) = g(x) - c, verify that F is continuous on a closed interval, and find two points where F has opposite signs — not necessarily the endpoints.', 'Assume no such ξ exists and derive a contradiction from monotonicity.', 'Evaluate g at the endpoints and read the answer off directly.'],
+        a: 1,
+        why: 'Shifting the equation turns a value-taking problem into a zero-finding problem, which is the only form the theorem accepts.' },
+      { q: 'Let f be continuous on the closed interval [a, b]. What is its image?',
+        opts: ['An open interval.', 'A single value.', 'Again a closed interval [m, M], where m and M are the minimum and maximum — the extreme value and intermediate value theorems together.', 'The whole real line.'],
+        a: 2,
+        why: 'The extreme value theorem supplies m and M; the intermediate value theorem fills in everything between them. Neither theorem alone gives this.' }
+    ]
+  },
   'course-app-05': {
     title: 'Lesson 5 · Identifiers, Functions and Data Types',
     intro: 'Ten questions that ask you to reason about names, calls and types rather than recall them. All questions are in English; think first, then click.',
@@ -7381,6 +8061,327 @@ img{filter:saturate(1.14) contrast(1.05) brightness(1.02)}
       else { ch.value = isUpper ? 'A' : 'a'; }
       render();
     });
+    render();
+  })();
+})();
+</script>
+
+<script id="l6-l7-script">
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s).replace(/[&<>]/g, function(c){ return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' })[c]; }); }
+  function fmtInt(x){ return Math.abs(x) >= 1e15 ? x.toExponential(6) : x.toLocaleString('en-US'); }
+
+  /* ===== Lesson 6 · Demo 1 · 无符号上限的精确关系 ===== */
+  (function(){
+    var nR = $('l6-ur-n'), nV = $('l6-ur-nv'), stage = $('l6-ur-stage'), out = $('l6-ur-out');
+    if (!nR || !stage) return;
+    function render(){
+      var n = parseInt(nR.value, 10);
+      nV.textContent = n;
+      var sMax = Math.pow(2, n - 1) - 1, uMax = Math.pow(2, n) - 1;
+      var sCnt = Math.pow(2, n - 1), uCnt = Math.pow(2, n);
+      stage.innerHTML = '<div class="l3c-grid2">' +
+        '<div class="l3c-mini">有符号 S_max = 2^' + (n - 1) + ' − 1<br><b>' + fmtInt(sMax) + '</b></div>' +
+        '<div class="l3c-mini">无符号 U_max = 2^' + n + ' − 1<br><b>' + fmtInt(uMax) + '</b></div>' +
+        '</div>' +
+        '<div class="l3-flow" style="margin-top:10px">' +
+        '<div>2 × S_max + 1 = 2 × ' + fmtInt(sMax) + ' + 1 = <b>' + fmtInt(2 * sMax + 1) + '</b></div>' +
+        '<div>U_max　　　　 = <b>' + fmtInt(uMax) + '</b>　' + (2 * sMax + 1 === uMax ? '<span class="l3c-ok">✓ 恒等成立</span>' : '<span class="l3c-no">✗</span>') + '</div>' +
+        '</div>';
+      out.innerHTML = '数值个数之比：' + fmtInt(uCnt) + ' ÷ ' + fmtInt(sCnt) + ' = <b>' + (uCnt / sCnt) + '</b>（恰好 2 倍）。' +
+        '上限之比：' + fmtInt(uMax) + ' ÷ ' + fmtInt(sMax) + ' = <b>' + (uMax / sMax).toFixed(6) + '</b>。' +
+        '两种说法都对，但要讲清说的是“个数”还是“上限”——精确关系用 U_max = 2·S_max + 1 最不容易出错。';
+    }
+    nR.addEventListener('input', render);
+    render();
+  })();
+
+  /* ===== Lesson 6 · Demo 2 · 转义与路径 ===== */
+  (function(){
+    var inp = $('l6-esc-in'), out = $('l6-esc-out'), stage = $('l6-esc-stage');
+    if (!inp || !out) return;
+    var KNOWN = 'ntr0abfv?\\\'"';
+    function render(){
+      var raw = inp.value;
+      var literal = raw.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+      var bad = [], i = 0;
+      while (i < raw.length) {
+        if (raw[i] === '\\') {
+          var nx = raw[i + 1];
+          if (nx === undefined) { bad.push('（结尾单独一个反斜杠）'); break; }
+          if (KNOWN.indexOf(nx) < 0) bad.push('\\' + nx);
+          i += 2;
+        } else i++;
+      }
+      out.innerHTML = '<div class="l3c-val">C 源码里应当写成：<code>\"' + esc(literal) + '\"</code></div>' +
+        '<div class="l3c-val" style="margin-top:6px">printf 实际输出：<b>' + esc(raw) + '</b></div>';
+      stage.innerHTML = (bad.length
+        ? '<div class="l3c-val"><span class="l3c-no">检测到未定义的转义：</span><b>' + esc(bad.join('、')) + '</b></div>' +
+          '<div class="l3-tiny" style="margin-top:6px">C 标准要求编译器对未定义的转义序列给出诊断。即使某个编译器宽容放过，得到的字符串也已经不是你以为的内容——Windows 路径必须写成双反斜杠。</div>'
+        : '<div class="l3c-val"><span class="l3c-ok">没有未定义的转义序列</span></div>' +
+          '<div class="l3-tiny" style="margin-top:6px">反斜杠与双引号在字符串里都需要转义；\\n、\\t 这类是已经定义好的转义序列。</div>');
+    }
+    inp.addEventListener('input', render);
+    render();
+  })();
+
+  /* ===== Lesson 6 · Demo 3 · IEEE 754 位分解 ===== */
+  (function(){
+    var v = $('l6-fp-v'), t = $('l6-fp-t'), stage = $('l6-fp-stage'), out = $('l6-fp-out');
+    if (!v || !stage) return;
+    function render(){
+      var x = parseFloat(v.value);
+      if (isNaN(x)) { stage.innerHTML = ''; out.textContent = '请输入一个数值。'; return; }
+      var isD = t && t.value === '64';
+      var buf = new ArrayBuffer(isD ? 8 : 4), dv = new DataView(buf);
+      var bits, back;
+      if (isD) { dv.setFloat64(0, x); bits = dv.getBigUint64(0).toString(2).padStart(64, '0'); back = dv.getFloat64(0); }
+      else { dv.setFloat32(0, x); bits = dv.getUint32(0).toString(2).padStart(32, '0'); back = dv.getFloat32(0); }
+      var eLen = isD ? 11 : 8, mLen = isD ? 52 : 23;
+      var sBit = bits.slice(0, 1), eBits = bits.slice(1, 1 + eLen), mBits = bits.slice(1 + eLen);
+      function seg(cls, str){ return '<span class="l3-cell ' + cls + '" style="font-family:ui-monospace,monospace;font-size:11px">' + str + '</span>'; }
+      stage.innerHTML = '<div class="l3-bits" style="justify-content:flex-start;gap:2px">' +
+        seg('hi', sBit) + '<span class="l3-tiny" style="margin:0 4px">|</span>' +
+        seg('', eBits) + '<span class="l3-tiny" style="margin:0 4px">|</span>' +
+        seg('', mBits) + '</div>' +
+        '<div class="l3-tiny" style="margin-top:6px">符号位 1 位 · 指数 ' + eLen + ' 位 · 尾数 ' + mLen + ' 位　（指数段解析为 ' + parseInt(eBits, 2) + '）</div>' +
+        '<div class="l3-flow" style="margin-top:10px">' +
+        '<div>输入　　　：' + x + '</div>' +
+        '<div>实际存储值：' + back + '</div>' +
+        '<div>误差　　　：' + (Math.abs(back - x) === 0 ? '<span class="l3c-ok">0（可以精确表示）</span>' : '<span class="l3c-no">' + Math.abs(back - x).toExponential(4) + '</span>') + '</div>' +
+        '</div>';
+      out.innerHTML = (Math.abs(back - x) === 0
+        ? '这个数在' + (isD ? '双' : '单') + '精度下可以被精确表示——它正好是若干个 1/2 的幂之和。'
+        : '存不精确：尾数只有 ' + mLen + ' 位，这个数的二进制展开被截断了，有效十进制位数约为 ' + Math.floor(mLen * Math.log10(2)) + ' 位。') +
+        '　依次试试 0.1、0.2、0.3，再试 0.5、0.25，对比“能否精确表示”。';
+    }
+    v.addEventListener('input', render);
+    if (t) t.addEventListener('change', render);
+    render();
+  })();
+
+  /* ===== Lesson 6 · Demo 4 · sizeof 参考台 ===== */
+  (function(){
+    var t = $('l6-sz-t'), stage = $('l6-sz-stage'), out = $('l6-sz-out');
+    if (!t || !stage) return;
+    var T = {
+      char:       { b: 1, f: '%c / %d', note: '最小存储单位；标准保证 sizeof(char) 恒为 1' },
+      short:      { b: 2, f: '%hd', note: '至少 16 位' },
+      int:        { b: 4, f: '%d', note: '至少 16 位；4 字节是常见平台的事实，不是语言保证' },
+      long:       { b: 8, f: '%ld', note: 'Windows 上是 4，Linux 64 位上是 8——同一份代码行为可能不同' },
+      float:      { b: 4, f: '%f / %.2f', note: 'IEEE 754 单精度，有效数字约 6–7 位' },
+      double:     { b: 8, f: '%f / %.2f', note: 'IEEE 754 双精度，有效数字约 15–16 位' },
+      longdouble: { b: 16, f: '%Lf', note: 'x86 上是 80 位扩展精度（占 16 字节），MSVC 上等同 double' },
+      size_t:     { b: 8, f: '%zu', note: 'sizeof 的结果类型，无符号；打印 sizeof 的结果要用它' },
+      ptr:        { b: 8, f: '%p', note: '64 位平台上指针是 8 字节' }
+    };
+    function render(){
+      var k = t.value, d = T[k];
+      stage.innerHTML = '<div class="l3c-grid2">' +
+        '<div class="l3c-mini">sizeof(' + k + ')<br><b>' + d.b + ' 字节</b> = ' + (d.b * 8) + ' 位</div>' +
+        '<div class="l3c-mini">打印格式符<br><b>' + d.f + '</b></div>' +
+        '</div>' +
+        '<div class="l3-tiny" style="margin-top:8px">' + d.note + '</div>';
+      out.innerHTML = '在典型 64 位平台上，' + k + ' 占 <b>' + d.b + '</b> 字节。' +
+        '但请记住：除了 sizeof(char) == 1，其余字节数都是<b>实现约定</b>而非标准保证——想知道真实值，永远用 sizeof 而不是背数字。';
+    }
+    t.addEventListener('change', render);
+    render();
+  })();
+
+  /* ===== Lesson 6 · Demo 5 · 内存字节序 ===== */
+  (function(){
+    var v = $('l6-bo-v'), stage = $('l6-bo-stage'), out = $('l6-bo-out');
+    if (!v || !stage) return;
+    function render(){
+      var n = parseInt(v.value, 10);
+      if (isNaN(n)) { stage.innerHTML = ''; out.textContent = '请输入一个整数。'; return; }
+      var u = n >>> 0;
+      var be = [(u >>> 24) & 255, (u >>> 16) & 255, (u >>> 8) & 255, u & 255];
+      var le = be.slice().reverse();
+      function hex(x){ return ('0' + x.toString(16).toUpperCase()).slice(-2); }
+      function row(label, arr){
+        var cells = arr.map(function(b, i){
+          return '<span class="l3-cell' + (i === 0 ? ' hi' : '') + '">' + hex(b) + '<br><span class="l3-tiny">+' + i + '</span></span>';
+        }).join('');
+        return '<div class="l3-tiny" style="margin-top:8px">' + label + '</div><div class="l3-bits" style="justify-content:flex-start">' + cells + '</div>';
+      }
+      stage.innerHTML = '<div class="l3c-val">值 = ' + n + '　= 0x' + hex(be[0]) + hex(be[1]) + hex(be[2]) + hex(be[3]) + '</div>' +
+        row('小端（x86/x64）：低位字节放在低地址', le) +
+        row('大端（网络字节序）：高位字节放在低地址', be);
+      var asBig = ((le[0] << 24) | (le[1] << 16) | (le[2] << 8) | le[3]) >>> 0;
+      out.innerHTML = '同一份 4 字节内容，按小端解释得 <b>' + n + '</b>，按大端解释得 <b>' + asBig + '</b>。' +
+        '在同一个进程里你感受不到这个差别；一旦写二进制文件、走网络或与别的架构交换数据，就必须先约定字节序——TCP/IP 统一用大端，所以叫“网络字节序”。';
+    }
+    v.addEventListener('input', render);
+    render();
+  })();
+
+  /* ===== Lesson 5 · Demo 1 · 代入判定器 ===== */
+  (function(){
+    var k = $('l7-sub-k'), stage = $('l7-sub-stage');
+    if (!k || !stage) return;
+    var C = [
+      { f: 'f(x) = (x² − 1)/(x − 1)，x → 1', ok: false, why: 'x = 1 处 <b>无定义</b>（分母为零），所以不能代入。但化简后 f = x + 1（x ≠ 1），左右极限都是 2 ⟹ <b>极限存在且为 2</b>。这是<b>可去间断点</b>。' },
+      { f: 'f(x) = √x，x → 4', ok: true, why: '4 在定义域内，√x 在 4 处<b>连续</b>，所以直接代入：√4 = <b>2</b>。这是“连续 ⟹ 可代入”的标准情形。' },
+      { f: 'f(x) = √x，x → 0⁺', ok: null, why: '0 是定义域<b>左端点</b>，左邻域里函数没有定义，只能谈<b>右极限</b>。√x 在 0 处<b>右连续</b>，所以右极限等于函数值 0。第四课讲左右连续就是为这种情况准备的。' },
+      { f: 'f(x) = 1/x，x → 0', ok: false, why: '0 处无定义。左极限 −∞、右极限 +∞，两侧都无界且符号相反 ⟹ 既没有有限极限也没有统一的无穷极限。属于<b>无穷间断点</b>，x = 0 是垂直渐近线。' },
+      { f: 'f(x) = ln x，x → 0⁺', ok: false, why: '0 不在定义域内（真数必须为正），只能谈右极限，而 lim (x → 0⁺) ln x = <b>−∞</b>。注意：严格说这不是“间断点”，因为间断点只对定义域内的点讨论。' },
+      { f: 'f(x) = tan x，x → π/2', ok: false, why: 'π/2 处无定义（cos = 0）。左右极限分别为 +∞ 与 −∞ ⟹ <b>无穷间断点</b>，x = π/2 是垂直渐近线。' }
+    ];
+    function render(){
+      var c = C[parseInt(k.value, 10)] || C[0];
+      var badge = c.ok === true ? '<span class="l3c-ok">可以直接代入 ✓</span>' :
+                  (c.ok === null ? '<span style="color:#a15c00;font-weight:600">只能单侧讨论 △</span>' : '<span class="l3c-no">不能代入 ✗</span>');
+      stage.innerHTML = '<div class="l3c-val"><b>' + c.f + '</b>　' + badge + '</div>' +
+        '<div class="l3-tiny" style="margin-top:8px">' + c.why + '</div>' +
+        '<div class="l3-tiny" style="margin-top:8px">判定顺序：先问“该点在定义域内吗”→ 再问“函数在该点连续吗”→ 都不是，就回到极限的定义去做。</div>';
+    }
+    k.addEventListener('change', render);
+    render();
+  })();
+
+  /* ===== Lesson 5 · Demo 2 · 复合极限能否穿过去 ===== */
+  (function(){
+    var host = $('l7-cp-tabs'), stage = $('l7-cp-stage'), out = $('l7-cp-out');
+    if (!host || !stage) return;
+    var CASES = [
+      { name: '外函数连续', f: 'f(u) = u²', cont: true,
+        rows: ['g(x) = x + 1，x → 1　⟹　lim g = 2', 'f 在 u = 2 处连续（多项式处处连续）', 'lim f(g(x)) = f(2) = 4', 'f(lim g) = f(2) = 4'],
+        verdict: '两者相等，定理成立。' },
+      { name: '外函数不连续', f: 'f(u) = 1（u = 0），0（u ≠ 0）', cont: false,
+        rows: ['g(x) = x，x → 0　⟹　lim g = 0', 'f 在 u = 0 处不连续（f(0) = 1，但 0 附近的极限是 0）', 'lim f(g(x))：x ≠ 0 所以 g(x) ≠ 0，f(g(x)) ≡ 0 ⟹ 极限 = 0', 'f(lim g) = f(0) = 1'],
+        verdict: '两者不等（0 ≠ 1），定理失效。' },
+      { name: '内外都连续', f: 'f(u) = sin u，g(x) = x²', cont: true,
+        rows: ['g(x) = x²，x → 0　⟹　lim g = 0，且 g 在 0 连续', 'f 在 u = 0 处连续', 'lim f(g(x)) = f(0) = 0', 'f(lim g) = f(0) = 0'],
+        verdict: '两者相等，且复合函数在 0 处连续（定理 5.2）。' }
+    ];
+    var cur = 0;
+    function render(){
+      host.innerHTML = CASES.map(function(c, i){
+        return '<button class="l3-btn" data-i="' + i + '"' + (i === cur ? ' style="background:#2f2a22;color:#fdf8ee"' : '') + '>' + c.name + '</button>';
+      }).join('') + '<span class="l3-tiny" style="margin-left:8px">切换外函数是否连续</span>';
+      var c = CASES[cur];
+      stage.innerHTML = '<div class="l3c-val">外函数：<b>' + c.f + '</b>　' +
+        (c.cont ? '<span class="l3c-ok">在对应点连续</span>' : '<span class="l3c-no">在对应点不连续</span>') + '</div>' +
+        '<div class="l3-flow" style="margin-top:10px">' + c.rows.map(function(r){ return '<div>' + r + '</div>'; }).join('') + '</div>';
+      out.innerHTML = '<b>' + c.verdict + '</b>' +
+        (c.cont ? '　原因：外函数在 b 连续就意味着“极限值 = 函数值”，这条等式正是定理需要的桥。'
+                : '　原因：求极限时 x 永远不等于 a，所以 g(x) 永远取不到 b，f 在 b 点的取值影响不到复合极限；而右边用的是 f(b)。这个缝隙只能靠“f 在 b 连续”补上。');
+    }
+    host.addEventListener('click', function(e){ var btn = e.target.closest('.l3-btn'); if (!btn) return; cur = parseInt(btn.dataset.i, 10); render(); });
+    render();
+  })();
+
+  /* ===== Lesson 5 · Demo 3 · 幂指函数极限 ===== */
+  (function(){
+    var k = $('l7-pe-k'), kv = $('l7-pe-kv'), stage = $('l7-pe-stage'), out = $('l7-pe-out');
+    if (!k || !stage) return;
+    function render(){
+      var K = parseFloat(k.value);
+      kv.textContent = K;
+      stage.innerHTML = '<div class="l3-flow">' +
+        '<div>lim (x → 0) (1 + ' + K + 'x)^(1/x)</div>' +
+        '<div style="padding-left:18px">= e^( lim (1/x) · ln(1 + ' + K + 'x) )</div>' +
+        '<div style="padding-left:18px">= e^( lim (1/x) · (' + K + 'x) )　　（用等价无穷小 ln(1+t) ~ t）</div>' +
+        '<div style="padding-left:18px">= e^(' + K + ') = <b>' + Math.exp(K).toFixed(6) + '</b></div>' +
+        '</div>';
+      out.innerHTML = '指数上的极限 L = <b>' + K + '</b>，所以结果是 <b>e^' + K + ' ≈ ' + Math.exp(K).toFixed(6) + '</b>。' +
+        '当 k = 1 时就是第二重要极限 lim (1 + x)^(1/x) = e。' +
+        '整条推理链只用了一个事实：<b>e^u 处处连续</b>，所以极限可以穿进指数函数——这正是上一节复合函数定理的价值。';
+    }
+    k.addEventListener('input', render);
+    render();
+  })();
+
+  /* ===== Lesson 5 · Demo 4 · 间断点判定器 ===== */
+  (function(){
+    var k = $('l7-dc-k'), stage = $('l7-dc-stage');
+    if (!k || !stage) return;
+    var C = [
+      { f: '(x² − 1)/(x − 1) 在 x = 1', L: '2', R: '2', fa: '无定义', type: '可去间断点',
+        why: '左右极限都存在且相等（都是 2），但函数在该点无定义。只要补充定义 f(1) = 2，函数立刻在该点连续——“可去”就是这个意思。' },
+      { f: '1/(x − 1)² 在 x = 1', L: '+∞', R: '+∞', fa: '无定义', type: '无穷间断点',
+        why: '两侧都无限增大。无论把 f(1) 定义成什么有限值，都不可能连续——所以它不可去。x = 1 是垂直渐近线。' },
+      { f: '|x|/x 在 x = 0', L: '−1', R: '+1', fa: '无定义', type: '跳跃间断点',
+        why: '左右极限都是有限值但不相等，所以整个极限不存在。两侧的“落差”就是跳跃量，这里等于 2。修改单点取值无法修复。' },
+      { f: 'sin(1/x) 在 x = 0', L: '不存在', R: '不存在', fa: '无定义', type: '振荡间断点（第四类）',
+        why: '函数值在 −1 与 1 之间越震越快，两条序列可以给出不同的极限，所以极限不存在；同时它的绝对值不超过 1，也不趋于无穷。三个经典类型都装不下它——这正是原笔记“三类间断点”不完整的地方。' },
+      { f: 'tan x 在 x = 0', L: '0', R: '0', fa: '无定义', type: '可去间断点',
+        why: 'tan x = sin x / cos x，x → 0 时 sin x ~ x、cos x → 1，所以两侧都趋于 0。函数在 0 处无定义但极限存在 ⟹ 可去。' },
+      { f: 'tan x 在 x = π', L: '+∞', R: '−∞', fa: '无定义', type: '无穷间断点',
+        why: '在 x = kπ 中只有 0 是可去的；其余 k ≠ 0 的点两侧分别冲向 +∞ 与 −∞，符号都不同，属于无穷间断。这道题同时用到了等价无穷小、单侧极限和分类。' }
+    ];
+    function render(){
+      var c = C[parseInt(k.value, 10)] || C[0];
+      stage.innerHTML = '<div class="l3c-val"><b>' + c.f + '</b></div>' +
+        '<div class="l3-flow" style="margin-top:10px">' +
+        '<div>左极限　：' + c.L + '</div>' +
+        '<div>右极限　：' + c.R + '</div>' +
+        '<div>f(a)　　：' + c.fa + '</div>' +
+        '</div>' +
+        '<div class="l3c-val" style="margin-top:10px">判定：<b>' + c.type + '</b></div>' +
+        '<div class="l3-tiny" style="margin-top:6px">' + c.why + '</div>';
+    }
+    k.addEventListener('change', render);
+    render();
+  })();
+
+  /* ===== Lesson 5 · Demo 5 · 介值定理交互 ===== */
+  (function(){
+    var k = $('l7-iv-k'), m = $('l7-iv-m'), mv = $('l7-iv-mv'),
+        curve = $('l7-iv-curve'), line = $('l7-iv-line'), dots = $('l7-iv-dots'), out = $('l7-iv-out');
+    if (!k || !curve) return;
+    function PX(x){ return 40 + (x + 1.35) / 3.7 * 450; }
+    function PY(y){ return 225 - (y + 1.6) / 8.2 * 205; }
+    var CASES = [
+      { name: 'closed', lo: -1, hi: 2, gap: 0,
+        f: function(x){ return x * x * x - x; },
+        desc: 'f(x) = x³ − x 在 [−1, 2] 上连续，定义域是闭区间。' },
+      { name: 'open', lo: 0.001, hi: 0.999, gap: 0,
+        f: function(x){ return x; },
+        desc: 'f(x) = x 在开区间 (0, 1) 上连续——注意两个端点都取不到。' },
+      { name: 'jump', lo: -1, hi: 1, gap: 0.0001,
+        f: function(x){ return x < 0 ? -1 : 1; },
+        desc: 'f(x) = |x|/x 在 [−1, 1] 上（x = 0 处不连续）：闭区间 + 不连续。' }
+    ];
+    function render(){
+      var c = CASES[parseInt(k.value, 10)] || CASES[0];
+      var mu = parseFloat(m.value);
+      mv.textContent = mu.toFixed(2);
+      var pts = [], N = 400;
+      for (var i = 0; i <= N; i++) {
+        var x = c.lo + (c.hi - c.lo) * i / N;
+        pts.push(PX(x).toFixed(1) + ',' + PY(c.f(x)).toFixed(1));
+      }
+      curve.setAttribute('points', pts.join(' '));
+      line.setAttribute('y1', PY(mu).toFixed(1));
+      line.setAttribute('y2', PY(mu).toFixed(1));
+      var hits = [], prev = null;
+      for (var j = 0; j <= 800; j++) {
+        var xx = c.lo + (c.hi - c.lo) * j / 800;
+        if (c.gap && Math.abs(xx) < c.gap) { prev = null; continue; }
+        var val = c.f(xx) - mu;
+        if (prev !== null && prev * val < 0) hits.push(xx);
+        if (val === 0) hits.push(xx);
+        prev = val;
+      }
+      var uniq = [];
+      hits.forEach(function(h){ if (!uniq.some(function(u){ return Math.abs(u - h) < 0.01; })) uniq.push(h); });
+      dots.innerHTML = uniq.map(function(h){
+        return '<circle cx="' + PX(h).toFixed(1) + '" cy="' + PY(mu).toFixed(1) + '" r="4.5" fill="#a51c30"/>';
+      }).join('');
+      out.innerHTML = '<b>' + c.desc + '</b><br>水平线 y = ' + mu.toFixed(2) + ' 与图像的交点：<b>' + uniq.length + '</b> 个' +
+        (uniq.length ? '（' + uniq.map(function(h){ return 'x ≈ ' + h.toFixed(3); }).join('，') + '）' : '') + '。' +
+        (c.name === 'closed'
+          ? '　闭区间 + 连续：只要 μ 介于 f(−1) = 0 与 f(2) = 6 之间，就一定相交——这就是介值定理。'
+          : (c.name === 'open'
+             ? '　开区间：μ 必须严格落在 (0, 1) 内才有交点；而最小值 0 与最大值 1 都取不到，所以“最值定理”在这里失效。'
+             : '　闭区间但不连续：μ 落在 −1 与 1 之间时，图像却与水平线<b>没有交点</b>（函数只取 ±1 两个值）。去掉“连续”，介值定理立刻失效。'));
+    }
+    k.addEventListener('change', render);
+    m.addEventListener('input', render);
     render();
   })();
 })();
