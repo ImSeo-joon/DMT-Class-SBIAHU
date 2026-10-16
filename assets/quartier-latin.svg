@@ -1,38 +1,70 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="1200" height="420" role="img" aria-label="Toits du Quartier latin, Paris">
   <title>Quartier latin · 拉丁区屋顶</title>
-  <g fill="#1b3a6b">
-    <rect x="0" y="356" width="1200" height="64" opacity=".14"/>
-    <path d="M0 320c120-26 210-6 300-24s180 6 260-16 200 10 320-14 220 8 320-12v146H0z" opacity=".08"/>
-    <g opacity=".26">
-      <path d="M30 300l86-40 86 40v58H30z"/>
-      <rect x="176" y="308" width="10" height="26"/>
-      <path d="M210 286l74-34 74 34v72h-148z"/>
-      <rect x="272" y="240" width="10" height="30"/>
+  <defs>
+    <linearGradient id="qsky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b3a6b" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#1b3a6b" stop-opacity="0.42"/>
+    </linearGradient>
+    <linearGradient id="near" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#122545" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#1b3a6b" stop-opacity="0.54"/>
+    </linearGradient>
+    <linearGradient id="far" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b3a6b" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#1b3a6b" stop-opacity="0.22"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="1200" height="420" fill="url(#qsky)"/>
+
+  <!-- 远景屋顶：淡 -->
+  <g fill="url(#far)">
+    <path d="M0 310l70-30 70 30v72H0z"/>
+    <path d="M140 296l84-38 84 38v86h-168z"/>
+    <path d="M308 306l62-28 62 28v66H308z"/>
+    <path d="M432 320l54-24 54 24v58H432z"/>
+  </g>
+
+  <!-- 中景：屋顶、烟囱与老虎窗 -->
+  <g fill="#1b3a6b" opacity="0.48">
+    <path d="M540 292l96-44 96 44v92H540z"/>
+    <rect x="622" y="212" width="13" height="38"/><rect x="576" y="242" width="10" height="26"/>
+    <path d="M660 268h26l-13-18z"/><rect x="660" y="268" width="26" height="22" fill="#f4f1e9"/>
+    <path d="M732 274h24l-12-16z"/><rect x="732" y="274" width="24" height="20" fill="#f4f1e9"/>
+  </g>
+
+  <!-- 穹顶（先贤祠式）：中心 900，不在画面正中 -->
+  <g>
+    <rect x="836" y="240" width="128" height="118" fill="url(#near)"/>
+    <rect x="828" y="232" width="144" height="10" fill="#1b3a6b" opacity="0.83"/>
+    <g fill="#f4f1e9" opacity="0.77">
+      <rect x="852" y="266" width="12" height="70"/><rect x="876" y="266" width="12" height="70"/>
+      <rect x="900" y="266" width="12" height="70"/><rect x="924" y="266" width="12" height="70"/>
     </g>
-    <g opacity=".22">
-      <path d="M370 268l92-42 92 42v90H370z"/>
-      <rect x="452" y="204" width="12" height="34"/>
-      <rect x="398" y="232" width="9" height="24"/>
+    <rect x="862" y="196" width="76" height="40" fill="#1b3a6b" opacity="0.74"/>
+    <g fill="#f4f1e9" opacity="0.67">
+      <rect x="870" y="206" width="10" height="24"/><rect x="890" y="206" width="10" height="24"/>
+      <rect x="910" y="206" width="10" height="24"/><rect x="930" y="206" width="8" height="24"/>
     </g>
-    <g opacity=".20">
-      <path d="M566 300l60-28 60 28v58H566z"/>
-    </g>
-    <g opacity=".34">
-      <path d="M700 258l104-50 104 50v100H700z"/>
-      <rect x="788" y="176" width="12" height="36"/>
-      <rect x="726" y="212" width="10" height="26"/>
-      <path d="M938 264l88-42 88 42v94H938z"/>
-      <rect x="1010" y="196" width="11" height="30"/>
-    </g>
-    <g opacity=".40">
-      <rect x="836" y="236" width="128" height="116"/>
-      <path d="M900 138c34 0 62 26 64 60h-132c2-34 32-60 68-60z"/>
-      <rect x="892" y="112" width="10" height="30"/>
-      <circle cx="897" cy="108" r="6"/>
-    </g>
-    <g opacity=".30">
-      <path d="M1090 286l76-36 76 36v86h-152z"/>
-      <rect x="1156" y="226" width="12" height="28"/>
+    <path d="M900 132c36 0 64 28 64 64H836c0-36 28-64 64-64z" fill="#1b3a6b" opacity="0.8"/>
+    <path d="M900 104c14 0 24 12 24 28h-48c0-16 10-28 24-28z" fill="#1b3a6b" opacity="0.74"/>
+    <rect x="895" y="86" width="10" height="22" fill="#1b3a6b" opacity="0.8"/>
+    <circle cx="900" cy="82" r="6" fill="#1b3a6b" opacity="0.8"/>
+  </g>
+
+  <!-- 近景最右一栋，压住画面 -->
+  <g>
+    <path d="M1010 286l92-42 92 42v98h-184z" fill="url(#near)"/>
+    <rect x="1084" y="212" width="14" height="32" fill="#1b3a6b" opacity="0.64"/>
+    <rect x="1040" y="248" width="11" height="24" fill="#1b3a6b" opacity="0.54"/>
+    <g fill="#f4f1e9" opacity="0.7">
+      <path d="M1046 300h22l-11-15z"/><rect x="1046" y="300" width="22" height="20"/>
+      <path d="M1098 300h22l-11-15z"/><rect x="1098" y="300" width="22" height="20"/>
+      <path d="M1150 300h20l-10-14z"/><rect x="1150" y="300" width="20" height="20"/>
     </g>
   </g>
+
+  <!-- 一条极细的街道留白，打断屋顶的连续节奏 -->
+  <rect x="486" y="330" width="34" height="54" fill="#f4f1e9" opacity="0.64"/>
+
+  <rect x="0" y="384" width="1200" height="36" fill="#1b3a6b" opacity="0.19"/>
 </svg>

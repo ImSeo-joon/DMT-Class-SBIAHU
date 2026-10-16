@@ -1,39 +1,111 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="1200" height="420" role="img" aria-label="Facade de l'Ecole normale superieure, rue d'Ulm">
   <title>Ecole normale superieure · 巴黎高师主楼</title>
-  <g fill="#1b3a6b">
-    <rect x="0" y="352" width="1200" height="68" opacity=".14"/>
-    <rect x="40" y="322" width="230" height="30" opacity=".22"/>
-    <rect x="52" y="316" width="206" height="8" opacity=".28"/>
-    <g opacity=".26">
-      <rect x="146" y="252" width="12" height="72"/>
-      <circle cx="152" cy="238" r="42"/>
-      <circle cx="112" cy="256" r="27"/>
-      <circle cx="192" cy="252" r="24"/>
-    </g>
-    <rect x="620" y="252" width="560" height="100" opacity=".30"/>
-    <rect x="612" y="244" width="576" height="10" opacity=".36"/>
-    <rect x="620" y="276" width="560" height="4" opacity=".22"/>
-    <g opacity=".34">
-      <path d="M648 300h26v52h-26z"/><path d="M648 300a13 13 0 0 1 26 0z"/>
-      <path d="M712 300h26v52h-26z"/><path d="M712 300a13 13 0 0 1 26 0z"/>
-      <path d="M776 300h26v52h-26z"/><path d="M776 300a13 13 0 0 1 26 0z"/>
-      <path d="M1064 300h26v52h-26z"/><path d="M1064 300a13 13 0 0 1 26 0z"/>
-      <path d="M1120 300h26v52h-26z"/><path d="M1120 300a13 13 0 0 1 26 0z"/>
-    </g>
-    <rect x="880" y="196" width="180" height="156" opacity=".32"/>
-    <rect x="870" y="188" width="200" height="12" opacity=".40"/>
-    <path d="M970 92c40 0 72 32 72 72v24h-144v-24c0-40 32-72 72-72z" opacity=".42"/>
-    <rect x="964" y="62" width="12" height="34" opacity=".42"/>
-    <circle cx="970" cy="58" r="7" opacity=".42"/>
-    <rect x="902" y="232" width="136" height="6" opacity=".22"/>
-    <path d="M946 268h48v84h-48z" opacity=".46"/>
-    <path d="M946 268a24 24 0 0 1 48 0z" opacity=".46"/>
-    <path d="M620 252h180l-26-34H620z" opacity=".24"/>
-    <rect x="700" y="188" width="16" height="34" opacity=".26"/>
-    <rect x="742" y="200" width="14" height="24" opacity=".22"/>
-    <rect x="1002" y="106" width="4" height="82" opacity=".40"/>
-    <path d="M1006 112h34l-9 11 9 11h-34z" opacity=".40"/>
-    <rect x="856" y="352" width="228" height="9" opacity=".26"/>
-    <rect x="842" y="361" width="256" height="9" opacity=".20"/>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b3a6b" stop-opacity="0.1"/>
+      <stop offset="1" stop-color="#1b3a6b" stop-opacity="0.48"/>
+    </linearGradient>
+    <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b3a6b" stop-opacity="0.48"/>
+      <stop offset="1" stop-color="#122545" stop-opacity="0.74"/>
+    </linearGradient>
+    <linearGradient id="roof" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0f1f3a" stop-opacity="0.83"/>
+      <stop offset="1" stop-color="#1b3a6b" stop-opacity="0.54"/>
+    </linearGradient>
+    <linearGradient id="dome" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16294d" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#1b3a6b" stop-opacity="0.54"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 天空：极淡的纵向渐变，给画面一点空气感 -->
+  <rect x="0" y="0" width="1200" height="420" fill="url(#sky)"/>
+
+  <!-- 远树带 -->
+  <g fill="#1b3a6b" opacity="0.26">
+    <circle cx="470" cy="330" r="26"/><circle cx="516" cy="336" r="20"/>
+    <circle cx="836" cy="330" r="22"/><circle cx="876" cy="336" r="18"/>
   </g>
+
+  <!-- 左侧：矮墙 + 树 + 路灯（不对称的那一半） -->
+  <g fill="#1b3a6b">
+    <rect x="36" y="330" width="250" height="36" opacity="0.48"/>
+    <rect x="28" y="322" width="266" height="10" opacity="0.61"/>
+    <g opacity="0.54">
+      <rect x="144" y="248" width="13" height="76"/>
+      <circle cx="150" cy="232" r="44"/><circle cx="106" cy="252" r="28"/><circle cx="196" cy="248" r="25"/>
+    </g>
+    <g opacity="0.48">
+      <rect x="318" y="286" width="4" height="78"/>
+      <path d="M312 286h16l-4-12h-8z"/>
+      <circle cx="320" cy="272" r="5"/>
+    </g>
+  </g>
+
+  <!-- 主楼：孟莎屋顶 -->
+  <path d="M520 268 L578 206 L1148 206 L1180 268 Z" fill="url(#roof)"/>
+  <!-- 老虎窗 -->
+  <g fill="#f4f1e9" opacity="0.88">
+    <path d="M604 240h22l-11-16z"/><rect x="604" y="240" width="22" height="24"/>
+    <path d="M688 240h22l-11-16z"/><rect x="688" y="240" width="22" height="24"/>
+    <path d="M772 240h22l-11-16z"/><rect x="772" y="240" width="22" height="24"/>
+    <path d="M1024 240h22l-11-16z"/><rect x="1024" y="240" width="22" height="24"/>
+    <path d="M1092 240h22l-11-16z"/><rect x="1092" y="240" width="22" height="24"/>
+  </g>
+  <!-- 烟囱 -->
+  <g fill="#1b3a6b" opacity="0.64">
+    <rect x="628" y="176" width="17" height="34"/><rect x="660" y="188" width="14" height="22"/>
+    <rect x="1064" y="180" width="16" height="30"/>
+  </g>
+
+  <!-- 主楼立面 -->
+  <rect x="520" y="268" width="660" height="98" fill="url(#stone)"/>
+  <rect x="510" y="260" width="680" height="12" opacity="0.74" fill="#1b3a6b"/>
+  <rect x="520" y="300" width="660" height="4" opacity="0.35" fill="#f4f1e9"/>
+
+  <!-- 拱窗两排 -->
+  <g fill="#f4f1e9" opacity="0.77">
+    <path d="M556 318h24v40h-24z"/><path d="M556 318a12 12 0 0 1 24 0z"/>
+    <path d="M608 318h24v40h-24z"/><path d="M608 318a12 12 0 0 1 24 0z"/>
+    <path d="M660 318h24v40h-24z"/><path d="M660 318a12 12 0 0 1 24 0z"/>
+    <path d="M712 318h24v40h-24z"/><path d="M712 318a12 12 0 0 1 24 0z"/>
+    <path d="M764 318h24v40h-24z"/><path d="M764 318a12 12 0 0 1 24 0z"/>
+    <path d="M1052 318h24v40h-24z"/><path d="M1052 318a12 12 0 0 1 24 0z"/>
+    <path d="M1104 318h24v40h-24z"/><path d="M1104 318a12 12 0 0 1 24 0z"/>
+    <path d="M1156 318h20v40h-20z"/><path d="M1156 318a10 10 0 0 1 20 0z"/>
+  </g>
+
+  <!-- 中央亭：鼓座 + 穹顶 + 灯笼 + 旗 -->
+  <g fill="#1b3a6b">
+    <rect x="872" y="196" width="164" height="170" opacity="0.64"/>
+    <rect x="862" y="188" width="184" height="12" opacity="0.83"/>
+    <rect x="898" y="150" width="112" height="42" opacity="0.7"/>
+    <path d="M954 74c46 0 82 32 82 76H872c0-44 36-76 82-76z" fill="url(#dome)"/>
+    <rect x="948" y="46" width="12" height="30" opacity="0.86"/>
+    <circle cx="954" cy="42" r="7" opacity="0.86"/>
+    <path d="M946 262h28v104h-28z" opacity="0.92"/>
+    <path d="M946 262a14 14 0 0 1 28 0z" opacity="0.92"/>
+    <path d="M900 232h108v7" opacity="0.45"/>
+  </g>
+  <!-- 旗杆：唯一的竖向高元素 -->
+  <g fill="#1b3a6b" opacity="0.83">
+    <rect x="1006" y="104" width="4" height="84"/>
+    <path d="M1010 110h36l-10 12 10 12h-36z"/>
+  </g>
+
+  <!-- 台阶与栏杆 -->
+  <g fill="#1b3a6b">
+    <rect x="846" y="366" width="250" height="8" opacity="0.54"/>
+    <rect x="832" y="374" width="278" height="8" opacity="0.42"/>
+    <g opacity="0.48">
+      <rect x="556" y="356" width="150" height="4"/>
+      <rect x="560" y="348" width="4" height="10"/><rect x="586" y="348" width="4" height="10"/>
+      <rect x="612" y="348" width="4" height="10"/><rect x="638" y="348" width="4" height="10"/>
+      <rect x="664" y="348" width="4" height="10"/><rect x="690" y="348" width="4" height="10"/>
+    </g>
+  </g>
+
+  <!-- 地面 -->
+  <rect x="0" y="380" width="1200" height="40" fill="#1b3a6b" opacity="0.19"/>
 </svg>

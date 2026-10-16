@@ -1,40 +1,64 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="1200" height="420" role="img" aria-label="Cour et jardin de l'Ecole normale superieure">
   <title>Cour d'honneur · 巴黎高师中庭</title>
+  <defs>
+    <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b3a6b" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#1b3a6b" stop-opacity="0.38"/>
+    </linearGradient>
+    <linearGradient id="arc" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#16294d" stop-opacity="0.77"/>
+      <stop offset="1" stop-color="#1b3a6b" stop-opacity="0.51"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="1200" height="420" fill="url(#cg)"/>
+
+  <!-- 左侧连拱廊（重量偏左） -->
+  <g>
+    <rect x="30" y="176" width="366" height="180" fill="url(#arc)"/>
+    <rect x="18" y="164" width="392" height="14" fill="#1b3a6b" opacity="0.86"/>
+    <rect x="18" y="186" width="392" height="5" fill="#f4f1e9" opacity="0.48"/>
+    <g fill="#f4f1e9" opacity="0.92">
+      <path d="M56 356v-104a30 30 0 0 1 60 0v104z"/>
+      <path d="M148 356v-104a30 30 0 0 1 60 0v104z"/>
+      <path d="M240 356v-104a30 30 0 0 1 60 0v104z"/>
+      <path d="M332 356v-104a28 28 0 0 1 52 0v104z"/>
+    </g>
+    <!-- 拱廊上的圆浮雕 -->
+    <g fill="#1b3a6b" opacity="0.54">
+      <circle cx="86" cy="212" r="13"/><circle cx="178" cy="212" r="13"/>
+      <circle cx="270" cy="212" r="13"/><circle cx="358" cy="212" r="12"/>
+    </g>
+  </g>
+
+  <!-- 中景：喷泉（偏中右） -->
   <g fill="#1b3a6b">
-    <rect x="0" y="348" width="1200" height="72" opacity=".12"/>
-    <g opacity=".30">
-      <rect x="40" y="188" width="330" height="160"/>
-      <rect x="30" y="178" width="350" height="12"/>
-      <path d="M62 348v-96a26 26 0 0 1 52 0v96z" fill="#f4f1e9"/>
-      <path d="M146 348v-96a26 26 0 0 1 52 0v96z" fill="#f4f1e9"/>
-      <path d="M230 348v-96a26 26 0 0 1 52 0v96z" fill="#f4f1e9"/>
-      <path d="M314 348v-96a26 26 0 0 1 44 0v96z" fill="#f4f1e9"/>
-    </g>
-    <g opacity=".22">
-      <circle cx="88" cy="216" r="12"/><circle cx="172" cy="216" r="12"/>
-      <circle cx="256" cy="216" r="12"/><circle cx="336" cy="216" r="11"/>
-    </g>
-    <g opacity=".28">
-      <ellipse cx="742" cy="336" rx="86" ry="16"/>
-      <rect x="734" y="292" width="16" height="44"/>
-      <ellipse cx="742" cy="288" rx="46" ry="11"/>
-      <path d="M742 226c10 22 10 40 0 58-10-18-10-36 0-58z"/>
-    </g>
-    <g opacity=".26">
-      <rect x="1040" y="230" width="14" height="118"/>
-      <circle cx="1047" cy="212" r="52"/>
-      <circle cx="996" cy="238" r="32"/>
-      <circle cx="1100" cy="232" r="28"/>
-    </g>
-    <g opacity=".20">
-      <rect x="470" y="330" width="120" height="8"/>
-      <rect x="482" y="338" width="8" height="14"/>
-      <rect x="570" y="338" width="8" height="14"/>
-      <path d="M900 344h44l-6-22h-32z"/>
-    </g>
-    <g opacity=".14">
-      <rect x="380" y="360" width="820" height="3"/>
-      <rect x="380" y="378" width="820" height="3"/>
-    </g>
+    <ellipse cx="742" cy="340" rx="94" ry="17" opacity="0.54"/>
+    <rect x="734" y="296" width="17" height="46" opacity="0.64"/>
+    <ellipse cx="742" cy="292" rx="50" ry="12" opacity="0.67"/>
+    <path d="M742 224c11 24 11 44 0 64-11-20-11-40 0-64z" opacity="0.74"/>
+    <ellipse cx="742" cy="222" rx="7" ry="4" opacity="0.74"/>
+  </g>
+
+  <!-- 最右：一棵树压在边缘 -->
+  <g fill="#1b3a6b" opacity="0.54">
+    <rect x="1042" y="228" width="15" height="120"/>
+    <circle cx="1049" cy="208" r="54"/><circle cx="994" cy="238" r="34"/><circle cx="1104" cy="230" r="30"/>
+    <circle cx="1058" cy="160" r="26"/>
+  </g>
+
+  <!-- 中景长椅与盆栽 -->
+  <g fill="#1b3a6b" opacity="0.45">
+    <rect x="476" y="332" width="128" height="9"/>
+    <rect x="488" y="341" width="8" height="16"/><rect x="580" y="341" width="8" height="16"/>
+    <rect x="490" y="318" width="100" height="6"/>
+    <path d="M846 356h50l-7-24h-36z"/>
+    <circle cx="871" cy="324" r="14"/>
+  </g>
+
+  <!-- 地面铺装：三组线，疏密不等 -->
+  <g fill="#1b3a6b" opacity="0.26">
+    <rect x="396" y="368" width="804" height="3"/>
+    <rect x="396" y="384" width="804" height="3"/>
+    <rect x="396" y="400" width="804" height="3"/>
   </g>
 </svg>
