@@ -11,12 +11,12 @@
  *
  * 改缓存清单或版本号时，记得把 VERSION 一起改掉，否则激活阶段不会清理旧缓存。
  */
-const VERSION = 'dmt-shell-v2';
+const VERSION = 'dmt-shell-v3';
 const API_CACHE = 'dmt-api-v1';
 /* 只缓存公开只读接口；会员与个人数据（/api/me、消息、反馈等）一律不缓存，
    避免同一台设备上的下一个使用者看到上一个人的数据。 */
 const API_CACHEABLE = ['/api/news', '/api/events', '/api/schedule', '/api/folders', '/api/team', '/api/config'];
-const SHELL = ["/", "/index.html", "/manifest.webmanifest", "/icon-512.png", "/icon-maskable-512.png", "/assets/favicon.svg", "/assets/favicon-192.png", "/assets/favicon-32.png", "/assets/apple-touch-icon.png", "/assets/paris-chateau.svg", "/assets/paris-garden.svg", "/assets/paris-nature.svg", "/assets/paris-skyline.svg"];
+const SHELL = ["/", "/index.html", "/manifest.webmanifest", "/icon-512.png", "/icon-maskable-512.png", "/assets/favicon.svg", "/assets/favicon-192.png", "/assets/favicon-32.png", "/assets/apple-touch-icon.png", "/assets/paris-chateau.svg", "/assets/paris-garden.svg", "/assets/paris-nature.svg", "/assets/paris-skyline.svg", "/assets/fleur-de-lis.svg"];
 const NAV_TIMEOUT = 3500;
 const API_TIMEOUT = 3000;
 
