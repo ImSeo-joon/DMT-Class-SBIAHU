@@ -1,14 +1,14 @@
 {
-  "name": "DMT Class 01 | SBIAHU 班级网站",
-  "short_name": "DMT Class 01",
-  "description": "安徽大学纽约石溪学院 · 数字媒体技术 1 班（DMT Class 01）班级网站：班级新闻、事务中心、公共资料、课程要点与组队大厅。",
+  "name": "High Table · Academic Platform",
+  "short_name": "High Table",
+  "description": "High Table — a bilingual academic platform in the French university tradition. 高桌学术平台：新闻、事务、资料与课程要点。",
   "lang": "zh-CN",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#f6f5f0",
-  "theme_color": "#414a86",
+  "background_color": "#f4f1e9",
+  "theme_color": "#1b3a6b",
   "icons": [
     {
       "src": "/icon-192.png",

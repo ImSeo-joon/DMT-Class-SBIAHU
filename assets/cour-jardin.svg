@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="1200" height="420" role="img" aria-label="Cour et jardin de l'Ecole normale superieure">
+  <title>Cour d'honneur · 巴黎高师中庭</title>
+  <g fill="#1b3a6b">
+    <rect x="0" y="348" width="1200" height="72" opacity=".12"/>
+    <g opacity=".30">
+      <rect x="40" y="188" width="330" height="160"/>
+      <rect x="30" y="178" width="350" height="12"/>
+      <path d="M62 348v-96a26 26 0 0 1 52 0v96z" fill="#f4f1e9"/>
+      <path d="M146 348v-96a26 26 0 0 1 52 0v96z" fill="#f4f1e9"/>
+      <path d="M230 348v-96a26 26 0 0 1 52 0v96z" fill="#f4f1e9"/>
+      <path d="M314 348v-96a26 26 0 0 1 44 0v96z" fill="#f4f1e9"/>
+    </g>
+    <g opacity=".22">
+      <circle cx="88" cy="216" r="12"/><circle cx="172" cy="216" r="12"/>
+      <circle cx="256" cy="216" r="12"/><circle cx="336" cy="216" r="11"/>
+    </g>
+    <g opacity=".28">
+      <ellipse cx="742" cy="336" rx="86" ry="16"/>
+      <rect x="734" y="292" width="16" height="44"/>
+      <ellipse cx="742" cy="288" rx="46" ry="11"/>
+      <path d="M742 226c10 22 10 40 0 58-10-18-10-36 0-58z"/>
+    </g>
+    <g opacity=".26">
+      <rect x="1040" y="230" width="14" height="118"/>
+      <circle cx="1047" cy="212" r="52"/>
+      <circle cx="996" cy="238" r="32"/>
+      <circle cx="1100" cy="232" r="28"/>
+    </g>
+    <g opacity=".20">
+      <rect x="470" y="330" width="120" height="8"/>
+      <rect x="482" y="338" width="8" height="14"/>
+      <rect x="570" y="338" width="8" height="14"/>
+      <path d="M900 344h44l-6-22h-32z"/>
+    </g>
+    <g opacity=".14">
+      <rect x="380" y="360" width="820" height="3"/>
+      <rect x="380" y="378" width="820" height="3"/>
+    </g>
+  </g>
+</svg>

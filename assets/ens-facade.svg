@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="1200" height="420" role="img" aria-label="Facade de l'Ecole normale superieure, rue d'Ulm">
+  <title>Ecole normale superieure · 巴黎高师主楼</title>
+  <g fill="#1b3a6b">
+    <rect x="0" y="352" width="1200" height="68" opacity=".14"/>
+    <rect x="40" y="322" width="230" height="30" opacity=".22"/>
+    <rect x="52" y="316" width="206" height="8" opacity=".28"/>
+    <g opacity=".26">
+      <rect x="146" y="252" width="12" height="72"/>
+      <circle cx="152" cy="238" r="42"/>
+      <circle cx="112" cy="256" r="27"/>
+      <circle cx="192" cy="252" r="24"/>
+    </g>
+    <rect x="620" y="252" width="560" height="100" opacity=".30"/>
+    <rect x="612" y="244" width="576" height="10" opacity=".36"/>
+    <rect x="620" y="276" width="560" height="4" opacity=".22"/>
+    <g opacity=".34">
+      <path d="M648 300h26v52h-26z"/><path d="M648 300a13 13 0 0 1 26 0z"/>
+      <path d="M712 300h26v52h-26z"/><path d="M712 300a13 13 0 0 1 26 0z"/>
+      <path d="M776 300h26v52h-26z"/><path d="M776 300a13 13 0 0 1 26 0z"/>
+      <path d="M1064 300h26v52h-26z"/><path d="M1064 300a13 13 0 0 1 26 0z"/>
+      <path d="M1120 300h26v52h-26z"/><path d="M1120 300a13 13 0 0 1 26 0z"/>
+    </g>
+    <rect x="880" y="196" width="180" height="156" opacity=".32"/>
+    <rect x="870" y="188" width="200" height="12" opacity=".40"/>
+    <path d="M970 92c40 0 72 32 72 72v24h-144v-24c0-40 32-72 72-72z" opacity=".42"/>
+    <rect x="964" y="62" width="12" height="34" opacity=".42"/>
+    <circle cx="970" cy="58" r="7" opacity=".42"/>
+    <rect x="902" y="232" width="136" height="6" opacity=".22"/>
+    <path d="M946 268h48v84h-48z" opacity=".46"/>
+    <path d="M946 268a24 24 0 0 1 48 0z" opacity=".46"/>
+    <path d="M620 252h180l-26-34H620z" opacity=".24"/>
+    <rect x="700" y="188" width="16" height="34" opacity=".26"/>
+    <rect x="742" y="200" width="14" height="24" opacity=".22"/>
+    <rect x="1002" y="106" width="4" height="82" opacity=".40"/>
+    <path d="M1006 112h34l-9 11 9 11h-34z" opacity=".40"/>
+    <rect x="856" y="352" width="228" height="9" opacity=".26"/>
+    <rect x="842" y="361" width="256" height="9" opacity=".20"/>
+  </g>
+</svg>
